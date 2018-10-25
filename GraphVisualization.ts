@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import {findIndex, get, merge, reduce, size} from 'lodash-es'
+import {findIndex, get, merge, reduce, size} from 'lodash'
 import * as THREE from 'three'
 import {Lines} from './Lines'
 import {MouseInteraction} from './MouseInteraction'

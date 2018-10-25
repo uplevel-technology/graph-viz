@@ -1,6 +1,6 @@
 // @flow
 
-import {defaultTo, get, size} from 'lodash-es'
+import {defaultTo, get, size} from 'lodash'
 import * as THREE from 'three'
 import {SimNode, Simulation} from './GraphVisualization'
 import fragmentShader from './shaders/nodes.fragment.glsl'

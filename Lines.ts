@@ -1,7 +1,7 @@
 // @flow
 
 import * as d3 from 'd3'
-import {size} from 'lodash-es'
+import {size} from 'lodash'
 import * as THREE from 'three'
 import {SimLink, SimNode, Simulation} from './GraphVisualization'
 

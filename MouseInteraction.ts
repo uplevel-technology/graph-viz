@@ -1,4 +1,4 @@
-import {orderBy} from 'lodash-es'
+import {orderBy} from 'lodash'
 import * as THREE from 'three'
 import {Nodes} from './Nodes'
 
