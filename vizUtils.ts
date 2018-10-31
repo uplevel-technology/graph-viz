@@ -1,7 +1,7 @@
 import {Attribute} from '@core/ontology/attribute_pb'
 import {GraphViz} from '@core/ontology/graph_viz_pb'
 import {Observable} from '@core/ontology/observable_pb'
-import {VisualGraphLink, VisualGraphNode} from './visualization/GraphVisualization'
+import {VisualGraphLink, VisualGraphNode} from './GraphVisualization'
 import {first, compact, values, omitBy, isNil, keys, map} from 'lodash'
 import {Artifact} from '@core/ontology/artifact_pb'
 
