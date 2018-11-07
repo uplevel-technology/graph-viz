@@ -12,7 +12,6 @@ import {formatVizData, transformLink, transformNode} from './vizUtils'
 import {Empty} from '@core/services/wrappers_pb'
 
 interface State {
-  readonly graphViz?: GraphViz.AsObject
   readonly tooltipNode?: SimNode
 }
 
@@ -47,13 +46,10 @@ export class DevGraph extends React.Component<State> {
       }
 
       const graphVizObject = formatVizData(graphViz)
-
       const graph = {
         links: graphVizObject.links.map(transformLink),
         nodes: graphVizObject.nodes.map(transformNode),
       }
-
-      console.log(graph) // tslint:disable-line no-console
 
       this.graphVisualization.update(graph)
     })
