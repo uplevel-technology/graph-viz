@@ -1,6 +1,9 @@
 import {GraphViz} from '@core/ontology/graph_viz_pb'
+import {ObservableNode} from '@core/ontology/observable_pb'
+import {Attribute} from '@core/ontology/attribute_pb'
+import {Artifact} from '@core/ontology/artifact_pb'
 import {VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
-import {first, isNil, keys, map, omitBy} from 'lodash'
+import {map} from 'lodash'
 
 export const graphNodePalette = {
   alert: '#098E85',
@@ -18,10 +21,9 @@ interface TmpVizNode {
   // TODO use enums from the proto definition
   // parentType?: valueof<Observable.ValueCase>
   // type?: valueof<Artifact.ValueCase> | valueof<Attribute.ValueCase>
-  parentType?: 'artifact' | 'attribute'
-  type?: string
-  vizId?: string
-  [key: string]: any
+  parentType: 'artifact' | 'attribute'
+  type: Attribute.Type | Artifact.Type
+  vizId: string
 }
 
 interface TmpVizLink {
@@ -34,35 +36,33 @@ interface TmpVizGraph {
   links: TmpVizLink[]
 }
 
-// TODO: use proto directly to format
-const formatVizNodeFromProto = (node: any): TmpVizNode => {
-  const parentType = node.getValueCase()
-  const type = node.getArtifact()
-
-  return {
-
+const formatVizNode = (node: ObservableNode): TmpVizNode => {
+  switch (node.getValueCase()) {
+  case ObservableNode.ValueCase.ARTIFACT:
+    const artifact = node.getArtifact()
+    return {
+      parentType: 'artifact',
+      type: artifact.getType(),
+      vizId: artifact.getUid(),
+    }
+  case ObservableNode.ValueCase.ATTRIBUTE:
+    const attribute = node.getAttribute()
+    return {
+      parentType: 'attribute',
+      type: attribute.getType(),
+      vizId: attribute.getValue(),
+    }
+  default:
+    throw new Error('unknown ObservableNode type')
   }
 }
 
-const formatVizNode = (node: any): TmpVizNode => {
-  const parentType = node.artifact ? 'artifact' : 'attribute'
-  const obsNode = omitBy(node[parentType], isNil) // remove null/undefined values
-  const type = first(keys(obsNode))
+export const formatVizData = (graphViz: GraphViz): TmpVizGraph => {
+  const nodes = map(graphViz.getNodesList(), formatVizNode)
 
-  return {
-    parentType,
-    type,
-    vizId: node.artifact ? node[parentType][type].uid.value : node[parentType][type].value,
-    ...node[parentType][type],
-  }
-}
-
-export const formatVizData = (graphViz: GraphViz.AsObject): TmpVizGraph => {
-  const nodes = map(graphViz.nodesList, formatVizNode)
-
-  const links = map(graphViz.linksList, (link) => ({
-    from: formatVizNode(link.from),
-    to: formatVizNode(link.to),
+  const links = map(graphViz.getLinksList(), (link) => ({
+    from: formatVizNode(link.getFrom()),
+    to: formatVizNode(link.getTo()),
   }))
 
   return {nodes, links}

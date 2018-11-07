@@ -13,7 +13,7 @@ import {Empty} from '@core/services/wrappers_pb'
 
 interface State {
   readonly graphViz?: GraphViz.AsObject
-  readonly tooltipNode?: any // TODO fix
+  readonly tooltipNode?: SimNode
 }
 
 export class DevGraph extends React.Component<State> {
@@ -41,12 +41,12 @@ export class DevGraph extends React.Component<State> {
   }
 
   public readGraphViz(): void {
-    this.graphVizCrudClient.read(new Empty(), (error: CrudError, graphViz: GraphViz) => {
+    this.graphVizCrudClient.read(new Empty(), (error: CrudError|null, graphViz: GraphViz) => {
       if (error) {
         throw error
       }
 
-      const graphVizObject = formatVizData(graphViz.toObject())
+      const graphVizObject = formatVizData(graphViz)
 
       const graph = {
         links: graphVizObject.links.map(transformLink),

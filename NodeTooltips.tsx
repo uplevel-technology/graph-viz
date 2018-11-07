@@ -2,7 +2,6 @@ import * as React from 'react'
 import * as THREE from 'three'
 import {SimNode} from './lib/GraphVisualization'
 import {CSSProperties} from 'react'
-import {get} from 'lodash'
 
 export const getNodeWithScreenSpaceCoords = (
   node: SimNode,
@@ -55,7 +54,7 @@ export class NodeTooltips extends React.Component<Props> {
     if (primaryNode) {
       const n = getNodeWithScreenSpaceCoords(primaryNode, camera, canvasWidth, canvasHeight)
       primaryTooltipStyle = getTooltipStyle(n)
-      label = `${get(n, 'type')} (${get(n, 'parentType')})`
+      label = `${n._id} (type ${n._type})`
     }
 
     return (
