@@ -3,7 +3,7 @@ import {ObservableNode} from '@core/ontology/observable_pb'
 import {Attribute} from '@core/ontology/attribute_pb'
 import {Artifact} from '@core/ontology/artifact_pb'
 import {VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
-import {map} from 'lodash'
+import {findKey, map} from 'lodash'
 
 export const graphNodePalette = {
   alert: '#098E85',
@@ -14,15 +14,10 @@ export const graphNodePalette = {
   threat: '#3696F6',
 }
 
-type valueof<T> = T[keyof T]
-
 // Temp hacky types introduced here until we decide on the right format from the backend
 interface TmpVizNode {
-  // TODO use enums from the proto definition
-  // parentType?: valueof<Observable.ValueCase>
-  // type?: valueof<Artifact.ValueCase> | valueof<Attribute.ValueCase>
   parentType: 'artifact' | 'attribute'
-  type: Attribute.Type | Artifact.Type
+  type: string
   vizId: string
 }
 
@@ -42,14 +37,14 @@ const formatVizNode = (node: ObservableNode): TmpVizNode => {
     const artifact = node.getArtifact()
     return {
       parentType: 'artifact',
-      type: artifact.getType(),
+      type: findKey(Artifact.Type, (t) => t === artifact.getType()),
       vizId: artifact.getUid(),
     }
   case ObservableNode.ValueCase.ATTRIBUTE:
     const attribute = node.getAttribute()
     return {
       parentType: 'attribute',
-      type: attribute.getType(),
+      type: findKey(Attribute.Type, (t) => t === attribute.getType()),
       vizId: attribute.getValue(),
     }
   case ObservableNode.ValueCase.VALUE_NOT_SET:
@@ -74,7 +69,7 @@ export const formatVizData = (graphViz: GraphViz): TmpVizGraph => {
 
 export const transformNode = (node: TmpVizNode): VisualGraphNode => ({
   _id: node.vizId, // TODO fix interface VisualGraphNode
-  _type: node.type.toString(), // TODO fix interface VisualGraphNode
+  _type: node.type, // TODO fix interface VisualGraphNode
   fill: node.parentType === 'artifact' ? graphNodePalette.target : graphNodePalette.observable,
   id: node.vizId,
   ...node,
