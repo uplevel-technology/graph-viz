@@ -52,8 +52,12 @@ const formatVizNode = (node: ObservableNode): TmpVizNode => {
       type: attribute.getType(),
       vizId: attribute.getValue(),
     }
+  case ObservableNode.ValueCase.VALUE_NOT_SET:
+    throw new Error('ObservableNode value not set')
   default:
-    throw new Error('unknown ObservableNode type')
+    // This should happen when a new ObservableNode type was added to the proto
+    // but not updated here.
+    throw new Error('Unknown ObservableNode value:' + node.getValueCase())
   }
 }
 
