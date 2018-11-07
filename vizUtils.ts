@@ -1,5 +1,5 @@
 import {GraphViz} from '@core/ontology/graph_viz_pb'
-import {VisualGraphLink, VisualGraphNode} from './GraphVisualization'
+import {VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
 import {first, isNil, keys, map, omitBy} from 'lodash'
 
 export const graphNodePalette = {

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as THREE from 'three'
-import {SimNode} from './GraphVisualization'
+import {SimNode} from './lib/GraphVisualization'
 import {CSSProperties} from 'react'
 import {get} from 'lodash'
 
