@@ -3,7 +3,7 @@ import {ObservableNode} from '@core/ontology/observable_pb'
 import {Attribute} from '@core/ontology/attribute_pb'
 import {Artifact} from '@core/ontology/artifact_pb'
 import {VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
-import {findKey, map} from 'lodash'
+import {invert, map} from 'lodash'
 
 export const graphNodePalette = {
   alert: '#098E85',
@@ -13,6 +13,9 @@ export const graphNodePalette = {
   target: '#00478D',
   threat: '#3696F6',
 }
+
+const ArtifactTypeToLabel = invert(Artifact.Type)
+const AttributeTypeToLabel = invert(Attribute.Type)
 
 // Temp hacky types introduced here until we decide on the right format from the backend
 interface TmpVizNode {
@@ -37,14 +40,14 @@ const formatVizNode = (node: ObservableNode): TmpVizNode => {
     const artifact = node.getArtifact()
     return {
       parentType: 'artifact',
-      type: findKey(Artifact.Type, (t) => t === artifact.getType()),
+      type: ArtifactTypeToLabel[artifact.getType()],
       vizId: artifact.getUid(),
     }
   case ObservableNode.ValueCase.ATTRIBUTE:
     const attribute = node.getAttribute()
     return {
       parentType: 'attribute',
-      type: findKey(Attribute.Type, (t) => t === attribute.getType()),
+      type: AttributeTypeToLabel[attribute.getType()],
       vizId: attribute.getValue(),
     }
   case ObservableNode.ValueCase.VALUE_NOT_SET:
