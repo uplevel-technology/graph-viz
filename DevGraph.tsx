@@ -15,6 +15,9 @@ interface State {
   readonly tooltipNode?: SimNode
 }
 
+const CANVAS_WIDTH = 700
+const CANVAS_HEIGHT = 700
+
 export class DevGraph extends React.Component<State> {
   public graphVizCrudClient: GraphVizCrudServiceClient
   public graphVisualization: GraphVisualization
@@ -29,7 +32,7 @@ export class DevGraph extends React.Component<State> {
     this.graphVizCrudClient = new GraphVizCrudServiceClient(GRAPH_CRUD_APP_ADDRESS)
 
     const canvas = this.canvasRef.current
-    this.graphVisualization = new GraphVisualization({nodes: [], links: []}, canvas, 700, 700)
+    this.graphVisualization = new GraphVisualization({nodes: [], links: []}, canvas, CANVAS_WIDTH, CANVAS_HEIGHT)
     this.graphVisualization.onHover = this.onNodeHover
 
     this.readGraphViz()
@@ -62,8 +65,8 @@ export class DevGraph extends React.Component<State> {
         <NodeTooltips
           primaryNode={this.state.tooltipNode}
           camera={get(this.graphVisualization, 'camera')}
-          canvasWidth={700}
-          canvasHeight={700}
+          canvasWidth={CANVAS_WIDTH}
+          canvasHeight={CANVAS_HEIGHT}
         />
       </div>
     )
