@@ -14,6 +14,10 @@ export const graphNodePalette = {
   threat: '#3696F6',
 }
 
+// This works because the typescript enum is actually an object like {FOO: 0, BAR: 1}.
+// We invert that here to get {0: 'FOO', 1: 'BAR'}.
+// Better would be a mapping between enum value to *display name*, but this is
+// fine for the dev graph.
 const ArtifactTypeToLabel = invert(Artifact.Type)
 const AttributeTypeToLabel = invert(Attribute.Type)
 
@@ -27,6 +31,7 @@ interface TmpVizNode {
 interface TmpVizLink {
   from: TmpVizNode
   to: TmpVizNode
+  // TODO: relationship type
 }
 
 interface TmpVizGraph {
