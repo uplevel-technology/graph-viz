@@ -6,12 +6,8 @@ import {VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
 import {invert, map} from 'lodash'
 
 export const graphNodePalette = {
-  alert: '#098E85',
-  incident: '#56D48E',
-  indicator: '#E7465A',
-  observable: '#FEC400',
-  target: '#00478D',
-  threat: '#3696F6',
+  artifact: '#00478D',
+  attribute: '#FEC400',
 }
 
 // This works because the typescript enum is actually an object like {FOO: 0, BAR: 1}.
@@ -78,7 +74,7 @@ export const formatVizData = (graphViz: GraphViz): TmpVizGraph => {
 export const transformNode = (node: TmpVizNode): VisualGraphNode => ({
   _id: node.vizId, // TODO fix interface VisualGraphNode
   _type: node.type, // TODO fix interface VisualGraphNode
-  fill: node.parentType === 'artifact' ? graphNodePalette.target : graphNodePalette.observable,
+  fill: graphNodePalette[node.parentType],
   id: node.vizId,
   ...node,
 })
