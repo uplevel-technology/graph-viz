@@ -45,14 +45,18 @@ export class DevGraph extends React.Component<Props, State> {
     this.readGraphViz()
   }
 
-  public onNodeHover = (hoveredNode: SimNode) => {
+  public onNodeHover = (hoveredNode: SimNode|null) => {
     this.setState({tooltipNode: hoveredNode})
   }
 
   public readGraphViz(): void {
-    this.graphVizCrudClient.read(new Empty(), (error: CrudError|null, graphViz: GraphViz) => {
+    this.graphVizCrudClient.read(new Empty(), (error: CrudError|null, graphViz: GraphViz|null) => {
       if (error) {
         throw error
+      }
+
+      if (!graphViz) {
+        throw new Error('received no graphViz response')
       }
 
       const graphVizObject = formatVizData(graphViz)
