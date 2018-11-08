@@ -19,8 +19,8 @@ const AttributeTypeToLabel = invert(Attribute.Type)
 
 // Temp hacky types introduced here until we decide on the right format from the backend
 interface TmpVizNode {
-  parentType: 'artifact' | 'attribute'
-  type: string
+  type: 'artifact' | 'attribute'
+  subType: string // technically, could reduce this down to the set of Artifact.Type | Attribute.Type
   vizId: string
 }
 
@@ -40,15 +40,15 @@ const formatVizNode = (node: ObservableNode): TmpVizNode => {
   case ObservableNode.ValueCase.ARTIFACT:
     const artifact = node.getArtifact()
     return {
-      parentType: 'artifact',
-      type: ArtifactTypeToLabel[artifact.getType()],
+      type: 'artifact',
+      subType: ArtifactTypeToLabel[artifact.getType()],
       vizId: artifact.getUid(),
     }
   case ObservableNode.ValueCase.ATTRIBUTE:
     const attribute = node.getAttribute()
     return {
-      parentType: 'attribute',
-      type: AttributeTypeToLabel[attribute.getType()],
+      type: 'attribute',
+      subType: AttributeTypeToLabel[attribute.getType()],
       vizId: attribute.getValue(),
     }
   case ObservableNode.ValueCase.VALUE_NOT_SET:
@@ -73,8 +73,8 @@ export const formatVizData = (graphViz: GraphViz): TmpVizGraph => {
 
 export const transformNode = (node: TmpVizNode): VisualGraphNode => ({
   _id: node.vizId, // TODO fix interface VisualGraphNode
-  _type: node.type, // TODO fix interface VisualGraphNode
-  fill: graphNodePalette[node.parentType],
+  _type: node.subType, // TODO fix interface VisualGraphNode
+  fill: graphNodePalette[node.type],
   id: node.vizId,
   ...node,
 })
