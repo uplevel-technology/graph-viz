@@ -1,21 +1,13 @@
 import {GraphViz} from '@core/ontology/graph_viz_pb'
 import {ObservableNode} from '@core/ontology/observable_pb'
-import {Attribute} from '@core/ontology/attribute_pb'
-import {Artifact} from '@core/ontology/artifact_pb'
 import {VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
-import {invert, map} from 'lodash'
+import {ArtifactDisplayTypes, AttributeDisplayTypes} from '../displayTypes'
+import {map} from 'lodash'
 
 export const graphNodePalette = {
   artifact: '#00478D',
   attribute: '#FEC400',
 }
-
-// This works because the typescript enum is actually an object like {FOO: 0, BAR: 1}.
-// We invert that here to get {0: 'FOO', 1: 'BAR'}.
-// Better would be a mapping between enum value to *display name*, but this is
-// fine for the dev graph.
-const ArtifactTypeToLabel = invert(Artifact.Type)
-const AttributeTypeToLabel = invert(Attribute.Type)
 
 // Temp hacky types introduced here until we decide on the right format from the backend
 interface TmpVizNode {
@@ -41,14 +33,14 @@ const formatVizNode = (node: ObservableNode): TmpVizNode => {
     const artifact = node.getArtifact()
     return {
       type: 'artifact',
-      subType: ArtifactTypeToLabel[artifact.getType()],
+      subType: ArtifactDisplayTypes[artifact.getType()],
       vizId: artifact.getUid(),
     }
   case ObservableNode.ValueCase.ATTRIBUTE:
     const attribute = node.getAttribute()
     return {
       type: 'attribute',
-      subType: AttributeTypeToLabel[attribute.getType()],
+      subType: AttributeDisplayTypes[attribute.getType()],
       vizId: attribute.getValue(),
     }
   case ObservableNode.ValueCase.VALUE_NOT_SET:
