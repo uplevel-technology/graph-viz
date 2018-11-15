@@ -1,4 +1,12 @@
 import * as React from 'react'
+import {
+  createStyles,
+  Button,
+  Theme,
+  Typography,
+  withStyles,
+  WithStyles,
+} from '@material-ui/core'
 import {get} from 'lodash'
 import {GraphViz} from '@core/ontology/graph_viz_pb'
 import {
@@ -10,19 +18,38 @@ import {GRAPH_CRUD_APP_ADDRESS} from '../../src/App'
 import {NodeTooltips} from './NodeTooltips'
 import {formatVizData, transformLink, transformNode} from './vizUtils'
 import {Empty} from '@core/services/wrappers_pb'
-import {Button, Typography} from '@material-ui/core'
+
+const styles = (theme: Theme) => createStyles({
+  root: {
+    position: 'relative',
+  },
+  canvas: {
+    background: 'white',
+  },
+  refreshButton: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+  },
+  errorMessage: {
+    position: 'absolute',
+    top: 0,
+    left: theme.spacing.unit,
+    color: 'red',
+  },
+})
 
 interface State {
   readonly tooltipNode?: SimNode
   readonly errorMessage?: string
 }
 
-interface Props {
+interface Props extends WithStyles<typeof styles> {
   width: number
   height: number
 }
 
-export class DevGraph extends React.Component<Props, State> {
+class DevGraphBase extends React.Component<Props, State> {
   public graphVizCrudClient: GraphVizCrudServiceClient
   public graphVisualization: GraphVisualization
 
@@ -75,27 +102,29 @@ export class DevGraph extends React.Component<Props, State> {
   }
 
   public render() {
+    const {classes, width, height} = this.props
+
     return (
-      <div style={{position: 'relative'}}>
-        <canvas ref={this.canvasRef} style={{background: 'white'}}/>
+      <div className={classes.root}>
+        <canvas ref={this.canvasRef} className={classes.canvas}/>
 
         <NodeTooltips
           primaryNode={this.state.tooltipNode}
           camera={get(this.graphVisualization, 'camera')}
-          canvasWidth={this.props.width}
-          canvasHeight={this.props.height}
+          canvasWidth={width}
+          canvasHeight={height}
         />
 
         <Button
           size={'small'}
           onClick={this.readGraphViz}
-          style={{position: 'absolute', top: 0, right: 0}}
+          className={classes.refreshButton}
         >
           Refresh
         </Button>
 
         {this.state.errorMessage &&
-          <Typography style={{color: 'red', position: 'absolute', bottom: 0, left: 0}}>
+          <Typography className={classes.errorMessage}>
             {this.state.errorMessage}
           </Typography>
         }
@@ -103,3 +132,5 @@ export class DevGraph extends React.Component<Props, State> {
     )
   }
 }
+
+export const DevGraph = withStyles(styles)(DevGraphBase)
