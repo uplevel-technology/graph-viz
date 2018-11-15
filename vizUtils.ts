@@ -1,7 +1,7 @@
 import {GraphViz} from '@core/ontology/graph_viz_pb'
 import {ObservableNode} from '@core/ontology/observable_pb'
 import {VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
-import {ArtifactDisplayTypes, AttributeDisplayTypes} from '../displayTypes'
+import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
 import {map} from 'lodash'
 
 export const graphNodePalette = {
@@ -33,14 +33,14 @@ const formatVizNode = (node: ObservableNode): TmpVizNode => {
     const artifact = node.getArtifact()
     return {
       type: 'artifact',
-      subType: ArtifactDisplayTypes[artifact.getType()],
+      subType: getArtifactNodeLabel(artifact.getType()),
       vizId: artifact.getUid(),
     }
   case ObservableNode.ValueCase.ATTRIBUTE:
     const attribute = node.getAttribute()
     return {
       type: 'attribute',
-      subType: AttributeDisplayTypes[attribute.getType()],
+      subType: getAttributeNodeLabel(attribute.getType()),
       vizId: attribute.getValue(),
     }
   case ObservableNode.ValueCase.VALUE_NOT_SET:
