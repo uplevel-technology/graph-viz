@@ -10,6 +10,7 @@ import {GRAPH_CRUD_APP_ADDRESS} from '../../src/App'
 import {NodeTooltips} from './NodeTooltips'
 import {formatVizData, transformLink, transformNode} from './vizUtils'
 import {Empty} from '@core/services/wrappers_pb'
+import {Button} from '@material-ui/core'
 
 interface State {
   readonly tooltipNode?: SimNode
@@ -49,7 +50,7 @@ export class DevGraph extends React.Component<Props, State> {
     this.setState({tooltipNode: hoveredNode})
   }
 
-  public readGraphViz(): void {
+  public readGraphViz = (): void => {
     this.graphVizCrudClient.read(new Empty(), (error: CrudError|null, graphViz: GraphViz|null) => {
       if (error) {
         throw error
@@ -79,6 +80,13 @@ export class DevGraph extends React.Component<Props, State> {
           canvasWidth={this.props.width}
           canvasHeight={this.props.height}
         />
+        <Button
+          size={'small'}
+          onClick={this.readGraphViz}
+          style={{position: 'absolute', top: 0, right: 0}}
+        >
+          Refresh
+        </Button>
       </div>
     )
   }
