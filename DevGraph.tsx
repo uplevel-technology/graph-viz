@@ -7,6 +7,7 @@ import {
   withStyles,
   WithStyles,
 } from '@material-ui/core'
+import RefreshIcon from '@material-ui/icons/Refresh'
 import {get} from 'lodash'
 import {GraphViz} from '@core/ontology/graph_viz_pb'
 import {
@@ -120,7 +121,7 @@ class DevGraphBase extends React.Component<Props, State> {
           onClick={this.readGraphViz}
           className={classes.refreshButton}
         >
-          Refresh
+          <RefreshIcon />
         </Button>
 
         {this.state.errorMessage &&
