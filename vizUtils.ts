@@ -30,14 +30,14 @@ interface TmpVizGraph {
 const formatVizNode = (node: ObservableNode): TmpVizNode => {
   switch (node.getValueCase()) {
   case ObservableNode.ValueCase.ARTIFACT:
-    const artifact = node.getArtifact()
+    const artifact = node.getArtifact()! // valueCase matched, so this is safe
     return {
       type: 'artifact',
       subType: getArtifactNodeLabel(artifact.getType()),
       vizId: artifact.getUid(),
     }
   case ObservableNode.ValueCase.ATTRIBUTE:
-    const attribute = node.getAttribute()
+    const attribute = node.getAttribute()! // valueCase matched, so this is safe
     return {
       type: 'attribute',
       subType: getAttributeNodeLabel(attribute.getType()),
@@ -56,8 +56,8 @@ export const formatVizData = (graphViz: GraphViz): TmpVizGraph => {
   const nodes = map(graphViz.getNodesList(), formatVizNode)
 
   const links = map(graphViz.getLinksList(), (link) => ({
-    from: formatVizNode(link.getFrom()),
-    to: formatVizNode(link.getTo()),
+    from: formatVizNode(link.getFrom()!), // TODO: handle null?
+    to: formatVizNode(link.getTo()!), // TODO: handle null?
   }))
 
   return {nodes, links}
