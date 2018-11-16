@@ -16,7 +16,7 @@ import {
   ServiceError as CrudError,
 } from '@core/services/crud/crud_services_pb_service'
 import {GraphVisualization, SimNode} from './lib/GraphVisualization'
-import {GRAPH_CRUD_APP_ADDRESS} from '../../src/App'
+import {GRAPH_CRUD_APP_ADDRESS} from '../App'
 import {NodeTooltips} from './NodeTooltips'
 import {formatVizData, transformLink, transformNode} from './vizUtils'
 import {Empty} from '@core/services/wrappers_pb'
@@ -62,7 +62,7 @@ class DevGraphBase extends React.Component<Props, State> {
   public componentDidMount(): void {
     this.graphVizCrudClient = new GraphVizCrudServiceClient(GRAPH_CRUD_APP_ADDRESS)
 
-    const canvas = this.canvasRef.current
+    const canvas = this.canvasRef.current! // this is safe when mounted
     this.graphVisualization = new GraphVisualization(
       {nodes: [], links: []},
       canvas,
@@ -74,12 +74,12 @@ class DevGraphBase extends React.Component<Props, State> {
     this.readGraphViz()
   }
 
-  public onNodeHover = (hoveredNode: SimNode|null) => {
+  public onNodeHover = (hoveredNode: SimNode|undefined) => {
     this.setState({tooltipNode: hoveredNode})
   }
 
   public readGraphViz = (): void => {
-    this.setState({errorMessage: null})
+    this.setState({errorMessage: undefined})
 
     this.graphVizCrudClient.read(new Empty(), (error: CrudError|null, graphViz: GraphViz|null) => {
       if (error) {
