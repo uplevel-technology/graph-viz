@@ -6,6 +6,7 @@ import {
   Typography,
   withStyles,
   WithStyles,
+  Paper,
 } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import {get} from 'lodash'
@@ -106,7 +107,7 @@ class DevGraphBase extends React.Component<Props, State> {
     const {classes, width, height} = this.props
 
     return (
-      <div className={classes.root}>
+      <Paper className={classes.root}>
         <canvas ref={this.canvasRef} className={classes.canvas}/>
 
         <NodeTooltips
@@ -129,7 +130,7 @@ class DevGraphBase extends React.Component<Props, State> {
             {this.state.errorMessage}
           </Typography>
         }
-      </div>
+      </Paper>
     )
   }
 }
