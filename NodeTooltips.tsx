@@ -48,18 +48,18 @@ export class NodeTooltips extends React.Component<Props> {
   public render() {
     const {primaryNode, camera, canvasWidth, canvasHeight} = this.props
 
-    let primaryTooltipStyle
-    let label
+    if (!primaryNode) {
+      return null
+    }
 
-    if (primaryNode) {
-      const n = getNodeWithScreenSpaceCoords(primaryNode, camera, canvasWidth, canvasHeight)
-      primaryTooltipStyle = getTooltipStyle(n)
-      label = `${n._type} (${n._id})`
+    const n = getNodeWithScreenSpaceCoords(primaryNode, camera, canvasWidth, canvasHeight)
+    if (!n) {
+      return null
     }
 
     return (
-      <div style={primaryTooltipStyle}>
-        <div>{label}</div>
+      <div style={getTooltipStyle(n)}>
+        <div>{n._type} ({n._id}</div>
       </div>
     )
   }
