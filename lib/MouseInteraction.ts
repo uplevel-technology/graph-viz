@@ -7,16 +7,16 @@ const PAN_SPEED = 1.0
 const MAX_ZOOM = 5.0
 
 export class MouseInteraction {
-  public onHover: (hoveredToNodeIdx: number, hoveredFromNodeIdx: number) => void
-  public onClick: (mouse: THREE.Vector3, clickedNodeIdx: number) => void
-  public onDragStart: (mouse: THREE.Vector3, draggedNodeIdx: number) => void
+  public onHover: (hoveredToNodeIdx: number|null, hoveredFromNodeIdx: number|null) => void
+  public onClick: (mouse: THREE.Vector3, clickedNodeIdx: number|null) => void
+  public onDragStart?: (mouse: THREE.Vector3, draggedNodeIdx: number|null) => void
   public onDrag: (mouse: THREE.Vector3, draggedNode: number) => void
   public onDragEnd: () => void
   public onPan: (panDelta: THREE.Vector3) => void
   public onZoom: (event: MouseWheelEvent) => void
 
   private nodes: Nodes
-  private intersectedPointIdx: number
+  private intersectedPointIdx: number|null
   private dragging: boolean
   private registerClick: boolean
 
@@ -43,7 +43,7 @@ export class MouseInteraction {
 
     this.mouse = new THREE.Vector2(0, 0)
     this.raycaster = new THREE.Raycaster()
-    this.raycaster.params.Points.threshold = 40
+    this.raycaster.params.Points!.threshold = 40
 
     this.canvas.addEventListener('mousedown', this.onMouseDown)
     this.canvas.addEventListener('mousemove', this.onMouseMove)
@@ -96,12 +96,12 @@ export class MouseInteraction {
       if (intersects.length > 0) {
         // hover in
         const nearestIntersect = orderBy(intersects, 'distanceToRay', 'asc')[0]
-
-        if (this.intersectedPointIdx !== nearestIntersect.index) {
+        const nearestIndex = nearestIntersect.index || null
+        if (this.intersectedPointIdx !== nearestIndex) {
           if (this.onHover) {
-            this.onHover(nearestIntersect.index, this.intersectedPointIdx)
+            this.onHover(nearestIndex, this.intersectedPointIdx)
           }
-          this.intersectedPointIdx = nearestIntersect.index
+          this.intersectedPointIdx = nearestIndex
         }
       } else if (this.intersectedPointIdx !== null) {
         // hover out

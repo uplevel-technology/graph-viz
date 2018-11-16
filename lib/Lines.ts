@@ -74,14 +74,13 @@ export class Lines {
       const sourceIndex = 2 * i
       const targetIndex = 2 * i + 1
 
-      position.setXYZ(sourceIndex, links[i].source.x, links[i].source.y, 0)
-      position.setXYZ(targetIndex, links[i].target.x, links[i].target.y, 0)
+      position.setXYZ(sourceIndex, links[i].source.x!, links[i].source.y!, 0)
+      position.setXYZ(targetIndex, links[i].target.x!, links[i].target.y!, 0)
     }
 
     position.needsUpdate = true
 
-    // Tell THREE to recompute the bounding sphere as needed:
-    this.geometry.boundingSphere = null
+    this.geometry.computeBoundingSphere()
   }
 
   private recalcColorFromData = (links: Array<SimLink>) => {

@@ -98,13 +98,12 @@ export class Nodes {
     }
 
     for (let i = 0; i < numNodes; i++) {
-      position.setXYZ(i, nodes[i].x, nodes[i].y, 0)
+      position.setXYZ(i, nodes[i].x!, nodes[i].y!, 0)
     }
 
     position.needsUpdate = true
 
-    // Recompute bounding sphere as needed
-    this.geometry.boundingSphere = null
+    this.geometry.computeBoundingSphere()
   }
 
   private recalcScaleFromData = (nodes: Array<SimNode>) => {
@@ -167,7 +166,7 @@ export class Nodes {
     for (let i = 0; i < numNodes; i++) {
       // preserve stroke widths during data updates for locked nodes
       if (!this.lockedIds[i]) {
-        strokeWidth.setX(i, nodes[i].strokeWidth)
+        strokeWidth.setX(i, nodes[i].strokeWidth!)
       }
     }
 
@@ -184,7 +183,7 @@ export class Nodes {
 
     for (let i = 0; i < numNodes; i++) {
       if (!this.lockedIds[i]) {
-        strokeOpacity.setX(i, nodes[i].strokeOpacity)
+        strokeOpacity.setX(i, nodes[i].strokeOpacity!)
       }
     }
 
