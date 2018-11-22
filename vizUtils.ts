@@ -1,17 +1,18 @@
 import {GraphViz, VizNode} from '@core/ontology/graph_viz_pb'
 import {VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
 import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
-import {map} from 'lodash'
+import {map, values} from 'lodash'
 
 export const graphNodePalette = {
   artifact: '#00478D',
   attribute: '#FEC400',
+  alert: '#D86C1A', // FIXME someone else choose
 }
 
 // Temp hacky types introduced here until we decide on the right format from the backend
 interface TmpVizNode {
-  type: 'artifact' | 'attribute'
-  subType: string // technically, could reduce this down to the set of Artifact.Type | Attribute.Type
+  type: 'artifact' | 'attribute' | 'alert'
+  subType: string // technically, could reduce this down to the set of Artifact.Type | Attribute.Type ... and alert?
   vizId: string
 }
 
@@ -43,7 +44,12 @@ const formatVizNode = (node: VizNode): TmpVizNode => {
       vizId: attribute.getValue(),
     }
   case VizNode.ValueCase.ALERT:
-    throw new Error('VizNode of type alert not yet handled')
+    const alert = node.getAlert()! // valueCase matched, so this is safe
+    return {
+      type: 'alert',
+      subType: 'alert', // FIXME use [display] name?
+      vizId: alert.getUid(),
+    }
   case VizNode.ValueCase.VALUE_NOT_SET:
     throw new Error('VizNode value not set')
   default:
@@ -54,14 +60,22 @@ const formatVizNode = (node: VizNode): TmpVizNode => {
 }
 
 export const formatVizData = (graphViz: GraphViz): TmpVizGraph => {
-  const nodes = map(graphViz.getNodesList(), formatVizNode)
+  // TODO this deduping could be done more efficiently if i knew the language!
+  // or it could easily be handled on the backend when the code for retrieving this data is improved
+  const allNodes = map(graphViz.getNodesList(), formatVizNode)
+
+  const seenVizNodesById: {[key: string]: TmpVizNode} = {}
+  allNodes.forEach(node => {
+    seenVizNodesById[node.vizId] = node
+  })
+  const uniqNodes = values(seenVizNodesById)
 
   const links = map(graphViz.getLinksList(), (link) => ({
     from: formatVizNode(link.getFrom()!), // TODO: handle null?
     to: formatVizNode(link.getTo()!), // TODO: handle null?
   }))
 
-  return {nodes, links}
+  return {nodes: uniqNodes, links}
 }
 
 export const transformNode = (node: TmpVizNode): VisualGraphNode => ({
