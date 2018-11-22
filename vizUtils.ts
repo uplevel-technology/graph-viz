@@ -7,6 +7,7 @@ import {map} from 'lodash'
 export const graphNodePalette = {
   artifact: '#00478D',
   attribute: '#FEC400',
+  alert: '#EE6352',
 }
 
 // Temp hacky types introduced here until we decide on the right format from the backend
