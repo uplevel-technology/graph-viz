@@ -1,5 +1,4 @@
-import {GraphViz} from '@core/ontology/graph_viz_pb'
-import {ObservableNode} from '@core/ontology/observable_pb'
+import {GraphViz, VizNode} from '@core/ontology/graph_viz_pb'
 import {VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
 import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
 import {map} from 'lodash'
@@ -27,28 +26,30 @@ interface TmpVizGraph {
   links: TmpVizLink[]
 }
 
-const formatVizNode = (node: ObservableNode): TmpVizNode => {
+const formatVizNode = (node: VizNode): TmpVizNode => {
   switch (node.getValueCase()) {
-  case ObservableNode.ValueCase.ARTIFACT:
+  case VizNode.ValueCase.ARTIFACT:
     const artifact = node.getArtifact()! // valueCase matched, so this is safe
     return {
       type: 'artifact',
       subType: getArtifactNodeLabel(artifact.getType()),
       vizId: artifact.getUid(),
     }
-  case ObservableNode.ValueCase.ATTRIBUTE:
+  case VizNode.ValueCase.ATTRIBUTE:
     const attribute = node.getAttribute()! // valueCase matched, so this is safe
     return {
       type: 'attribute',
       subType: getAttributeNodeLabel(attribute.getType()),
       vizId: attribute.getValue(),
     }
-  case ObservableNode.ValueCase.VALUE_NOT_SET:
-    throw new Error('ObservableNode value not set')
+  case VizNode.ValueCase.ALERT:
+    throw new Error('VizNode of type alert not yet handled')
+  case VizNode.ValueCase.VALUE_NOT_SET:
+    throw new Error('VizNode value not set')
   default:
     // This should happen when a new ObservableNode type was added to the proto
     // but not updated here.
-    throw new Error('Unknown ObservableNode value:' + node.getValueCase())
+    throw new Error('Unknown VizNode value:' + node.getValueCase())
   }
 }
 
