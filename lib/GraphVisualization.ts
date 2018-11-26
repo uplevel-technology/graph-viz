@@ -36,7 +36,7 @@ export interface VisualGraphNode extends d3.SimulationNodeDatum {
 }
 
 export interface VisualGraphLink extends d3.SimulationLinkDatum<VisualGraphNode> {
-  id: string
+  id?: string
   source: string
   target: string
   color?: number | string
