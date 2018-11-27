@@ -7,11 +7,12 @@ export const graphNodePalette = {
   artifact: '#00478D',
   attribute: '#FEC400',
   alert: '#EE6352',
+  email_upload: '#0d8721',
 }
 
 // Temp hacky types introduced here until we decide on the right format from the backend
 interface TmpVizNode {
-  type: 'artifact' | 'attribute' | 'alert'
+  type: 'artifact' | 'attribute' | 'alert' | 'email_upload'
   subType: string // technically, could reduce this down to the set of Artifact.Type | Attribute.Type ... and alert?
   vizId: string
 }
@@ -49,6 +50,13 @@ const formatVizNode = (node: VizNode): TmpVizNode => {
       type: 'alert',
       subType: 'alert', // FIXME use [display] name?
       vizId: alert.getUid(),
+    }
+  case VizNode.ValueCase.EMAIL_UPLOAD:
+    const emailUpload = node.getEmailUpload()! // valueCase matched, so this is safe
+    return {
+      type: 'email_upload',
+      subType: 'email_upload', // FIXME use [display] name?
+      vizId: emailUpload.getUid(),
     }
   case VizNode.ValueCase.VALUE_NOT_SET:
     throw new Error('VizNode value not set')
