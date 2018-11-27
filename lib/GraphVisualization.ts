@@ -25,8 +25,7 @@ const mergeById = (originalArray: Array<any>, updatedArray: Array<any>): Array<a
   )
 
 export interface VisualGraphNode extends d3.SimulationNodeDatum {
-  _id: string
-  _type: string
+  displayName: string
   inactive?: boolean
   fill?: number | string
   stroke?: number | string
