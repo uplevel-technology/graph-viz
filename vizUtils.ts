@@ -79,8 +79,7 @@ export const formatVizData = (graphViz: GraphViz): TmpVizGraph => {
 }
 
 export const transformNode = (node: TmpVizNode): VisualGraphNode => ({
-  _id: node.vizId, // TODO fix interface VisualGraphNode
-  _type: node.subType, // TODO fix interface VisualGraphNode
+  displayName: `${node.subType} (${node.vizId})`,
   fill: graphNodePalette[node.type],
   id: node.vizId,
   ...node,

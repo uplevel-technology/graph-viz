@@ -59,7 +59,7 @@ export class NodeTooltips extends React.Component<Props> {
 
     return (
       <div style={getTooltipStyle(n)}>
-        <div>{n._type} ({n._id})</div>
+        <div>{n.displayName}</div>
       </div>
     )
   }
