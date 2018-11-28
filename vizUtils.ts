@@ -68,22 +68,25 @@ const formatVizNode = (node: VizNode): TmpVizNode => {
 }
 
 export const formatVizData = (graphViz: GraphViz): TmpVizGraph => {
-  // TODO this deduping could be done more efficiently if i knew the language!
-  // or it could easily be handled on the backend when the code for retrieving this data is improved
-  const allNodes = map(graphViz.getNodesList(), formatVizNode)
+  // We want a deduped list of all nodes, whether they were seen in the "nodes"
+  // or "links" part of the message. We'll build that up in this object:
+  const seenVizNodesById: {[vizId: string]: TmpVizNode} = {}
 
-  const seenVizNodesById: {[key: string]: TmpVizNode} = {}
-  allNodes.forEach(node => {
+  graphViz.getNodesList().map(formatVizNode).forEach((node) => {
     seenVizNodesById[node.vizId] = node
   })
-  const uniqNodes = values(seenVizNodesById)
 
-  const links = map(graphViz.getLinksList(), (link) => ({
+  const links = graphViz.getLinksList().map((link) => ({
     from: formatVizNode(link.getFrom()!), // TODO: handle null?
     to: formatVizNode(link.getTo()!), // TODO: handle null?
   }))
 
-  return {nodes: uniqNodes, links}
+  links.forEach((link) => {
+    seenVizNodesById[link.from.vizId] = link.from
+    seenVizNodesById[link.to.vizId] = link.to
+  })
+
+  return {nodes: values(seenVizNodesById), links}
 }
 
 export const transformNode = (node: TmpVizNode): VisualGraphNode => ({
