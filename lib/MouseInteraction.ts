@@ -96,7 +96,7 @@ export class MouseInteraction {
       if (intersects.length > 0) {
         // hover in
         const nearestIntersect = orderBy(intersects, 'distanceToRay', 'asc')[0]
-        const nearestIndex = nearestIntersect.index || null
+        const nearestIndex = nearestIntersect.index === undefined ? null : nearestIntersect.index
         if (this.intersectedPointIdx !== nearestIndex) {
           if (this.onHover) {
             this.onHover(nearestIndex, this.intersectedPointIdx)
