@@ -213,7 +213,7 @@ export class GraphVisualization {
     }
   })
 
-  private handleHover = (hoveredToNodeIdx: number, hoveredFromNodeIdx: number) => {
+  private handleHover = (hoveredToNodeIdx: number | null, hoveredFromNodeIdx: number | null) => {
     this.nodes.scalePointAt(hoveredFromNodeIdx, 1.0) // reset previously hovered
     this.nodes.scalePointAt(hoveredToNodeIdx, 1.75)
     this.render()
@@ -223,7 +223,7 @@ export class GraphVisualization {
     }
   }
 
-  private handleDragStart = (mouse: THREE.Vector3, draggedNodeIdx: number) => {
+  private handleDragStart = (mouse: THREE.Vector3, draggedNodeIdx: number | null) => {
     this.userHasAdjustedViewport = true
     if (draggedNodeIdx) {
       this.simulation.alphaTarget(0.8).restart()
@@ -264,8 +264,8 @@ export class GraphVisualization {
     this.render()
   }
 
-  private handleClick = (mouse: THREE.Vector3, clickedNodeIdx: number) => {
-    if (clickedNodeIdx) {
+  private handleClick = (mouse: THREE.Vector3, clickedNodeIdx: number | null) => {
+    if (clickedNodeIdx) { // FIXME: 0 is falsy
       const nodes = this.simulation.nodes()
       if (get(nodes, `${clickedNodeIdx}.fx`)) {
         // release node
