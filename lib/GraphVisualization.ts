@@ -62,7 +62,7 @@ export class GraphVisualization {
   public lines: Lines
 
   public onNodeClick: (clickedNode: SimNode) => {}
-  public onHover: (hoveredNode: SimNode) => void
+  public onHover: (hoveredNode: SimNode | null) => void
   public onSimulationTick: (simulation: Simulation) => {}
 
   private userHasAdjustedViewport: boolean
@@ -222,9 +222,15 @@ export class GraphVisualization {
     }
     this.render()
 
-    if (this.onHover && hoveredToNodeIdx !== null) {
-      this.onHover(get(this.simulation.nodes(), hoveredToNodeIdx))
+    if (!this.onHover) {
+      return
     }
+
+    let node: SimNode | null = null
+    if (hoveredToNodeIdx !== null && this.simulation.nodes().length > hoveredToNodeIdx) {
+      node = this.simulation.nodes()[hoveredToNodeIdx]
+    }
+    this.onHover(node)
   }
 
   private handleDragStart = (mouse: THREE.Vector3, draggedNodeIdx: number | null) => {

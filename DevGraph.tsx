@@ -74,8 +74,10 @@ class DevGraphBase extends React.Component<Props, State> {
     this.readGraphViz()
   }
 
-  public onNodeHover = (hoveredNode: SimNode|undefined) => {
-    this.setState({tooltipNode: hoveredNode})
+  public onNodeHover = (hoveredNode: SimNode|null) => {
+    this.setState({
+      tooltipNode: hoveredNode || undefined, // handle annoying mismatch between null and undefined
+    })
   }
 
   public readGraphViz = (): void => {
