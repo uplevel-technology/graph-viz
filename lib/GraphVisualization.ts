@@ -230,14 +230,12 @@ export class GraphVisualization {
     }
   }
 
-  private handleDrag = (mouse: THREE.Vector3, draggedNode: number) => {
-    if (draggedNode) {
-      // lock node
-      const nodes = this.simulation.nodes()
-      nodes[draggedNode].fx = mouse.x
-      nodes[draggedNode].fy = mouse.y
-      this.nodes.lockPointAt(draggedNode)
-    }
+  private handleDrag = (mouse: THREE.Vector3, draggedNodeIdx: number) => {
+    // lock node
+    const nodes = this.simulation.nodes()
+    nodes[draggedNodeIdx].fx = mouse.x
+    nodes[draggedNodeIdx].fy = mouse.y
+    this.nodes.lockPointAt(draggedNodeIdx)
     this.render()
   }
 
