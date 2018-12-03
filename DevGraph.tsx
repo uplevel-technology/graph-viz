@@ -42,7 +42,7 @@ const styles = (theme: Theme) => createStyles({
 })
 
 interface State {
-  readonly tooltipNode?: SimNode
+  readonly tooltipNode: SimNode | null
   readonly errorMessage?: string
 }
 
@@ -57,7 +57,7 @@ class DevGraphBase extends React.Component<Props, State> {
 
   public canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef()
 
-  public readonly state: State = {}
+  public readonly state: State = {tooltipNode: null}
 
   public componentDidMount(): void {
     this.graphVizCrudClient = new GraphVizCrudServiceClient(GRAPH_CRUD_APP_ADDRESS)
@@ -75,9 +75,7 @@ class DevGraphBase extends React.Component<Props, State> {
   }
 
   public onNodeHover = (hoveredNode: SimNode|null) => {
-    this.setState({
-      tooltipNode: hoveredNode || undefined, // handle annoying mismatch between null and undefined
-    })
+    this.setState({tooltipNode: hoveredNode})
   }
 
   public readGraphViz = (): void => {

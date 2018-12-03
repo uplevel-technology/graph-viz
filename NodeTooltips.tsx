@@ -37,7 +37,7 @@ const getTooltipStyle = (node: SimNode, isPrimary?: boolean): CSSProperties => {
 }
 
 interface Props {
-  primaryNode?: SimNode,
+  primaryNode: SimNode | null,
   camera: THREE.OrthographicCamera,
   canvasWidth: number,
   canvasHeight: number,
