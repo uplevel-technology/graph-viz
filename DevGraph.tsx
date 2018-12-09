@@ -1,20 +1,12 @@
 import * as React from 'react'
-import {
-  createStyles,
-  Button,
-  Theme,
-  Typography,
-  withStyles,
-  WithStyles,
-  Paper,
-} from '@material-ui/core'
+import {Button, createStyles, Paper, Theme, Typography, WithStyles, withStyles} from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import {get} from 'lodash'
-import {GraphViz} from '@core/ontology/graph_viz_pb'
 import {
   GraphVizCrudServiceClient,
-  ServiceError as CrudError,
-} from '@core/services/crud/crud_services_pb_service'
+  ServiceError as GraphVizServiceError,
+} from '@core/services/graph_viz_service_pb_service'
+import {GraphViz} from '@core/services/graph_viz_service_pb'
 import {GraphVisualization, SimNode} from './lib/GraphVisualization'
 import {GRAPH_CRUD_APP_ADDRESS} from '../App'
 import {NodeTooltips} from './NodeTooltips'
@@ -81,7 +73,7 @@ class DevGraphBase extends React.Component<Props, State> {
   public readGraphViz = (): void => {
     this.setState({errorMessage: undefined})
 
-    this.graphVizCrudClient.read(new Empty(), (error: CrudError|null, graphViz: GraphViz|null) => {
+    this.graphVizCrudClient.read(new Empty(), (error: GraphVizServiceError|null, graphViz: GraphViz|null) => {
       if (error) {
         console.error(error) // tslint:disable-line no-console
         this.setState({errorMessage: `Error retrieving graph: ${error.message || 'unknown error'}`})

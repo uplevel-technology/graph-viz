@@ -1,7 +1,7 @@
-import {GraphViz, VizNode} from '@core/ontology/graph_viz_pb'
+import {GraphViz, VizNode} from '@core/services/graph_viz_service_pb'
 import {VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
 import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
-import {map, values} from 'lodash'
+import {values} from 'lodash'
 
 export const graphNodePalette = {
   artifact: '#00478D',
