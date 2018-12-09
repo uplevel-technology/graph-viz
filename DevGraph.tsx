@@ -2,11 +2,8 @@ import * as React from 'react'
 import {Button, createStyles, Paper, Theme, Typography, WithStyles, withStyles} from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import {get} from 'lodash'
-import {
-  GraphVizCrudServiceClient,
-  ServiceError as GraphVizServiceError,
-} from '@core/services/graph_viz_service_pb_service'
-import {GraphViz} from '@core/services/graph_viz_service_pb'
+import {GraphVizServiceClient, ServiceError as GraphVizServiceError} from '@core/services/graph_viz_service_pb_service'
+import {GraphVizData} from '@core/services/graph_viz_service_pb'
 import {GraphVisualization, SimNode} from './lib/GraphVisualization'
 import {GRAPH_CRUD_APP_ADDRESS} from '../App'
 import {NodeTooltips} from './NodeTooltips'
@@ -44,7 +41,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 class DevGraphBase extends React.Component<Props, State> {
-  public graphVizCrudClient: GraphVizCrudServiceClient
+  public graphVizCrudClient: GraphVizServiceClient
   public graphVisualization: GraphVisualization
 
   public canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef()
@@ -52,7 +49,7 @@ class DevGraphBase extends React.Component<Props, State> {
   public readonly state: State = {tooltipNode: null}
 
   public componentDidMount(): void {
-    this.graphVizCrudClient = new GraphVizCrudServiceClient(GRAPH_CRUD_APP_ADDRESS)
+    this.graphVizCrudClient = new GraphVizServiceClient(GRAPH_CRUD_APP_ADDRESS)
 
     const canvas = this.canvasRef.current! // this is safe when mounted
     this.graphVisualization = new GraphVisualization(
@@ -73,7 +70,7 @@ class DevGraphBase extends React.Component<Props, State> {
   public readGraphViz = (): void => {
     this.setState({errorMessage: undefined})
 
-    this.graphVizCrudClient.read(new Empty(), (error: GraphVizServiceError|null, graphViz: GraphViz|null) => {
+    this.graphVizCrudClient.read(new Empty(), (error: GraphVizServiceError|null, graphViz: GraphVizData|null) => {
       if (error) {
         console.error(error) // tslint:disable-line no-console
         this.setState({errorMessage: `Error retrieving graph: ${error.message || 'unknown error'}`})

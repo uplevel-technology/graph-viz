@@ -1,4 +1,4 @@
-import {GraphViz, VizNode} from '@core/services/graph_viz_service_pb'
+import {GraphVizData, VizNode} from '@core/services/graph_viz_service_pb'
 import {VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
 import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
 import {values} from 'lodash'
@@ -67,7 +67,7 @@ const formatVizNode = (node: VizNode): TmpVizNode => {
   }
 }
 
-export const formatVizData = (graphViz: GraphViz): TmpVizGraph => {
+export const formatVizData = (graphViz: GraphVizData): TmpVizGraph => {
   // We want a deduped list of all nodes, whether they were seen in the "nodes"
   // or "links" part of the message. We'll build that up in this object:
   const seenVizNodesById: {[vizId: string]: TmpVizNode} = {}
