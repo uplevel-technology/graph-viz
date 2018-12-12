@@ -35,7 +35,7 @@ const formatVizNode = (node: VizNode): TmpVizNode => {
     return {
       type: 'artifact',
       subType: getArtifactNodeLabel(artifact.getType()),
-      vizId: artifact.getUid(),
+      vizId: artifact.getUid()!.getValue(), // FIXME: potentially unsafe - we're not guaranteed getUid() will be defined
     }
   case VizNode.ValueCase.ATTRIBUTE:
     const attribute = node.getAttribute()! // valueCase matched, so this is safe
@@ -49,14 +49,14 @@ const formatVizNode = (node: VizNode): TmpVizNode => {
     return {
       type: 'alert',
       subType: 'alert', // FIXME use [display] name?
-      vizId: alert.getUid(),
+      vizId: alert.getUid()!.getValue(),// FIXME: potentially unsafe - we're not guaranteed getUid() will be defined
     }
   case VizNode.ValueCase.EMAIL_UPLOAD:
     const emailUpload = node.getEmailUpload()! // valueCase matched, so this is safe
     return {
       type: 'email_upload',
       subType: 'email_upload', // FIXME use [display] name?
-      vizId: emailUpload.getUid(),
+      vizId: emailUpload.getUid()!.getValue(), // FIXME: potentially unsafe
     }
   case VizNode.ValueCase.VALUE_NOT_SET:
     throw new Error('VizNode value not set')
