@@ -8,7 +8,7 @@ import {GraphVisualization, SimNode} from './lib/GraphVisualization'
 import {GRAPH_CRUD_APP_ADDRESS} from '../App'
 import {NodeTooltips} from './NodeTooltips'
 import {formatVizData, transformLink, transformNode} from './vizUtils'
-import {Empty} from '@core/services/wrappers_pb'
+import {Empty} from '@core/wrappers_pb'
 
 const styles = (theme: Theme) => createStyles({
   root: {
