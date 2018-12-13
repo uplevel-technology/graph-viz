@@ -33,6 +33,7 @@ const getTooltipStyle = (node: SimNode, isPrimary?: boolean): CSSProperties => {
     position: 'absolute',
     top: node.screenY + offsetTop,
     zIndex: isPrimary ? 10 : 9,
+    fontSize: 12,
   })
 }
 
