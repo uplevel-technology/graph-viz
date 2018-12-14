@@ -49,7 +49,7 @@ const formatVizNode = (node: VizNode): TmpVizNode => {
     return {
       type: 'alert',
       subType: 'alert', // FIXME use [display] name?
-      vizId: alert.getUid()!.getValue(),// FIXME: potentially unsafe - we're not guaranteed getUid() will be defined
+      vizId: alert.getUid()!.getValue(), // FIXME: potentially unsafe - we're not guaranteed getUid() will be defined
     }
   case VizNode.ValueCase.EMAIL_UPLOAD:
     const emailUpload = node.getEmailUpload()! // valueCase matched, so this is safe
