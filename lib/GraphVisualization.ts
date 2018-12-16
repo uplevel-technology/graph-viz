@@ -24,17 +24,19 @@ const mergeById = (originalArray: Array<any>, updatedArray: Array<any>): Array<a
     [...originalArray],
   )
 
-export interface VisualGraphNode extends d3.SimulationNodeDatum {
+export interface VisualGraphNode {
+  id: string
+  x: number | null
+  y: number | null
   displayName: string
   inactive?: boolean
   fill?: number | string
   stroke?: number | string
   strokeOpacity?: number
   strokeWidth?: number
-  [property: string]: any // TODO make VisualGraphNode a union type with DisplayAttributes | Incident | Target | Threat
 }
 
-export interface VisualGraphLink extends d3.SimulationLinkDatum<VisualGraphNode> {
+export interface VisualGraphLink {
   id?: string
   source: string
   target: string
