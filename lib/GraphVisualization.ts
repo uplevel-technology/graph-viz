@@ -1,28 +1,10 @@
 import * as d3 from 'd3'
-import {findIndex, get, merge, reduce, size} from 'lodash'
+import {get, size} from 'lodash'
 import * as THREE from 'three'
+import {mergeById, SimLink, SimNode, Simulation} from './ForceSimulation'
 import {Lines} from './Lines'
 import {MouseInteraction} from './MouseInteraction'
 import {Nodes} from './Nodes'
-
-const mergeById = (originalArray: Array<any>, updatedArray: Array<any>): Array<any> =>
-  reduce(
-    updatedArray,
-    (acc, newElem) => {
-      // find an element with matching id as newElem.id
-      const existingElemIdx = findIndex(acc, (e) => e.id === newElem.id)
-
-      if (existingElemIdx >= 0) {
-        // NOTE (sm): Lodash Merge mutates object, thus maintaining referential equality
-        merge(acc[existingElemIdx], newElem)
-      } else {
-        acc.push(newElem)
-      }
-
-      return acc
-    },
-    [...originalArray],
-  )
 
 export interface VisualGraphNode {
   id: string
@@ -47,16 +29,6 @@ export interface VisualGraphData {
   nodes: Array<VisualGraphNode>
   links: Array<VisualGraphLink>
 }
-
-export type SimNode = VisualGraphNode & d3.SimulationNodeDatum
-
-export interface SimLink extends d3.SimulationLinkDatum<SimNode> {
-  id: string
-  source: SimNode
-  target: SimNode
-}
-
-export type Simulation = d3.Simulation<SimNode, SimLink>
 
 export class GraphVisualization {
   public simulation: Simulation

@@ -1,14 +1,15 @@
-import * as React from 'react'
+import {GraphVizData} from '@core/services/graph_viz_service_pb'
+import {GraphVizServiceClient, ServiceError as GraphVizServiceError} from '@core/services/graph_viz_service_pb_service'
+import {Empty} from '@core/wrappers_pb'
 import {Button, createStyles, Paper, Theme, Typography, WithStyles, withStyles} from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import {get} from 'lodash'
-import {GraphVizServiceClient, ServiceError as GraphVizServiceError} from '@core/services/graph_viz_service_pb_service'
-import {GraphVizData} from '@core/services/graph_viz_service_pb'
-import {GraphVisualization, SimNode} from './lib/GraphVisualization'
+import * as React from 'react'
 import {GRAPH_CRUD_APP_ADDRESS} from '../App'
+import {SimNode} from './lib/ForceSimulation'
+import {GraphVisualization} from './lib/GraphVisualization'
 import {NodeTooltips} from './NodeTooltips'
 import {formatVizData, transformLink, transformNode} from './vizUtils'
-import {Empty} from '@core/wrappers_pb'
 
 const styles = (theme: Theme) => createStyles({
   root: {
