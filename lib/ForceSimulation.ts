@@ -1,6 +1,7 @@
 import * as d3 from 'd3'
 import {findIndex, merge, reduce} from 'lodash'
 
+// TODO: remove this and maintain nodes and links in an object
 export const mergeById = (originalArray: Array<any>, updatedArray: Array<any>): Array<any> =>
   reduce(
     updatedArray,
@@ -69,8 +70,13 @@ export class ForceSimulation {
   }
 
   public update(graph: SimulationInput) {
+    const newNodes = mergeById(this.simulation.nodes(), graph.nodes)
+    const newLinks = mergeById(
+      (this.simulation.force('links') as d3.ForceLink<SimNode, SimLink>).links(),
+      graph.links,
+    )
     this.simulation
-      .nodes(graph.nodes)
-      .force('links', d3.forceLink(graph.links).id((e: SimLink) => e.id))
+      .nodes(newNodes)
+      .force('links', d3.forceLink(newLinks).id((e: SimLink) => e.id))
   }
 }
