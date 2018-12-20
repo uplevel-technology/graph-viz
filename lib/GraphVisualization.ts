@@ -25,18 +25,9 @@ export interface VisualGraphLink {
   color?: number | string
 }
 
-// export interface VisualGraphData {
-//   nodes: Array<VisualGraphNode>
-//   links: Array<VisualGraphLink>
-// }
-
 export interface VisualGraphData {
-  nodes: {
-    [id: string]: VisualGraphNode,
-  },
-  links: {
-    [id: string]: VisualGraphLink,
-  }
+  nodes: Array<VisualGraphNode>
+  links: Array<VisualGraphLink>
 }
 
 export class GraphVisualization {
