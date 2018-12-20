@@ -78,5 +78,14 @@ export class ForceSimulation {
     this.simulation
       .nodes(newNodes)
       .force('links', d3.forceLink(newLinks).id((e: SimLink) => e.id))
+
+
+
+
+    this.simulation.alpha(1)
+    // Run the first few ticks of the simulation before we start drawing:
+    // "Note that tick events are not dispatched when simulation.tick is called manually"
+    d3.range(10).forEach(this.simulation.tick)
+    this.simulation.restart()
   }
 }
