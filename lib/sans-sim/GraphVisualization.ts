@@ -1,9 +1,9 @@
 import {get, size} from 'lodash'
 import * as THREE from 'three'
-import {SimNode, Simulation} from './ForceSimulation'
-import {Lines} from './Lines'
-import {MouseInteraction} from './MouseInteraction'
-import {Nodes} from './Nodes'
+import {D3Simulation, SimNode} from '../ForceSimulation'
+import {Lines} from '../Lines'
+import {MouseInteraction} from '../MouseInteraction'
+import {Nodes} from '../Nodes'
 
 export interface VisualGraphNode {
   id: string
@@ -38,14 +38,14 @@ export interface VisualGraphData {
   }
 }
 
-export class GraphVizSansSim {
+export class GraphVisualization {
   public graph: VisualGraphData
   public nodes: Nodes
   public lines: Lines
 
   public onNodeClick: (clickedNode: SimNode) => {}
   public onHover: (hoveredNode: SimNode | null) => void
-  public onSimulationTick: (simulation: Simulation) => {}
+  public onSimulationTick: (simulation: D3Simulation) => {}
 
   private userHasAdjustedViewport: boolean
   private readonly camera: THREE.OrthographicCamera
