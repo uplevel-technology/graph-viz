@@ -1,6 +1,6 @@
-import {GraphVizData, VizNode} from '@core/services/graph_viz_service_pb'
+import {EverythingResponse} from '@core/services/event_service_pb'
 import {VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
-import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
+import {getArtifactNodeLabel, getAttributeNodeLabel, getEventNodeLabel} from '../displayTypes'
 import {values} from 'lodash'
 
 export const graphNodePalette = {
@@ -28,55 +28,48 @@ interface TmpVizGraph {
   links: TmpVizLink[]
 }
 
-const formatVizNode = (node: VizNode): TmpVizNode => {
+const formatVizNode = (node: EverythingResponse.Node): TmpVizNode => {
   switch (node.getValueCase()) {
-  case VizNode.ValueCase.ARTIFACT:
+  case EverythingResponse.Node.ValueCase.ARTIFACT:
     const artifact = node.getArtifact()! // valueCase matched, so this is safe
     return {
       type: 'artifact',
       subType: getArtifactNodeLabel(artifact.getType()),
       vizId: artifact.getUid()!.getValue(), // FIXME: potentially unsafe - we're not guaranteed getUid() will be defined
     }
-  case VizNode.ValueCase.ATTRIBUTE:
+  case EverythingResponse.Node.ValueCase.ATTRIBUTE:
     const attribute = node.getAttribute()! // valueCase matched, so this is safe
     return {
       type: 'attribute',
       subType: getAttributeNodeLabel(attribute.getType()),
       vizId: attribute.getValue(),
     }
-  case VizNode.ValueCase.ALERT:
-    const alert = node.getAlert()! // valueCase matched, so this is safe
+  case EverythingResponse.Node.ValueCase.EVENT:
+    const event = node.getEvent()! // valueCase matched, so this is safe
     return {
-      type: 'alert',
-      subType: 'alert', // FIXME use [display] name?
-      vizId: alert.getUid()!.getValue(), // FIXME: potentially unsafe - we're not guaranteed getUid() will be defined
+      type: getEventNodeLabel(event.getEventType()),
+      subType: event.getDisplay()!.getName(),
+      vizId: event.getUid()!.getValue(), // FIXME: potentially unsafe - we're not guaranteed getUid() will be defined
     }
-  case VizNode.ValueCase.EMAIL_UPLOAD:
-    const emailUpload = node.getEmailUpload()! // valueCase matched, so this is safe
-    return {
-      type: 'email_upload',
-      subType: 'email_upload', // FIXME use [display] name?
-      vizId: emailUpload.getUid()!.getValue(), // FIXME: potentially unsafe
-    }
-  case VizNode.ValueCase.VALUE_NOT_SET:
-    throw new Error('VizNode value not set')
+  case EverythingResponse.Node.ValueCase.VALUE_NOT_SET:
+    throw new Error('EverythingResponse.Node value not set')
   default:
     // This should happen when a new ObservableNode type was added to the proto
     // but not updated here.
-    throw new Error('Unknown VizNode value:' + node.getValueCase())
+    throw new Error('Unknown EverythingResponse.Node value:' + node.getValueCase())
   }
 }
 
-export const formatVizData = (graphViz: GraphVizData): TmpVizGraph => {
+export const formatVizData = (data: EverythingResponse): TmpVizGraph => {
   // We want a deduped list of all nodes, whether they were seen in the "nodes"
   // or "links" part of the message. We'll build that up in this object:
   const seenVizNodesById: {[vizId: string]: TmpVizNode} = {}
 
-  graphViz.getNodesList().map(formatVizNode).forEach((node) => {
+  data.getNodesList().map(formatVizNode).forEach((node) => {
     seenVizNodesById[node.vizId] = node
   })
 
-  const links = graphViz.getLinksList().map((link) => ({
+  const links = data.getLinksList().map((link) => ({
     from: formatVizNode(link.getFrom()!), // TODO: handle null?
     to: formatVizNode(link.getTo()!), // TODO: handle null?
   }))
