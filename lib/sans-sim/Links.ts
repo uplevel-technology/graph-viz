@@ -1,26 +1,22 @@
 // @flow
 
-import * as d3 from 'd3'
 import {size} from 'lodash'
 import * as THREE from 'three'
-import {SimLink, SimNode, D3Simulation} from '../ForceSimulation'
+import {VisualGraphLink} from './GraphVisualization'
 
 const DEFAULT_COLOR = 0xbbbbbb
 const HIGHLIGHTED_COLOR = 0x333333
 
-export class Lines {
-  public simulation: D3Simulation
+export class Links {
   public object: THREE.LineSegments
 
   private highlightEdges: boolean = false
+  private links: VisualGraphLink[]
   private readonly geometry: THREE.BufferGeometry
   private readonly material: THREE.LineBasicMaterial
 
-  constructor(simulation: D3Simulation) {
-    this.simulation = simulation
-
-    const forceLinks = this.simulation.force('links') as d3.ForceLink<SimNode, SimLink>
-    const links = forceLinks.links()
+  constructor(links: VisualGraphLink[]) {
+    this.links = links
     const numLinks = size(links)
 
     this.geometry = new THREE.BufferGeometry()
@@ -44,16 +40,13 @@ export class Lines {
   }
 
   public updatePositions = () => {
-    const forceLinks = this.simulation.force('links') as d3.ForceLink<SimNode, SimLink>
-    const links = forceLinks.links()
-    this.recalcPositionFromData(links)
+    this.recalcPositionFromData(this.links)
   }
 
-  public redraw = () => {
-    const forceLinks = this.simulation.force('links') as d3.ForceLink<SimNode, SimLink>
-    const links = forceLinks.links()
-    this.recalcPositionFromData(links)
-    this.recalcColorFromData(links)
+  public redraw = (links: VisualGraphLink[]) => {
+    this.links = links
+    this.recalcPositionFromData(this.links)
+    this.recalcColorFromData(this.links)
   }
 
   public dispose = () => {
@@ -61,7 +54,7 @@ export class Lines {
     this.material.dispose()
   }
 
-  private recalcPositionFromData = (links: Array<SimLink>) => {
+  private recalcPositionFromData = (links: VisualGraphLink[]) => {
     const position = this.geometry.getAttribute('position') as THREE.BufferAttribute
 
     const numLinks = size(links)
@@ -83,7 +76,7 @@ export class Lines {
     this.geometry.computeBoundingSphere()
   }
 
-  private recalcColorFromData = (links: Array<SimLink>) => {
+  private recalcColorFromData = (links: VisualGraphLink[]) => {
     const color = this.geometry.getAttribute('color') as THREE.BufferAttribute
 
     const numLinks = size(links)
