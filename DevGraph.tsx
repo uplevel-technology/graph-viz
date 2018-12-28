@@ -1,12 +1,11 @@
-import {GraphVizData} from '@core/services/graph_viz_service_pb'
-import {GraphVizServiceClient, ServiceError as GraphVizServiceError} from '@core/services/graph_viz_service_pb_service'
-import {Empty} from '@core/wrappers_pb'
+import * as React from 'react'
 import {Button, createStyles, Paper, Theme, Typography, WithStyles, withStyles} from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
-import * as React from 'react'
-import {GRAPH_CRUD_APP_ADDRESS} from '../App'
 import {GraphVisualization, VisualGraphNode} from './lib/sans-sim/GraphVisualization'
 import {formatVizData, transformLink, transformNode} from './vizUtils'
+import {Empty} from '@core/wrappers_pb'
+import {EventServiceClient} from '@core/services/event_service_pb_service'
+import {EVENT_SERVICE_ADDRESS} from '../App'
 
 const styles = (theme: Theme) => createStyles({
   root: {
@@ -39,7 +38,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 class DevGraphBase extends React.Component<Props, State> {
-  public graphVizCrudClient: GraphVizServiceClient
+  public client = new EventServiceClient(EVENT_SERVICE_ADDRESS)
   public graphVisualization: GraphVisualization
 
   public canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef()
@@ -47,8 +46,6 @@ class DevGraphBase extends React.Component<Props, State> {
   public readonly state: State = {tooltipNode: null}
 
   public componentDidMount(): void {
-    this.graphVizCrudClient = new GraphVizServiceClient(GRAPH_CRUD_APP_ADDRESS)
-
     const canvas = this.canvasRef.current! // this is safe when mounted
     this.graphVisualization = new GraphVisualization(
       {nodes: [], links: []},
@@ -58,29 +55,29 @@ class DevGraphBase extends React.Component<Props, State> {
     )
     this.graphVisualization.onHover = this.onNodeHover
 
-    this.readGraphViz()
+    this.readGraph()
   }
 
   public onNodeHover = (hoveredNode: VisualGraphNode | null) => {
     this.setState({tooltipNode: hoveredNode})
   }
 
-  public readGraphViz = (): void => {
+  public readGraph = (): void => {
     this.setState({errorMessage: undefined})
 
-    this.graphVizCrudClient.read(new Empty(), (error: GraphVizServiceError|null, graphViz: GraphVizData|null) => {
+    this.client.readEverything(new Empty(), (error, response) => {
       if (error) {
         console.error(error) // tslint:disable-line no-console
-        this.setState({errorMessage: `Error retrieving graph: ${error.message || 'unknown error'}`})
+        this.setState({errorMessage: `Error reading graph: ${error.message || 'unknown error'}`})
         return
       }
 
-      if (!graphViz) {
-        this.setState({errorMessage: 'Error retrieving graph: received no graphViz response'})
+      if (!response) {
+        this.setState({errorMessage: 'Error reading graph: received no response'})
         return
       }
 
-      const graphVizObject = formatVizData(graphViz)
+      const graphVizObject = formatVizData(response)
       const graph = {
         links: graphVizObject.links.map(transformLink),
         nodes: graphVizObject.nodes.map(transformNode),
@@ -106,16 +103,16 @@ class DevGraphBase extends React.Component<Props, State> {
 
         <Button
           size={'small'}
-          onClick={this.readGraphViz}
+          onClick={this.readGraph}
           className={classes.refreshButton}
         >
           <RefreshIcon />
         </Button>
 
         {this.state.errorMessage &&
-        <Typography className={classes.errorMessage}>
-          {this.state.errorMessage}
-        </Typography>
+          <Typography className={classes.errorMessage}>
+            {this.state.errorMessage}
+          </Typography>
         }
       </Paper>
     )
