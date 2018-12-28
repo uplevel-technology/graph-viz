@@ -2,9 +2,9 @@
 
 import {defaultTo, get, size} from 'lodash'
 import * as THREE from 'three'
+import fragmentShader from '../shaders/nodes.fragment.glsl'
+import vertexShader from '../shaders/nodes.vertex.glsl'
 import {VisualGraphNode} from './GraphVisualization'
-import fragmentShader from './shaders/nodes.fragment.glsl'
-import vertexShader from './shaders/nodes.vertex.glsl'
 
 export class Nodes {
   public object: THREE.Points
@@ -39,9 +39,11 @@ export class Nodes {
       vertexShader,
     })
 
+    this.object = new THREE.Points(this.geometry, this.material)
   }
 
-  public updatePositions = () => {
+  public updatePositions = (nodes: VisualGraphNode[]) => {
+    this.nodes = nodes
     this.recalcPositionFromData(this.nodes)
   }
 

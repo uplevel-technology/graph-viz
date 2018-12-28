@@ -3,11 +3,9 @@ import {GraphVizServiceClient, ServiceError as GraphVizServiceError} from '@core
 import {Empty} from '@core/wrappers_pb'
 import {Button, createStyles, Paper, Theme, Typography, WithStyles, withStyles} from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
-import {get} from 'lodash'
 import * as React from 'react'
 import {GRAPH_CRUD_APP_ADDRESS} from '../App'
-import {GraphVisualization, SimNode} from './lib/GraphVisualization'
-import {NodeTooltips} from './NodeTooltips'
+import {GraphVisualization, VisualGraphNode} from './lib/sans-sim/GraphVisualization'
 import {formatVizData, transformLink, transformNode} from './vizUtils'
 
 const styles = (theme: Theme) => createStyles({
@@ -31,7 +29,7 @@ const styles = (theme: Theme) => createStyles({
 })
 
 interface State {
-  readonly tooltipNode: SimNode | null
+  readonly tooltipNode: VisualGraphNode | null
   readonly errorMessage?: string
 }
 
@@ -63,7 +61,7 @@ class DevGraphBase extends React.Component<Props, State> {
     this.readGraphViz()
   }
 
-  public onNodeHover = (hoveredNode: SimNode|null) => {
+  public onNodeHover = (hoveredNode: VisualGraphNode | null) => {
     this.setState({tooltipNode: hoveredNode})
   }
 
@@ -99,12 +97,12 @@ class DevGraphBase extends React.Component<Props, State> {
       <Paper className={classes.root}>
         <canvas ref={this.canvasRef} className={classes.canvas}/>
 
-        <NodeTooltips
-          primaryNode={this.state.tooltipNode}
-          camera={get(this.graphVisualization, 'camera')}
-          canvasWidth={width}
-          canvasHeight={height}
-        />
+        {/*<NodeTooltips*/}
+          {/*primaryNode={this.state.tooltipNode}*/}
+          {/*camera={get(this.graphVisualization, 'camera')}*/}
+          {/*canvasWidth={width}*/}
+          {/*canvasHeight={height}*/}
+        {/*/>*/}
 
         <Button
           size={'small'}

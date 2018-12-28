@@ -5,38 +5,20 @@ import {Links} from './Links'
 import {MouseInteraction} from './MouseInteraction'
 import {Nodes} from './Nodes'
 
-export interface VisualizationInputNode {
-  [key: string]: any
-}
-
-export interface VisualizationInputLink {
+export interface VisualGraphNode {
   id: string
-  source: VisualizationInputNode
-  target: VisualizationInputNode
-}
-
-export interface VisualizationInput {
-  nodes: VisualizationInputNode[]
-  links: VisualizationInputLink[]
-}
-
-export interface VisualGraphNode extends VisualizationInputNode {
-  id: string
-  x: number | null
-  y: number | null
-  displayName: string
+  displayName?: string
   inactive?: boolean
   fill?: number | string
   stroke?: number | string
   strokeOpacity?: number
   strokeWidth?: number
+  [key: string]: any
 }
 
 export interface VisualGraphLink {
-  id?: string
   source: VisualGraphNode
   target: VisualGraphNode
-  color?: number | string
 }
 
 export interface VisualGraphData {
@@ -60,9 +42,9 @@ export class GraphVisualization {
   private readonly mouseInteraction: MouseInteraction
   private readonly canvas: HTMLCanvasElement
 
-  constructor(graphData: VisualizationInput, canvas: HTMLCanvasElement, width: number, height: number) {
+  constructor(graphData: VisualGraphData, canvas: HTMLCanvasElement, width: number, height: number) {
     this.canvas = canvas
-    this.simulation = new ForceSimulation(graphData)
+    this.simulation = new ForceSimulation(graphData, this.onSimulationTick)
     this.graph = this.simulation.getVisualGraph()
 
     // init Scene and Camera
@@ -108,6 +90,16 @@ export class GraphVisualization {
     this.renderer.render(this.scene, this.camera)
   }
 
+  private onSimulationTick = (updatedGraphData: VisualGraphData) => window.requestAnimationFrame(() => {
+    this.nodesMesh.updatePositions(updatedGraphData.nodes)
+    this.linksMesh.updatePositions(updatedGraphData.links)
+
+    if (!this.userHasAdjustedViewport) {
+      this.zoomToFit()
+    }
+    this.render()
+  })
+
   public zoomToFit = () => {
     if (size(this.graph.nodes) === 0) {
       // Don't try to do this if there are no nodes.
@@ -145,10 +137,10 @@ export class GraphVisualization {
     this.nodesMesh.handleCameraZoom()
   }
 
-  public update = (graphData: VisualizationInput) => {
+  public update = (graphData: VisualGraphData) => {
     if (size(this.graph.nodes) === 0 && size(graphData.nodes) > 0) {
       // Re-initialize simulation if it's the first load for better stabilization
-      this.simulation = new ForceSimulation(graphData)
+      this.simulation = new ForceSimulation(graphData, this.onSimulationTick)
     } else {
       this.simulation.update(graphData)
     }

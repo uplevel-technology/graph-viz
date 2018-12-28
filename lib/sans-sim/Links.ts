@@ -39,7 +39,8 @@ export class Links {
     this.highlightEdges = false
   }
 
-  public updatePositions = () => {
+  public updatePositions = (links: VisualGraphLink[]) => {
+    this.links = links
     this.recalcPositionFromData(this.links)
   }
 
@@ -56,7 +57,6 @@ export class Links {
 
   private recalcPositionFromData = (links: VisualGraphLink[]) => {
     const position = this.geometry.getAttribute('position') as THREE.BufferAttribute
-
     const numLinks = size(links)
 
     if (numLinks * 2 !== position.count) {

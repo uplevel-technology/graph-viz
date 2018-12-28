@@ -1,7 +1,7 @@
 import {GraphVizData, VizNode} from '@core/services/graph_viz_service_pb'
-import {VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
-import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
 import {values} from 'lodash'
+import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
+import {VisualGraphLink, VisualGraphNode} from './lib/sans-sim/GraphVisualization'
 
 export const graphNodePalette = {
   artifact: '#00478D',
@@ -97,11 +97,8 @@ export const transformNode = (node: TmpVizNode): VisualGraphNode => ({
 })
 
 export const transformLink = (link: TmpVizLink): VisualGraphLink => {
-  const source = link.from.vizId
-  const target = link.to.vizId
   return {
-    id: `${source}-${target}`,
-    source,
-    target,
+    source: transformNode(link.from),
+    target: transformNode(link.to),
   }
 }
