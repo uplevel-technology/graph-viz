@@ -3,7 +3,7 @@
 import * as d3 from 'd3'
 import {size} from 'lodash'
 import * as THREE from 'three'
-import {SimLink, SimNode, Simulation} from './ForceSimulation'
+import {SimLink, SimNode, Simulation} from './GraphVisualization'
 
 const DEFAULT_COLOR = 0xbbbbbb
 const HIGHLIGHTED_COLOR = 0x333333

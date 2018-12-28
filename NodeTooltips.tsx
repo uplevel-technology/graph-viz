@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {CSSProperties} from 'react'
 import * as THREE from 'three'
-import {SimNode} from './lib/ForceSimulation'
+import {SimNode} from './lib/GraphVisualization'
 
 export const getNodeWithScreenSpaceCoords = (
   node: SimNode,

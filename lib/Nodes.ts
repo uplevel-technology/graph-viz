@@ -2,7 +2,7 @@
 
 import {defaultTo, get, size} from 'lodash'
 import * as THREE from 'three'
-import {SimNode, Simulation} from './ForceSimulation'
+import {SimNode, Simulation} from './GraphVisualization'
 import fragmentShader from './shaders/nodes.fragment.glsl'
 import vertexShader from './shaders/nodes.vertex.glsl'
 

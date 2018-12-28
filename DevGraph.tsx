@@ -6,8 +6,7 @@ import RefreshIcon from '@material-ui/icons/Refresh'
 import {get} from 'lodash'
 import * as React from 'react'
 import {GRAPH_CRUD_APP_ADDRESS} from '../App'
-import {SimNode} from './lib/ForceSimulation'
-import {GraphVisualization} from './lib/GraphVisualization'
+import {GraphVisualization, SimNode} from './lib/GraphVisualization'
 import {NodeTooltips} from './NodeTooltips'
 import {formatVizData, transformLink, transformNode} from './vizUtils'
 
@@ -116,9 +115,9 @@ class DevGraphBase extends React.Component<Props, State> {
         </Button>
 
         {this.state.errorMessage &&
-          <Typography className={classes.errorMessage}>
-            {this.state.errorMessage}
-          </Typography>
+        <Typography className={classes.errorMessage}>
+          {this.state.errorMessage}
+        </Typography>
         }
       </Paper>
     )
