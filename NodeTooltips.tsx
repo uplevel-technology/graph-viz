@@ -1,10 +1,10 @@
 import * as React from 'react'
 import {CSSProperties} from 'react'
 import * as THREE from 'three'
-import {SimNode} from './lib/GraphVisualization'
+import {VisualGraphNode} from './lib/sans-sim/GraphVisualization'
 
 export const getNodeWithScreenSpaceCoords = (
-  node: SimNode,
+  node: VisualGraphNode,
   camera: THREE.OrthographicCamera,
   canvasWidth: number,
   canvasHeight: number,
@@ -23,7 +23,7 @@ export const getNodeWithScreenSpaceCoords = (
   }
 }
 
-const getTooltipStyle = (node: SimNode, isPrimary?: boolean): CSSProperties => {
+const getTooltipStyle = (node: VisualGraphNode, isPrimary?: boolean): CSSProperties => {
   // TOOD: fix node size
   const offsetTop = isPrimary ? -20 : -10
   const offsetLeft = isPrimary ? 25 : 10
@@ -38,7 +38,7 @@ const getTooltipStyle = (node: SimNode, isPrimary?: boolean): CSSProperties => {
 }
 
 interface Props {
-  primaryNode: SimNode | null,
+  primaryNode: VisualGraphNode | null,
   camera: THREE.OrthographicCamera,
   canvasWidth: number,
   canvasHeight: number,

@@ -1,11 +1,13 @@
-import * as React from 'react'
+import {EventServiceClient} from '@core/services/event_service_pb_service'
+import {Empty} from '@core/wrappers_pb'
 import {Button, createStyles, Paper, Theme, Typography, WithStyles, withStyles} from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
-import {GraphVisualization, VisualGraphNode} from './lib/sans-sim/GraphVisualization'
-import {formatVizData, transformLink, transformNode} from './vizUtils'
-import {Empty} from '@core/wrappers_pb'
-import {EventServiceClient} from '@core/services/event_service_pb_service'
+import {get} from 'lodash'
+import * as React from 'react'
 import {EVENT_SERVICE_ADDRESS} from '../App'
+import {GraphVisualization, VisualGraphNode} from './lib/sans-sim/GraphVisualization'
+import {NodeTooltips} from './NodeTooltips'
+import {formatVizData, transformLink, transformNode} from './vizUtils'
 
 const styles = (theme: Theme) => createStyles({
   root: {
@@ -94,12 +96,12 @@ class DevGraphBase extends React.Component<Props, State> {
       <Paper className={classes.root}>
         <canvas ref={this.canvasRef} className={classes.canvas}/>
 
-        {/*<NodeTooltips*/}
-          {/*primaryNode={this.state.tooltipNode}*/}
-          {/*camera={get(this.graphVisualization, 'camera')}*/}
-          {/*canvasWidth={width}*/}
-          {/*canvasHeight={height}*/}
-        {/*/>*/}
+        <NodeTooltips
+          primaryNode={this.state.tooltipNode}
+          camera={get(this.graphVisualization, 'camera')}
+          canvasWidth={width}
+          canvasHeight={height}
+        />
 
         <Button
           size={'small'}
