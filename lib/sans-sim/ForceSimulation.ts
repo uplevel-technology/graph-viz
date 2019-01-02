@@ -28,10 +28,21 @@ export class ForceSimulation {
     this.simulation = d3.forceSimulation(graphData.nodes)
       .force('x', d3.forceX(0))
       .force('y', d3.forceY(0))
-      .force('links', d3.forceLink(linksWithIds).id((n: SimulationNode) => n.id))
+      .force('links', d3.forceLink(linksWithIds).id((n: SimulationNode) => n.id).distance(this.getForceLinkDistance))
       .force('charge', d3.forceManyBody().strength(-50))
       .velocityDecay(0.7)
       .on('tick', this.tick)
+  }
+
+  private getForceLinkDistance(
+    link: {source: string, target: string},
+    i: number,
+    links: {source: string, target: string}[],
+  ) {
+    // NOTE: For now this is set heuristically.
+    // We should ideally measure performance and scale this accordingly.
+    const dropoff = 30 - (links.length / 50)
+    return Math.max(dropoff, 0.3)
   }
 
   private tick = () => {
@@ -52,7 +63,7 @@ export class ForceSimulation {
     const linksWithIds = flattenLinks(graph.links)
     this.simulation
       .nodes(graph.nodes)
-      .force('links', d3.forceLink(linksWithIds).id((n: SimulationNode) => n.id))
+      .force('links', d3.forceLink(linksWithIds).id((n: SimulationNode) => n.id).distance(this.getForceLinkDistance))
   }
 
   public restart() {
