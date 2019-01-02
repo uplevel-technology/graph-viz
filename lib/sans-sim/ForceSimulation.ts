@@ -3,7 +3,7 @@ import {VisualGraphData, VisualGraphLink, VisualGraphNode} from './GraphVisualiz
 
 type SimulationNode = VisualGraphNode & d3.SimulationNodeDatum
 type SimulationLink = VisualGraphLink & d3.SimulationLinkDatum<SimulationNode>
-export type D3Simulation = d3.Simulation<SimulationNode, SimulationLink>
+type D3Simulation = d3.Simulation<SimulationNode, SimulationLink>
 
 // This interface is compatible with VisualGraphData
 export interface SimulationInput {
@@ -17,29 +17,33 @@ const flattenLinks = (links: VisualGraphLink[]) =>
     target: l.target.id,
   }))
 
-export class ForceSimulation {
+// Interfaces that any custom class should implement
+export interface SimulationInterface {
+  reinitialize: (graph: SimulationInput) => void
+  update: (graph: SimulationInput) => void
+  restart: () => void
+  stop: () => void
+  getVisualGraph: () => VisualGraphData
+}
+
+export class ForceSimulation implements SimulationInterface {
   private simulation: D3Simulation
-  private onSimulationTick: (graphData: VisualGraphData) => {}
+  private onSimulationTick: (graphData: VisualGraphData) => void
 
   constructor(
     graphData: SimulationInput,
-    onSimulationTick: (graphData: VisualGraphData) => {},
-    d3Simulation?: D3Simulation,
+    onSimulationTick: (graphData: VisualGraphData) => void,
   ) {
     this.onSimulationTick = onSimulationTick
     const linksWithIds = flattenLinks(graphData.links)
 
-    if (d3Simulation) {
-      this.simulation = d3Simulation
-    } else {
-      this.simulation = d3.forceSimulation(graphData.nodes)
-        .force('x', d3.forceX(0))
-        .force('y', d3.forceY(0))
-        .force('links', d3.forceLink(linksWithIds).id((n: SimulationNode) => n.id).distance(this.getForceLinkDistance))
-        .force('charge', d3.forceManyBody().strength(-50))
-        .velocityDecay(0.7)
-        .on('tick', this.tick)
-    }
+    this.simulation = d3.forceSimulation(graphData.nodes)
+      .force('x', d3.forceX(0))
+      .force('y', d3.forceY(0))
+      .force('links', d3.forceLink(linksWithIds).id((n: SimulationNode) => n.id).distance(this.getForceLinkDistance))
+      .force('charge', d3.forceManyBody().strength(-50))
+      .velocityDecay(0.7)
+      .on('tick', this.tick)
   }
 
   private getForceLinkDistance(
@@ -65,6 +69,17 @@ export class ForceSimulation {
       nodes: this.simulation.nodes() as VisualGraphNode[],
       links: linkForces.links() as VisualGraphLink[],
     }
+  }
+
+  public reinitialize(graph: SimulationInput) {
+    const linksWithIds = flattenLinks(graph.links)
+    this.simulation = d3.forceSimulation(graph.nodes)
+      .force('x', d3.forceX(0))
+      .force('y', d3.forceY(0))
+      .force('links', d3.forceLink(linksWithIds).id((n: SimulationNode) => n.id).distance(this.getForceLinkDistance))
+      .force('charge', d3.forceManyBody().strength(-50))
+      .velocityDecay(0.7)
+      .on('tick', this.tick)
   }
 
   public update(graph: SimulationInput) {

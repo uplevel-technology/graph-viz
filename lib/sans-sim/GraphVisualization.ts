@@ -1,6 +1,6 @@
 import {get, size} from 'lodash'
 import * as THREE from 'three'
-import {D3Simulation, ForceSimulation} from './ForceSimulation'
+import {ForceSimulation, SimulationInterface} from './ForceSimulation'
 import {Links} from './Links'
 import {MouseInteraction} from './MouseInteraction'
 import {Nodes} from './Nodes'
@@ -35,7 +35,7 @@ export class GraphVisualization {
   public onHover: (hoveredNode: VisualGraphNode | null) => void
 
   private userHasAdjustedViewport: boolean
-  private simulation: ForceSimulation
+  private readonly simulation: SimulationInterface
   private readonly camera: THREE.OrthographicCamera
   private readonly scene: THREE.Scene
   private readonly renderer: THREE.WebGLRenderer
@@ -47,10 +47,15 @@ export class GraphVisualization {
     canvas: HTMLCanvasElement,
     width: number,
     height: number,
-    d3Simulation?: D3Simulation,
+    simulation?: SimulationInterface,
   ) {
     this.canvas = canvas
-    this.simulation = new ForceSimulation(graphData, this.onSimulationTick, d3Simulation)
+
+    if (simulation) {
+      this.simulation = simulation
+    } else {
+      this.simulation = new ForceSimulation(graphData, this.onSimulationTick)
+    }
     this.graph = this.simulation.getVisualGraph()
 
     // init Scene and Camera
@@ -146,7 +151,7 @@ export class GraphVisualization {
   public update = (graphData: VisualGraphData) => {
     if (size(this.graph.nodes) === 0 && size(graphData.nodes) > 0) {
       // Re-initialize simulation if it's the first load for better stabilization
-      this.simulation = new ForceSimulation(graphData, this.onSimulationTick)
+      this.simulation.reinitialize(graphData)
     } else {
       this.simulation.update(graphData)
     }
