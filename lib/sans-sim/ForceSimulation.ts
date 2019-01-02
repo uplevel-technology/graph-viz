@@ -32,13 +32,19 @@ export interface SimulationInput {
   links: SimulationLink[],
 }
 
+const flattenLinks = (links: VisualGraphLink[]) =>
+  links.map(l => ({
+    source: l.source.id,
+    target: l.target.id,
+  }))
+
 export class ForceSimulation {
   private simulation: D3Simulation
   private onSimulationTick: (graphData: VisualGraphData) => {}
 
   constructor(graphData: SimulationInput, onSimulationTick: (graphData: VisualGraphData) => {}) {
     this.onSimulationTick = onSimulationTick
-    const linksWithIds = graphData.links.map(l => ({source: l.source.id, target: l.target.id}))
+    const linksWithIds = flattenLinks(graphData.links)
 
     this.simulation = d3.forceSimulation(graphData.nodes)
       .force('x', d3.forceX(0))
@@ -70,8 +76,7 @@ export class ForceSimulation {
       graph.links,
     )
 
-    const linksWithIds = newLinks.map(l => ({source: l.source.id, target: l.target.id}))
-
+    const linksWithIds = flattenLinks(newLinks)
     this.simulation
       .nodes(newNodes)
       .force('links', d3.forceLink(linksWithIds).id((n: SimulationNode) => n.id))
