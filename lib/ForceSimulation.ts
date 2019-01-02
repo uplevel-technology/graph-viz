@@ -22,6 +22,7 @@ export interface SimulationInterface {
   initialize: (graphData: SimulationInput) => void
   update: (graphData: SimulationInput) => void
   restart: () => void
+  reheat: () => void
   stop: () => void
   getVisualGraph: () => VisualGraphData
 }
@@ -67,7 +68,7 @@ export class ForceSimulation implements SimulationInterface {
       .force('x', d3.forceX(0))
       .force('y', d3.forceY(0))
       .force('links', d3.forceLink(linksWithIds).id((n: SimulationNode) => n.id).distance(this.getForceLinkDistance))
-      .force('charge', d3.forceManyBody().strength(-50))
+      .force('charge', d3.forceManyBody().strength(-100))
       .velocityDecay(0.7)
       .on('tick', this.tick)
   }
@@ -80,6 +81,11 @@ export class ForceSimulation implements SimulationInterface {
   }
 
   public restart() {
+    this.simulation.alpha(1)
+    this.simulation.restart()
+  }
+
+  public reheat() {
     this.simulation.alphaTarget(0.8).restart()
   }
 

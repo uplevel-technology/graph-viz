@@ -194,7 +194,7 @@ export class GraphVisualization {
   private handleDragStart = (mouse: THREE.Vector3, draggedNodeIdx: number | null) => {
     this.userHasAdjustedViewport = true
     if (draggedNodeIdx !== null) {
-      this.simulation.restart()
+      this.simulation.reheat()
     }
   }
 
