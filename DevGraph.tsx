@@ -5,7 +5,7 @@ import RefreshIcon from '@material-ui/icons/Refresh'
 import {get} from 'lodash'
 import * as React from 'react'
 import {EVENT_SERVICE_ADDRESS} from '../App'
-import {GraphVisualization, VisualGraphNode} from './lib/sans-sim/GraphVisualization'
+import {GraphVisualization, VisualGraphNode} from './lib/GraphVisualization'
 import {NodeTooltips} from './NodeTooltips'
 import {formatVizData, transformLink, transformNode} from './vizUtils'
 

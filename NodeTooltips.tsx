@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {CSSProperties} from 'react'
 import * as THREE from 'three'
-import {VisualGraphNode} from './lib/sans-sim/GraphVisualization'
+import {VisualGraphNode} from './lib/GraphVisualization'
 
 export const getNodeWithScreenSpaceCoords = (
   node: VisualGraphNode,

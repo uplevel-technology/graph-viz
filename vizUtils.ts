@@ -1,7 +1,7 @@
 import {EverythingResponse} from '@core/services/event_service_pb'
-import {getArtifactNodeLabel, getAttributeNodeLabel, getEventNodeLabel} from '../displayTypes'
 import {values} from 'lodash'
-import {VisualGraphLink, VisualGraphNode} from './lib/sans-sim/GraphVisualization'
+import {getArtifactNodeLabel, getAttributeNodeLabel, getEventNodeLabel} from '../displayTypes'
+import {VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
 
 export const graphNodePalette = {
   artifact: '#00478D',

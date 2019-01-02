@@ -2,23 +2,23 @@
 
 import {defaultTo, get, size} from 'lodash'
 import * as THREE from 'three'
-import {SimNode, Simulation} from './GraphVisualization'
+import {VisualGraphNode} from './GraphVisualization'
 import fragmentShader from './shaders/nodes.fragment.glsl'
 import vertexShader from './shaders/nodes.vertex.glsl'
 
 export class Nodes {
   public object: THREE.Points
-  public simulation: Simulation
+  private nodes: VisualGraphNode[]
   private readonly geometry: THREE.BufferGeometry
   private readonly camera: THREE.OrthographicCamera
   private readonly material: THREE.ShaderMaterial
   private lockedIds: {[id: string]: boolean} = {}
 
-  constructor(simulation: Simulation, camera: THREE.OrthographicCamera) {
-    this.simulation = simulation
+  constructor(nodes: VisualGraphNode[], camera: THREE.OrthographicCamera) {
     this.camera = camera
 
-    const numNodes = size(simulation.nodes())
+    this.nodes = nodes
+    const numNodes = size(nodes)
     this.geometry = new THREE.BufferGeometry()
     this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
     this.geometry.addAttribute('scale', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
@@ -27,7 +27,7 @@ export class Nodes {
     this.geometry.addAttribute('strokeWidth', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
     this.geometry.addAttribute('strokeOpacity', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
 
-    this.recalcAttributesFromData(simulation.nodes())
+    this.recalcAttributesFromData(nodes)
 
     this.material = new THREE.ShaderMaterial({
       fragmentShader,
@@ -42,8 +42,9 @@ export class Nodes {
     this.object = new THREE.Points(this.geometry, this.material)
   }
 
-  public updatePositions = () => {
-    this.recalcPositionFromData(this.simulation.nodes())
+  public updatePositions = (nodes: VisualGraphNode[]) => {
+    this.nodes = nodes
+    this.recalcPositionFromData(this.nodes)
   }
 
   public handleCameraZoom = () => {
@@ -71,8 +72,9 @@ export class Nodes {
     this.lockedIds[pointIdx] = false
   }
 
-  public redraw = () => {
-    this.recalcAttributesFromData(this.simulation.nodes())
+  public redraw = (nodes: VisualGraphNode[]) => {
+    this.nodes = nodes
+    this.recalcAttributesFromData(this.nodes)
   }
 
   public dispose = () => {
@@ -80,7 +82,7 @@ export class Nodes {
     this.material.dispose()
   }
 
-  private recalcAttributesFromData = (nodes: Array<SimNode>) => {
+  private recalcAttributesFromData = (nodes: VisualGraphNode[]) => {
     this.recalcPositionFromData(nodes)
     this.recalcScaleFromData(nodes)
     this.recalcFillFromData(nodes)
@@ -89,7 +91,7 @@ export class Nodes {
     this.recalcStrokeOpacityFromData(nodes)
   }
 
-  private recalcPositionFromData = (nodes: Array<SimNode>) => {
+  private recalcPositionFromData = (nodes: VisualGraphNode[]) => {
     const position = this.geometry.getAttribute('position') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -106,7 +108,7 @@ export class Nodes {
     this.geometry.computeBoundingSphere()
   }
 
-  private recalcScaleFromData = (nodes: Array<SimNode>) => {
+  private recalcScaleFromData = (nodes: VisualGraphNode[]) => {
     const scale = this.geometry.getAttribute('scale') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -121,7 +123,7 @@ export class Nodes {
     scale.needsUpdate = true
   }
 
-  private recalcFillFromData = (nodes: Array<SimNode>) => {
+  private recalcFillFromData = (nodes: VisualGraphNode[]) => {
     const fill = this.geometry.getAttribute('fill') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -138,7 +140,7 @@ export class Nodes {
     fill.needsUpdate = true
   }
 
-  private recalcStrokeFromData = (nodes: Array<SimNode>) => {
+  private recalcStrokeFromData = (nodes: VisualGraphNode[]) => {
     const stroke = this.geometry.getAttribute('stroke') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -155,7 +157,7 @@ export class Nodes {
     stroke.needsUpdate = true
   }
 
-  private recalcStrokeWidthFromData = (nodes: Array<SimNode>) => {
+  private recalcStrokeWidthFromData = (nodes: VisualGraphNode[]) => {
     const strokeWidth = this.geometry.getAttribute('strokeWidth') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -173,7 +175,7 @@ export class Nodes {
     strokeWidth.needsUpdate = true
   }
 
-  private recalcStrokeOpacityFromData = (nodes: Array<SimNode>) => {
+  private recalcStrokeOpacityFromData = (nodes: VisualGraphNode[]) => {
     const strokeOpacity = this.geometry.getAttribute('strokeOpacity') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -201,7 +203,7 @@ export class Nodes {
   private resetAttributeAt = (attributeName: string, pointIdx: number) => {
     const attr = this.geometry.getAttribute(attributeName) as THREE.BufferAttribute
     if (attr.array) {
-      const initialNodeState = get(this.simulation.nodes(), pointIdx)
+      const initialNodeState = get(this.nodes, pointIdx)
       attr.setX(pointIdx, get(initialNodeState, attributeName))
       attr.needsUpdate = true
     }
