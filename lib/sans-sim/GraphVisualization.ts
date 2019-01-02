@@ -1,6 +1,6 @@
 import {get, size} from 'lodash'
 import * as THREE from 'three'
-import {ForceSimulation} from './ForceSimulation'
+import {D3Simulation, ForceSimulation} from './ForceSimulation'
 import {Links} from './Links'
 import {MouseInteraction} from './MouseInteraction'
 import {Nodes} from './Nodes'
@@ -42,9 +42,15 @@ export class GraphVisualization {
   private readonly mouseInteraction: MouseInteraction
   private readonly canvas: HTMLCanvasElement
 
-  constructor(graphData: VisualGraphData, canvas: HTMLCanvasElement, width: number, height: number) {
+  constructor(
+    graphData: VisualGraphData,
+    canvas: HTMLCanvasElement,
+    width: number,
+    height: number,
+    d3Simulation?: D3Simulation,
+  ) {
     this.canvas = canvas
-    this.simulation = new ForceSimulation(graphData, this.onSimulationTick)
+    this.simulation = new ForceSimulation(graphData, this.onSimulationTick, d3Simulation)
     this.graph = this.simulation.getVisualGraph()
 
     // init Scene and Camera
