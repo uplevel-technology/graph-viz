@@ -39,8 +39,8 @@ export class ForceSimulation {
     i: number,
     links: {source: string, target: string}[],
   ) {
-    // NOTE: For now this is set heuristically.
-    // We should ideally measure performance and scale this accordingly.
+    // NOTE: For now this is set heuristically on visual appearance/performance of large graphs.
+    // We should ideally measure performance & appearance and tweak this accordingly.
     const dropoff = 30 - (links.length / 50)
     return Math.max(dropoff, 0.3)
   }
@@ -73,5 +73,4 @@ export class ForceSimulation {
   public stop() {
     this.simulation.alphaTarget(0)
   }
-
 }
