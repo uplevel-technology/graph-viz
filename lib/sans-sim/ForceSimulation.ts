@@ -19,8 +19,8 @@ const flattenLinks = (links: VisualGraphLink[]) =>
 
 // Interfaces that any custom class should implement
 export interface SimulationInterface {
-  reinitialize: (graph: SimulationInput) => void
-  update: (graph: SimulationInput) => void
+  initialize: (graphData: SimulationInput) => void
+  update: (graphData: SimulationInput) => void
   restart: () => void
   stop: () => void
   getVisualGraph: () => VisualGraphData
@@ -28,22 +28,10 @@ export interface SimulationInterface {
 
 export class ForceSimulation implements SimulationInterface {
   private simulation: D3Simulation
-  private onSimulationTick: (graphData: VisualGraphData) => void
+  private onSimulationTick: ((graphData: VisualGraphData) => void) | undefined
 
-  constructor(
-    graphData: SimulationInput,
-    onSimulationTick: (graphData: VisualGraphData) => void,
-  ) {
+  constructor(onSimulationTick?: (graphData: VisualGraphData) => void) {
     this.onSimulationTick = onSimulationTick
-    const linksWithIds = flattenLinks(graphData.links)
-
-    this.simulation = d3.forceSimulation(graphData.nodes)
-      .force('x', d3.forceX(0))
-      .force('y', d3.forceY(0))
-      .force('links', d3.forceLink(linksWithIds).id((n: SimulationNode) => n.id).distance(this.getForceLinkDistance))
-      .force('charge', d3.forceManyBody().strength(-50))
-      .velocityDecay(0.7)
-      .on('tick', this.tick)
   }
 
   private getForceLinkDistance(
@@ -58,8 +46,10 @@ export class ForceSimulation implements SimulationInterface {
   }
 
   private tick = () => {
-    const visualGraph = this.getVisualGraph()
-    this.onSimulationTick(visualGraph)
+    if (this.onSimulationTick) {
+      const visualGraph = this.getVisualGraph()
+      this.onSimulationTick(visualGraph)
+    }
   }
 
   public getVisualGraph(): VisualGraphData {
@@ -71,7 +61,7 @@ export class ForceSimulation implements SimulationInterface {
     }
   }
 
-  public reinitialize(graph: SimulationInput) {
+  public initialize(graph: SimulationInput) {
     const linksWithIds = flattenLinks(graph.links)
     this.simulation = d3.forceSimulation(graph.nodes)
       .force('x', d3.forceX(0))

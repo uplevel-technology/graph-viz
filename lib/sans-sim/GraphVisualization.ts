@@ -54,7 +54,8 @@ export class GraphVisualization {
     if (simulation) {
       this.simulation = simulation
     } else {
-      this.simulation = new ForceSimulation(graphData, this.onSimulationTick)
+      this.simulation = new ForceSimulation(this.onSimulationTick)
+      this.simulation.initialize(graphData)
     }
     this.graph = this.simulation.getVisualGraph()
 
@@ -151,7 +152,7 @@ export class GraphVisualization {
   public update = (graphData: VisualGraphData) => {
     if (size(this.graph.nodes) === 0 && size(graphData.nodes) > 0) {
       // Re-initialize simulation if it's the first load for better stabilization
-      this.simulation.reinitialize(graphData)
+      this.simulation.initialize(graphData)
     } else {
       this.simulation.update(graphData)
     }
