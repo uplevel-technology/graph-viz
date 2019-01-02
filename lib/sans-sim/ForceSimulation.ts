@@ -1,26 +1,5 @@
 import * as d3 from 'd3'
-import {findIndex, merge, reduce} from 'lodash'
 import {VisualGraphData, VisualGraphLink, VisualGraphNode} from './GraphVisualization'
-
-// TODO: remove this and maintain nodes and links in an object
-export const mergeById = (originalArray: Array<any>, updatedArray: Array<any>): Array<any> =>
-  reduce(
-    updatedArray,
-    (acc, newElem) => {
-      // find an element with matching id as newElem.id
-      const existingElemIdx = findIndex(acc, (e) => e.id === newElem.id)
-
-      if (existingElemIdx >= 0) {
-        // NOTE (sm): Lodash Merge mutates object, thus maintaining referential equality
-        merge(acc[existingElemIdx], newElem)
-      } else {
-        acc.push(newElem)
-      }
-
-      return acc
-    },
-    [...originalArray],
-  )
 
 type SimulationNode = VisualGraphNode & d3.SimulationNodeDatum
 type SimulationLink = VisualGraphLink & d3.SimulationLinkDatum<SimulationNode>
@@ -70,22 +49,10 @@ export class ForceSimulation {
   }
 
   public update(graph: SimulationInput) {
-    const newNodes = mergeById(this.simulation.nodes(), graph.nodes)
-    const newLinks = mergeById(
-      (this.simulation.force('links') as d3.ForceLink<SimulationNode, SimulationLink>).links(),
-      graph.links,
-    )
-
-    const linksWithIds = flattenLinks(newLinks)
+    const linksWithIds = flattenLinks(graph.links)
     this.simulation
-      .nodes(newNodes)
+      .nodes(graph.nodes)
       .force('links', d3.forceLink(linksWithIds).id((n: SimulationNode) => n.id))
-
-    // this.simulation.alpha(1)
-    // // Run the first few ticks of the simulation before we start drawing:
-    // // "Note that tick events are not dispatched when simulation.tick is called manually"
-    // d3.range(10).forEach(this.simulation.tick)
-    // this.simulation.restart()
   }
 
   public restart() {
