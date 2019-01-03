@@ -68,6 +68,8 @@ export class GraphVisualization {
   private readonly renderer: THREE.WebGLRenderer
   private readonly mouseInteraction: MouseInteraction
   private readonly canvas: HTMLCanvasElement
+  private readonly width: number
+  private readonly height: number
 
   constructor(
     graphData: VisualGraphData,
@@ -77,6 +79,8 @@ export class GraphVisualization {
     simulation?: SimulationInterface,
   ) {
     this.canvas = canvas
+    this.width = width
+    this.height = height
 
     if (simulation) {
       this.simulation = simulation
@@ -214,16 +218,25 @@ export class GraphVisualization {
     let screenNode: ScreenNode | null = null
     if (hoveredToNodeIdx !== null && size(this.graph.nodes) > hoveredToNodeIdx) {
       const node = this.graph.nodes[hoveredToNodeIdx]
-      const pos = new THREE.Vector3(node.x, node.y, 0)
-      pos.project(this.camera)
-
+      const pos = this.toScreenSpacePoint(new THREE.Vector3(node.x, node.y, 0))
       screenNode = {
         ...node,
-        screenX: THREE.Math.mapLinear(pos.x, -1, 1, 0, this.canvas.width),
-        screenY: THREE.Math.mapLinear(pos.y, 1, -1, 0, this.canvas.height),
+        screenX: pos.x,
+        screenY: pos.y,
       }
     }
     this.onHover(screenNode)
+  }
+
+  private toScreenSpacePoint = (worldSpacePoint: THREE.Vector3): THREE.Vector3 => {
+    const pos = new THREE.Vector3(worldSpacePoint.x, worldSpacePoint.y, 0)
+    pos.project(this.camera)
+
+    return new THREE.Vector3(
+      THREE.Math.mapLinear(pos.x, -1, 1, 0, this.width),
+      THREE.Math.mapLinear(pos.y, 1, -1, 0, this.height),
+      0,
+    )
   }
 
   private handleDragStart = (mouse: THREE.Vector3, draggedNodeIdx: number | null) => {
