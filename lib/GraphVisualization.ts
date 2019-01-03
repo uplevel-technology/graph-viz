@@ -6,14 +6,28 @@ import {MouseInteraction} from './MouseInteraction'
 import {Nodes} from './Nodes'
 
 export interface VisualGraphNode {
-  id: string
-  displayName?: string
+  id: string | number
   inactive?: boolean
   fill?: number | string
   stroke?: number | string
   strokeOpacity?: number
   strokeWidth?: number
-  [key: string]: any
+  /**
+   * Node’s current x-position
+   */
+  x?: number
+  /**
+   * Node’s current y-position
+   */
+  y?: number
+  /**
+   * Node’s fixed x-position (if position was fixed)
+   */
+  fx?: number | null
+  /**
+   * Node’s fixed y-position (if position was fixed)
+   */
+  fy?: number | null
 }
 
 export interface VisualGraphLink {
