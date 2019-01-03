@@ -32,7 +32,7 @@ export interface VisualGraphNode {
 }
 
 // interface with a VisualGraphNode's screen space coordinates
-export interface ScreenNode extends VisualGraphNode {
+interface ScreenNode extends VisualGraphNode {
   /**
    * Node’s screen space x-position
    */

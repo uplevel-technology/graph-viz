@@ -1,8 +1,14 @@
 import * as React from 'react'
 import {CSSProperties} from 'react'
-import {ScreenNode} from './lib/GraphVisualization'
 
-const getTooltipStyle = (node: ScreenNode, isPrimary?: boolean): CSSProperties => {
+export interface TooltipNode {
+  id: string
+  displayName: string
+  screenX: number
+  screenY: number
+}
+
+const getTooltipStyle = (node: TooltipNode, isPrimary?: boolean): CSSProperties => {
   const offsetTop = isPrimary ? -20 : -10
   const offsetLeft = isPrimary ? 25 : 10
   return ({
@@ -16,7 +22,7 @@ const getTooltipStyle = (node: ScreenNode, isPrimary?: boolean): CSSProperties =
 }
 
 interface Props {
-  node: ScreenNode | null,
+  node: TooltipNode | null,
 }
 
 export class NodeTooltips extends React.Component<Props> {

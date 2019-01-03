@@ -4,8 +4,8 @@ import {Button, createStyles, Paper, Theme, Typography, WithStyles, withStyles} 
 import RefreshIcon from '@material-ui/icons/Refresh'
 import * as React from 'react'
 import {EVENT_SERVICE_ADDRESS} from '../App'
-import {GraphVisualization, ScreenNode} from './lib/GraphVisualization'
-import {NodeTooltips} from './NodeTooltips'
+import {GraphVisualization} from './lib/GraphVisualization'
+import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {toVisualGraphData} from './vizUtils'
 
 const styles = (theme: Theme) => createStyles({
@@ -29,7 +29,7 @@ const styles = (theme: Theme) => createStyles({
 })
 
 interface State {
-  readonly tooltipNode: ScreenNode | null
+  readonly tooltipNode: TooltipNode | null
   readonly errorMessage?: string
 }
 
@@ -61,7 +61,7 @@ class DevGraphBase extends React.Component<Props, State> {
     this.readGraph()
   }
 
-  onNodeHover = (hoveredNode: ScreenNode | null) => {
+  onNodeHover = (hoveredNode: TooltipNode | null) => {
     this.setState({tooltipNode: hoveredNode})
   }
 
