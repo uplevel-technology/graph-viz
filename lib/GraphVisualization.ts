@@ -6,7 +6,7 @@ import {MouseInteraction} from './MouseInteraction'
 import {Nodes} from './Nodes'
 
 export interface VisualGraphNode {
-  id: string | number
+  id: string
   inactive?: boolean
   fill?: number | string
   stroke?: number | string

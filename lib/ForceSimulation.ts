@@ -1,15 +1,7 @@
 import * as d3 from 'd3'
 import {VisualGraphData, VisualGraphLink, VisualGraphNode} from './GraphVisualization'
 
-type SimulationNode = VisualGraphNode & d3.SimulationNodeDatum
-type SimulationLink = VisualGraphLink & d3.SimulationLinkDatum<SimulationNode>
-type D3Simulation = d3.Simulation<SimulationNode, SimulationLink>
-
-// This interface is compatible with VisualGraphData
-export interface SimulationInput {
-  nodes: SimulationNode[],
-  links: SimulationLink[],
-}
+type D3Simulation = d3.Simulation<VisualGraphNode, VisualGraphLink>
 
 const flattenLinks = (links: VisualGraphLink[]) =>
   links.map(l => ({
@@ -19,8 +11,8 @@ const flattenLinks = (links: VisualGraphLink[]) =>
 
 // Interfaces that any custom class should implement
 export interface SimulationInterface {
-  initialize: (graphData: SimulationInput) => void
-  update: (graphData: SimulationInput) => void
+  initialize: (graphData: VisualGraphData) => void
+  update: (graphData: VisualGraphData) => void
   restart: () => void
   reheat: () => void
   stop: () => void
@@ -54,7 +46,7 @@ export class ForceSimulation implements SimulationInterface {
   }
 
   public getVisualGraph(): VisualGraphData {
-    const linkForces = this.simulation.force('links') as d3.ForceLink<SimulationNode, SimulationLink>
+    const linkForces = this.simulation.force('links') as d3.ForceLink<VisualGraphNode, VisualGraphLink>
 
     return {
       nodes: this.simulation.nodes() as VisualGraphNode[],
@@ -62,22 +54,22 @@ export class ForceSimulation implements SimulationInterface {
     }
   }
 
-  public initialize(graph: SimulationInput) {
+  public initialize(graph: VisualGraphData) {
     const linksWithIds = flattenLinks(graph.links)
     this.simulation = d3.forceSimulation(graph.nodes)
       .force('x', d3.forceX(0))
       .force('y', d3.forceY(0))
-      .force('links', d3.forceLink(linksWithIds).id((n: SimulationNode) => n.id).distance(this.getForceLinkDistance))
+      .force('links', d3.forceLink(linksWithIds).id((n: VisualGraphNode) => n.id).distance(this.getForceLinkDistance))
       .force('charge', d3.forceManyBody().strength(-100))
       .velocityDecay(0.7)
       .on('tick', this.tick)
   }
 
-  public update(graph: SimulationInput) {
+  public update(graph: VisualGraphData) {
     const linksWithIds = flattenLinks(graph.links)
     this.simulation
       .nodes(graph.nodes)
-      .force('links', d3.forceLink(linksWithIds).id((n: SimulationNode) => n.id).distance(this.getForceLinkDistance))
+      .force('links', d3.forceLink(linksWithIds).id((n: VisualGraphNode) => n.id).distance(this.getForceLinkDistance))
   }
 
   public restart() {
