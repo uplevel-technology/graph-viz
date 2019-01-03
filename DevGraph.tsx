@@ -7,7 +7,7 @@ import * as React from 'react'
 import {EVENT_SERVICE_ADDRESS} from '../App'
 import {GraphVisualization, VisualGraphNode} from './lib/GraphVisualization'
 import {NodeTooltips} from './NodeTooltips'
-import {formatVizData, transformLink, transformNode} from './vizUtils'
+import {toVisualGraphData} from './vizUtils'
 
 const styles = (theme: Theme) => createStyles({
   root: {
@@ -79,13 +79,7 @@ class DevGraphBase extends React.Component<Props, State> {
         return
       }
 
-      const graphVizObject = formatVizData(response)
-      const graph = {
-        links: graphVizObject.links.map(transformLink),
-        nodes: graphVizObject.nodes.map(transformNode),
-      }
-
-      this.graphVisualization.update(graph)
+      this.graphVisualization.update(toVisualGraphData(response))
     })
   }
 
