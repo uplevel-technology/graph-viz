@@ -218,7 +218,7 @@ export class GraphVisualization {
     let screenNode: ScreenNode | null = null
     if (hoveredToNodeIdx !== null && size(this.graph.nodes) > hoveredToNodeIdx) {
       const node = this.graph.nodes[hoveredToNodeIdx]
-      const pos = this.toScreenSpacePoint(new THREE.Vector3(node.x, node.y, 0))
+      const pos = this.toScreenSpacePoint(node.x, node.y)
       screenNode = {
         ...node,
         screenX: pos.x,
@@ -228,8 +228,8 @@ export class GraphVisualization {
     this.onHover(screenNode)
   }
 
-  private toScreenSpacePoint = (worldSpacePoint: THREE.Vector3): THREE.Vector3 => {
-    const pos = new THREE.Vector3(worldSpacePoint.x, worldSpacePoint.y, 0)
+  private toScreenSpacePoint = (worldX: number = 0, worldY: number = 0): THREE.Vector3 => {
+    const pos = new THREE.Vector3(worldX, worldY, 0)
     pos.project(this.camera)
 
     return new THREE.Vector3(
