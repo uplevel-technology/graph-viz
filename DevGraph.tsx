@@ -2,10 +2,9 @@ import {EventServiceClient} from '@core/services/event_service_pb_service'
 import {Empty} from '@core/wrappers_pb'
 import {Button, createStyles, Paper, Theme, Typography, WithStyles, withStyles} from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
-import {get} from 'lodash'
 import * as React from 'react'
 import {EVENT_SERVICE_ADDRESS} from '../App'
-import {GraphVisualization, VisualGraphNode} from './lib/GraphVisualization'
+import {GraphVisualization, ScreenNode} from './lib/GraphVisualization'
 import {NodeTooltips} from './NodeTooltips'
 import {toVisualGraphData} from './vizUtils'
 
@@ -30,7 +29,7 @@ const styles = (theme: Theme) => createStyles({
 })
 
 interface State {
-  readonly tooltipNode: VisualGraphNode | null
+  readonly tooltipNode: ScreenNode | null
   readonly errorMessage?: string
 }
 
@@ -40,14 +39,16 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 class DevGraphBase extends React.Component<Props, State> {
-  public client = new EventServiceClient(EVENT_SERVICE_ADDRESS)
-  public graphVisualization: GraphVisualization
+  client = new EventServiceClient(EVENT_SERVICE_ADDRESS)
+  graphVisualization: GraphVisualization
 
-  public canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef()
+  canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef()
 
-  public readonly state: State = {tooltipNode: null}
+  readonly state: State = {
+    tooltipNode: null,
+  }
 
-  public componentDidMount(): void {
+  componentDidMount(): void {
     const canvas = this.canvasRef.current! // this is safe when mounted
     this.graphVisualization = new GraphVisualization(
       {nodes: [], links: []},
@@ -60,11 +61,11 @@ class DevGraphBase extends React.Component<Props, State> {
     this.readGraph()
   }
 
-  public onNodeHover = (hoveredNode: VisualGraphNode | null) => {
+  onNodeHover = (hoveredNode: ScreenNode | null) => {
     this.setState({tooltipNode: hoveredNode})
   }
 
-  public readGraph = (): void => {
+  readGraph = (): void => {
     this.setState({errorMessage: undefined})
 
     this.client.readEverything(new Empty(), (error, response) => {
@@ -83,19 +84,14 @@ class DevGraphBase extends React.Component<Props, State> {
     })
   }
 
-  public render() {
-    const {classes, width, height} = this.props
+  render() {
+    const {classes} = this.props
 
     return (
       <Paper className={classes.root}>
         <canvas ref={this.canvasRef} className={classes.canvas}/>
 
-        <NodeTooltips
-          primaryNode={this.state.tooltipNode}
-          camera={get(this.graphVisualization, 'camera')}
-          canvasWidth={width}
-          canvasHeight={height}
-        />
+        <NodeTooltips node={this.state.tooltipNode}/>
 
         <Button
           size={'small'}

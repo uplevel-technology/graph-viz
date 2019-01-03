@@ -12,6 +12,7 @@ export interface VisualGraphNode {
   stroke?: number | string
   strokeOpacity?: number
   strokeWidth?: number
+  displayName?: string
   /**
    * Node’s current x-position
    */
@@ -30,6 +31,18 @@ export interface VisualGraphNode {
   fy?: number | null
 }
 
+// interface with a VisualGraphNode's screen space coordinates
+export interface ScreenNode extends VisualGraphNode {
+  /**
+   * Node’s screen space x-position
+   */
+  screenX: number
+  /**
+   * Node’s screen space y-position
+   */
+  screenY: number
+}
+
 export interface VisualGraphLink {
   source: VisualGraphNode
   target: VisualGraphNode
@@ -46,7 +59,7 @@ export class GraphVisualization {
   public linksMesh: Links
 
   public onNodeClick: (clickedNode: VisualGraphNode) => {}
-  public onHover: (hoveredNode: VisualGraphNode | null) => void
+  public onHover: (hoveredNode: ScreenNode | null) => void
 
   private userHasAdjustedViewport: boolean
   private readonly simulation: SimulationInterface
@@ -198,11 +211,19 @@ export class GraphVisualization {
       return
     }
 
-    let node: VisualGraphNode | null = null
+    let screenNode: ScreenNode | null = null
     if (hoveredToNodeIdx !== null && size(this.graph.nodes) > hoveredToNodeIdx) {
-      node = this.graph.nodes[hoveredToNodeIdx]
+      const node = this.graph.nodes[hoveredToNodeIdx]
+      const pos = new THREE.Vector3(node.x, node.y, 0)
+      pos.project(this.camera)
+
+      screenNode = {
+        ...node,
+        screenX: THREE.Math.mapLinear(pos.x, -1, 1, 0, this.canvas.width),
+        screenY: THREE.Math.mapLinear(pos.y, 1, -1, 0, this.canvas.height),
+      }
     }
-    this.onHover(node)
+    this.onHover(screenNode)
   }
 
   private handleDragStart = (mouse: THREE.Vector3, draggedNodeIdx: number | null) => {
