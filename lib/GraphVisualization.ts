@@ -1,10 +1,18 @@
 import {get, size} from 'lodash'
 import * as THREE from 'three'
-import {ForceSimulation, SimulationInterface} from './ForceSimulation'
+import {DefaultForceSimulation} from './DefaultForceSimulation'
 import {Links} from './Links'
 import {MouseInteraction} from './MouseInteraction'
 import {Nodes} from './Nodes'
+import {SimulationInterface} from './SimulationInterface'
 
+// input data structure
+export interface VisualGraphData {
+  nodes: VisualGraphNode[]
+  links: VisualGraphLink[]
+}
+
+// input node data structure
 export interface VisualGraphNode {
   id: string
   inactive?: boolean
@@ -31,8 +39,14 @@ export interface VisualGraphNode {
   fy?: number | null
 }
 
+// input link data structure
+export interface VisualGraphLink {
+  source: VisualGraphNode
+  target: VisualGraphNode
+}
+
 // interface with a VisualGraphNode's screen space coordinates
-interface ScreenNode extends VisualGraphNode {
+interface ScreenSpaceNode extends VisualGraphNode {
   /**
    * Node’s screen space x-position
    */
@@ -43,23 +57,13 @@ interface ScreenNode extends VisualGraphNode {
   screenY: number
 }
 
-export interface VisualGraphLink {
-  source: VisualGraphNode
-  target: VisualGraphNode
-}
-
-export interface VisualGraphData {
-  nodes: VisualGraphNode[]
-  links: VisualGraphLink[]
-}
-
 export class GraphVisualization {
   public graph: VisualGraphData
   public nodesMesh: Nodes
   public linksMesh: Links
 
   public onNodeClick: (clickedNode: VisualGraphNode) => {}
-  public onHover: (hoveredNode: ScreenNode | null) => void
+  public onHover: (hoveredNode: ScreenSpaceNode | null) => void
 
   private userHasAdjustedViewport: boolean
   private readonly simulation: SimulationInterface
@@ -85,7 +89,7 @@ export class GraphVisualization {
     if (simulation) {
       this.simulation = simulation
     } else {
-      this.simulation = new ForceSimulation(this.onSimulationTick)
+      this.simulation = new DefaultForceSimulation(this.onSimulationTick)
       this.simulation.initialize(graphData)
     }
     this.graph = this.simulation.getVisualGraph()
@@ -215,7 +219,7 @@ export class GraphVisualization {
       return
     }
 
-    let screenNode: ScreenNode | null = null
+    let screenNode: ScreenSpaceNode | null = null
     if (hoveredToNodeIdx !== null && size(this.graph.nodes) > hoveredToNodeIdx) {
       const node = this.graph.nodes[hoveredToNodeIdx]
       const pos = this.toScreenSpacePoint(node.x, node.y)

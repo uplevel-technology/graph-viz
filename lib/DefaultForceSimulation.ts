@@ -1,5 +1,6 @@
 import * as d3 from 'd3'
 import {VisualGraphData, VisualGraphLink, VisualGraphNode} from './GraphVisualization'
+import {SimulationInterface} from './SimulationInterface'
 
 type D3Simulation = d3.Simulation<VisualGraphNode, VisualGraphLink>
 
@@ -9,17 +10,7 @@ const flattenLinks = (links: VisualGraphLink[]) =>
     target: l.target.id,
   }))
 
-// Interfaces that any custom class should implement
-export interface SimulationInterface {
-  initialize: (graphData: VisualGraphData) => void
-  update: (graphData: VisualGraphData) => void
-  restart: () => void
-  reheat: () => void
-  stop: () => void
-  getVisualGraph: () => VisualGraphData
-}
-
-export class ForceSimulation implements SimulationInterface {
+export class DefaultForceSimulation implements SimulationInterface {
   private simulation: D3Simulation
   private onSimulationTick: ((graphData: VisualGraphData) => void) | undefined
 
