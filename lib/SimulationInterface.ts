@@ -16,9 +16,9 @@ export interface SimulationInterface {
    */
   restart: () => void
   /**
-   * Adds entropy to the simulation and restart it.
-   * The caller should not expect the entropy of the simulation to settle and will have to call stop after any
-   * call to this function.
+   * Adds entropy to the simulation and restarts it.
+   * The caller should not expect the entropy of the simulation to settle and will have to manually call `stop()` after
+   * any call to this function.
    */
   reheat: () => void
   /**
