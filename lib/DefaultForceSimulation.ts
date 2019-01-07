@@ -12,10 +12,9 @@ const flattenLinks = (links: VisualGraphLink[]) =>
 
 export class DefaultForceSimulation implements SimulationInterface {
   private simulation: D3Simulation
-  private onSimulationTick: ((graphData: VisualGraphData) => void) | undefined
-
-  constructor(onSimulationTick?: (graphData: VisualGraphData) => void) {
-    this.onSimulationTick = onSimulationTick
+  private tickEventHandler(graphData: VisualGraphData) {
+    // Default no op implementation. Will be overwritten by the callback provided to onSimulationTick
+    return
   }
 
   private getForceLinkDistance(
@@ -27,13 +26,6 @@ export class DefaultForceSimulation implements SimulationInterface {
     // We should ideally measure performance & appearance and tweak this accordingly.
     const dropoff = 30 - (links.length / 50)
     return Math.max(dropoff, 0.3)
-  }
-
-  private tick = () => {
-    if (this.onSimulationTick) {
-      const visualGraph = this.getVisualGraph()
-      this.onSimulationTick(visualGraph)
-    }
   }
 
   public getVisualGraph(): VisualGraphData {
@@ -53,7 +45,14 @@ export class DefaultForceSimulation implements SimulationInterface {
       .force('links', d3.forceLink(linksWithIds).id((n: VisualGraphNode) => n.id).distance(this.getForceLinkDistance))
       .force('charge', d3.forceManyBody().strength(-100))
       .velocityDecay(0.7)
-      .on('tick', this.tick)
+      .on('tick', () => {
+        const visualGraph = this.getVisualGraph()
+        this.tickEventHandler(visualGraph)
+      })
+  }
+
+  public onSimulationTick(callback: (graphData: VisualGraphData) => void) {
+    this.tickEventHandler = callback
   }
 
   public update(graph: VisualGraphData) {

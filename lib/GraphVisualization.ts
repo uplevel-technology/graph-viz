@@ -89,7 +89,8 @@ export class GraphVisualization {
     if (simulation) {
       this.simulation = simulation
     } else {
-      this.simulation = new DefaultForceSimulation(this.onSimulationTick)
+      this.simulation = new DefaultForceSimulation()
+      this.simulation.onSimulationTick(this.updatePositions)
       this.simulation.initialize(graphData)
     }
     this.graph = this.simulation.getVisualGraph()
@@ -137,7 +138,7 @@ export class GraphVisualization {
     this.renderer.render(this.scene, this.camera)
   }
 
-  private onSimulationTick = (updatedGraphData: VisualGraphData) => window.requestAnimationFrame(() => {
+  private updatePositions = (updatedGraphData: VisualGraphData) => window.requestAnimationFrame(() => {
     this.nodesMesh.updatePositions(updatedGraphData.nodes)
     this.linksMesh.updatePositions(updatedGraphData.links)
 

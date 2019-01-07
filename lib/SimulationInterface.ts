@@ -7,6 +7,10 @@ export interface SimulationInterface {
    */
   initialize: (graphData: VisualGraphData) => void
   /**
+   * Handler to bind a callback function to the simulation's tick event
+   */
+  onSimulationTick: (callback: (graphData: VisualGraphData) => void) => void
+  /**
    * Updates the simulation data
    */
   update: (graphData: VisualGraphData) => void
