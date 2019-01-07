@@ -1,5 +1,5 @@
 import {Event} from '@core/event_pb'
-import {EverythingResponse} from '@core/services/event_service_pb'
+import {EverythingResponse} from '@core/services/crud_service_pb'
 import {values} from 'lodash'
 import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
 import {VisualGraphData, VisualGraphNode} from './lib/GraphVisualization'
