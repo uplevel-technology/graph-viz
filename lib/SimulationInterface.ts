@@ -5,7 +5,7 @@ export interface SimulationInterface {
   /**
    * Seeds the simulation with data
    */
-  initialize: (graphData: VisualGraphData) => void
+  initialize: (graphData: VisualGraphData, onSimulationTick?: (graphData: VisualGraphData) => void) => void
   /**
    * Handler to bind a callback function to the simulation's tick event
    */

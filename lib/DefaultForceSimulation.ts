@@ -37,7 +37,7 @@ export class DefaultForceSimulation implements SimulationInterface {
     }
   }
 
-  public initialize(graph: VisualGraphData) {
+  public initialize(graph: VisualGraphData, onSimulationTick?: (graphData: VisualGraphData) => void) {
     const linksWithIds = flattenLinks(graph.links)
     this.simulation = d3.forceSimulation(graph.nodes)
       .force('x', d3.forceX(0))
