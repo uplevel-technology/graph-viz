@@ -37,6 +37,9 @@ export interface VisualGraphNode {
    * Node’s fixed y-position (if position was fixed)
    */
   fy?: number | null
+
+  forceX?: number | null
+  forceY?: number | null
 }
 
 // input link data structure

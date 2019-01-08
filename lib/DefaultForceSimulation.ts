@@ -18,8 +18,6 @@ export class DefaultForceSimulation implements SimulationInterface {
   }
 
   private getForceLinkDistance(
-    link: {source: string, target: string},
-    i: number,
     links: {source: string, target: string}[],
   ) {
     // NOTE: For now this is set heuristically on visual appearance/performance of large graphs.
@@ -39,11 +37,17 @@ export class DefaultForceSimulation implements SimulationInterface {
 
   public initialize(graph: VisualGraphData) {
     const linksWithIds = flattenLinks(graph.links)
+
+    const linkForceDistance = this.getForceLinkDistance(linksWithIds)
+
     this.simulation = d3.forceSimulation(graph.nodes)
-      .force('x', d3.forceX(0))
-      .force('y', d3.forceY(0))
-      .force('links', d3.forceLink(linksWithIds).id((n: VisualGraphNode) => n.id).distance(this.getForceLinkDistance))
-      .force('charge', d3.forceManyBody().strength(-100))
+    // TODO figure out how to conditionally apply force in x direction based on node value
+    // (because apply force in direction of 0 is not what we want!)
+      .force('x', d3.forceX().x((node: VisualGraphNode) => node.forceX || 0))
+     .force('y', d3.forceY().y((node: VisualGraphNode) => node.forceY  || 0))
+     .force('links', d3.forceLink(linksWithIds).id((n: VisualGraphNode) => n.id).distance(linkForceDistance))
+      .force('charge', d3.forceManyBody().strength(-40))
+    //  .force('collision', d3.forceCollide(10))
       .velocityDecay(0.7)
       .on('tick', () => {
         const visualGraph = this.getVisualGraph()
@@ -59,7 +63,7 @@ export class DefaultForceSimulation implements SimulationInterface {
     const linksWithIds = flattenLinks(graph.links)
     this.simulation
       .nodes(graph.nodes)
-      .force('links', d3.forceLink(linksWithIds).id((n: VisualGraphNode) => n.id).distance(this.getForceLinkDistance))
+ //     .force('links', d3.forceLink(linksWithIds).id((n: VisualGraphNode) => n.id).distance(this.getForceLinkDistance))
   }
 
   public restart() {
