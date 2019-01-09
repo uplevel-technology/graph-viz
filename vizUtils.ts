@@ -95,6 +95,16 @@ export const toVisualGraphData = (events: Event[]): VisualGraphData => {
         source: from,
         target: to,
       })
+
+      // We also add links from the eventNode, to approximate having hyperedges:
+      links.push({
+        source: eventNode,
+        target: from,
+      })
+      links.push({
+        source: eventNode,
+        target: to,
+      })
     })
   })
 
