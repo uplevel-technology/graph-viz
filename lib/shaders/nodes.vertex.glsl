@@ -1,4 +1,4 @@
-#define POINT_SIZE 20.0
+#define POINT_SIZE 50.0
 
 uniform float cameraZoom;
 
