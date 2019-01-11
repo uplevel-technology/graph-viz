@@ -46,6 +46,12 @@ export class Links {
     this.object.name = 'lines'
   }
 
+  public handleCameraZoom = (zoom: number) => {
+    this.material.uniforms.scale.value = zoom < 0.3 ? 0.3 : zoom
+    this.material.uniforms.scale.value *= window.devicePixelRatio
+    this.material.needsUpdate = true
+  }
+
   public enableEdgeHighlight = () => {
     this.highlightEdges = true
   }

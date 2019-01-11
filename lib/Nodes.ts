@@ -10,13 +10,10 @@ export class Nodes {
   public object: THREE.Points
   private nodes: VisualGraphNode[]
   private readonly geometry: THREE.BufferGeometry
-  private readonly camera: THREE.OrthographicCamera
   private readonly material: THREE.ShaderMaterial
   private lockedIds: {[id: string]: boolean} = {}
 
-  constructor(nodes: VisualGraphNode[], camera: THREE.OrthographicCamera) {
-    this.camera = camera
-
+  constructor(nodes: VisualGraphNode[]) {
     this.nodes = nodes
     const numNodes = size(nodes)
     this.geometry = new THREE.BufferGeometry()
@@ -33,7 +30,7 @@ export class Nodes {
       fragmentShader,
       transparent: true,
       uniforms: {
-        cameraZoom: {value: this.camera.zoom},
+        cameraZoom: {value: 1},
         defaultColor: {value: new THREE.Color(0xffffff)},
       },
       vertexShader,
@@ -47,8 +44,8 @@ export class Nodes {
     this.recalcPositionFromData(this.nodes)
   }
 
-  public handleCameraZoom = () => {
-    this.material.uniforms.cameraZoom.value = this.camera.zoom < 0.3 ? 0.3 : this.camera.zoom
+  public handleCameraZoom = (zoom: number) => {
+    this.material.uniforms.cameraZoom.value = zoom < 0.3 ? 0.3 : zoom
     this.material.needsUpdate = true
   }
 
