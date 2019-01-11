@@ -30,7 +30,7 @@ export class Nodes {
       fragmentShader,
       transparent: true,
       uniforms: {
-        cameraZoom: {value: 1},
+        globalScale: {value: window.devicePixelRatio},
         defaultColor: {value: new THREE.Color(0xffffff)},
       },
       vertexShader,
@@ -45,13 +45,14 @@ export class Nodes {
   }
 
   public handleCameraZoom = (zoom: number) => {
-    this.material.uniforms.cameraZoom.value = zoom < 0.3 ? 0.3 : zoom
+    this.material.uniforms.globalScale.value = zoom < 0.3 ? 0.3 : zoom
+    this.material.uniforms.globalScale.value *= window.devicePixelRatio
   }
 
   public scalePointAt = (pointIdx: number, scale: number = 1.0) => {
     const scaleAttr = this.geometry.getAttribute('scale') as THREE.BufferAttribute
     if (scaleAttr.array) {
-      scaleAttr.setX(pointIdx, window.devicePixelRatio * scale)
+      scaleAttr.setX(pointIdx, scale)
       scaleAttr.needsUpdate = true
     }
   }
@@ -113,7 +114,7 @@ export class Nodes {
     }
 
     for (let i = 0; i < numNodes; i++) {
-      scale.setX(i, window.devicePixelRatio)
+      scale.setX(i, 1)
     }
 
     scale.needsUpdate = true

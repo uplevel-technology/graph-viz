@@ -7,11 +7,11 @@ varying vec3 vColor;
 uniform float quadWidth;
 uniform float lineWidth;
 uniform float arrowHeight;
-uniform float scale;
+uniform float globalScale;
 
 // pseudo "anti-aliased" step
 float aaStep(float edge, float x) {
-  return smoothstep(edge - SQRT2OVER2/scale, edge + SQRT2OVER2/scale, x);
+  return smoothstep(edge - SQRT2OVER2/globalScale, edge + SQRT2OVER2/globalScale, x);
 }
 
 void main() {

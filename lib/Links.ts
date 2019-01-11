@@ -38,7 +38,7 @@ export class Links {
         quadWidth: {value: QUAD_WIDTH},
         lineWidth: {value: 1},
         arrowHeight: {value: QUAD_WIDTH / 2},
-        scale: {value: window.devicePixelRatio}, // TODO: update this with camera zoom
+        globalScale: {value: window.devicePixelRatio}, // TODO: update this with camera zoom
       },
     })
 
@@ -47,8 +47,8 @@ export class Links {
   }
 
   public handleCameraZoom = (zoom: number) => {
-    this.material.uniforms.scale.value = zoom < 0.3 ? 0.3 : zoom
-    this.material.uniforms.scale.value *= window.devicePixelRatio
+    this.material.uniforms.globalScale.value = zoom < 0.3 ? 0.3 : zoom
+    this.material.uniforms.globalScale.value *= window.devicePixelRatio
   }
 
   public enableEdgeHighlight = () => {
