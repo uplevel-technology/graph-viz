@@ -1,7 +1,8 @@
 varying vec2 vUV;
-varying vec2 vSize;
+varying float vLength;
 varying vec3 vColor;
 
+uniform float quadWidth;
 uniform float lineWidth;
 uniform float arrowHeight;
 
@@ -12,8 +13,8 @@ void main() {
   float arrowWidth = arrowHeight * 2.0;
 
   vec2 arrowTip = vec2(
-    vSize.x / 2.0,
-    vSize.y - lineOffset
+    quadWidth / 2.0,
+    vLength - lineOffset
   );
   vec2 arrowBase = arrowTip - vec2(0.0, arrowHeight);
 

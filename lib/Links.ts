@@ -25,7 +25,7 @@ export class Links {
     this.geometry = new THREE.BufferGeometry()
     this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3))
     this.geometry.addAttribute('uv', new THREE.BufferAttribute(new Float32Array(numVertices * 2), 2))
-    this.geometry.addAttribute('size', new THREE.BufferAttribute(new Float32Array(numVertices * 2), 2))
+    this.geometry.addAttribute('length', new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1))
     this.geometry.addAttribute('color', new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3))
     this.recalcPositionFromData(links)
     this.recalcColorFromData(links)
@@ -35,6 +35,7 @@ export class Links {
       fragmentShader,
       transparent: true,
       uniforms: {
+        quadWidth: {value: QUAD_WIDTH},
         lineWidth: {value: 1},
         arrowHeight: {value: QUAD_WIDTH / 2},
       },
@@ -71,7 +72,7 @@ export class Links {
   private recalcPositionFromData = (links: VisualGraphLink[]) => {
     const position = this.geometry.getAttribute('position') as THREE.BufferAttribute
     const uv = this.geometry.getAttribute('uv') as THREE.BufferAttribute
-    const size = this.geometry.getAttribute('size') as THREE.BufferAttribute
+    const length = this.geometry.getAttribute('length') as THREE.BufferAttribute
     const numLinks = links.length
     const numVertices = numLinks * VERTICES_PER_QUAD
 
@@ -83,8 +84,8 @@ export class Links {
       uv.setArray(new Float32Array(numVertices * uv.itemSize))
     }
 
-    if (numVertices !== size.count) {
-      size.setArray(new Float32Array(numVertices * size.itemSize))
+    if (numVertices !== length.count) {
+      length.setArray(new Float32Array(numVertices * length.itemSize))
     }
 
     const source = new THREE.Vector2()
@@ -110,28 +111,29 @@ export class Links {
       position.setXYZ(i * VERTICES_PER_QUAD + 0, a.x, a.y, 0)
       position.setXYZ(i * VERTICES_PER_QUAD + 1, b.x, b.y, 0)
       position.setXYZ(i * VERTICES_PER_QUAD + 2, c.x, c.y, 0)
-
       // Second triangle, repeating two of the vertices in the first triangle:
       position.setXYZ(i * VERTICES_PER_QUAD + 3, d.x, d.y, 0)
       position.setXYZ(i * VERTICES_PER_QUAD + 4, c.x, c.y, 0)
       position.setXYZ(i * VERTICES_PER_QUAD + 5, b.x, b.y, 0)
 
+      // First triangle, in coordinates relative to the quad:
       uv.setXY(i * VERTICES_PER_QUAD + 0, 0, 0)
       uv.setXY(i * VERTICES_PER_QUAD + 1, QUAD_WIDTH, 0)
       uv.setXY(i * VERTICES_PER_QUAD + 2, 0, quadLength)
+      // Second triangle:
       uv.setXY(i * VERTICES_PER_QUAD + 3, QUAD_WIDTH, quadLength)
       uv.setXY(i * VERTICES_PER_QUAD + 4, 0, quadLength)
       uv.setXY(i * VERTICES_PER_QUAD + 5, QUAD_WIDTH, 0)
 
       // Repeat for all vertices of this quad:
       for (let vertexIndex = i * VERTICES_PER_QUAD; vertexIndex < (i + 1) * VERTICES_PER_QUAD; vertexIndex++) {
-        size.setXY(vertexIndex, QUAD_WIDTH, quadLength) // TODO: width could be set as uniform
+        length.setX(vertexIndex, quadLength)
       }
     }
 
     position.needsUpdate = true
     uv.needsUpdate = true
-    size.needsUpdate = true
+    length.needsUpdate = true
 
     this.geometry.computeBoundingSphere()
   }
