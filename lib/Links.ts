@@ -1,11 +1,10 @@
-// @flow
-
-import {size} from 'lodash'
 import * as THREE from 'three'
 import {VisualGraphLink} from './GraphVisualization'
+import fragmentShader from './shaders/links.fragment.glsl'
+import vertexShader from './shaders/links.vertex.glsl'
 
 const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
-const QUAD_WIDTH = 10
+const QUAD_WIDTH = 6
 
 const DEFAULT_COLOR = 0xbbbbbb
 const HIGHLIGHTED_COLOR = 0x333333
@@ -16,20 +15,30 @@ export class Links {
   private highlightEdges: boolean = false
   private links: VisualGraphLink[]
   private readonly geometry: THREE.BufferGeometry
-  private readonly material: THREE.MeshBasicMaterial
+  private readonly material: THREE.ShaderMaterial
 
   constructor(links: VisualGraphLink[]) {
     this.links = links
-    const numLinks = size(links)
+    const numLinks = links.length
     const numVertices = numLinks * VERTICES_PER_QUAD
 
     this.geometry = new THREE.BufferGeometry()
     this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3))
+    this.geometry.addAttribute('uv', new THREE.BufferAttribute(new Float32Array(numVertices * 2), 2))
+    this.geometry.addAttribute('size', new THREE.BufferAttribute(new Float32Array(numVertices * 2), 2))
     this.geometry.addAttribute('color', new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3))
     this.recalcPositionFromData(links)
     this.recalcColorFromData(links)
 
-    this.material = new THREE.MeshBasicMaterial({vertexColors: THREE.VertexColors})
+    this.material = new THREE.ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      transparent: true,
+      uniforms: {
+        lineWidth: {value: 1},
+        arrowHeight: {value: QUAD_WIDTH / 2},
+      },
+    })
 
     this.object = new THREE.Mesh(this.geometry, this.material)
     this.object.name = 'lines'
@@ -61,11 +70,21 @@ export class Links {
 
   private recalcPositionFromData = (links: VisualGraphLink[]) => {
     const position = this.geometry.getAttribute('position') as THREE.BufferAttribute
-    const numLinks = size(links)
+    const uv = this.geometry.getAttribute('uv') as THREE.BufferAttribute
+    const size = this.geometry.getAttribute('size') as THREE.BufferAttribute
+    const numLinks = links.length
     const numVertices = numLinks * VERTICES_PER_QUAD
 
     if (numVertices !== position.count) {
       position.setArray(new Float32Array(numVertices * position.itemSize))
+    }
+
+    if (numVertices !== uv.count) {
+      uv.setArray(new Float32Array(numVertices * uv.itemSize))
+    }
+
+    if (numVertices !== size.count) {
+      size.setArray(new Float32Array(numVertices * size.itemSize))
     }
 
     const source = new THREE.Vector2()
@@ -78,6 +97,8 @@ export class Links {
       const normal = target.clone().sub(source).normalize() // now a unit vector tangent to the link
       normal.set(-normal.y, normal.x) // rotate 90 degrees to make it normal to the link
       normal.multiplyScalar(QUAD_WIDTH / 2)
+
+      const quadLength = target.clone().sub(source).length()
 
       // The four corners of the quad:
       const a = source.clone().add(normal)
@@ -94,9 +115,23 @@ export class Links {
       position.setXYZ(i * VERTICES_PER_QUAD + 3, d.x, d.y, 0)
       position.setXYZ(i * VERTICES_PER_QUAD + 4, c.x, c.y, 0)
       position.setXYZ(i * VERTICES_PER_QUAD + 5, b.x, b.y, 0)
+
+      uv.setXY(i * VERTICES_PER_QUAD + 0, 0, 0)
+      uv.setXY(i * VERTICES_PER_QUAD + 1, QUAD_WIDTH, 0)
+      uv.setXY(i * VERTICES_PER_QUAD + 2, 0, quadLength)
+      uv.setXY(i * VERTICES_PER_QUAD + 3, QUAD_WIDTH, quadLength)
+      uv.setXY(i * VERTICES_PER_QUAD + 4, 0, quadLength)
+      uv.setXY(i * VERTICES_PER_QUAD + 5, QUAD_WIDTH, 0)
+
+      // Repeat for all vertices of this quad:
+      for (let vertexIndex = i * VERTICES_PER_QUAD; vertexIndex < (i + 1) * VERTICES_PER_QUAD; vertexIndex++) {
+        size.setXY(vertexIndex, QUAD_WIDTH, quadLength) // TODO: width could be set as uniform
+      }
     }
 
     position.needsUpdate = true
+    uv.needsUpdate = true
+    size.needsUpdate = true
 
     this.geometry.computeBoundingSphere()
   }
@@ -104,7 +139,7 @@ export class Links {
   private recalcColorFromData = (links: VisualGraphLink[]) => {
     const color = this.geometry.getAttribute('color') as THREE.BufferAttribute
 
-    const numLinks = size(links)
+    const numLinks = links.length
     const numVertices = numLinks * VERTICES_PER_QUAD
 
     if (numVertices !== color.count) {
