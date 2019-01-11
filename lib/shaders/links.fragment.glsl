@@ -6,7 +6,7 @@ varying vec3 vColor;
 
 uniform float quadWidth;
 uniform float lineWidth;
-uniform float arrowHeight;
+uniform float arrowHeight; // TODO: if this was varying, we could set it to 0 to disable the arrow
 uniform float globalScale;
 
 // pseudo "anti-aliased" step
@@ -17,8 +17,6 @@ float aaStep(float edge, float x) {
 void main() {
   // TODO: this should be a varying:
   float lineOffset = 4.0; // e.g. node radius
-
-  float arrowWidth = arrowHeight * 2.0;
 
   vec2 arrowTip = vec2(
     quadWidth / 2.0,
