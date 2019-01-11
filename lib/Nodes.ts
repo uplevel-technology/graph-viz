@@ -46,7 +46,6 @@ export class Nodes {
 
   public handleCameraZoom = (zoom: number) => {
     this.material.uniforms.cameraZoom.value = zoom < 0.3 ? 0.3 : zoom
-    this.material.needsUpdate = true
   }
 
   public scalePointAt = (pointIdx: number, scale: number = 1.0) => {
