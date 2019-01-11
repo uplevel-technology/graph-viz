@@ -90,22 +90,26 @@ export class Links {
 
     const source = new THREE.Vector2()
     const target = new THREE.Vector2()
+    const tangent = new THREE.Vector2()
+    const normal = new THREE.Vector2()
 
     for (let i = 0; i < numLinks; i++) {
       source.set(links[i].source.x!, links[i].source.y!)
       target.set(links[i].target.x!, links[i].target.y!)
 
-      const normal = target.clone().sub(source).normalize() // now a unit vector tangent to the link
-      normal.set(-normal.y, normal.x) // rotate 90 degrees to make it normal to the link
-      normal.multiplyScalar(QUAD_WIDTH / 2)
+      tangent.copy(target).sub(source)
 
-      const quadLength = target.clone().sub(source).length()
+      normal.set(-tangent.y, tangent.x) // rotate 90 degrees to make it normal to the link
+      normal.normalize().multiplyScalar(QUAD_WIDTH / 2)
+
+      const quadLength = tangent.length()
 
       // The four corners of the quad:
       const a = source.clone().add(normal)
       const b = source.clone().sub(normal)
       const c = target.clone().add(normal)
       const d = target.clone().sub(normal)
+      // TODO: OPTIMIZE: don't clone these 4 vectors
 
       // First triangle:
       position.setXYZ(i * VERTICES_PER_QUAD + 0, a.x, a.y, 0)
