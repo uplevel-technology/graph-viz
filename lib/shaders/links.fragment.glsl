@@ -1,3 +1,5 @@
+#define SQRT2OVER2 0.707107
+
 varying vec2 vUV;
 varying float vLength;
 varying vec3 vColor;
@@ -5,6 +7,12 @@ varying vec3 vColor;
 uniform float quadWidth;
 uniform float lineWidth;
 uniform float arrowHeight;
+uniform float scale;
+
+// pseudo "anti-aliased" step
+float aaStep(float edge, float x) {
+  return smoothstep(edge - SQRT2OVER2/scale, edge + SQRT2OVER2/scale, x);
+}
 
 void main() {
   // TODO: this should be a varying:
@@ -19,13 +27,13 @@ void main() {
   vec2 arrowBase = arrowTip - vec2(0.0, arrowHeight);
 
   float xFromCenter = abs(vUV.x - arrowTip.x);
-  float lineMask = 1.0 - step(lineWidth / 2.0, xFromCenter);
-  lineMask -= step(arrowBase.y, vUV.y); // line ends at the base of the arrow
+  float lineMask = 1.0 - aaStep(lineWidth / 2.0, xFromCenter);
+  lineMask -= aaStep(arrowBase.y, vUV.y); // line ends at the base of the arrow
   lineMask = clamp(lineMask, 0.0, 1.0);
 
-  float arrowMask = step(arrowBase.y, vUV.y); // base of the arrow
-  arrowMask -= step(arrowTip.y, vUV.y); // tip of the arrow
-  arrowMask -= step(arrowTip.y - vUV.y, xFromCenter); // diagonal edge
+  float arrowMask = aaStep(arrowBase.y, vUV.y); // base of the arrow
+  arrowMask -= aaStep(arrowTip.y, vUV.y); // tip of the arrow
+  arrowMask -= aaStep(arrowTip.y - vUV.y, xFromCenter); // diagonal edge
 
   float mask = lineMask + arrowMask;
 

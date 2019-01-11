@@ -38,6 +38,7 @@ export class Links {
         quadWidth: {value: QUAD_WIDTH},
         lineWidth: {value: 1},
         arrowHeight: {value: QUAD_WIDTH / 2},
+        scale: {value: window.devicePixelRatio}, // TODO: update this with camera zoom
       },
     })
 
