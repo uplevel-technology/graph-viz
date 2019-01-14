@@ -145,7 +145,7 @@ export class Links {
       for (let vertexIndex = i * VERTICES_PER_QUAD; vertexIndex < (i + 1) * VERTICES_PER_QUAD; vertexIndex++) {
         length.setX(vertexIndex, quadLength)
 
-        if (!links[i].directed) {
+        if (links[i].directed) {
           arrowHeight.setX(vertexIndex, QUAD_WIDTH / 2.0)
         } else {
           arrowHeight.setX(vertexIndex, 0.0)
