@@ -4,11 +4,43 @@ import {values} from 'lodash'
 import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
 import {VisualGraphData, VisualGraphNode} from './lib/GraphVisualization'
 
-export const GraphPalette = {
-  ArtifactNode: '#00478D',
-  AttributeNode: '#FEC400',
-  AlertNode: '#EE6352',
-  EmailUploadNode: '#0d8721',
+/*
+additional colors from kaori (fill, then outline)
+YELLOW
+FFD74F
+FF8A3A
+ */
+
+// NOTE that the keys corresponding to specific attribute types must match the labels in
+// neo4j (for the microsoft data, that's snake_case)
+export const NodeFillPalette: {[key: string]: string} = {
+  artifact: '#00478D',
+  attribute: '#FEC400',
+  alert: '#F16576', // red
+  emailUpload: '#0d8721',
+  ip_address: '#86B4EA', // blue
+  port: '#CFDEFF', // light blue
+  file_name: '#A68ABE', // purple
+  file_path: '#EED6F2', // pink
+  hash: '#C0F3FA', // cyan
+  url: '#7ED3C0', // green
+  application: '#CCFF90', // light green
+  process: '#FFA76B', // orange
+}
+
+export const NodeOutlinePalette = {
+  artifact: '#00478D',
+  attribute: '#FEC400',
+  alert: '#921928', // red
+  emailUpload: '#0d8721',
+  ip_address:    '#005DB8', // blue
+  port: '#5986EC', // light blue
+  file_name: '#5B129B', // purple
+  file_path: '#EA80FC', // pink
+  hash: '#08A7BB', // cyan
+  url: '#278C90', // green
+  application: '#9ACA95', // light green
+  process: '#FC6600', // orange
 }
 
 export const getNodeVizId = (node: EverythingResponse.Node): string => {
@@ -58,13 +90,13 @@ const toVisualGraphNode = (node: EverythingResponse.Node): VisualGraphNode => {
     return {
       id: getNodeVizId(node),
       displayName: getArtifactNodeLabel(node.getArtifact()!.getType()),
-      fill: GraphPalette.ArtifactNode,
+      fill: NodeFillPalette.artifact,
     }
   case EverythingResponse.Node.ValueCase.ATTRIBUTE:
     return {
       id: getNodeVizId(node),
       displayName: getAttributeNodeLabel(node.getAttribute()!.getType()),
-      fill: GraphPalette.AttributeNode,
+      fill: NodeFillPalette.attribute,
     }
   case EverythingResponse.Node.ValueCase.EVENT:
     const event = node.getEvent()!
@@ -81,8 +113,8 @@ const toVisualGraphNode = (node: EverythingResponse.Node): VisualGraphNode => {
       id: getNodeVizId(node),
       displayName,
       fill: node.getEvent()!.getEventType() === Event.Type.ALERT
-        ? GraphPalette.AlertNode
-        : GraphPalette.EmailUploadNode,
+        ? NodeFillPalette.alert
+        : NodeFillPalette.emailUpload,
     }
   case EverythingResponse.Node.ValueCase.VALUE_NOT_SET:
     throw new Error('EverythingResponse.Node value not set')
