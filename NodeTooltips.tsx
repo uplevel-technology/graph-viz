@@ -4,7 +4,7 @@ import {CSSProperties} from 'react'
 export interface TooltipNode {
   id: string
   displayName: string
-  nodeType?: string
+  displayType?: string
   formattedTime?: string
   screenX: number
   screenY: number
@@ -38,15 +38,19 @@ export class NodeTooltips extends React.Component<Props> {
     }
     return (
       <div style={getTooltipStyle(this.props.node)}>
+        {this.props.node.displayType &&
         <div>
-          {this.props.node.nodeType}
+          {this.props.node.displayType}
         </div>
+        }
         <div>
           {this.props.node.displayName}
         </div>
+        {this.props.node.formattedTime &&
         <div>
           {this.props.node.formattedTime}
         </div>
+        }
       </div>
     )
   }

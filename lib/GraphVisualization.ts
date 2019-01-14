@@ -57,7 +57,7 @@ export interface VisualGraphNode {
    * information for tooltip
    */
   displayName?: string
-  nodeType?: string
+  displayType?: string
   formattedTime?: string
 
   /**
