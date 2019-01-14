@@ -4,7 +4,7 @@ import {Event} from '@core/event_pb'
 import {ObservableNode} from '@core/observable_pb'
 import {values} from 'lodash'
 import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
-import {VisualGraphData, VisualGraphNode, VisualGraphLink} from './lib/GraphVisualization'
+import {VisualGraphData, VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
 
 /*
 additional colors from kaori (fill, then outline)
@@ -30,7 +30,7 @@ export const NodeFillPalette: {[key: string]: string} = {
   process: '#FFA76B', // orange
 }
 
-export const OutlineAndLinkPalette: {[key: string]: string} = {
+export const NodeOutlinePalette: {[key: string]: string} = {
   artifact: '#00478D',
   attribute: '#FEC400',
   alert: '#921928', // red
