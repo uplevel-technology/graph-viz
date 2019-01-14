@@ -61,9 +61,10 @@ export class DefaultForceSimulation implements SimulationInterface {
 
   public update(graph: VisualGraphData) {
     const linksWithIds = flattenLinks(graph.links)
+    const linkForceDistance = this.getForceLinkDistance(linksWithIds)
     this.simulation
       .nodes(graph.nodes)
- //     .force('links', d3.forceLink(linksWithIds).id((n: VisualGraphNode) => n.id).distance(this.getForceLinkDistance))
+     .force('links', d3.forceLink(linksWithIds).id((n: VisualGraphNode) => n.id).distance(linkForceDistance))
   }
 
   public restart() {
