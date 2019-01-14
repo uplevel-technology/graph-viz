@@ -1,10 +1,12 @@
 import * as THREE from 'three'
 import {VisualGraphLink} from './GraphVisualization'
+import {DEFAULT_NODE_SIZE} from './Nodes'
 import fragmentShader from './shaders/links.fragment.glsl'
 import vertexShader from './shaders/links.vertex.glsl'
 
 const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
 const QUAD_WIDTH = 6
+const DEFAULT_LINK_OFFSET = 4
 
 const DEFAULT_COLOR = 0xbbbbbb
 const HIGHLIGHTED_COLOR = 0x333333
@@ -25,7 +27,8 @@ export class Links {
     this.geometry = new THREE.BufferGeometry()
     this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3))
     this.geometry.addAttribute('uv', new THREE.BufferAttribute(new Float32Array(numVertices * 2), 2))
-    this.geometry.addAttribute('length', new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1))
+    this.geometry.addAttribute('quadLength', new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1))
+    this.geometry.addAttribute('linkOffset', new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1))
     this.geometry.addAttribute('color', new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3))
     this.geometry.addAttribute('arrowHeight', new THREE.BufferAttribute((new Float32Array(numVertices * 1)), 1))
     this.recalcPositionFromData(links)
@@ -78,7 +81,8 @@ export class Links {
   private recalcPositionFromData = (links: VisualGraphLink[]) => {
     const position = this.geometry.getAttribute('position') as THREE.BufferAttribute
     const uv = this.geometry.getAttribute('uv') as THREE.BufferAttribute
-    const length = this.geometry.getAttribute('length') as THREE.BufferAttribute
+    const quadLength = this.geometry.getAttribute('quadLength') as THREE.BufferAttribute
+    const linkOffset = this.geometry.getAttribute('linkOffset') as THREE.BufferAttribute
     const arrowHeight = this.geometry.getAttribute('arrowHeight') as THREE.BufferAttribute
 
     const numLinks = links.length
@@ -92,8 +96,12 @@ export class Links {
       uv.setArray(new Float32Array(numVertices * uv.itemSize))
     }
 
-    if (numVertices !== length.count) {
-      length.setArray(new Float32Array(numVertices * length.itemSize))
+    if (numVertices !== quadLength.count) {
+      quadLength.setArray(new Float32Array(numVertices * quadLength.itemSize))
+    }
+
+    if (numVertices !== linkOffset.count) {
+      linkOffset.setArray(new Float32Array(numVertices * linkOffset.itemSize))
     }
 
     if (numVertices !== arrowHeight.count) {
@@ -114,7 +122,7 @@ export class Links {
       normal.set(-tangent.y, tangent.x) // rotate 90 degrees to make it normal to the link
       normal.normalize().multiplyScalar(QUAD_WIDTH / 2)
 
-      const quadLength = tangent.length()
+      const totalLength = tangent.length()
 
       // The four corners of the quad:
       const a = source.clone().add(normal)
@@ -135,27 +143,35 @@ export class Links {
       // First triangle, in coordinates relative to the quad:
       uv.setXY(i * VERTICES_PER_QUAD + 0, 0, 0)
       uv.setXY(i * VERTICES_PER_QUAD + 1, QUAD_WIDTH, 0)
-      uv.setXY(i * VERTICES_PER_QUAD + 2, 0, quadLength)
+      uv.setXY(i * VERTICES_PER_QUAD + 2, 0, totalLength)
       // Second triangle:
-      uv.setXY(i * VERTICES_PER_QUAD + 3, QUAD_WIDTH, quadLength)
-      uv.setXY(i * VERTICES_PER_QUAD + 4, 0, quadLength)
+      uv.setXY(i * VERTICES_PER_QUAD + 3, QUAD_WIDTH, totalLength)
+      uv.setXY(i * VERTICES_PER_QUAD + 4, 0, totalLength)
       uv.setXY(i * VERTICES_PER_QUAD + 5, QUAD_WIDTH, 0)
 
       // Repeat for all vertices of this quad:
       for (let vertexIndex = i * VERTICES_PER_QUAD; vertexIndex < (i + 1) * VERTICES_PER_QUAD; vertexIndex++) {
-        length.setX(vertexIndex, quadLength)
+        quadLength.setX(vertexIndex, totalLength)
 
         if (links[i].directed) {
           arrowHeight.setX(vertexIndex, QUAD_WIDTH / 2.0)
+
+          // NOTE:
+          // This is hardcoded right now but 0.22 = 0.2*nodeSize which is the absolute node radius within the point size
+          // and 0.04*nodeSize being the actual absolute offset
+          const offset = 0.24 * (links[i].target.size || DEFAULT_NODE_SIZE)
+          linkOffset.setX(vertexIndex, offset)
         } else {
-          arrowHeight.setX(vertexIndex, 0.0)
+          arrowHeight.setX(vertexIndex, 0)
+          linkOffset.setX(vertexIndex, 0)
         }
       }
     }
 
     position.needsUpdate = true
     uv.needsUpdate = true
-    length.needsUpdate = true
+    quadLength.needsUpdate = true
+    linkOffset.needsUpdate = true
     arrowHeight.needsUpdate = true
 
     this.geometry.computeBoundingSphere()

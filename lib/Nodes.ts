@@ -6,7 +6,7 @@ import {VisualGraphNode} from './GraphVisualization'
 import fragmentShader from './shaders/nodes.fragment.glsl'
 import vertexShader from './shaders/nodes.vertex.glsl'
 
-const DEFAULT_POINT_SIZE = 20.0
+export const DEFAULT_NODE_SIZE = 20.0
 
 export class Nodes {
   public object: THREE.Points
@@ -118,7 +118,7 @@ export class Nodes {
     }
 
     for (let i = 0; i < numNodes; i++) {
-      nodeSize.setX(i, nodes[i].size || DEFAULT_POINT_SIZE)
+      nodeSize.setX(i, nodes[i].size || DEFAULT_NODE_SIZE)
     }
 
     nodeSize.needsUpdate = true

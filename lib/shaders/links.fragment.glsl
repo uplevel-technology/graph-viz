@@ -1,7 +1,8 @@
 #define SQRT2OVER2 0.707107
 
 varying vec2 vUV;
-varying float vLength;
+varying float vQuadLength;
+varying float vLinkOffset;
 varying vec3 vColor;
 varying float vArrowHeight;
 
@@ -19,12 +20,9 @@ float map(float value, float inMin, float inMax, float outMin, float outMax) {
 }
 
 void main() {
-  // TODO: this should be a varying:
-  float lineOffset = 4.0; // e.g. node radius
-
   vec2 arrowTip = vec2(
     quadWidth / 2.0,
-    vLength - lineOffset
+    vQuadLength - vLinkOffset
   );
   vec2 arrowBase = arrowTip - vec2(0.0, vArrowHeight);
 

@@ -4,7 +4,7 @@ import {Event} from '@core/event_pb'
 import {ObservableNode} from '@core/observable_pb'
 import {values} from 'lodash'
 import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
-import {VisualGraphData, VisualGraphNode, VisualGraphLink} from './lib/GraphVisualization'
+import {VisualGraphData, VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
 
 export const GraphPalette = {
   ArtifactNode: '#00478D',
@@ -26,6 +26,7 @@ const attributeToNode = (attribute: Attribute): VisualGraphNode => {
     id: `${getAttributeNodeLabel(attribute.getType())}::${attribute.getValue()}`,
     displayName: getAttributeNodeLabel(attribute.getType()),
     fill: GraphPalette.AttributeNode,
+    size: 20,
   }
 }
 
@@ -81,6 +82,7 @@ export const toVisualGraphData = (events: Event[]): VisualGraphData => {
       links.push({
         source: eventNode,
         target: attrNode,
+        directed: true,
       })
     })
 
