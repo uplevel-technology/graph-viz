@@ -1,7 +1,7 @@
 uniform float globalScale;
 
 attribute vec3 fill;
-attribute float pointSize;
+attribute float size;
 attribute float scale;
 attribute vec3 stroke;
 attribute float strokeOpacity;
@@ -23,7 +23,7 @@ void main() {
 
     // TODO: globalScale multiplication must be logarithmic
     // Something like ((2.2 + log2(globalScale + 0.3)) / 2.0)
-    gl_PointSize = pointSize * scale * globalScale;
+    gl_PointSize = size * scale * globalScale;
     vSize = gl_PointSize;
 
     gl_Position = projectionMatrix * mvPosition;

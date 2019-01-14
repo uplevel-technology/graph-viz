@@ -20,7 +20,7 @@ export class Nodes {
     const numNodes = size(nodes)
     this.geometry = new THREE.BufferGeometry()
     this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
-    this.geometry.addAttribute('pointSize', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
+    this.geometry.addAttribute('size', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
     this.geometry.addAttribute('scale', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
     this.geometry.addAttribute('fill', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
     this.geometry.addAttribute('stroke', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
@@ -84,7 +84,7 @@ export class Nodes {
 
   private recalcAttributesFromData = (nodes: VisualGraphNode[]) => {
     this.recalcPositionFromData(nodes)
-    this.recalcPointSizeFromData(nodes)
+    this.recalcSizeFromData(nodes)
     this.recalcScaleFromData(nodes)
     this.recalcFillFromData(nodes)
     this.recalcStrokeFromData(nodes)
@@ -109,19 +109,19 @@ export class Nodes {
     this.geometry.computeBoundingSphere()
   }
 
-  private recalcPointSizeFromData = (nodes: VisualGraphNode[]) => {
-    const radius = this.geometry.getAttribute('pointSize') as THREE.BufferAttribute
+  private recalcSizeFromData = (nodes: VisualGraphNode[]) => {
+    const nodeSize = this.geometry.getAttribute('size') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
-    if (numNodes !== radius.count) {
-      radius.setArray(new Float32Array(radius.itemSize * numNodes))
+    if (numNodes !== nodeSize.count) {
+      nodeSize.setArray(new Float32Array(nodeSize.itemSize * numNodes))
     }
 
     for (let i = 0; i < numNodes; i++) {
-      radius.setX(i, nodes[i].radius || DEFAULT_POINT_SIZE)
+      nodeSize.setX(i, nodes[i].size || DEFAULT_POINT_SIZE)
     }
 
-    radius.needsUpdate = true
+    nodeSize.needsUpdate = true
   }
 
   private recalcScaleFromData = (nodes: VisualGraphNode[]) => {
