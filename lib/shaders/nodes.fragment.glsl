@@ -13,8 +13,9 @@ void main() {
 
     float radiusWithStroke = RADIUS + vStrokeWidth;
 
-    float strokeMask = (smoothstep(RADIUS, RADIUS + edgeWidth, distanceFromCenter) - smoothstep(radiusWithStroke, radiusWithStroke + edgeWidth, distanceFromCenter));
-    float fillMask = (1.0 - (smoothstep(RADIUS, RADIUS + edgeWidth, distanceFromCenter)));
+    float strokeMask = smoothstep(RADIUS, RADIUS + edgeWidth, distanceFromCenter);
+    strokeMask -= smoothstep(radiusWithStroke, radiusWithStroke + edgeWidth, distanceFromCenter);
+    float fillMask = 1.0 - smoothstep(RADIUS, RADIUS + edgeWidth, distanceFromCenter);
 
     gl_FragColor.rgb = mix(vFill, vStroke, strokeMask);
     gl_FragColor.a = max(strokeMask * vStrokeOpacity, fillMask);
