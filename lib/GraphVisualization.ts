@@ -14,27 +14,66 @@ export interface VisualGraphData {
 
 // input node data structure
 export interface VisualGraphNode {
-  id: string
-  inactive?: boolean
-  fill?: number | string
-  stroke?: number | string
-  strokeOpacity?: number
-  strokeWidth?: number
-  displayName?: string
   /**
-   * Node’s current x-position
+   * Unique node id
+   */
+  id: string
+
+  /**
+   * inactive is a boolean that makes a node grey when set.
+   * NOTE: this will be deprecated soon.
+   */
+  inactive?: boolean
+
+  /**
+   * node fill color hex string or hex number
+   */
+  fill?: number | string
+
+  /**
+   * node's absolute radius in pixels at the default zoom level
+   */
+  radius?: number
+
+  /**
+   * node strike color hex string or hex number
+   */
+  stroke?: number | string
+
+  /**
+   * relative node stroke opacity (must be between 0.0 to 1.0)
+   */
+  strokeOpacity?: number
+
+  /**
+   * relative node stroke width (must be between 0.0 to 1.0)
+   */
+  strokeWidth?: number
+
+  /**
+   * string to display as tooltip
+   */
+  displayName?: string
+
+  /**
+   * node’s current x-position
+   * TODO: we need to split this into x and simulationX or xt(x at time t), where x will be what we currently call fx
    */
   x?: number
+
   /**
-   * Node’s current y-position
+   * node’s current y-position
+   * NOTE: this will soon change to simulationY
    */
   y?: number
+
   /**
-   * Node’s fixed x-position (if position was fixed)
+   * node’s fixed x-position (if position was fixed)
    */
   fx?: number | null
+
   /**
-   * Node’s fixed y-position (if position was fixed)
+   * node’s fixed y-position (if position was fixed)
    */
   fy?: number | null
 }

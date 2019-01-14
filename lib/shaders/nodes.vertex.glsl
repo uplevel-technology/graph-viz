@@ -1,12 +1,11 @@
-#define POINT_SIZE 20.0
-
 uniform float globalScale;
 
 attribute vec3 fill;
-attribute vec3 stroke;
-attribute float strokeWidth;
-attribute float strokeOpacity;
+attribute float pointSize;
 attribute float scale;
+attribute vec3 stroke;
+attribute float strokeOpacity;
+attribute float strokeWidth;
 
 varying vec3 vFill;
 varying vec3 vStroke;
@@ -24,7 +23,7 @@ void main() {
 
     // TODO: globalScale multiplication must be logarithmic
     // Something like ((2.2 + log2(globalScale + 0.3)) / 2.0)
-    gl_PointSize = POINT_SIZE * scale * globalScale;
+    gl_PointSize = pointSize * scale * globalScale;
     vSize = gl_PointSize;
 
     gl_Position = projectionMatrix * mvPosition;
