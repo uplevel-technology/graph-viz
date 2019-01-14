@@ -28,7 +28,7 @@ export const NodeFillPalette: {[key: string]: string} = {
   process: '#FFA76B', // orange
 }
 
-export const NodeOutlinePalette = {
+export const NodeOutlinePalette: {[key: string]: string} = {
   artifact: '#00478D',
   attribute: '#FEC400',
   alert: '#921928', // red
