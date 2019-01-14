@@ -14,6 +14,10 @@ float aaStep(float edge, float x) {
   return smoothstep(edge - SQRT2OVER2/globalScale, edge + SQRT2OVER2/globalScale, x);
 }
 
+float map(float value, float inMin, float inMax, float outMin, float outMax) {
+  return outMin + (outMax - outMin) * (value - inMin) / (inMax - inMin);
+}
+
 void main() {
   // TODO: this should be a varying:
   float lineOffset = 4.0; // e.g. node radius
@@ -24,6 +28,9 @@ void main() {
   );
   vec2 arrowBase = arrowTip - vec2(0.0, vArrowHeight);
 
+  // Configure the arrowhead's "aspect ratio" here:
+  float arrowWidth = vArrowHeight * 1.5;
+
   float xFromCenter = abs(vUV.x - arrowTip.x);
   float lineMask = 1.0 - aaStep(lineWidth / 2.0, xFromCenter);
   lineMask -= aaStep(arrowBase.y, vUV.y); // line ends at the base of the arrow
@@ -31,7 +38,12 @@ void main() {
 
   float arrowMask = aaStep(arrowBase.y, vUV.y); // base of the arrow
   arrowMask -= aaStep(arrowTip.y, vUV.y); // tip of the arrow
-  arrowMask -= aaStep(arrowTip.y - vUV.y, xFromCenter); // diagonal edge
+  float diagonalEdgeX = map(
+    vUV.y,
+    arrowBase.y, arrowTip.y,
+    arrowWidth / 2.0, 0.0
+  );
+  arrowMask -= aaStep(diagonalEdgeX, xFromCenter);
 
   float mask = lineMask + arrowMask;
 
