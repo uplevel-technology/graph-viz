@@ -54,7 +54,7 @@ export interface VisualGraphNode {
   strokeWidth?: number
 
   /**
-   * string to display as tooltip
+   * information for tooltip
    */
   displayName?: string
   nodeType?: string
@@ -95,6 +95,11 @@ export interface VisualGraphLink {
    * boolean to determine whether a link arrow should be drawn
    */
   directed?: boolean
+
+  /**
+   * hex string or hex number
+   */
+  color?: number | string
 }
 
 // interface with a VisualGraphNode's screen space coordinates

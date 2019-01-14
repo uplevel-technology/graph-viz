@@ -174,8 +174,11 @@ export class Links {
     const tmpColor = new THREE.Color() // for reuse
 
     for (let i = 0; i < numLinks; i++) {
-      if (this.highlightEdges && !links[i].source.inactive && !links[i].target.inactive) {
+      const currentLink = links[i]
+      if (this.highlightEdges && !currentLink.source.inactive && !currentLink.target.inactive) {
         tmpColor.set(HIGHLIGHTED_COLOR)
+      } else if (currentLink.color !== undefined) {
+        tmpColor.set(currentLink.color as string)
       } else {
         tmpColor.set(DEFAULT_COLOR)
       }
