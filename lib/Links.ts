@@ -40,7 +40,7 @@ export class Links {
       transparent: true,
       uniforms: {
         quadWidth: {value: QUAD_WIDTH},
-        lineWidth: {value: 1},
+        lineWidth: {value: 0.5},
         globalScale: {value: window.devicePixelRatio}, // TODO: update this with camera zoom
       },
     })
@@ -157,9 +157,9 @@ export class Links {
           arrowHeight.setX(vertexIndex, QUAD_WIDTH / 2.0)
 
           // NOTE:
-          // This is hardcoded right now but 0.22 = 0.2*nodeSize which is the absolute node radius within the point size
-          // and 0.04*nodeSize being the actual absolute offset
-          const offset = 0.24 * (links[i].target.size || DEFAULT_NODE_SIZE)
+          // This is hardcoded right now: 0.2*nodeSize which is the absolute node radius within the point size
+          // TODO add 0.04*nodeSize for padding between arrow tip and node circumference
+          const offset = 0.2 * (links[i].target.size || DEFAULT_NODE_SIZE)
           linkOffset.setX(vertexIndex, offset)
         } else {
           arrowHeight.setX(vertexIndex, 0)
