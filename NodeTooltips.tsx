@@ -1,3 +1,4 @@
+import {createStyles, Grid, Theme, Typography, withStyles, WithStyles} from '@material-ui/core'
 import * as React from 'react'
 import {CSSProperties} from 'react'
 
@@ -10,48 +11,54 @@ export interface TooltipNode {
   screenY: number
 }
 
-const getTooltipStyle = (node: TooltipNode, isPrimary?: boolean): CSSProperties => {
-  const offsetTop = isPrimary ? -20 : -10
-  const offsetLeft = isPrimary ? 25 : 10
+const getTooltipStyle = (node: TooltipNode): CSSProperties => {
+  const offsetTop = -10
+  const offsetLeft = 10
   return ({
-    float: 'left',
     left: node.screenX + offsetLeft,
-    position: 'absolute',
     top: node.screenY + offsetTop,
-    zIndex: isPrimary ? 10 : 9,
+    zIndex: 10,
+  })
+}
+
+const styles = (theme: Theme) => createStyles({
+  root: {
+    maxWidth: 250,
+    overflow: 'hidden',
+    position: 'absolute',
     fontSize: 12,
     backgroundColor: 'rgb(200,207,214, 0.7)',
     padding: 6,
     borderRadius: 3,
     textTransform: 'capitalize',
-  })
-}
+  },
+  breakLongWord: {
+    wordBreak: 'break-word',
+  },
+})
 
-interface Props {
+interface Props extends WithStyles<typeof styles> {
   node: TooltipNode | null,
 }
 
-export class NodeTooltips extends React.Component<Props> {
+class NodeTooltipsBase extends React.Component<Props> {
   render() {
+    const {classes} = this.props
     if (!this.props.node) {
       return null
     }
     return (
-      <div style={getTooltipStyle(this.props.node)}>
+      <Grid container direction={'column'} className={classes.root} style={getTooltipStyle(this.props.node)}>
         {this.props.node.displayType &&
-        <div>
-          {this.props.node.displayType}
-        </div>
+          <Typography variant={'subtitle2'}>{this.props.node.displayType}</Typography>
         }
-        <div>
-          {this.props.node.displayName}
-        </div>
+        <Typography variant={'body2'} className={classes.breakLongWord}>{this.props.node.displayName}</Typography>
         {this.props.node.formattedTime &&
-        <div>
-          {this.props.node.formattedTime}
-        </div>
+          <Typography style={{fontSize: 10, color: '#555555'}}>{this.props.node.formattedTime}</Typography>
         }
-      </div>
+      </Grid>
     )
   }
 }
+
+export const NodeTooltips = withStyles(styles)(NodeTooltipsBase)
