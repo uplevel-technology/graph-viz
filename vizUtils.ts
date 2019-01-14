@@ -1,8 +1,10 @@
+import {Artifact} from '@core/artifact_pb'
+import {Attribute} from '@core/attribute_pb'
 import {Event} from '@core/event_pb'
-import {EverythingResponse} from '@core/services/crud_service_pb'
+import {ObservableNode} from '@core/observable_pb'
 import {values} from 'lodash'
 import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
-import {VisualGraphData, VisualGraphNode} from './lib/GraphVisualization'
+import {VisualGraphData, VisualGraphNode, VisualGraphLink} from './lib/GraphVisualization'
 
 /*
 additional colors from kaori (fill, then outline)
@@ -43,105 +45,99 @@ export const NodeOutlinePalette: {[key: string]: string} = {
   process: '#FC6600', // orange
 }
 
-export const getNodeVizId = (node: EverythingResponse.Node): string => {
-  switch (node.getValueCase()) {
-  case EverythingResponse.Node.ValueCase.ARTIFACT:
-    return node.getArtifact()!.getUid()!.getValue()
-  case EverythingResponse.Node.ValueCase.ATTRIBUTE:
-    return `${getAttributeNodeLabel(node.getAttribute()!.getType())}::${node.getAttribute()!.getValue()}`
-  case EverythingResponse.Node.ValueCase.EVENT:
-    return node.getEvent()!.getUid()!.getValue()
-  case EverythingResponse.Node.ValueCase.VALUE_NOT_SET:
-    throw new Error('EverythingResponse.Node value not set')
-  default:
-    // This should happen when a new ObservableNode type was added to the proto
-    // but not updated here.
-    throw new Error('Unknown EverythingResponse.Node value:' + node.getValueCase())
+const artifactToNode = (artifact: Artifact): VisualGraphNode => {
+  return {
+    id: artifact.getUid()!.getValue(),
+    displayName: getArtifactNodeLabel(artifact.getType()),
+    fill: NodeFillPalette.artifact,
   }
 }
 
-export const getNodeDisplayName = (node: EverythingResponse.Node): string => {
-  switch (node.getValueCase()) {
-  case EverythingResponse.Node.ValueCase.ARTIFACT:
-    return getArtifactNodeLabel(node.getArtifact()!.getType())
-  case EverythingResponse.Node.ValueCase.ATTRIBUTE:
-    return getAttributeNodeLabel(node.getAttribute()!.getType())
-  case EverythingResponse.Node.ValueCase.EVENT:
-    const event = node.getEvent()! // valueCase matched, so this is safe
-    const display = event.getDisplay()
-    if (display) {
-      return display.getName()
-    }
-    return event.getEventType() === Event.Type.ALERT
-      ? `Alert (${event.getUid()})`
-      : `Email Upload (${event.getUid()})`
-  case EverythingResponse.Node.ValueCase.VALUE_NOT_SET:
-    throw new Error('EverythingResponse.Node value not set')
-  default:
-    // This should happen when a new ObservableNode type was added to the proto
-    // but not updated here.
-    throw new Error('Unknown EverythingResponse.Node value:' + node.getValueCase())
+const attributeToNode = (attribute: Attribute): VisualGraphNode => {
+  return {
+    id: `${getAttributeNodeLabel(attribute.getType())}::${attribute.getValue()}`,
+    displayName: getAttributeNodeLabel(attribute.getType()),
+    fill: NodeFillPalette.attribute,
   }
 }
 
-const toVisualGraphNode = (node: EverythingResponse.Node): VisualGraphNode => {
-  switch (node.getValueCase()) {
-  case EverythingResponse.Node.ValueCase.ARTIFACT:
-    return {
-      id: getNodeVizId(node),
-      displayName: getArtifactNodeLabel(node.getArtifact()!.getType()),
-      fill: NodeFillPalette.artifact,
-    }
-  case EverythingResponse.Node.ValueCase.ATTRIBUTE:
-    return {
-      id: getNodeVizId(node),
-      displayName: getAttributeNodeLabel(node.getAttribute()!.getType()),
-      fill: NodeFillPalette.attribute,
-    }
-  case EverythingResponse.Node.ValueCase.EVENT:
-    const event = node.getEvent()!
-    let displayName = event.getEventType() === Event.Type.ALERT
-      ? `Alert (${event.getUid()})`
-      : `Email Upload (${event.getUid()})`
+const observableToNode = (observable: ObservableNode): VisualGraphNode => {
+  switch (observable.getValueCase()) {
+  case ObservableNode.ValueCase.ARTIFACT:
+    return artifactToNode(observable.getArtifact()!)
+  case ObservableNode.ValueCase.ATTRIBUTE:
+    return attributeToNode(observable.getAttribute()!)
+  }
+  throw new Error('unexpected observable node type: ' + observable.getValueCase())
+}
 
-    const display = event.getDisplay()
-    if (display) {
-      displayName = display.getName()
-    }
+const eventToNode = (event: Event): VisualGraphNode => {
+  let displayName = event.getEventType() === Event.Type.ALERT
+    ? `Alert (${event.getUid()})`
+    : `Email Upload (${event.getUid()})`
 
-    return {
-      id: getNodeVizId(node),
-      displayName,
-      fill: node.getEvent()!.getEventType() === Event.Type.ALERT
-        ? NodeFillPalette.alert
-        : NodeFillPalette.emailUpload,
-    }
-  case EverythingResponse.Node.ValueCase.VALUE_NOT_SET:
-    throw new Error('EverythingResponse.Node value not set')
-  default:
-    // This should happen when a new ObservableNode type was added to the proto
-    // but not updated here.
-    throw new Error('Unknown EverythingResponse.Node value:' + node.getValueCase())
+  const display = event.getDisplay()
+  if (display) {
+    displayName = display.getName()
+  }
+
+  return {
+    id: event.getUid()!.getValue(),
+    displayName,
+    fill: event.getEventType() === Event.Type.ALERT
+      ? NodeFillPalette.alert
+      : NodeFillPalette.emailUpload,
   }
 }
 
-export const toVisualGraphData = (data: EverythingResponse): VisualGraphData => {
-  // We want a deduped list of all nodes, whether they were seen in the "nodes"
-  // or "links" part of the message. We'll build that up in this object:
+export const toVisualGraphData = (events: Event[]): VisualGraphData => {
+  // We want a deduped list of all nodes, because they can be repeated. We'll
+  // build that up in this object:
   const seenVizNodesById: {[id: string]: VisualGraphNode} = {}
+  // Links shouldn't be deduped, though:
+  const links: VisualGraphLink[] = []
 
-  data.getNodesList().map(toVisualGraphNode).forEach((node) => {
-    seenVizNodesById[node.id] = node
-  })
+  events.forEach((event) => {
+    const eventNode = eventToNode(event)
+    seenVizNodesById[eventNode.id] = eventNode
 
-  const links = data.getLinksList().map((link) => ({
-    source: toVisualGraphNode(link.getFrom()!), // TODO: handle null?
-    target: toVisualGraphNode(link.getTo()!), // TODO: handle null?
-  }))
+    const observed = event.getObserved()
+    if (!observed) {
+      return
+    }
 
-  links.forEach((link) => {
-    seenVizNodesById[link.source.id] = link.source
-    seenVizNodesById[link.target.id] = link.target
+    observed.getAttributesList().forEach((ao) => {
+      const attrNode = attributeToNode(ao.getAttribute()!)
+      seenVizNodesById[attrNode.id] = attrNode
+
+      links.push({
+        source: eventNode,
+        target: attrNode,
+      })
+    })
+
+    observed.getRelationshipsList().forEach((rel) => {
+      const from = observableToNode(rel.getFrom()!)
+      seenVizNodesById[from.id] = from
+
+      const to = observableToNode(rel.getTo()!)
+      seenVizNodesById[to.id] = to
+
+      links.push({
+        source: from,
+        target: to,
+      })
+
+      // We also add links from the eventNode, to approximate having hyperedges:
+      links.push({
+        source: eventNode,
+        target: from,
+      })
+      links.push({
+        source: eventNode,
+        target: to,
+      })
+    })
   })
 
   return {

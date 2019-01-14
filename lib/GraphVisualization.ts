@@ -46,6 +46,11 @@ export interface VisualGraphNode {
 export interface VisualGraphLink {
   source: VisualGraphNode
   target: VisualGraphNode
+
+  /**
+   * boolean to determine whether a link arrow should be drawn
+   */
+  directed?: boolean
 }
 
 // interface with a VisualGraphNode's screen space coordinates
@@ -118,7 +123,7 @@ export class GraphVisualization {
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setSize(width, height)
 
-    this.nodesMesh = new Nodes(this.graph.nodes, this.camera)
+    this.nodesMesh = new Nodes(this.graph.nodes)
     this.linksMesh = new Links(this.graph.links)
 
     this.scene.add(this.linksMesh.object)
@@ -185,7 +190,8 @@ export class GraphVisualization {
     const scale = visibleBox.getSize(new THREE.Vector3()).divide(boundingBox.getSize(new THREE.Vector3()))
     this.camera.zoom = Math.min(maxZoom, this.camera.zoom * Math.min(scale.x, scale.y))
     this.camera.updateProjectionMatrix()
-    this.nodesMesh.handleCameraZoom()
+    this.nodesMesh.handleCameraZoom(this.camera.zoom)
+    this.linksMesh.handleCameraZoom(this.camera.zoom)
   }
 
   public update = (graphData: VisualGraphData) => {
@@ -274,7 +280,8 @@ export class GraphVisualization {
 
   private handleZoomOnWheel = () => {
     this.userHasAdjustedViewport = true
-    this.nodesMesh.handleCameraZoom()
+    this.nodesMesh.handleCameraZoom(this.camera.zoom)
+    this.linksMesh.handleCameraZoom(this.camera.zoom)
     this.render()
   }
 
@@ -282,7 +289,8 @@ export class GraphVisualization {
     this.userHasAdjustedViewport = true
     this.camera.zoom += factor * this.camera.zoom
     this.camera.updateProjectionMatrix()
-    this.nodesMesh.handleCameraZoom()
+    this.nodesMesh.handleCameraZoom(this.camera.zoom)
+    this.linksMesh.handleCameraZoom(this.camera.zoom)
     this.render()
   }
 

@@ -10,13 +10,10 @@ export class Nodes {
   public object: THREE.Points
   private nodes: VisualGraphNode[]
   private readonly geometry: THREE.BufferGeometry
-  private readonly camera: THREE.OrthographicCamera
   private readonly material: THREE.ShaderMaterial
   private lockedIds: {[id: string]: boolean} = {}
 
-  constructor(nodes: VisualGraphNode[], camera: THREE.OrthographicCamera) {
-    this.camera = camera
-
+  constructor(nodes: VisualGraphNode[]) {
     this.nodes = nodes
     const numNodes = size(nodes)
     this.geometry = new THREE.BufferGeometry()
@@ -33,7 +30,7 @@ export class Nodes {
       fragmentShader,
       transparent: true,
       uniforms: {
-        cameraZoom: {value: this.camera.zoom},
+        globalScale: {value: window.devicePixelRatio},
         defaultColor: {value: new THREE.Color(0xffffff)},
       },
       vertexShader,
@@ -47,15 +44,15 @@ export class Nodes {
     this.recalcPositionFromData(this.nodes)
   }
 
-  public handleCameraZoom = () => {
-    this.material.uniforms.cameraZoom.value = this.camera.zoom < 0.3 ? 0.3 : this.camera.zoom
-    this.material.needsUpdate = true
+  public handleCameraZoom = (zoom: number) => {
+    this.material.uniforms.globalScale.value = zoom < 0.3 ? 0.3 : zoom
+    this.material.uniforms.globalScale.value *= window.devicePixelRatio
   }
 
   public scalePointAt = (pointIdx: number, scale: number = 1.0) => {
     const scaleAttr = this.geometry.getAttribute('scale') as THREE.BufferAttribute
     if (scaleAttr.array) {
-      scaleAttr.setX(pointIdx, window.devicePixelRatio * scale)
+      scaleAttr.setX(pointIdx, scale)
       scaleAttr.needsUpdate = true
     }
   }
@@ -117,7 +114,7 @@ export class Nodes {
     }
 
     for (let i = 0; i < numNodes; i++) {
-      scale.setX(i, window.devicePixelRatio)
+      scale.setX(i, 1)
     }
 
     scale.needsUpdate = true

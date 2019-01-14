@@ -1,9 +1,9 @@
-import {CrudServiceClient} from '@core/services/crud_service_pb_service'
 import {Empty} from '@core/wrappers_pb'
+import {PersistenceServiceClient} from '@core/services/persistence_service_pb_service'
 import {Button, createStyles, Paper, Theme, Typography, WithStyles, withStyles} from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import * as React from 'react'
-import {CRUD_SERVICE_ADDRESS} from '../App'
+import {PERSISTENCE_SERVICE_ADDRESS} from '../App'
 import {GraphVisualization} from './lib/GraphVisualization'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {toVisualGraphData} from './vizUtils'
@@ -39,7 +39,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 class DevGraphBase extends React.Component<Props, State> {
-  client = new CrudServiceClient(CRUD_SERVICE_ADDRESS)
+  client = new PersistenceServiceClient(PERSISTENCE_SERVICE_ADDRESS)
   graphVisualization: GraphVisualization
 
   canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef()
@@ -68,7 +68,7 @@ class DevGraphBase extends React.Component<Props, State> {
   readGraph = (): void => {
     this.setState({errorMessage: undefined})
 
-    this.client.readEverything(new Empty(), (error, response) => {
+    this.client.readAllEvents(new Empty(), (error, response) => {
       if (error) {
         console.error(error) // tslint:disable-line no-console
         this.setState({errorMessage: `Error reading graph: ${error.message || 'unknown error'}`})
@@ -80,7 +80,7 @@ class DevGraphBase extends React.Component<Props, State> {
         return
       }
 
-      this.graphVisualization.update(toVisualGraphData(response))
+      this.graphVisualization.update(toVisualGraphData(response.getValuesList()))
     })
   }
 

@@ -1,6 +1,6 @@
 #define POINT_SIZE 50.0
 
-uniform float cameraZoom;
+uniform float globalScale;
 
 attribute vec3 fill;
 attribute vec3 stroke;
@@ -22,9 +22,9 @@ void main() {
 
     vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
 
-    // TODO: camerazoom multiplication must be logarithmic
-    // Something like ((2.2 + log2(cameraZoom + 0.3)) / 2.0)
-    gl_PointSize = POINT_SIZE * scale * cameraZoom;
+    // TODO: globalScale multiplication must be logarithmic
+    // Something like ((2.2 + log2(globalScale + 0.3)) / 2.0)
+    gl_PointSize = POINT_SIZE * scale * globalScale;
     vSize = gl_PointSize;
 
     gl_Position = projectionMatrix * mvPosition;
