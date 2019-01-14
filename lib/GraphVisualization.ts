@@ -21,6 +21,9 @@ export interface VisualGraphNode {
   strokeOpacity?: number
   strokeWidth?: number
   displayName?: string
+  nodeType?: string
+  formattedTime?: string
+
   /**
    * Node’s current x-position
    */
