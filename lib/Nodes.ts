@@ -6,6 +6,8 @@ import {VisualGraphNode} from './GraphVisualization'
 import fragmentShader from './shaders/nodes.fragment.glsl'
 import vertexShader from './shaders/nodes.vertex.glsl'
 
+const DEFAULT_POINT_SIZE = 20.0
+
 export class Nodes {
   public object: THREE.Points
   private nodes: VisualGraphNode[]
@@ -18,6 +20,7 @@ export class Nodes {
     const numNodes = size(nodes)
     this.geometry = new THREE.BufferGeometry()
     this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
+    this.geometry.addAttribute('size', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
     this.geometry.addAttribute('scale', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
     this.geometry.addAttribute('fill', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
     this.geometry.addAttribute('stroke', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
@@ -81,6 +84,7 @@ export class Nodes {
 
   private recalcAttributesFromData = (nodes: VisualGraphNode[]) => {
     this.recalcPositionFromData(nodes)
+    this.recalcSizeFromData(nodes)
     this.recalcScaleFromData(nodes)
     this.recalcFillFromData(nodes)
     this.recalcStrokeFromData(nodes)
@@ -103,6 +107,21 @@ export class Nodes {
     position.needsUpdate = true
 
     this.geometry.computeBoundingSphere()
+  }
+
+  private recalcSizeFromData = (nodes: VisualGraphNode[]) => {
+    const nodeSize = this.geometry.getAttribute('size') as THREE.BufferAttribute
+
+    const numNodes = size(nodes)
+    if (numNodes !== nodeSize.count) {
+      nodeSize.setArray(new Float32Array(nodeSize.itemSize * numNodes))
+    }
+
+    for (let i = 0; i < numNodes; i++) {
+      nodeSize.setX(i, nodes[i].size || DEFAULT_POINT_SIZE)
+    }
+
+    nodeSize.needsUpdate = true
   }
 
   private recalcScaleFromData = (nodes: VisualGraphNode[]) => {

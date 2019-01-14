@@ -6,6 +6,7 @@ type D3Simulation = d3.Simulation<VisualGraphNode, VisualGraphLink>
 
 const flattenLinks = (links: VisualGraphLink[]) =>
   links.map(l => ({
+    ...l,
     source: l.source.id,
     target: l.target.id,
   }))
