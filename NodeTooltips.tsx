@@ -18,6 +18,9 @@ const getTooltipStyle = (node: TooltipNode, isPrimary?: boolean): CSSProperties 
     top: node.screenY + offsetTop,
     zIndex: isPrimary ? 10 : 9,
     fontSize: 12,
+    backgroundColor: 'rgb(200,207,214, 0.7)',
+    padding: 6,
+    borderRadius: 3,
   })
 }
 
@@ -30,7 +33,6 @@ export class NodeTooltips extends React.Component<Props> {
     if (!this.props.node) {
       return null
     }
-
     return (
       <div style={getTooltipStyle(this.props.node)}>
         {this.props.node.displayName}
