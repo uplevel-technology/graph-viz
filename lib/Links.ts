@@ -6,7 +6,6 @@ import vertexShader from './shaders/links.vertex.glsl'
 
 const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
 const QUAD_WIDTH = 6
-const DEFAULT_LINK_OFFSET = 4
 
 const DEFAULT_COLOR = 0xbbbbbb
 const HIGHLIGHTED_COLOR = 0x333333
