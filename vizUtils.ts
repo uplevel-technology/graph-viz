@@ -82,7 +82,6 @@ export const toVisualGraphData = (events: Event[]): VisualGraphData => {
       links.push({
         source: eventNode,
         target: attrNode,
-        directed: true,
       })
     })
 
