@@ -58,6 +58,7 @@ const attributeToNode = (attribute: Attribute): VisualGraphNode => {
     id: `${getAttributeNodeLabel(attribute.getType())}::${attribute.getValue()}`,
     displayName: getAttributeNodeLabel(attribute.getType()),
     fill: NodeFillPalette.attribute,
+    size: 20,
   }
 }
 
