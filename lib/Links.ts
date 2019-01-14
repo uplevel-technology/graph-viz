@@ -5,7 +5,7 @@ import fragmentShader from './shaders/links.fragment.glsl'
 import vertexShader from './shaders/links.vertex.glsl'
 
 const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
-const QUAD_WIDTH = 6
+const QUAD_WIDTH = 15
 
 const DEFAULT_COLOR = 0xbbbbbb
 const HIGHLIGHTED_COLOR = 0x333333
@@ -159,7 +159,7 @@ export class Links {
           // This is hardcoded right now: 0.2*nodeSize which is the absolute node radius within the point size
           // FIXME: don't hardcode, by passing 0.2 to the node shader somehow
           // TODO add 0.04*nodeSize for padding between arrow tip and node circumference
-          const offset = 0.2 * (links[i].target.size || DEFAULT_NODE_SIZE)
+          const offset = 0.24 * (links[i].target.size || DEFAULT_NODE_SIZE)
           linkOffset.setX(vertexIndex, offset)
         } else {
           arrowHeight.setX(vertexIndex, 0)
