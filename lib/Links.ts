@@ -38,7 +38,6 @@ export class Links {
       uniforms: {
         quadWidth: {value: QUAD_WIDTH},
         lineWidth: {value: 1},
-        arrowHeight: {value: QUAD_WIDTH / 2},
         globalScale: {value: window.devicePixelRatio}, // TODO: update this with camera zoom
       },
     })
@@ -69,7 +68,6 @@ export class Links {
     this.links = links
     this.recalcPositionFromData(this.links)
     this.recalcColorFromData(this.links)
-    this.recalcArrowHeightFromData(this.links)
   }
 
   public dispose = () => {
@@ -98,9 +96,8 @@ export class Links {
       length.setArray(new Float32Array(numVertices * length.itemSize))
     }
 
-    // TODO: this check could be better
-    if (numLinks !== arrowHeight.count) {
-      arrowHeight.setArray(new Float32Array(numLinks * arrowHeight.itemSize))
+    if (numVertices !== arrowHeight.count) {
+      arrowHeight.setArray(new Float32Array(numVertices * arrowHeight.itemSize))
     }
 
     const source = new THREE.Vector2()
@@ -147,34 +144,21 @@ export class Links {
       // Repeat for all vertices of this quad:
       for (let vertexIndex = i * VERTICES_PER_QUAD; vertexIndex < (i + 1) * VERTICES_PER_QUAD; vertexIndex++) {
         length.setX(vertexIndex, quadLength)
+
+        if (!links[i].directed) {
+          arrowHeight.setX(vertexIndex, QUAD_WIDTH / 2.0)
+        } else {
+          arrowHeight.setX(vertexIndex, 0.0)
+        }
       }
     }
 
     position.needsUpdate = true
     uv.needsUpdate = true
     length.needsUpdate = true
+    arrowHeight.needsUpdate = true
 
     this.geometry.computeBoundingSphere()
-  }
-
-  private recalcArrowHeightFromData = (links: VisualGraphLink[]) => {
-    const arrowHeight = this.geometry.getAttribute('arrowHeight') as THREE.BufferAttribute
-
-    const numLinks = links.length
-
-    if (numLinks !== arrowHeight.count) {
-      arrowHeight.setArray(new Float32Array(numLinks * arrowHeight.itemSize))
-    }
-
-    for (let i = 0; i < numLinks; i++) {
-      if (links[i].directed) {
-        arrowHeight.setX(i, 3.0)
-      } else {
-        arrowHeight.setX(i, 0.0)
-      }
-    }
-
-    arrowHeight.needsUpdate = true
   }
 
   private recalcColorFromData = (links: VisualGraphLink[]) => {
