@@ -23,6 +23,7 @@ const getTooltipStyle = (node: TooltipNode, isPrimary?: boolean): CSSProperties 
     backgroundColor: 'rgb(200,207,214, 0.7)',
     padding: 6,
     borderRadius: 3,
+    textTransform: 'capitalize',
   })
 }
 
@@ -36,13 +37,16 @@ export class NodeTooltips extends React.Component<Props> {
       return null
     }
     return (
-      <div>
       <div style={getTooltipStyle(this.props.node)}>
-        {this.props.node.displayName}
-      </div>
-      <div style={getTooltipStyle(this.props.node)}>
-      {this.props.node.formattedTime}
-      </div>
+        <div>
+          {this.props.node.nodeType}
+        </div>
+        <div>
+          {this.props.node.displayName}
+        </div>
+        <div>
+          {this.props.node.formattedTime}
+        </div>
       </div>
     )
   }
