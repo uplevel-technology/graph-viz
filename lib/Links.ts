@@ -27,6 +27,7 @@ export class Links {
     this.geometry.addAttribute('uv', new THREE.BufferAttribute(new Float32Array(numVertices * 2), 2))
     this.geometry.addAttribute('length', new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1))
     this.geometry.addAttribute('color', new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3))
+    this.geometry.addAttribute('arrowHeight', new THREE.BufferAttribute((new Float32Array(numVertices * 1)), 1))
     this.recalcPositionFromData(links)
     this.recalcColorFromData(links)
 
@@ -68,6 +69,7 @@ export class Links {
     this.links = links
     this.recalcPositionFromData(this.links)
     this.recalcColorFromData(this.links)
+    this.recalcArrowHeightFromData(this.links)
   }
 
   public dispose = () => {
@@ -79,6 +81,8 @@ export class Links {
     const position = this.geometry.getAttribute('position') as THREE.BufferAttribute
     const uv = this.geometry.getAttribute('uv') as THREE.BufferAttribute
     const length = this.geometry.getAttribute('length') as THREE.BufferAttribute
+    const arrowHeight = this.geometry.getAttribute('arrowHeight') as THREE.BufferAttribute
+
     const numLinks = links.length
     const numVertices = numLinks * VERTICES_PER_QUAD
 
@@ -92,6 +96,11 @@ export class Links {
 
     if (numVertices !== length.count) {
       length.setArray(new Float32Array(numVertices * length.itemSize))
+    }
+
+    // TODO: this check could be better
+    if (numLinks !== arrowHeight.count) {
+      arrowHeight.setArray(new Float32Array(numLinks * arrowHeight.itemSize))
     }
 
     const source = new THREE.Vector2()
@@ -146,6 +155,26 @@ export class Links {
     length.needsUpdate = true
 
     this.geometry.computeBoundingSphere()
+  }
+
+  private recalcArrowHeightFromData = (links: VisualGraphLink[]) => {
+    const arrowHeight = this.geometry.getAttribute('arrowHeight') as THREE.BufferAttribute
+
+    const numLinks = links.length
+
+    if (numLinks !== arrowHeight.count) {
+      arrowHeight.setArray(new Float32Array(numLinks * arrowHeight.itemSize))
+    }
+
+    for (let i = 0; i < numLinks; i++) {
+      if (links[i].directed) {
+        arrowHeight.setX(i, 3.0)
+      } else {
+        arrowHeight.setX(i, 0.0)
+      }
+    }
+
+    arrowHeight.needsUpdate = true
   }
 
   private recalcColorFromData = (links: VisualGraphLink[]) => {

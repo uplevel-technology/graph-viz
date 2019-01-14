@@ -3,10 +3,10 @@
 varying vec2 vUV;
 varying float vLength;
 varying vec3 vColor;
+varying float vArrowHeight;
 
 uniform float quadWidth;
 uniform float lineWidth;
-uniform float arrowHeight; // TODO: if this was varying, we could set it to 0 to disable the arrow
 uniform float globalScale;
 
 // pseudo "anti-aliased" step
@@ -22,7 +22,7 @@ void main() {
     quadWidth / 2.0,
     vLength - lineOffset
   );
-  vec2 arrowBase = arrowTip - vec2(0.0, arrowHeight);
+  vec2 arrowBase = arrowTip - vec2(0.0, vArrowHeight);
 
   float xFromCenter = abs(vUV.x - arrowTip.x);
   float lineMask = 1.0 - aaStep(lineWidth / 2.0, xFromCenter);

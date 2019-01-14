@@ -43,6 +43,11 @@ export interface VisualGraphNode {
 export interface VisualGraphLink {
   source: VisualGraphNode
   target: VisualGraphNode
+
+  /**
+   * boolean to determine whether a link arrow should be drawn
+   */
+  directed: boolean
 }
 
 // interface with a VisualGraphNode's screen space coordinates
