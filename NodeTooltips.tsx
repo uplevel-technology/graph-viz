@@ -50,7 +50,7 @@ class NodeTooltipsBase extends React.Component<Props> {
     return (
       <Grid container direction={'column'} className={classes.root} style={getTooltipStyle(this.props.node)}>
         {this.props.node.displayType &&
-          <Typography style={{fontSize: 12, fontWeight: 'bold'}}>{this.props.node.displayType}</Typography>
+          <Typography style={{fontSize: 10, fontWeight: 'bold'}}>{this.props.node.displayType}</Typography>
         }
         <Typography variant={'body2'} className={classes.breakLongWord}>{this.props.node.displayName}</Typography>
         {this.props.node.formattedTime &&
