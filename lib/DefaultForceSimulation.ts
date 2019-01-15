@@ -48,7 +48,6 @@ export class DefaultForceSimulation implements SimulationInterface {
      .force('y', d3.forceY().y((node: VisualGraphNode) => node.forceY  || 0))
      .force('links', d3.forceLink(linksWithIds).id((n: VisualGraphNode) => n.id).distance(linkForceDistance))
       .force('charge', d3.forceManyBody().strength(-200))
-    //  .force('collision', d3.forceCollide(10))
       .velocityDecay(0.7)
       .on('tick', () => {
         const visualGraph = this.getVisualGraph()
