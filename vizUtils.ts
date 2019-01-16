@@ -7,10 +7,13 @@ import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
 import {VisualGraphData, VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
 
 /*
+TODO: maintain a map of color names to their hex codes in addition to the fill and outline palettes below
+
 additional colors from kaori (fill, then outline)
 YELLOW
 FFD74F
 FF8A3A
+
  */
 
 // NOTE that the keys corresponding to specific attribute types must match the labels in

@@ -5,6 +5,7 @@ import fragmentShader from './shaders/links.fragment.glsl'
 import vertexShader from './shaders/links.vertex.glsl'
 
 const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
+// TODO: make arrowWidth an attribute so it can be customized per node instead of being derived from QuadWidth
 const QUAD_WIDTH = 15
 
 const DEFAULT_COLOR = 0xbbbbbb

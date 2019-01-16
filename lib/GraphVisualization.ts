@@ -55,6 +55,7 @@ export interface VisualGraphNode {
 
   /**
    * information for tooltip
+   * TODO: pass this data directly to the Tooltip component instead of relying on the GraphVisualization to do so
    */
   displayName?: string
   displayType?: string
