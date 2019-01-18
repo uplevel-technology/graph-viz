@@ -5,6 +5,7 @@ varying float vQuadLength;
 varying float vLinkOffset;
 varying vec3 vColor;
 varying float vArrowHeight;
+varying float vDashGap;
 
 uniform float quadWidth;
 uniform float lineWidth;
@@ -32,6 +33,9 @@ void main() {
   float xFromCenter = abs(vUV.x - arrowTip.x);
   float lineMask = 1.0 - aaStep(lineWidth / 2.0, xFromCenter);
   lineMask -= aaStep(arrowBase.y, vUV.y); // line ends at the base of the arrow
+
+  float dashedY = mod(vUV.y - arrowBase.y, vDashGap * 2.0);
+  lineMask -= aaStep(vDashGap, dashedY);
   lineMask = clamp(lineMask, 0.0, 1.0);
 
   float arrowMask = aaStep(arrowBase.y, vUV.y); // base of the arrow

@@ -31,6 +31,7 @@ export class Links {
     this.geometry.addAttribute('linkOffset', new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1))
     this.geometry.addAttribute('color', new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3))
     this.geometry.addAttribute('arrowHeight', new THREE.BufferAttribute((new Float32Array(numVertices * 1)), 1))
+    this.geometry.addAttribute('dashGap', new THREE.BufferAttribute((new Float32Array(numVertices * 1)), 1))
     this.recalcPositionFromData(links)
     this.recalcColorFromData(links)
 
@@ -84,6 +85,7 @@ export class Links {
     const quadLength = this.geometry.getAttribute('quadLength') as THREE.BufferAttribute
     const linkOffset = this.geometry.getAttribute('linkOffset') as THREE.BufferAttribute
     const arrowHeight = this.geometry.getAttribute('arrowHeight') as THREE.BufferAttribute
+    const dashGap = this.geometry.getAttribute('dashGap') as THREE.BufferAttribute
 
     const numLinks = links.length
     const numVertices = numLinks * VERTICES_PER_QUAD
@@ -106,6 +108,10 @@ export class Links {
 
     if (numVertices !== arrowHeight.count) {
       arrowHeight.setArray(new Float32Array(numVertices * arrowHeight.itemSize))
+    }
+
+    if (numVertices !== dashGap.count) {
+      dashGap.setArray(new Float32Array(numVertices * dashGap.itemSize))
     }
 
     const source = new THREE.Vector2()
@@ -166,6 +172,12 @@ export class Links {
           arrowHeight.setX(vertexIndex, 0)
           linkOffset.setX(vertexIndex, 0)
         }
+
+        if (links[i].dashed) {
+          dashGap.setX(vertexIndex, 10)
+        } else {
+          dashGap.setX(vertexIndex, 0)
+        }
       }
     }
 
@@ -174,6 +186,7 @@ export class Links {
     quadLength.needsUpdate = true
     linkOffset.needsUpdate = true
     arrowHeight.needsUpdate = true
+    dashGap.needsUpdate = true
 
     this.geometry.computeBoundingSphere()
   }

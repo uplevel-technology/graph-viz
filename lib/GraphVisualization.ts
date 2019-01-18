@@ -98,6 +98,11 @@ export interface VisualGraphLink {
   directed?: boolean
 
   /**
+   * determine with the line should be dashed
+   */
+  dashed?: boolean
+
+  /**
    * hex string or hex number
    */
   color?: number | string
