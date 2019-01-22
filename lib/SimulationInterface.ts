@@ -35,18 +35,6 @@ export interface SimulationInterface {
   getVisualGraph: () => VisualGraphData
 }
 
-export interface SimulationNode {
-  id: string
-  x: number
-  y: number
-  fixed: boolean
-}
-
-export interface SimulationLink {
-  source: string
-  target: string
-}
-
 export interface SimulationInputNode {
   /**
    * unique node id
