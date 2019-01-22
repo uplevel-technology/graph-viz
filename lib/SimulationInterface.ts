@@ -35,7 +35,7 @@ export interface SimulationInterface {
   getVisualGraph: () => VisualGraphData
 }
 
-export interface SimulationInputNode {
+export interface SimulationNode {
   /**
    * unique node id
    */
@@ -44,20 +44,12 @@ export interface SimulationInputNode {
   /**
    * initial seed x position. Should w name this as
    */
-  x?: number
+  x: number
 
   /**
    * initial seed y position
    */
-  y?: number
-  fixed?: boolean
-}
-
-export interface SimulationOutputNode {
-  id: string
-  x: number
   y: number
-  fixed?: boolean
 }
 
 export interface SimulationLink {
@@ -65,17 +57,10 @@ export interface SimulationLink {
   target: string
 }
 
-export interface SimulationInput {
-  nodes: SimulationInputNode[],
+export interface SimulationData {
+  nodes: SimulationNode[],
   links: SimulationLink[],
 }
-
-export interface SimulationOutput {
-  nodes: SimulationOutputNode[],
-  links: SimulationLink[],
-}
-
-export type SimulateFn = (inputGraph: SimulationInput) => SimulationOutput
 
 export interface VisualNode {
   /**
@@ -132,10 +117,10 @@ export interface VisualLink {
   color: string | number
 }
 
-type GraphNode = VisualNode & SimulationOutputNode
+type GraphNode = VisualNode & SimulationNode
 type GraphLink = VisualLink & SimulationLink
 
-interface GraphData {
+export interface GraphData {
   nodes: GraphNode[]
   links: GraphLink[]
 }
