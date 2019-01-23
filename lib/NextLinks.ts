@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import {GraphVizLink, GraphVizNode} from './NextGraphVisualization'
+import {GraphVizNode} from './NextNodes'
 import {DEFAULT_NODE_SIZE} from './Nodes'
 import fragmentShader from './shaders/links.fragment.glsl'
 import vertexShader from './shaders/links.vertex.glsl'
@@ -11,8 +11,28 @@ const QUAD_WIDTH = 15
 const DEFAULT_COLOR = 0xbbbbbb
 const HIGHLIGHTED_COLOR = 0x333333
 
-// lol
+// LOL. Maybe define a base GraphVizLinkStyles interface and extend both links from that instead
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
+export interface GraphVizLink {
+  source: string
+  target: string
+
+  /**
+   * determines whether an arrow is drawn on the link
+   */
+  directed?: string
+
+  /**
+   * determine whether the line should be dashed
+   */
+  dashed?: boolean
+
+  /**
+   * hex color string or hex number
+   */
+  color: string | number
+}
 
 export interface PopulatedGraphVizLink extends Omit<GraphVizLink, 'source'|'target'> {
   source: GraphVizNode

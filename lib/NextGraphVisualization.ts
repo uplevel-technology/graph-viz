@@ -1,84 +1,14 @@
 import {get, size, values} from 'lodash'
 import * as THREE from 'three'
-import {NextLinks, PopulatedGraphVizLink, populateGraphLinks} from './NextLinks'
+import {GraphVizLink, NextLinks, PopulatedGraphVizLink, populateGraphLinks} from './NextLinks'
 import {NextMouseInteraction} from './NextMouseInteraction'
-import {NextNodes} from './NextNodes'
+import {GraphVizNode, NextNodes} from './NextNodes'
 
 export interface GraphVizData {
   nodes: {
     [id: string]: GraphVizNode,
   }
   links: GraphVizLink[]
-}
-
-export interface GraphVizNode {
-  /**
-   * Unique node id
-   */
-  id: string
-
-  /**
-   * x coordinate of the node position
-   */
-  x: number
-
-  /**
-   * y position of the node position
-   */
-  y: number
-
-  /**
-   * inactive is a boolean that makes a node grey when set.
-   * @DEPRECATED
-   */
-  inactive?: boolean
-
-  /**
-   * node fill color hex string or hex number
-   */
-  fill?: number | string
-
-  /**
-   * The node container's absolute size in pixels at the default zoom level
-   * TODO: This is a bad name. We need to make more sense of this by ensuring all visual attributes
-   * can be translated represented by a property name in GraphVizNode. e.g. scale.
-   */
-  size?: number
-
-  /**
-   * node strike color hex string or hex number
-   */
-  stroke?: number | string
-
-  /**
-   * relative node stroke opacity (must be between 0.0 to 1.0)
-   */
-  strokeOpacity?: number
-
-  /**
-   * relative node stroke width (must be between 0.0 to 1.0)
-   */
-  strokeWidth?: number
-}
-
-export interface GraphVizLink {
-  source: string
-  target: string
-
-  /**
-   * determines whether an arrow is drawn on the link
-   */
-  directed?: string
-
-  /**
-   * determine whether the line should be dashed
-   */
-  dashed?: boolean
-
-  /**
-   * hex color string or hex number
-   */
-  color: string | number
 }
 
 export class NextGraphVisualization {
