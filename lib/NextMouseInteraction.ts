@@ -1,12 +1,12 @@
-import {orderBy} from 'lodash'
+import {noop, orderBy} from 'lodash'
 import * as THREE from 'three'
-import {Nodes} from './Nodes'
+import {NextNodes} from './NextNodes'
 
 const MAX_CLICK_DURATION = 300
 const PAN_SPEED = 1.0
 const MAX_ZOOM = 5.0
 
-type HoverEventHandler = (hoveredToNodeIdx: number|null, hoveredFromNodeIdx: number|null) => void
+type HoverEventHandler = (hoveredIdx: number) => void
 type ClickEventHandler = (mouse: THREE.Vector3, clickedNodeIdx: number|null) => void
 type DragStartEventHandler = (mouse: THREE.Vector3, draggedNodeIdx: number|null) => void
 type DragEventHandler = (mouse: THREE.Vector3, draggedNode: number) => void
@@ -15,8 +15,11 @@ type PanEventHandler = (panDelta: THREE.Vector3) => void
 type ZoomEventHandler = (event: MouseWheelEvent) => void
 
 export class NextMouseInteraction {
-  public onHover(callback: HoverEventHandler) {
-    this.registeredEventHandlers.hover = callback
+  public onNodeHoverIn(callback: HoverEventHandler) {
+    this.registeredEventHandlers.nodeHoverIn = callback
+  }
+  public onNodeHoverOut(callback: HoverEventHandler) {
+    this.registeredEventHandlers.nodeHoverOut = callback
   }
   public onClick(callback: ClickEventHandler) {
     this.registeredEventHandlers.click = callback
@@ -37,19 +40,29 @@ export class NextMouseInteraction {
     this.registeredEventHandlers.zoom = callback
   }
 
-  private nodes: Nodes
+  private nodes: NextNodes
   private intersectedPointIdx: number|null
   private dragging: boolean
   private registerClick: boolean
   private registeredEventHandlers: {
-    click?: ClickEventHandler,
-    hover?: HoverEventHandler,
-    dragStart?: DragStartEventHandler,
-    drag?: DragEventHandler,
-    dragEnd?: DragEndEventHandler,
-    pan?: PanEventHandler,
-    zoom?: ZoomEventHandler,
-  } = {}
+    click: ClickEventHandler,
+    nodeHoverIn: HoverEventHandler,
+    nodeHoverOut: HoverEventHandler,
+    dragStart: DragStartEventHandler,
+    drag: DragEventHandler,
+    dragEnd: DragEndEventHandler,
+    pan: PanEventHandler,
+    zoom: ZoomEventHandler,
+  } = {
+    click: noop,
+    nodeHoverIn: noop,
+    nodeHoverOut: noop,
+    dragStart: noop,
+    drag: noop,
+    dragEnd: noop,
+    pan: noop,
+    zoom: noop,
+  }
 
   private readonly canvas: HTMLCanvasElement
   private readonly camera: THREE.OrthographicCamera
@@ -59,7 +72,7 @@ export class NextMouseInteraction {
   private readonly mouse: THREE.Vector2
   private readonly raycaster: THREE.Raycaster
 
-  constructor(canvas: HTMLCanvasElement, camera: THREE.OrthographicCamera, nodes: Nodes) {
+  constructor(canvas: HTMLCanvasElement, camera: THREE.OrthographicCamera, nodes: NextNodes) {
     this.canvas = canvas
     this.camera = camera
     this.nodes = nodes
@@ -92,19 +105,15 @@ export class NextMouseInteraction {
     }, MAX_CLICK_DURATION)
 
     this.panStart.set(event.clientX, event.clientY, 0)
-    if (this.registeredEventHandlers.dragStart) {
-      this.registeredEventHandlers.dragStart(this.getMouseInWorldSpace(0), this.intersectedPointIdx)
-    }
+    this.registeredEventHandlers.dragStart(this.getMouseInWorldSpace(0), this.intersectedPointIdx)
   }
 
   private onMouseUp = (event: MouseEvent) => {
     event.preventDefault()
     this.dragging = false
-    if (this.registeredEventHandlers.dragEnd) {
-      this.registeredEventHandlers.dragEnd()
-    }
+    this.registeredEventHandlers.dragEnd()
 
-    if (this.registerClick && this.registeredEventHandlers.click) {
+    if (this.registerClick) {
       this.registeredEventHandlers.click(this.getMouseInWorldSpace(0), this.intersectedPointIdx)
     }
   }
@@ -129,24 +138,22 @@ export class NextMouseInteraction {
         const nearestIntersect = orderBy(intersects, 'distanceToRay', 'asc')[0]
         const nearestIndex = nearestIntersect.index === undefined ? null : nearestIntersect.index
         if (this.intersectedPointIdx !== nearestIndex) {
-          if (this.registeredEventHandlers.hover) {
-            this.registeredEventHandlers.hover(nearestIndex, this.intersectedPointIdx)
+          if (nearestIndex != null) {
+            this.registeredEventHandlers.nodeHoverIn(nearestIndex)
+          }
+          if (this.intersectedPointIdx !== null) {
+            this.registeredEventHandlers.nodeHoverOut(this.intersectedPointIdx)
           }
           this.intersectedPointIdx = nearestIndex
         }
       } else if (this.intersectedPointIdx !== null) {
-        // hover out
-        if (this.registeredEventHandlers.hover) {
-          this.registeredEventHandlers.hover(null, this.intersectedPointIdx)
-        }
+        this.registeredEventHandlers.nodeHoverOut(this.intersectedPointIdx)
         this.intersectedPointIdx = null
       }
     } else if (this.intersectedPointIdx !== null) {
       // handle node drag interaction
+      this.registeredEventHandlers.drag(this.getMouseInWorldSpace(0), this.intersectedPointIdx)
 
-      if (this.registeredEventHandlers.drag) {
-        this.registeredEventHandlers.drag(this.getMouseInWorldSpace(0), this.intersectedPointIdx)
-      }
     } else {
       // pan camera on drag
       this.panEnd.set(event.clientX, event.clientY, 0)
@@ -157,9 +164,7 @@ export class NextMouseInteraction {
         this.panDelta.y * (this.camera.top - this.camera.bottom) / this.camera.zoom / rect.height
       this.camera.updateProjectionMatrix()
 
-      if (this.registeredEventHandlers.pan) {
-        this.registeredEventHandlers.pan(this.panDelta)
-      }
+      this.registeredEventHandlers.pan(this.panDelta)
 
       this.panStart.copy(this.panEnd)
     }
@@ -173,9 +178,7 @@ export class NextMouseInteraction {
     this.camera.zoom = Math.min(MAX_ZOOM, this.camera.zoom * zoomFactor)
     this.camera.updateProjectionMatrix()
 
-    if (this.registeredEventHandlers.zoom) {
-      this.registeredEventHandlers.zoom(event)
-    }
+    this.registeredEventHandlers.zoom(event)
   }
 
   private getMouseInWorldSpace = (z: number) => {

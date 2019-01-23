@@ -1,27 +1,37 @@
 import {get, size, values} from 'lodash'
 import * as THREE from 'three'
-import {GraphVizLink, NextLinks, PopulatedGraphVizLink, populateGraphLinks} from './NextLinks'
+import {GraphVizLink, NextLinks, PopulatedGraphVizLink, getPopulatedGraphLinks} from './NextLinks'
 import {NextMouseInteraction} from './NextMouseInteraction'
 import {GraphVizNode, NextNodes} from './NextNodes'
 
 export interface GraphVizData {
-  nodes: {
-    [id: string]: GraphVizNode,
-  }
+  nodes: GraphVizNode[]
   links: GraphVizLink[]
 }
+
+interface ScreenSpaceNode {
+  id: string
+  screenX: number
+  screenY: number
+}
+
+type ClickEventHandler = (clickedNode: GraphVizNode) => void
+type HoverEventHandler = (hoveredNode: ScreenSpaceNode) => void
 
 export class NextGraphVisualization {
   public nodesMesh: NextNodes
   public linksMesh: NextLinks
 
-  public onNodeClick: (clickedNode: GraphVizNode) => {}
-  public onHover: (hoveredNode: ScreenSpaceNode | null) => void
-
+  private nodeIdToIndexMap: {[key: string]: number} = {}
   private graphData: GraphVizData
   private nodesData: GraphVizNode[]
   private linksData: PopulatedGraphVizLink[]
   private userHasAdjustedViewport: boolean
+  private registeredEventHandlers: {
+    nodeClick?: ClickEventHandler,
+    nodeHover?: HoverEventHandler,
+  } = {}
+
   private readonly camera: THREE.OrthographicCamera
   private readonly scene: THREE.Scene
   private readonly renderer: THREE.WebGLRenderer
@@ -72,7 +82,7 @@ export class NextGraphVisualization {
     this.renderer.setSize(width, height)
 
     this.nodesMesh = new NextNodes(this.nodesData)
-    this.linksMesh = new NextLinks(populateGraphLinks(this.graphData.links, this.graphData.nodes))
+    this.linksMesh = new NextLinks(getPopulatedGraphLinks(this.graphData))
 
     this.scene.add(this.linksMesh.object)
     this.nodesMesh.object.position.z = 3
@@ -81,13 +91,21 @@ export class NextGraphVisualization {
     this.render()
 
     this.mouseInteraction = new NextMouseInteraction(this.canvas, this.camera, this.nodesMesh)
-    this.mouseInteraction.onClick = this.handleClick
-    this.mouseInteraction.onHover = this.handleHover
-    this.mouseInteraction.onDragStart = this.handleDragStart
-    this.mouseInteraction.onDrag = this.handleDrag
-    this.mouseInteraction.onDragEnd = this.handleDragEnd
-    this.mouseInteraction.onPan = this.handlePan
-    this.mouseInteraction.onZoom = this.handleZoomOnWheel
+    this.mouseInteraction.onClick(this.handleClick)
+    this.mouseInteraction.onHover(this.handleHover)
+    this.mouseInteraction.onDragStart(this.handleDragStart)
+    this.mouseInteraction.onDrag(this.handleDrag)
+    this.mouseInteraction.onDragEnd(this.handleDragEnd)
+    this.mouseInteraction.onPan(this.handlePan)
+    this.mouseInteraction.onZoom(this.handleZoomOnWheel)
+  }
+
+  public onClick(callback: ClickEventHandler) {
+    this.registeredEventHandlers.nodeClick = callback
+  }
+
+  public onHover(callback: HoverEventHandler) {
+    this.registeredEventHandlers.nodeHover = callback
   }
 
   public render = () => {
@@ -95,8 +113,8 @@ export class NextGraphVisualization {
   }
 
   private updatePositions = (updatedGraphData: GraphVizData) => window.requestAnimationFrame(() => {
-    this.nodesMesh.updatePositions(updatedGraphData.nodes)
-    this.linksMesh.updatePositions(updatedGraphData.links)
+    this.nodesMesh.updatePositions(values(updatedGraphData.nodes))
+    this.linksMesh.updatePositions(getPopulatedGraphLinks(updatedGraphData))
 
     if (!this.userHasAdjustedViewport) {
       this.zoomToFit()
@@ -104,7 +122,7 @@ export class NextGraphVisualization {
     this.render()
   })
 
-  public zoomToFit = () => {
+  private zoomToFit = () => {
     if (size(this.graphData.nodes) === 0) {
       // Don't try to do this if there are no nodes.
       return
@@ -143,19 +161,19 @@ export class NextGraphVisualization {
   }
 
   public update = (graphData: GraphVizData) => {
-    if (size(this.graphData.nodes) === 0 && size(graphData.nodes) > 0) {
-      // Re-initialize simulation if it's the first load for better stabilization
-      this.simulation.initialize(graphData)
-    } else {
-      this.simulation.update(graphData)
-    }
+    // if (size(this.graphData.nodes) === 0 && size(graphData.nodes) > 0) {
+    //   // Re-initialize simulation if it's the first load for better stabilization
+    //   this.simulation.initialize(graphData)
+    // } else {
+    //   this.simulation.update(graphData)
+    // }
 
-    this.graphData = this.simulation.getVisualGraph()
+    // this.graphData = this.simulation.getVisualGraph()
 
-    this.nodesMesh.redraw(this.graphData.nodes)
-    this.linksMesh.redraw(this.graphData.links)
+    this.nodesMesh.redraw(values(this.graphData.nodes))
+    this.linksMesh.redraw(getPopulatedGraphLinks(this.graphData))
 
-    this.simulation.restart()
+    // this.simulation.restart()
   }
 
   public dispose() {
@@ -203,9 +221,9 @@ export class NextGraphVisualization {
 
   private handleDragStart = (mouse: THREE.Vector3, draggedNodeIdx: number | null) => {
     this.userHasAdjustedViewport = true
-    if (draggedNodeIdx !== null) {
-      this.simulation.reheat()
-    }
+    // if (draggedNodeIdx !== null) {
+    //   this.simulation.reheat()
+    // }
   }
 
   private handleDrag = (mouse: THREE.Vector3, draggedNodeIdx: number) => {
@@ -243,24 +261,28 @@ export class NextGraphVisualization {
   }
 
   private handleClick = (mouse: THREE.Vector3, clickedNodeIdx: number | null) => {
-    if (clickedNodeIdx !== null) {
-      const nodes = this.graphData.nodes
-      if (get(nodes, `${clickedNodeIdx}.fx`)) {
-        // release node
-        nodes[clickedNodeIdx].fx = null
-        nodes[clickedNodeIdx].fy = null
-        this.nodesMesh.unlockPointAt(clickedNodeIdx)
-      } else {
-        nodes[clickedNodeIdx].fx = mouse.x
-        nodes[clickedNodeIdx].fy = mouse.y
-        this.nodesMesh.lockPointAt(clickedNodeIdx)
-      }
-
-      if (this.onNodeClick) {
-        this.onNodeClick(nodes[clickedNodeIdx])
-      }
-
-      this.render()
+    if (clickedNodeIdx === null || !this.registeredEventHandlers.nodeClick) {
+      return
     }
+
+    const nodes = this.simulation.nodes //  this.graphData.nodes
+    if (get(nodes, `${clickedNodeIdx}.fx`)) {
+      // release node
+      nodes[clickedNodeIdx].fx = null
+      nodes[clickedNodeIdx].fy = null
+      this.nodesMesh.unlockPointAt(clickedNodeIdx)
+    } else {
+      nodes[clickedNodeIdx].fx = mouse.x
+      nodes[clickedNodeIdx].fy = mouse.y
+      this.nodesMesh.lockPointAt(clickedNodeIdx)
+    }
+
+    // if (this.onNodeClick) {
+    //   this.onNodeClick(nodes[clickedNodeIdx])
+    // }
+
+    this.registeredEventHandlers.nodeClick(nodes[])
+
+    this.render()
   }
 }

@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import {GraphVizData} from './NextGraphVisualization'
 import {GraphVizNode} from './NextNodes'
 import {DEFAULT_NODE_SIZE} from './Nodes'
 import fragmentShader from './shaders/links.fragment.glsl'
@@ -39,14 +40,11 @@ export interface PopulatedGraphVizLink extends Omit<GraphVizLink, 'source'|'targ
   target: GraphVizNode
 }
 
-export function populateGraphLinks(
-  links: GraphVizLink[],
-  nodesMap: {[id: string]: GraphVizNode},
-): PopulatedGraphVizLink[] {
-  return links.map(link => ({
+export function getPopulatedGraphLinks(graphData: GraphVizData): PopulatedGraphVizLink[] {
+  return graphData.links.map(link => ({
     ...link,
-    source: nodesMap[link.source],
-    target: nodesMap[link.target],
+    source: graphData.nodes[link.source],
+    target: graphData.nodes[link.target],
   }))
 }
 

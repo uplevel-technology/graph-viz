@@ -4,7 +4,9 @@ import {Button, createStyles, Paper, Theme, Typography, WithStyles, withStyles} 
 import RefreshIcon from '@material-ui/icons/Refresh'
 import * as React from 'react'
 import {PERSISTENCE_SERVICE_ADDRESS} from '../App'
+import {BasicForceSimulation} from './lib/BasicForceSimulation'
 import {GraphVisualization} from './lib/GraphVisualization'
+import {NextGraphVisualization} from './lib/NextGraphVisualization'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {toVisualGraphData} from './vizUtils'
 
@@ -40,7 +42,8 @@ interface Props extends WithStyles<typeof styles> {
 
 class DevGraphBase extends React.Component<Props, State> {
   client = new PersistenceServiceClient(PERSISTENCE_SERVICE_ADDRESS)
-  graphVisualization: GraphVisualization
+  graphVisualization: NextGraphVisualization
+  simulation: BasicForceSimulation
 
   canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef()
 
@@ -50,12 +53,14 @@ class DevGraphBase extends React.Component<Props, State> {
 
   componentDidMount(): void {
     const canvas = this.canvasRef.current! // this is safe when mounted
-    this.graphVisualization = new GraphVisualization(
-      {nodes: [], links: []},
+    this.graphVisualization = new NextGraphVisualization(
+      {nodes: {}, links: []},
       canvas,
       this.props.width,
       this.props.height,
     )
+    this.simulation = new BasicForceSimulation({nodes: [], links: []})
+
     this.graphVisualization.onHover = this.onNodeHover
 
     this.readGraph()
