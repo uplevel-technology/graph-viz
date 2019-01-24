@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 
-interface ForceSimulationNode extends d3.SimulationNodeDatum {
+export interface ForceSimulationNode extends d3.SimulationNodeDatum {
   id: string
 
   /**

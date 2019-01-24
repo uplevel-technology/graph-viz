@@ -35,6 +35,7 @@ export class NextGraphVisualization {
   public readonly canvas: HTMLCanvasElement
   public readonly camera: THREE.OrthographicCamera
 
+  private graphData: GraphVizData
   private nodeIdToIndexMap: {[key: string]: number} = {}
   private userHasAdjustedViewport: boolean
 
@@ -70,9 +71,10 @@ export class NextGraphVisualization {
     // } else {
     //   this.simulation = new DefaultForceSimulation()
     //   this.simulation.onSimulationTick(this.updatePositions)
-    //   this.simulation.initialize(graphData)
+    //   this.simulation.initialize(vizData)
     // }
 
+    this.graphData = graphData
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
 
     // init Scene and Camera
@@ -152,6 +154,7 @@ export class NextGraphVisualization {
   }
 
   private updatePositions = (updatedGraphData: GraphVizData) => window.requestAnimationFrame(() => {
+    this.graphData = updatedGraphData
     this.nodeIdToIndexMap = constructIdToIdxMap(updatedGraphData.nodes)
 
     this.nodesMesh.updatePositions(updatedGraphData.nodes)
@@ -202,14 +205,15 @@ export class NextGraphVisualization {
   }
 
   public update = (graphData: GraphVizData) => {
-    // if (size(this.graphData.nodes) === 0 && size(graphData.nodes) > 0) {
+    this.graphData = graphData
+    // if (size(this.vizData.nodes) === 0 && size(vizData.nodes) > 0) {
     //   // Re-initialize simulation if it's the first load for better stabilization
-    //   this.simulation.initialize(graphData)
+    //   this.simulation.initialize(vizData)
     // } else {
-    //   this.simulation.update(graphData)
+    //   this.simulation.update(vizData)
     // }
 
-    // this.graphData = this.simulation.getVisualGraph()
+    // this.vizData = this.simulation.getVisualGraph()
 
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
 
@@ -217,6 +221,12 @@ export class NextGraphVisualization {
     this.linksMesh.redraw(getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap))
 
     // this.simulation.restart()
+  }
+
+  public updateNode = (nodeIdx: number) => {
+    this.nodesMesh.redraw(this.graphData.nodes)
+    // TODO optimize and redraw only one node:
+    // this.nodesMesh.updateNodeAt(nodeIdx)
   }
 
   public toScreenSpacePoint = (worldX: number = 0, worldY: number = 0): THREE.Vector3 => {
@@ -266,32 +276,20 @@ export class NextGraphVisualization {
       // if (draggedNodeIdx !== null) {
       //   this.simulation.reheat()
       // }
-      this.registeredEventHandlers.dragStart(
-        this.toScreenSpacePoint(worldSpaceMouse.x, worldSpaceMouse.y),
-        draggedNodeIdx,
-      )
+      this.registeredEventHandlers.dragStart(worldSpaceMouse, draggedNodeIdx)
     }
     this.render() // <- this is probably not needed
   }
 
   private handleNodeDrag = (worldSpaceMouse: THREE.Vector3, draggedNodeIdx: number) => {
     if (this.registeredEventHandlers.nodeDrag) {
-      // // lock node etc.
-      // const nodes = this.graphData.nodes
-      // nodes[draggedNodeIdx].fx = mouse.x
-      // nodes[draggedNodeIdx].fy = mouse.y
-      // this.nodesMesh.lockPointAt(draggedNodeIdx)
-      this.registeredEventHandlers.nodeDrag(
-        this.toScreenSpacePoint(worldSpaceMouse.x, worldSpaceMouse.y),
-        draggedNodeIdx,
-      )
+      this.registeredEventHandlers.nodeDrag(worldSpaceMouse, draggedNodeIdx)
     }
     this.render()
   }
 
   private handleDragEnd = () => {
     if (this.registeredEventHandlers.dragEnd) {
-      // this.simulation.stop()
       this.registeredEventHandlers.dragEnd()
     }
   }
@@ -319,26 +317,7 @@ export class NextGraphVisualization {
       return
     }
 
-    // const nodes = this.simulation.nodes //  this.graphData.nodes
-    // if (get(nodes, `${clickedNodeIdx}.fx`)) {
-    //   // release node
-    //   nodes[clickedNodeIdx].fx = null
-    //   nodes[clickedNodeIdx].fy = null
-    //   this.nodesMesh.unlockPointAt(clickedNodeIdx)
-    // } else {
-    //   nodes[clickedNodeIdx].fx = mouse.x
-    //   nodes[clickedNodeIdx].fy = mouse.y
-    //   this.nodesMesh.lockPointAt(clickedNodeIdx)
-    // }
-
-    // if (this.onNodeClick) {
-    //   this.onNodeClick(nodes[clickedNodeIdx])
-    // }
-
-    this.registeredEventHandlers.click(
-      this.toScreenSpacePoint(worldSpaceMouse.x, worldSpaceMouse.y),
-      clickedNodeIdx,
-    )
+    this.registeredEventHandlers.click(worldSpaceMouse, clickedNodeIdx)
 
     this.render()
   }

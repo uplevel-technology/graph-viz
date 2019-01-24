@@ -14,12 +14,12 @@ export type HoverEventHandler = (hoveredIdx: number) => void
 /**
  * dispatched when the canvas is clicked. if a node click is detected the clickedNodeIdx will be non-null
  */
-export type ClickEventHandler = (mouse: THREE.Vector3, clickedNodeIdx: number|null) => void
+export type ClickEventHandler = (worldSpaceMousePosition: THREE.Vector3, clickedNodeIdx: number|null) => void
 
 /**
  * dispatched when a mouse drag start is detected anywhere on the canvas
  */
-export type DragStartEventHandler = (mouse: THREE.Vector3, draggedNodeIdx: number|null) => void
+export type DragStartEventHandler = (worldSpaceMousePosition: THREE.Vector3, draggedNodeIdx: number|null) => void
 
 /**
  * dispatched when a mouse drag end is detected anywhere on the canvas
@@ -30,7 +30,7 @@ export type DragEndEventHandler = () => void
  * dispatched when a mouse dragging event is detected after dragStart was dispatched with a non-null node
  * i.e. node was dragged
  */
-export type NodeDragEventHandler = (mouse: THREE.Vector3, draggedNodeIdx: number) => void
+export type NodeDragEventHandler = (worldSpaceMousePosition: THREE.Vector3, draggedNodeIdx: number) => void
 
 /**
  * dispatched when a mouse dragging event is detected after dragStart was dispatched with a null node
