@@ -1,7 +1,17 @@
-import {get, size, values} from 'lodash'
+import {size} from 'lodash'
 import * as THREE from 'three'
-import {GraphVizLink, NextLinks, PopulatedGraphVizLink, getPopulatedGraphLinks} from './NextLinks'
-import {NextMouseInteraction} from './NextMouseInteraction'
+import {Vector3} from 'three'
+import {getPopulatedGraphLinks, GraphVizLink, NextLinks} from './NextLinks'
+import {
+  ClickEventHandler,
+  DragEndEventHandler,
+  DragStartEventHandler,
+  HoverEventHandler,
+  NextMouseInteraction,
+  NodeDragEventHandler,
+  PanEventHandler,
+  ZoomEventHandler,
+} from './NextMouseInteraction'
 import {GraphVizNode, NextNodes} from './NextNodes'
 
 export interface GraphVizData {
@@ -9,34 +19,39 @@ export interface GraphVizData {
   links: GraphVizLink[]
 }
 
-interface ScreenSpaceNode {
-  id: string
-  screenX: number
-  screenY: number
-}
+function constructIdToIdxMap(arr: Array<{id: string}>): {[id: string]: number} {
+  const map: {[id: string]: number} = {}
+  arr.forEach((elem, idx) => {
+    map[elem.id] = idx
+  })
 
-type ClickEventHandler = (clickedNode: GraphVizNode) => void
-type HoverEventHandler = (hoveredNode: ScreenSpaceNode) => void
+  return map
+}
 
 export class NextGraphVisualization {
   public nodesMesh: NextNodes
   public linksMesh: NextLinks
 
+  public readonly canvas: HTMLCanvasElement
+  public readonly camera: THREE.OrthographicCamera
+
   private nodeIdToIndexMap: {[key: string]: number} = {}
-  private graphData: GraphVizData
-  private nodesData: GraphVizNode[]
-  private linksData: PopulatedGraphVizLink[]
   private userHasAdjustedViewport: boolean
+
   private registeredEventHandlers: {
-    nodeClick?: ClickEventHandler,
-    nodeHover?: HoverEventHandler,
+    click?: ClickEventHandler,
+    nodeHoverIn?: HoverEventHandler,
+    nodeHoverOut?: HoverEventHandler,
+    dragStart?: DragStartEventHandler,
+    dragEnd?: DragEndEventHandler,
+    nodeDrag?: NodeDragEventHandler,
+    pan?: PanEventHandler,
+    zoom?: ZoomEventHandler,
   } = {}
 
-  private readonly camera: THREE.OrthographicCamera
   private readonly scene: THREE.Scene
   private readonly renderer: THREE.WebGLRenderer
   private readonly mouseInteraction: NextMouseInteraction
-  private readonly canvas: HTMLCanvasElement
   private readonly width: number
   private readonly height: number
 
@@ -58,8 +73,7 @@ export class NextGraphVisualization {
     //   this.simulation.initialize(graphData)
     // }
 
-    this.graphData = graphData
-    this.nodesData = values(graphData.nodes)
+    this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
 
     // init Scene and Camera
     this.scene = new THREE.Scene()
@@ -81,8 +95,8 @@ export class NextGraphVisualization {
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setSize(width, height)
 
-    this.nodesMesh = new NextNodes(this.nodesData)
-    this.linksMesh = new NextLinks(getPopulatedGraphLinks(this.graphData))
+    this.nodesMesh = new NextNodes(graphData.nodes)
+    this.linksMesh = new NextLinks(getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap))
 
     this.scene.add(this.linksMesh.object)
     this.nodesMesh.object.position.z = 3
@@ -92,20 +106,45 @@ export class NextGraphVisualization {
 
     this.mouseInteraction = new NextMouseInteraction(this.canvas, this.camera, this.nodesMesh)
     this.mouseInteraction.onClick(this.handleClick)
-    this.mouseInteraction.onHover(this.handleHover)
+    this.mouseInteraction.onNodeHoverIn(this.handleHoverIn)
+    this.mouseInteraction.onNodeHoverOut(this.handleHoverOut)
     this.mouseInteraction.onDragStart(this.handleDragStart)
-    this.mouseInteraction.onDrag(this.handleDrag)
     this.mouseInteraction.onDragEnd(this.handleDragEnd)
+    this.mouseInteraction.onNodeDrag(this.handleNodeDrag)
     this.mouseInteraction.onPan(this.handlePan)
     this.mouseInteraction.onZoom(this.handleZoomOnWheel)
   }
 
-  public onClick(callback: ClickEventHandler) {
-    this.registeredEventHandlers.nodeClick = callback
+  public onNodeHoverIn(callback: HoverEventHandler) {
+    this.registeredEventHandlers.nodeHoverIn = callback
   }
 
-  public onHover(callback: HoverEventHandler) {
-    this.registeredEventHandlers.nodeHover = callback
+  public onNodeHoverOut(callback: HoverEventHandler) {
+    this.registeredEventHandlers.nodeHoverOut = callback
+  }
+
+  public onClick(callback: ClickEventHandler) {
+    this.registeredEventHandlers.click = callback
+  }
+
+  public onDragStart(callback: DragStartEventHandler) {
+    this.registeredEventHandlers.dragStart = callback
+  }
+
+  public onDragEnd(callback: DragEndEventHandler) {
+    this.registeredEventHandlers.dragEnd = callback
+  }
+
+  public onNodeDrag(callback: NodeDragEventHandler) {
+    this.registeredEventHandlers.nodeDrag = callback
+  }
+
+  public onPan(callback: PanEventHandler) {
+    this.registeredEventHandlers.pan = callback
+  }
+
+  public onZoom(callback: ZoomEventHandler) {
+    this.registeredEventHandlers.zoom = callback
   }
 
   public render = () => {
@@ -113,17 +152,19 @@ export class NextGraphVisualization {
   }
 
   private updatePositions = (updatedGraphData: GraphVizData) => window.requestAnimationFrame(() => {
-    this.nodesMesh.updatePositions(values(updatedGraphData.nodes))
-    this.linksMesh.updatePositions(getPopulatedGraphLinks(updatedGraphData))
+    this.nodeIdToIndexMap = constructIdToIdxMap(updatedGraphData.nodes)
+
+    this.nodesMesh.updatePositions(updatedGraphData.nodes)
+    this.linksMesh.updatePositions(getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap))
 
     if (!this.userHasAdjustedViewport) {
-      this.zoomToFit()
+      this.zoomToFit(updatedGraphData)
     }
     this.render()
   })
 
-  private zoomToFit = () => {
-    if (size(this.graphData.nodes) === 0) {
+  private zoomToFit = (graphData: GraphVizData) => {
+    if (size(graphData.nodes) === 0) {
       // Don't try to do this if there are no nodes.
       return
     }
@@ -170,45 +211,15 @@ export class NextGraphVisualization {
 
     // this.graphData = this.simulation.getVisualGraph()
 
-    this.nodesMesh.redraw(values(this.graphData.nodes))
-    this.linksMesh.redraw(getPopulatedGraphLinks(this.graphData))
+    this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
+
+    this.nodesMesh.redraw(graphData.nodes)
+    this.linksMesh.redraw(getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap))
 
     // this.simulation.restart()
   }
 
-  public dispose() {
-    this.nodesMesh.dispose()
-    this.linksMesh.dispose()
-    this.renderer.dispose()
-  }
-
-  private handleHover = (hoveredToNodeIdx: number | null, hoveredFromNodeIdx: number | null) => {
-    if (hoveredFromNodeIdx !== null) {
-      this.nodesMesh.scalePointAt(hoveredFromNodeIdx, 1.0) // reset previously hovered
-    }
-    if (hoveredToNodeIdx !== null) {
-      this.nodesMesh.scalePointAt(hoveredToNodeIdx, 1.75)
-    }
-    this.render()
-
-    if (!this.onHover) {
-      return
-    }
-
-    let screenNode: ScreenSpaceNode | null = null
-    if (hoveredToNodeIdx !== null && size(this.graphData.nodes) > hoveredToNodeIdx) {
-      const node = this.graphData.nodes[hoveredToNodeIdx]
-      const pos = this.toScreenSpacePoint(node.x, node.y)
-      screenNode = {
-        ...node,
-        screenX: pos.x,
-        screenY: pos.y,
-      }
-    }
-    this.onHover(screenNode)
-  }
-
-  private toScreenSpacePoint = (worldX: number = 0, worldY: number = 0): THREE.Vector3 => {
+  public toScreenSpacePoint = (worldX: number = 0, worldY: number = 0): THREE.Vector3 => {
     const pos = new THREE.Vector3(worldX, worldY, 0)
     pos.project(this.camera)
 
@@ -219,39 +230,7 @@ export class NextGraphVisualization {
     )
   }
 
-  private handleDragStart = (mouse: THREE.Vector3, draggedNodeIdx: number | null) => {
-    this.userHasAdjustedViewport = true
-    // if (draggedNodeIdx !== null) {
-    //   this.simulation.reheat()
-    // }
-  }
-
-  private handleDrag = (mouse: THREE.Vector3, draggedNodeIdx: number) => {
-    // lock node
-    const nodes = this.graphData.nodes
-    nodes[draggedNodeIdx].fx = mouse.x
-    nodes[draggedNodeIdx].fy = mouse.y
-    this.nodesMesh.lockPointAt(draggedNodeIdx)
-    this.render()
-  }
-
-  private handleDragEnd = () => {
-    this.simulation.stop()
-  }
-
-  private handlePan = () => {
-    this.userHasAdjustedViewport = true
-    this.render()
-  }
-
-  private handleZoomOnWheel = () => {
-    this.userHasAdjustedViewport = true
-    this.nodesMesh.handleCameraZoom(this.camera.zoom)
-    this.linksMesh.handleCameraZoom(this.camera.zoom)
-    this.render()
-  }
-
-  private zoom = (factor: number) => {
+  public zoom = (factor: number = 0) => {
     this.userHasAdjustedViewport = true
     this.camera.zoom += factor * this.camera.zoom
     this.camera.updateProjectionMatrix()
@@ -260,28 +239,106 @@ export class NextGraphVisualization {
     this.render()
   }
 
-  private handleClick = (mouse: THREE.Vector3, clickedNodeIdx: number | null) => {
-    if (clickedNodeIdx === null || !this.registeredEventHandlers.nodeClick) {
+  public dispose() {
+    this.nodesMesh.dispose()
+    this.linksMesh.dispose()
+    this.renderer.dispose()
+  }
+
+  private handleHoverIn = (hoveredToNodeIdx: number) => {
+    if (!this.registeredEventHandlers.nodeHoverIn) {
+      return
+    }
+    this.registeredEventHandlers.nodeHoverIn(hoveredToNodeIdx)
+    this.render()
+  }
+
+  private handleHoverOut = (hoveredFromNodeIdx: number) => {
+    if (hoveredFromNodeIdx !== null && this.registeredEventHandlers.nodeHoverOut) {
+      this.registeredEventHandlers.nodeHoverOut(hoveredFromNodeIdx)
+    }
+    this.render()
+  }
+
+  private handleDragStart = (worldSpaceMouse: THREE.Vector3, draggedNodeIdx: number | null) => {
+    this.userHasAdjustedViewport = true
+    if (this.registeredEventHandlers.dragStart) {
+      // if (draggedNodeIdx !== null) {
+      //   this.simulation.reheat()
+      // }
+      this.registeredEventHandlers.dragStart(
+        this.toScreenSpacePoint(worldSpaceMouse.x, worldSpaceMouse.y),
+        draggedNodeIdx,
+      )
+    }
+    this.render() // <- this is probably not needed
+  }
+
+  private handleNodeDrag = (worldSpaceMouse: THREE.Vector3, draggedNodeIdx: number) => {
+    if (this.registeredEventHandlers.nodeDrag) {
+      // // lock node etc.
+      // const nodes = this.graphData.nodes
+      // nodes[draggedNodeIdx].fx = mouse.x
+      // nodes[draggedNodeIdx].fy = mouse.y
+      // this.nodesMesh.lockPointAt(draggedNodeIdx)
+      this.registeredEventHandlers.nodeDrag(
+        this.toScreenSpacePoint(worldSpaceMouse.x, worldSpaceMouse.y),
+        draggedNodeIdx,
+      )
+    }
+    this.render()
+  }
+
+  private handleDragEnd = () => {
+    if (this.registeredEventHandlers.dragEnd) {
+      // this.simulation.stop()
+      this.registeredEventHandlers.dragEnd()
+    }
+  }
+
+  private handlePan = (panDelta: Vector3) => {
+    this.userHasAdjustedViewport = true
+    if (this.registeredEventHandlers.pan) {
+      this.registeredEventHandlers.pan(panDelta)
+    }
+    this.render()
+  }
+
+  private handleZoomOnWheel = (event: MouseWheelEvent) => {
+    this.userHasAdjustedViewport = true
+    this.nodesMesh.handleCameraZoom(this.camera.zoom)
+    this.linksMesh.handleCameraZoom(this.camera.zoom)
+    if (this.registeredEventHandlers.zoom) {
+      this.registeredEventHandlers.zoom(event)
+    }
+    this.render()
+  }
+
+  private handleClick = (worldSpaceMouse: THREE.Vector3, clickedNodeIdx: number | null) => {
+    if (clickedNodeIdx === null || !this.registeredEventHandlers.click) {
       return
     }
 
-    const nodes = this.simulation.nodes //  this.graphData.nodes
-    if (get(nodes, `${clickedNodeIdx}.fx`)) {
-      // release node
-      nodes[clickedNodeIdx].fx = null
-      nodes[clickedNodeIdx].fy = null
-      this.nodesMesh.unlockPointAt(clickedNodeIdx)
-    } else {
-      nodes[clickedNodeIdx].fx = mouse.x
-      nodes[clickedNodeIdx].fy = mouse.y
-      this.nodesMesh.lockPointAt(clickedNodeIdx)
-    }
+    // const nodes = this.simulation.nodes //  this.graphData.nodes
+    // if (get(nodes, `${clickedNodeIdx}.fx`)) {
+    //   // release node
+    //   nodes[clickedNodeIdx].fx = null
+    //   nodes[clickedNodeIdx].fy = null
+    //   this.nodesMesh.unlockPointAt(clickedNodeIdx)
+    // } else {
+    //   nodes[clickedNodeIdx].fx = mouse.x
+    //   nodes[clickedNodeIdx].fy = mouse.y
+    //   this.nodesMesh.lockPointAt(clickedNodeIdx)
+    // }
 
     // if (this.onNodeClick) {
     //   this.onNodeClick(nodes[clickedNodeIdx])
     // }
 
-    this.registeredEventHandlers.nodeClick(nodes[])
+    this.registeredEventHandlers.click(
+      this.toScreenSpacePoint(worldSpaceMouse.x, worldSpaceMouse.y),
+      clickedNodeIdx,
+    )
 
     this.render()
   }

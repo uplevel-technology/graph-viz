@@ -6,40 +6,44 @@ const MAX_CLICK_DURATION = 300
 const PAN_SPEED = 1.0
 const MAX_ZOOM = 5.0
 
-type HoverEventHandler = (hoveredIdx: number) => void
-type ClickEventHandler = (mouse: THREE.Vector3, clickedNodeIdx: number|null) => void
-type DragStartEventHandler = (mouse: THREE.Vector3, draggedNodeIdx: number|null) => void
-type DragEventHandler = (mouse: THREE.Vector3, draggedNode: number) => void
-type DragEndEventHandler = () => void
-type PanEventHandler = (panDelta: THREE.Vector3) => void
-type ZoomEventHandler = (event: MouseWheelEvent) => void
+/**
+ * dispatched when a node is hovered in or out
+ */
+export type HoverEventHandler = (hoveredIdx: number) => void
+
+/**
+ * dispatched when the canvas is clicked. if a node click is detected the clickedNodeIdx will be non-null
+ */
+export type ClickEventHandler = (mouse: THREE.Vector3, clickedNodeIdx: number|null) => void
+
+/**
+ * dispatched when a mouse drag start is detected anywhere on the canvas
+ */
+export type DragStartEventHandler = (mouse: THREE.Vector3, draggedNodeIdx: number|null) => void
+
+/**
+ * dispatched when a mouse drag end is detected anywhere on the canvas
+ */
+export type DragEndEventHandler = () => void
+
+/**
+ * dispatched when a mouse dragging event is detected after dragStart was dispatched with a non-null node
+ * i.e. node was dragged
+ */
+export type NodeDragEventHandler = (mouse: THREE.Vector3, draggedNodeIdx: number) => void
+
+/**
+ * dispatched when a mouse dragging event is detected after dragStart was dispatched with a null node
+ * i.e. canvas was panned
+ */
+export type PanEventHandler = (panDelta: THREE.Vector3) => void
+
+/**
+ * dispatched on mouse wheel change
+ */
+export type ZoomEventHandler = (event: MouseWheelEvent) => void
 
 export class NextMouseInteraction {
-  public onNodeHoverIn(callback: HoverEventHandler) {
-    this.registeredEventHandlers.nodeHoverIn = callback
-  }
-  public onNodeHoverOut(callback: HoverEventHandler) {
-    this.registeredEventHandlers.nodeHoverOut = callback
-  }
-  public onClick(callback: ClickEventHandler) {
-    this.registeredEventHandlers.click = callback
-  }
-  public onDragStart(callback: DragStartEventHandler) {
-    this.registeredEventHandlers.dragStart = callback
-  }
-  public onDrag(callback: DragEventHandler) {
-    this.registeredEventHandlers.drag = callback
-  }
-  public onDragEnd(callback: DragEndEventHandler) {
-    this.registeredEventHandlers.dragEnd = callback
-  }
-  public onPan(callback: PanEventHandler) {
-    this.registeredEventHandlers.pan = callback
-  }
-  public onZoom(callback: ZoomEventHandler) {
-    this.registeredEventHandlers.zoom = callback
-  }
-
   private nodes: NextNodes
   private intersectedPointIdx: number|null
   private dragging: boolean
@@ -49,8 +53,8 @@ export class NextMouseInteraction {
     nodeHoverIn: HoverEventHandler,
     nodeHoverOut: HoverEventHandler,
     dragStart: DragStartEventHandler,
-    drag: DragEventHandler,
     dragEnd: DragEndEventHandler,
+    nodeDrag: NodeDragEventHandler,
     pan: PanEventHandler,
     zoom: ZoomEventHandler,
   } = {
@@ -58,8 +62,8 @@ export class NextMouseInteraction {
     nodeHoverIn: noop,
     nodeHoverOut: noop,
     dragStart: noop,
-    drag: noop,
     dragEnd: noop,
+    nodeDrag: noop,
     pan: noop,
     zoom: noop,
   }
@@ -85,7 +89,7 @@ export class NextMouseInteraction {
     this.panEnd = new THREE.Vector3()
     this.panDelta = new THREE.Vector3()
 
-    this.mouse = new THREE.Vector2(0, 0)
+    this.mouse = new THREE.Vector2(0, 0) // normalized mouse coordinates (x, y, z): [-1, 1]
     this.raycaster = new THREE.Raycaster()
     this.raycaster.params.Points!.threshold = 40
 
@@ -93,6 +97,38 @@ export class NextMouseInteraction {
     this.canvas.addEventListener('mousemove', this.onMouseMove)
     this.canvas.addEventListener('mouseup', this.onMouseUp)
     this.canvas.addEventListener('wheel', this.onMouseWheel)
+  }
+
+  public onNodeHoverIn(callback: HoverEventHandler) {
+    this.registeredEventHandlers.nodeHoverIn = callback
+  }
+
+  public onNodeHoverOut(callback: HoverEventHandler) {
+    this.registeredEventHandlers.nodeHoverOut = callback
+  }
+
+  public onClick(callback: ClickEventHandler) {
+    this.registeredEventHandlers.click = callback
+  }
+
+  public onDragStart(callback: DragStartEventHandler) {
+    this.registeredEventHandlers.dragStart = callback
+  }
+
+  public onNodeDrag(callback: NodeDragEventHandler) {
+    this.registeredEventHandlers.nodeDrag = callback
+  }
+
+  public onDragEnd(callback: DragEndEventHandler) {
+    this.registeredEventHandlers.dragEnd = callback
+  }
+
+  public onPan(callback: PanEventHandler) {
+    this.registeredEventHandlers.pan = callback
+  }
+
+  public onZoom(callback: ZoomEventHandler) {
+    this.registeredEventHandlers.zoom = callback
   }
 
   private onMouseDown = (event: MouseEvent) => {
@@ -152,7 +188,7 @@ export class NextMouseInteraction {
       }
     } else if (this.intersectedPointIdx !== null) {
       // handle node drag interaction
-      this.registeredEventHandlers.drag(this.getMouseInWorldSpace(0), this.intersectedPointIdx)
+      this.registeredEventHandlers.nodeDrag(this.getMouseInWorldSpace(0), this.intersectedPointIdx)
 
     } else {
       // pan camera on drag

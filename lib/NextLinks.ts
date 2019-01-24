@@ -40,11 +40,14 @@ export interface PopulatedGraphVizLink extends Omit<GraphVizLink, 'source'|'targ
   target: GraphVizNode
 }
 
-export function getPopulatedGraphLinks(graphData: GraphVizData): PopulatedGraphVizLink[] {
+export function getPopulatedGraphLinks(
+  graphData: GraphVizData,
+  nodeIdToIdxMap: {[id: string]: number},
+  ): PopulatedGraphVizLink[] {
   return graphData.links.map(link => ({
     ...link,
-    source: graphData.nodes[link.source],
-    target: graphData.nodes[link.target],
+    source: graphData.nodes[nodeIdToIdxMap[link.source]],
+    target: graphData.nodes[nodeIdToIdxMap[link.target]],
   }))
 }
 
