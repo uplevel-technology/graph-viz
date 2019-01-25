@@ -12,13 +12,7 @@ const QUAD_WIDTH = 15
 const DEFAULT_COLOR = 0xbbbbbb
 const HIGHLIGHTED_COLOR = 0x333333
 
-// LOL. Maybe define a base GraphVizLinkStyles interface and extend both links from that instead
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-
-export interface GraphVizLink {
-  source: string
-  target: string
-
+interface LinkStyleAttributes {
   /**
    * determines whether an arrow is drawn on the link
    */
@@ -35,7 +29,12 @@ export interface GraphVizLink {
   color?: string | number
 }
 
-export interface PopulatedGraphVizLink extends Omit<GraphVizLink, 'source'|'target'> {
+export interface GraphVizLink extends LinkStyleAttributes {
+  source: string
+  target: string
+}
+
+export interface PopulatedGraphVizLink extends LinkStyleAttributes {
   source: GraphVizNode
   target: GraphVizNode
 }
