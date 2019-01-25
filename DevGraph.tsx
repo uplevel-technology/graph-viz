@@ -7,9 +7,9 @@ import {PERSISTENCE_SERVICE_ADDRESS} from '../App'
 import {BasicForceSimulation, ForceSimulationData, ForceSimulationNode, NodePosition} from './lib/BasicForceSimulation'
 import {GraphVizData, NextGraphVisualization} from './lib/NextGraphVisualization'
 import {GraphVizLink} from './lib/NextLinks'
-import {GraphVizNode} from './lib/NextNodes'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
-import {getAllVizData} from './vizUtils'
+import {eventsToVizData} from './protoToNodeUtils'
+import {lockNode, toggleNodeLock} from './vizUtils'
 
 const styles = (theme: Theme) => createStyles({
   root: {
@@ -73,6 +73,8 @@ class DevGraphBase extends React.Component<Props, State> {
       const vizNode = this.vizData.nodes[hoveredNodeIdx]
       const screenCoords = this.visualization.toScreenSpacePoint(vizNode.x, vizNode.y)
 
+      // TODO increase node scale / magnify
+
       this.setState({
         tooltipNode: {
           ...this.tooltipNodeList[hoveredNodeIdx],
@@ -87,7 +89,6 @@ class DevGraphBase extends React.Component<Props, State> {
       this.vizData.nodes.forEach((node, i) => {
         node.x = nodePositions[i].x
         node.y = nodePositions[i].y
-        // TODO increase node scale / magnify
       })
       this.visualization.updatePositions(this.vizData) // fixme use updatePosition + updateSize
     })
@@ -102,23 +103,7 @@ class DevGraphBase extends React.Component<Props, State> {
       if (clickedNodeIdx === null) {
         return
       }
-      //
-      const node = this.vizData.nodes[clickedNodeIdx] as ForceSimulationNode
-      const vizNode = this.vizData.nodes[clickedNodeIdx] as GraphVizNode
-      if (node.fx) {
-        // release node
-        node.fx = null
-        node.fy = null
-
-        vizNode.strokeWidth = 0.03
-        vizNode.strokeOpacity = 1.0
-      } else {
-        node.fx = worldPos.x
-        node.fy = worldPos.y
-
-        vizNode.strokeWidth = 0.3
-        vizNode.strokeOpacity = 0.4
-      }
+      toggleNodeLock(this.vizData.nodes[clickedNodeIdx])
 
       this.simulation.update(this.vizData)
 
@@ -142,9 +127,7 @@ class DevGraphBase extends React.Component<Props, State> {
         return
       }
 
-      const node = this.vizData.nodes[draggedNodeIdx]
-      node.strokeWidth = 0.3
-      node.strokeOpacity = 0.4
+      lockNode(this.vizData.nodes[draggedNodeIdx])
 
       this.visualization.update(this.vizData) // FIXME
       // TODO: implement following instead
@@ -175,7 +158,7 @@ class DevGraphBase extends React.Component<Props, State> {
         return
       }
 
-      const data = getAllVizData(response.getValuesList())
+      const data = eventsToVizData(response.getValuesList())
       const graphData = data.graphData
       this.tooltipNodeList = data.tooltipsNodes as TooltipNode[]
 
