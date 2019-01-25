@@ -3,8 +3,6 @@ import * as THREE from 'three'
 import {NextNodes} from './NextNodes'
 
 const MAX_CLICK_DURATION = 300
-const PAN_SPEED = 1.0
-const MAX_ZOOM = 5.0
 
 /**
  * dispatched when a node is hovered in or out
@@ -191,14 +189,9 @@ export class NextMouseInteraction {
       this.registeredEventHandlers.nodeDrag(this.getMouseInWorldSpace(0), this.intersectedPointIdx)
 
     } else {
-      // pan camera on drag
+      // calculate the pan delta
       this.panEnd.set(event.clientX, event.clientY, 0)
-      this.panDelta.subVectors(this.panEnd, this.panStart).multiplyScalar(PAN_SPEED)
-
-      this.camera.position.x -= this.panDelta.x * (this.camera.right - this.camera.left) / this.camera.zoom / rect.width
-      this.camera.position.y +=
-        this.panDelta.y * (this.camera.top - this.camera.bottom) / this.camera.zoom / rect.height
-      this.camera.updateProjectionMatrix()
+      this.panDelta.subVectors(this.panEnd, this.panStart)
 
       this.registeredEventHandlers.pan(this.panDelta)
 
@@ -209,11 +202,6 @@ export class NextMouseInteraction {
   private onMouseWheel = (event: MouseWheelEvent) => {
     event.preventDefault()
     event.stopPropagation()
-
-    const zoomFactor = event.deltaY < 0 ? 0.95 : 1.05
-    this.camera.zoom = Math.min(MAX_ZOOM, this.camera.zoom * zoomFactor)
-    this.camera.updateProjectionMatrix()
-
     this.registeredEventHandlers.zoom(event)
   }
 

@@ -14,6 +14,9 @@ import {
 } from './NextMouseInteraction'
 import {GraphVizNode, NextNodes} from './NextNodes'
 
+const MAX_ZOOM = 5.0
+const PAN_SPEED = 1.0
+
 export interface GraphVizData {
   nodes: GraphVizNode[]
   links: GraphVizLink[]
@@ -271,7 +274,15 @@ export class NextGraphVisualization {
   }
 
   private handlePan = (panDelta: Vector3) => {
+    const rect = this.canvas.getBoundingClientRect()
+    panDelta.multiplyScalar(PAN_SPEED)
+
+    this.camera.position.x -= panDelta.x * (this.camera.right - this.camera.left) / this.camera.zoom / rect.width
+    this.camera.position.y += panDelta.y * (this.camera.top - this.camera.bottom) / this.camera.zoom / rect.height
+    this.camera.updateProjectionMatrix()
+
     this.userHasAdjustedViewport = true
+
     if (this.registeredEventHandlers.pan) {
       this.registeredEventHandlers.pan(panDelta)
     }
@@ -280,8 +291,14 @@ export class NextGraphVisualization {
 
   private handleZoomOnWheel = (event: MouseWheelEvent) => {
     this.userHasAdjustedViewport = true
+
+    const zoomFactor = event.deltaY < 0 ? 0.95 : 1.05
+    this.camera.zoom = Math.min(MAX_ZOOM, this.camera.zoom * zoomFactor)
+    this.camera.updateProjectionMatrix()
+
     this.nodesMesh.handleCameraZoom(this.camera.zoom)
     this.linksMesh.handleCameraZoom(this.camera.zoom)
+
     if (this.registeredEventHandlers.zoom) {
       this.registeredEventHandlers.zoom(event)
     }
