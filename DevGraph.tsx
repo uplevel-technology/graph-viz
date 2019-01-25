@@ -4,10 +4,12 @@ import {Button, createStyles, Paper, Theme, Typography, WithStyles, withStyles} 
 import RefreshIcon from '@material-ui/icons/Refresh'
 import * as React from 'react'
 import {PERSISTENCE_SERVICE_ADDRESS} from '../App'
-import {BasicForceSimulation, ForceSimulationNode} from './lib/BasicForceSimulation'
+import {BasicForceSimulation, ForceSimulationData, ForceSimulationNode, NodePosition} from './lib/BasicForceSimulation'
 import {GraphVizData, NextGraphVisualization} from './lib/NextGraphVisualization'
+import {GraphVizLink} from './lib/NextLinks'
+import {GraphVizNode} from './lib/NextNodes'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
-import {toVisualGraphData} from './vizUtils'
+import {getAllVizData} from './vizUtils'
 
 const styles = (theme: Theme) => createStyles({
   root: {
@@ -31,6 +33,7 @@ const styles = (theme: Theme) => createStyles({
 
 interface State {
   readonly tooltipNode: TooltipNode | null
+  readonly tooltipNodeIdx: number | null
   readonly errorMessage?: string
 }
 
@@ -46,12 +49,14 @@ class DevGraphBase extends React.Component<Props, State> {
     nodes: [],
     links: [],
   }
+  tooltipNodeList: TooltipNode[]
   simulation: BasicForceSimulation
 
   canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef()
 
   readonly state: State = {
     tooltipNode: null,
+    tooltipNodeIdx: null,
   }
 
   componentDidMount(): void {
@@ -62,70 +67,100 @@ class DevGraphBase extends React.Component<Props, State> {
       this.props.width,
       this.props.height,
     )
-    this.simulation = new BasicForceSimulation(this.vizData)
 
+    this.simulation = new BasicForceSimulation()
     this.visualization.onNodeHoverIn((hoveredNodeIdx: number) => {
-      const hoveredNode = this.vizData.nodes[hoveredNodeIdx]
-      const screenCoords = this.visualization.toScreenSpacePoint(hoveredNode.x, hoveredNode.y)
-      const tooltipNode = {
-        ...hoveredNode,
-        displayName: 'Name',
-        displayType: 'Type',
-        formattedTime: 'Time',
-        screenX: screenCoords.x,
-        screenY: screenCoords.y,
+      const vizNode = this.vizData.nodes[hoveredNodeIdx]
+      const screenCoords = this.visualization.toScreenSpacePoint(vizNode.x, vizNode.y)
+
+      this.setState({
+        tooltipNode: {
+          ...this.tooltipNodeList[hoveredNodeIdx],
+          screenX: screenCoords.x,
+          screenY: screenCoords.y,
+        },
+        tooltipNodeIdx: hoveredNodeIdx,
+      })
+    })
+
+    this.simulation.onTick((nodePositions: NodePosition[]) => {
+      this.vizData.nodes.forEach((node, i) => {
+        node.x = nodePositions[i].x
+        node.y = nodePositions[i].y
+        // TODO increase node scale / magnify
+      })
+      this.visualization.updatePositions(this.vizData) // fixme use updatePosition + updateSize
+    })
+
+    this.visualization.onNodeHoverOut((hoveredOutNodeIdx) => {
+      if (hoveredOutNodeIdx === this.state.tooltipNodeIdx) {
+        this.setState({tooltipNode: null, tooltipNodeIdx: null})
       }
-      this.setState({tooltipNode})
     })
 
-    this.visualization.onNodeHoverOut(() => {
-      this.setState({tooltipNode: null})
-    })
-
-    this.visualization.onClick(((worldSpaceMousePosition, clickedNodeIdx) => {
+    this.visualization.onClick(((worldPos, clickedNodeIdx) => {
       if (clickedNodeIdx === null) {
         return
       }
-
+      //
       const node = this.vizData.nodes[clickedNodeIdx] as ForceSimulationNode
+      const vizNode = this.vizData.nodes[clickedNodeIdx] as GraphVizNode
       if (node.fx) {
         // release node
         node.fx = null
         node.fy = null
 
-        // TODO reset node stroke
+        vizNode.strokeWidth = 0.03
+        vizNode.strokeOpacity = 1.0
       } else {
-        node.fx = node.x
-        node.fy = node.y
+        node.fx = worldPos.x
+        node.fy = worldPos.y
 
-        // TODO add highlighted node stroke
+        vizNode.strokeWidth = 0.3
+        vizNode.strokeOpacity = 0.4
       }
+
+      this.simulation.update(this.vizData)
+
+      this.visualization.update(this.vizData)
+      // ^^ TODO implement the following instead (because the tick handler should automatically update the positions)
+      // this.visualization.updateStroke(this.vizData)
     }))
 
     this.visualization.onNodeDrag(((worldPos, draggedNodeIdx) => {
       const node = this.vizData.nodes[draggedNodeIdx] as ForceSimulationNode
       node.x = worldPos.x
       node.y = worldPos.y
-      node.fx = node.x
-      node.fy = node.y
-
-      // TODO add highlighted node stroke
-
-      this.visualization.updateNode(draggedNodeIdx)
+      node.fx = worldPos.x
+      node.fy = worldPos.y
+      this.simulation.update(this.vizData)
+      // ^ the simulation tick handler should handle the position updates after this in our viz
     }))
 
     this.visualization.onDragStart((mouse, draggedNodeIdx: number|null) => {
-      if (draggedNodeIdx !== null) {
-        this.simulation.reheat()
+      if (draggedNodeIdx === null) {
+        return
       }
+
+      const node = this.vizData.nodes[draggedNodeIdx]
+      node.strokeWidth = 0.3
+      node.strokeOpacity = 0.4
+
+      this.visualization.update(this.vizData) // FIXME
+      // TODO: implement following instead
+      // this.visualization.updateStroke(this.vizData)
+
+      this.simulation.reheat()
     })
 
-    this.visualization.onDragEnd(this.simulation.stop)
+    this.visualization.onDragEnd(() => {
+      this.simulation.stop()
+    })
 
     this.readGraph()
   }
 
-  readGraph = (): void => {
+  readGraph = () => {
     this.setState({errorMessage: undefined})
 
     this.client.readAllEvents(new Empty(), (error, response) => {
@@ -140,7 +175,18 @@ class DevGraphBase extends React.Component<Props, State> {
         return
       }
 
-      this.visualization.update(toVisualGraphData(response.getValuesList())) // <- FIXME
+      const data = getAllVizData(response.getValuesList())
+      const graphData = data.graphData
+      this.tooltipNodeList = data.tooltipsNodes as TooltipNode[]
+
+      this.simulation.initialize(graphData as ForceSimulationData)
+      const nodePositions = this.simulation.getNodePositions()
+
+      this.vizData = {
+        nodes: graphData.nodes.map((node, i) => ({...nodePositions[i], ...node})),
+        links: graphData.links as GraphVizLink[],
+      }
+      this.visualization.update(this.vizData)
     })
   }
 
