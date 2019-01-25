@@ -1,4 +1,5 @@
 import * as d3 from 'd3'
+import {noop} from 'lodash'
 
 export interface ForceSimulationNode extends d3.SimulationNodeDatum {
   id: string
@@ -17,12 +18,12 @@ export interface ForceSimulationNode extends d3.SimulationNodeDatum {
 
 }
 
-interface ForceSimulationLink {
+export interface ForceSimulationLink {
   source: string
   target: string
 }
 
-interface ForceSimulationData {
+export interface ForceSimulationData {
   nodes: ForceSimulationNode[]
   links: ForceSimulationLink[]
 }
@@ -36,7 +37,7 @@ function getForceLinkDistance(links: {source: string, target: string}[]) {
   return Math.max(dropoff, 0.3)
 }
 
-interface NodePosition {
+export interface NodePosition {
   id: string
   x: number
   y: number
@@ -45,29 +46,33 @@ interface NodePosition {
 
 export class BasicForceSimulation {
   private simulation: D3Simulation
-
-  private tickEventHandler(nodePositions: NodePosition[]) {
-    // Default no op implementation. Will be overwritten by the callback provided to onSimulationTick
-    return
+  private registeredEventHandlers: {
+    tick: (nodePositions: NodePosition[]) => void,
+  } = {
+    // Default no-op implementation. Will be overwritten by the callback provided to onSimulationTick
+    tick: noop,
   }
 
-  constructor(graph: ForceSimulationData) {
-    const linkForceDistance = getForceLinkDistance(graph.links)
+  public initialize(graph: ForceSimulationData) {
+    const nodesCopy = graph.nodes.map(node => ({...node}))
+    const linksCopy = graph.links.map(link => ({...link}))
 
-    this.simulation = d3.forceSimulation(graph.nodes)
+    const linkForceDistance = getForceLinkDistance(linksCopy)
+
+    this.simulation = d3.forceSimulation(nodesCopy)
     // TODO figure out how to conditionally apply force in x direction based on node value
     // (because apply force in direction of 0 is not what we want!)
       .force('x', d3.forceX().x((node: ForceSimulationNode) => node.forceX || 0))
       .force('y', d3.forceY().y((node: ForceSimulationNode) => node.forceY || 0))
-      .force('links', d3.forceLink(graph.links).id((n: ForceSimulationNode) => n.id).distance(linkForceDistance))
-      .force('charge', d3.forceManyBody().strength(-200))
-      .velocityDecay(0.7)
+      .force('links', d3.forceLink(linksCopy).id((n: ForceSimulationNode) => n.id).distance(linkForceDistance))
+      .force('charge', d3.forceManyBody().strength(-100))
+      .velocityDecay(0.5)
       .on('tick', () => {
-        this.tickEventHandler(this.getPositions())
+        this.registeredEventHandlers.tick(this.getNodePositions())
       })
   }
 
-  public getPositions(): NodePosition[] {
+  public getNodePositions(): NodePosition[] {
     const nodes = this.simulation.nodes() as ForceSimulationNode[]
 
     return nodes.map(node => ({
@@ -77,15 +82,18 @@ export class BasicForceSimulation {
     }))
   }
 
-  public onSimulationTick(callback: (nodePositions: NodePosition[]) => void) {
-    this.tickEventHandler = callback
+  public onTick(callback: (nodePositions: NodePosition[]) => void) {
+    this.registeredEventHandlers.tick = callback
   }
 
   public update(graph: ForceSimulationData) {
-    const linkForceDistance = getForceLinkDistance(graph.links)
+    const nodesCopy = graph.nodes.map(node => ({...node}))
+    const linksCopy = graph.links.map(link => ({...link}))
+
+    const linkForceDistance = getForceLinkDistance(linksCopy)
     this.simulation
-      .nodes(graph.nodes)
-      .force('links', d3.forceLink(graph.links).id((n: ForceSimulationNode) => n.id).distance(linkForceDistance))
+      .nodes(nodesCopy)
+      .force('links', d3.forceLink(linksCopy).id((n: ForceSimulationNode) => n.id).distance(linkForceDistance))
   }
 
   public restart() {
