@@ -59,13 +59,11 @@ export interface GraphVizNode {
 
 export class NextNodes {
   public object: THREE.Points
-  private nodes: GraphVizNode[]
   private readonly geometry: THREE.BufferGeometry
   private readonly material: THREE.ShaderMaterial
   private lockedIds: {[id: string]: boolean} = {}
 
   constructor(nodes: GraphVizNode[]) {
-    this.nodes = nodes
     const numNodes = size(nodes)
     this.geometry = new THREE.BufferGeometry()
     this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
@@ -92,8 +90,7 @@ export class NextNodes {
   }
 
   public updatePositions = (nodes: GraphVizNode[]) => {
-    this.nodes = nodes
-    this.recalcPositionFromData(this.nodes)
+    this.recalcPositionFromData(nodes)
   }
 
   public handleCameraZoom = (zoom: number) => {
@@ -102,8 +99,7 @@ export class NextNodes {
   }
 
   public redraw = (nodes: GraphVizNode[]) => {
-    this.nodes = nodes
-    this.recalcAttributesFromData(this.nodes)
+    this.recalcAttributesFromData(nodes)
   }
 
   public dispose = () => {

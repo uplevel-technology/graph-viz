@@ -35,7 +35,6 @@ export class NextGraphVisualization {
   public readonly canvas: HTMLCanvasElement
   public readonly camera: THREE.OrthographicCamera
 
-  private graphData: GraphVizData
   private nodeIdToIndexMap: {[key: string]: number} = {}
   private userHasAdjustedViewport: boolean
 
@@ -66,7 +65,6 @@ export class NextGraphVisualization {
     this.width = width
     this.height = height
 
-    this.graphData = graphData
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
 
     // init Scene and Camera
@@ -146,9 +144,9 @@ export class NextGraphVisualization {
   }
 
   public updatePositions = (updatedGraphData: GraphVizData) => window.requestAnimationFrame(() => {
-    this.graphData = updatedGraphData
-    this.nodeIdToIndexMap = constructIdToIdxMap(updatedGraphData.nodes)
-
+    // This function assumes the updatedGraphData hasn't changed in size or order and only the position attributes
+    // have changed within each node datum.
+    // Which should mean this.nodeIdToIndexMap is up to date
     this.nodesMesh.updatePositions(updatedGraphData.nodes)
     this.linksMesh.updatePositions(getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap))
 
@@ -197,7 +195,6 @@ export class NextGraphVisualization {
   }
 
   public update = (graphData: GraphVizData) => {
-    this.graphData = graphData
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
     this.nodesMesh.redraw(graphData.nodes)
     this.linksMesh.redraw(getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap))

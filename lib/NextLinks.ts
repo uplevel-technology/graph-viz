@@ -54,12 +54,10 @@ export class NextLinks {
   public object: THREE.Mesh
 
   private highlightEdges: boolean = false
-  private links: PopulatedGraphVizLink[]
   private readonly geometry: THREE.BufferGeometry
   private readonly material: THREE.ShaderMaterial
 
   constructor(links: PopulatedGraphVizLink[]) {
-    this.links = links
     const numLinks = links.length
     const numVertices = numLinks * VERTICES_PER_QUAD
 
@@ -103,14 +101,12 @@ export class NextLinks {
   }
 
   public updatePositions = (links: PopulatedGraphVizLink[]) => {
-    this.links = links
-    this.recalcPositionFromData(this.links)
+    this.recalcPositionFromData(links)
   }
 
   public redraw = (links: PopulatedGraphVizLink[]) => {
-    this.links = links
-    this.recalcPositionFromData(this.links)
-    this.recalcColorFromData(this.links)
+    this.recalcPositionFromData(links)
+    this.recalcColorFromData(links)
   }
 
   public dispose = () => {
