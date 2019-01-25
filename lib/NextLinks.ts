@@ -32,7 +32,7 @@ export interface GraphVizLink {
   /**
    * hex color string or hex number
    */
-  color: string | number
+  color?: string | number
 }
 
 export interface PopulatedGraphVizLink extends Omit<GraphVizLink, 'source'|'target'> {
