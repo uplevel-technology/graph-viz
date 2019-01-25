@@ -1,6 +1,6 @@
 // @flow
 
-import {defaultTo, get, size} from 'lodash'
+import {defaultTo, size} from 'lodash'
 import * as THREE from 'three'
 import fragmentShader from './shaders/nodes.fragment.glsl'
 import vertexShader from './shaders/nodes.vertex.glsl'
@@ -99,26 +99,6 @@ export class NextNodes {
   public handleCameraZoom = (zoom: number) => {
     this.material.uniforms.globalScale.value = zoom < 0.3 ? 0.3 : zoom
     this.material.uniforms.globalScale.value *= window.devicePixelRatio
-  }
-
-  public scalePointAt = (pointIdx: number, scale: number = 1.0) => {
-    const scaleAttr = this.geometry.getAttribute('scale') as THREE.BufferAttribute
-    if (scaleAttr.array) {
-      scaleAttr.setX(pointIdx, scale)
-      scaleAttr.needsUpdate = true
-    }
-  }
-
-  public lockPointAt = (pointIdx: number) => {
-    this.updateAttributeAt('strokeWidth', pointIdx, 0.3)
-    this.updateAttributeAt('strokeOpacity', pointIdx, 0.4)
-    this.lockedIds[pointIdx] = true
-  }
-
-  public unlockPointAt = (pointIdx: number) => {
-    this.resetAttributeAt('strokeWidth', pointIdx)
-    this.resetAttributeAt('strokeOpacity', pointIdx)
-    this.lockedIds[pointIdx] = false
   }
 
   public redraw = (nodes: GraphVizNode[]) => {
@@ -255,22 +235,5 @@ export class NextNodes {
     }
 
     strokeOpacity.needsUpdate = true
-  }
-
-  private updateAttributeAt = (attributeName: string, pointIdx: number, value: number) => {
-    const attr = this.geometry.getAttribute(attributeName) as THREE.BufferAttribute
-    if (attr.array) {
-      attr.setX(pointIdx, value)
-      attr.needsUpdate = true
-    }
-  }
-
-  private resetAttributeAt = (attributeName: string, pointIdx: number) => {
-    const attr = this.geometry.getAttribute(attributeName) as THREE.BufferAttribute
-    if (attr.array) {
-      const initialNodeState = get(this.nodes, pointIdx)
-      attr.setX(pointIdx, get(initialNodeState, attributeName))
-      attr.needsUpdate = true
-    }
   }
 }
