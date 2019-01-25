@@ -4,7 +4,10 @@ import {Event} from '@core/event_pb'
 import {ObservableNode} from '@core/observable_pb'
 import {values} from 'lodash'
 import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
-import {VisualGraphData, VisualGraphLink, VisualGraphNode} from './lib/GraphVisualization'
+import {ForceSimulationLink} from './lib/BasicForceSimulation'
+import {GraphVizLink} from './lib/NextLinks'
+import {GraphVizNode} from './lib/NextNodes'
+import {TooltipNode} from './NodeTooltips'
 
 /*
 TODO: maintain a map of color names to their hex codes in addition to the fill and outline palettes below
@@ -48,24 +51,32 @@ export const NodeOutlinePalette: {[key: string]: string} = {
   process: '#FC6600', // orange
 }
 
-const artifactToNode = (artifact: Artifact): VisualGraphNode => {
-  return {
-    id: artifact.getUid()!.getValue(),
-    displayName: getArtifactNodeLabel(artifact.getType()),
-    fill: NodeFillPalette.artifact,
-  }
-}
+const artifactToNode = (artifact: Artifact): Partial<GraphVizNode> => ({
+  id: artifact.getUid()!.getValue(),
+  fill: NodeFillPalette.artifact,
+  stroke: NodeOutlinePalette.artifact,
+  strokeWidth: 0.03,
+  strokeOpacity: 1.0,
+})
 
-const attributeToNode = (attribute: Attribute): VisualGraphNode => {
-  return {
-    id: `${getAttributeNodeLabel(attribute.getType())}::${attribute.getValue()}`,
-    displayName: getAttributeNodeLabel(attribute.getType()),
-    fill: NodeFillPalette.attribute,
-    size: 20,
-  }
-}
+const artifactToTooltipNode = (artifact: Artifact): Partial<TooltipNode> => ({
+  displayName: getArtifactNodeLabel(artifact.getType()),
+})
 
-const observableToNode = (observable: ObservableNode): VisualGraphNode => {
+const attributeToNode = (attribute: Attribute): Partial<GraphVizNode> => ({
+  id: `${getAttributeNodeLabel(attribute.getType())}::${attribute.getValue()}`,
+  fill: NodeFillPalette.attribute,
+  stroke: NodeOutlinePalette.attribute,
+  size: 20,
+  strokeWidth: 0.03,
+  strokeOpacity: 1.0,
+})
+
+const attributeToTooltipNode = (attribute: Attribute): Partial<TooltipNode> => ({
+  displayName: getAttributeNodeLabel(attribute.getType()),
+})
+
+const observableToNode = (observable: ObservableNode): Partial<GraphVizNode> => {
   switch (observable.getValueCase()) {
   case ObservableNode.ValueCase.ARTIFACT:
     return artifactToNode(observable.getArtifact()!)
@@ -75,7 +86,29 @@ const observableToNode = (observable: ObservableNode): VisualGraphNode => {
   throw new Error('unexpected observable node type: ' + observable.getValueCase())
 }
 
-const eventToNode = (event: Event): VisualGraphNode => {
+const observableToTooltipNode = (observable: ObservableNode): Partial<TooltipNode> => {
+  switch (observable.getValueCase()) {
+  case ObservableNode.ValueCase.ARTIFACT:
+    return artifactToTooltipNode(observable.getArtifact()!)
+  case ObservableNode.ValueCase.ATTRIBUTE:
+    return attributeToTooltipNode(observable.getAttribute()!)
+  }
+  throw new Error('unexpected observable node type: ' + observable.getValueCase())
+}
+
+const eventToNode = (event: Event): Partial<GraphVizNode> => ({
+  id: event.getUid()!.getValue(),
+  fill: event.getEventType() === Event.Type.ALERT
+    ? NodeFillPalette.alert
+    : NodeFillPalette.emailUpload,
+  stroke: event.getEventType() === Event.Type.ALERT
+    ? NodeOutlinePalette.alert
+    : NodeOutlinePalette.emailUpload,
+  strokeWidth: 0.03,
+  strokeOpacity: 1.0,
+})
+
+const eventToTooltipNode = (event: Event): Partial<TooltipNode> => {
   let displayName = event.getEventType() === Event.Type.ALERT
     ? `Alert (${event.getUid()})`
     : `Email Upload (${event.getUid()})`
@@ -86,24 +119,30 @@ const eventToNode = (event: Event): VisualGraphNode => {
   }
 
   return {
-    id: event.getUid()!.getValue(),
     displayName,
-    fill: event.getEventType() === Event.Type.ALERT
-      ? NodeFillPalette.alert
-      : NodeFillPalette.emailUpload,
   }
 }
 
-export const toVisualGraphData = (events: Event[]): VisualGraphData => {
+interface PartialGraphVizData {
+  nodes: Partial<GraphVizNode>[]
+  links: Partial<GraphVizLink>[]
+}
+
+export const getAllVizData = (events: Event[]): {
+  graphData: PartialGraphVizData,
+  tooltipsNodes: Partial<TooltipNode>[],
+} => {
   // We want a deduped list of all nodes, because they can be repeated. We'll
   // build that up in this object:
-  const seenVizNodesById: {[id: string]: VisualGraphNode} = {}
-  // Links shouldn't be deduped, though:
-  const links: VisualGraphLink[] = []
+  const seenVizNodesById: {[id: string]: {vizNode: Partial<GraphVizNode>, tooltipNode: Partial<TooltipNode>}} = {}
+  const links: ForceSimulationLink[] = []
 
   events.forEach((event) => {
     const eventNode = eventToNode(event)
-    seenVizNodesById[eventNode.id] = eventNode
+    seenVizNodesById[eventNode.id!] = {
+      vizNode: eventNode,
+      tooltipNode: eventToTooltipNode(event),
+    }
 
     const observed = event.getObserved()
     if (!observed) {
@@ -112,40 +151,53 @@ export const toVisualGraphData = (events: Event[]): VisualGraphData => {
 
     observed.getAttributesList().forEach((ao) => {
       const attrNode = attributeToNode(ao.getAttribute()!)
-      seenVizNodesById[attrNode.id] = attrNode
+      seenVizNodesById[attrNode.id!] = {
+        vizNode: attrNode,
+        tooltipNode: attributeToTooltipNode(ao.getAttribute()!),
+      }
 
       links.push({
-        source: eventNode,
-        target: attrNode,
+        source: eventNode.id!,
+        target: attrNode.id!,
       })
     })
 
     observed.getRelationshipsList().forEach((rel) => {
       const from = observableToNode(rel.getFrom()!)
-      seenVizNodesById[from.id] = from
+      seenVizNodesById[from.id!] = {
+        vizNode: from,
+        tooltipNode: observableToTooltipNode(rel.getFrom()!),
+      }
 
       const to = observableToNode(rel.getTo()!)
-      seenVizNodesById[to.id] = to
+      seenVizNodesById[to.id!] = {
+        vizNode: to,
+        tooltipNode: observableToTooltipNode(rel.getTo()!),
+      }
 
       links.push({
-        source: from,
-        target: to,
+        source: from.id!,
+        target: to.id!,
       })
 
       // We also add links from the eventNode, to approximate having hyperedges:
       links.push({
-        source: eventNode,
-        target: from,
+        source: eventNode.id!,
+        target: from.id!,
       })
       links.push({
-        source: eventNode,
-        target: to,
+        source: eventNode.id!,
+        target: to.id!,
       })
     })
   })
+  const seenNodes = values(seenVizNodesById)
 
   return {
-    nodes: values(seenVizNodesById),
-    links,
+    graphData: {
+      nodes: seenNodes.map(it => it.vizNode),
+      links,
+    },
+    tooltipsNodes: seenNodes.map(it => it.tooltipNode),
   }
 }
