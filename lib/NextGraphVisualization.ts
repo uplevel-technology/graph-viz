@@ -65,14 +65,6 @@ export class NextGraphVisualization {
     this.canvas = canvas
     this.width = width
     this.height = height
-    //
-    // if (simulation) {
-    //   this.simulation = simulation
-    // } else {
-    //   this.simulation = new DefaultForceSimulation()
-    //   this.simulation.onSimulationTick(this.updatePositions)
-    //   this.simulation.initialize(vizData)
-    // }
 
     this.graphData = graphData
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
@@ -153,7 +145,7 @@ export class NextGraphVisualization {
     this.renderer.render(this.scene, this.camera)
   }
 
-  private updatePositions = (updatedGraphData: GraphVizData) => window.requestAnimationFrame(() => {
+  public updatePositions = (updatedGraphData: GraphVizData) => window.requestAnimationFrame(() => {
     this.graphData = updatedGraphData
     this.nodeIdToIndexMap = constructIdToIdxMap(updatedGraphData.nodes)
 
@@ -166,7 +158,7 @@ export class NextGraphVisualization {
     this.render()
   })
 
-  private zoomToFit = (graphData: GraphVizData) => {
+  public zoomToFit = (graphData: GraphVizData) => {
     if (size(graphData.nodes) === 0) {
       // Don't try to do this if there are no nodes.
       return
@@ -206,25 +198,14 @@ export class NextGraphVisualization {
 
   public update = (graphData: GraphVizData) => {
     this.graphData = graphData
-    // if (size(this.vizData.nodes) === 0 && size(vizData.nodes) > 0) {
-    //   // Re-initialize simulation if it's the first load for better stabilization
-    //   this.simulation.initialize(vizData)
-    // } else {
-    //   this.simulation.update(vizData)
-    // }
-
-    // this.vizData = this.simulation.getVisualGraph()
-
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
-
     this.nodesMesh.redraw(graphData.nodes)
     this.linksMesh.redraw(getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap))
-
-    // this.simulation.restart()
   }
 
-  public updateNode = (nodeIdx: number) => {
-    this.nodesMesh.redraw(this.graphData.nodes)
+  // TODO: implement something like
+  public updateSingleNodeAttribute = (nodeIdx: number) => {
+    // this.nodesMesh.redraw(this.graphData.nodes)
     // TODO optimize and redraw only one node:
     // this.nodesMesh.updateNodeAt(nodeIdx)
   }
@@ -264,18 +245,16 @@ export class NextGraphVisualization {
   }
 
   private handleHoverOut = (hoveredFromNodeIdx: number) => {
-    if (hoveredFromNodeIdx !== null && this.registeredEventHandlers.nodeHoverOut) {
-      this.registeredEventHandlers.nodeHoverOut(hoveredFromNodeIdx)
+    if (!this.registeredEventHandlers.nodeHoverOut) {
+      return
     }
+    this.registeredEventHandlers.nodeHoverOut(hoveredFromNodeIdx)
     this.render()
   }
 
   private handleDragStart = (worldSpaceMouse: THREE.Vector3, draggedNodeIdx: number | null) => {
     this.userHasAdjustedViewport = true
     if (this.registeredEventHandlers.dragStart) {
-      // if (draggedNodeIdx !== null) {
-      //   this.simulation.reheat()
-      // }
       this.registeredEventHandlers.dragStart(worldSpaceMouse, draggedNodeIdx)
     }
     this.render() // <- this is probably not needed
@@ -318,7 +297,6 @@ export class NextGraphVisualization {
     }
 
     this.registeredEventHandlers.click(worldSpaceMouse, clickedNodeIdx)
-
     this.render()
   }
 }
