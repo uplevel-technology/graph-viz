@@ -22,12 +22,6 @@ export interface GraphVizNode {
   y: number
 
   /**
-   * inactive is a boolean that makes a node grey when set.
-   * @DEPRECATED
-   */
-  inactive?: boolean
-
-  /**
    * node fill color hex string or hex number
    * (default is 0x333333)
    */

@@ -4,7 +4,6 @@ import { Event } from '@core/event_pb'
 import { ObservableNode } from '@core/observable_pb'
 import { values } from 'lodash'
 import { getArtifactNodeLabel, getAttributeNodeLabel } from '../displayTypes'
-import { ForceSimulationLink } from './lib/BasicForceSimulation'
 import { GraphVizLink } from './lib/NextLinks'
 import { GraphVizNode } from './lib/NextNodes'
 import { TooltipNode } from './NodeTooltips'
@@ -93,7 +92,7 @@ export const eventsToVizData = (events: Event[]): {
   // We want a deduped list of all nodes, because they can be repeated. We'll
   // build that up in this object:
   const seenVizNodesById: { [id: string]: { vizNode: Partial<GraphVizNode>, tooltipNode: Partial<TooltipNode> } } = {}
-  const links: ForceSimulationLink[] = []
+  const links: GraphVizLink[] = []
 
   events.forEach((event) => {
     const eventNode = eventToNode(event)

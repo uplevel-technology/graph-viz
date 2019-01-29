@@ -139,7 +139,6 @@ class DevGraphBase extends React.Component<Props, State> {
       lockNode(this.vizData.nodes[draggedNodeIdx])
 
       this.visualization.updateNode(draggedNodeIdx, this.vizData.nodes[draggedNodeIdx])
-
       this.simulation.reheat()
     })
 

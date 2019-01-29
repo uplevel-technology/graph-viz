@@ -151,7 +151,7 @@ export class NextGraphVisualization {
     // have changed within each node datum.
     // Which should mean this.nodeIdToIndexMap is up to date
     this.nodesMesh.updateAllPositions(updatedGraphData.nodes)
-    this.linksMesh.updatePositions(getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap))
+    this.linksMesh.updateAllPositions(getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap))
 
     if (!this.userHasAdjustedViewport) {
       this.zoomToFit(updatedGraphData)
@@ -205,7 +205,7 @@ export class NextGraphVisualization {
   public update = (graphData: GraphVizData) => {
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
     this.nodesMesh.updateAll(graphData.nodes)
-    this.linksMesh.redraw(getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap))
+    this.linksMesh.updateAll(getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap))
   }
 
   // TODO: implement something like
