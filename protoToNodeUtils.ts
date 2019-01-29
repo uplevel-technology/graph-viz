@@ -1,14 +1,14 @@
-import {Artifact} from '@core/artifact_pb'
-import {Attribute} from '@core/attribute_pb'
-import {Event} from '@core/event_pb'
-import {ObservableNode} from '@core/observable_pb'
-import {values} from 'lodash'
-import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
-import {ForceSimulationLink} from './lib/BasicForceSimulation'
-import {GraphVizLink} from './lib/NextLinks'
-import {GraphVizNode} from './lib/NextNodes'
-import {TooltipNode} from './NodeTooltips'
-import {NodeFillPalette, NodeOutlinePalette} from './vizUtils'
+import { Artifact } from '@core/artifact_pb'
+import { Attribute } from '@core/attribute_pb'
+import { Event } from '@core/event_pb'
+import { ObservableNode } from '@core/observable_pb'
+import { values } from 'lodash'
+import { getArtifactNodeLabel, getAttributeNodeLabel } from '../displayTypes'
+import { ForceSimulationLink } from './lib/BasicForceSimulation'
+import { GraphVizLink } from './lib/NextLinks'
+import { GraphVizNode } from './lib/NextNodes'
+import { TooltipNode } from './NodeTooltips'
+import { NodeFillPalette, NodeOutlinePalette } from './vizUtils'
 
 export const artifactToNode = (artifact: Artifact): Partial<GraphVizNode> => ({
   id: artifact.getUid()!.getValue(),
@@ -26,7 +26,6 @@ export const attributeToNode = (attribute: Attribute): Partial<GraphVizNode> => 
   id: `${getAttributeNodeLabel(attribute.getType())}::${attribute.getValue()}`,
   fill: NodeFillPalette.attribute,
   stroke: NodeOutlinePalette.attribute,
-  size: 20,
   strokeWidth: 0.03,
   strokeOpacity: 1.0,
 })

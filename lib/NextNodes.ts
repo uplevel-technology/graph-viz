@@ -1,11 +1,9 @@
 // @flow
 
-import {defaultTo, size} from 'lodash'
+import { defaultTo, size } from 'lodash'
 import * as THREE from 'three'
 import fragmentShader from './shaders/nodes.fragment.glsl'
 import vertexShader from './shaders/nodes.vertex.glsl'
-
-export const DEFAULT_NODE_SIZE = 20.0
 
 export interface GraphVizNode {
   /**
@@ -35,11 +33,9 @@ export interface GraphVizNode {
   fill?: number | string
 
   /**
-   * The node container's absolute size in pixels at the default zoom level
-   * TODO: This is a bad name. We need to make more sense of this by ensuring all visual attributes
-   * can be translated represented by a property name in GraphVizNode. e.g. scale.
+   * The node's container's scale factor (default is 1.0)
    */
-  size?: number
+  scale?: number
 
   /**
    * node strike color hex string or hex number
@@ -52,10 +48,20 @@ export interface GraphVizNode {
   strokeOpacity?: number
 
   /**
-   * relative node stroke width (must be between 0.0 to 1.0)
+   * relative node stroke width
+   * (This width is relative to the node container. Must be between 0.0 to 1.0)
    */
   strokeWidth?: number
 }
+
+/**
+ * Reusable constants
+ */
+export const DEFAULT_NODE_SCALE = 1.0
+export const DEFAULT_NODE_STROKE_WIDTH = 0.03
+export const DEFAULT_STROKE_OPACITY = 1.0
+export const LOCKED_NODE_STROKE_WIDTH = 0.3
+export const LOCKED_NODE_STROKE_OPACITY = 0.4
 
 export class NextNodes {
   public object: THREE.Points
@@ -67,7 +73,6 @@ export class NextNodes {
     const numNodes = size(nodes)
     this.geometry = new THREE.BufferGeometry()
     this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
-    this.geometry.addAttribute('size', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
     this.geometry.addAttribute('scale', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
     this.geometry.addAttribute('fill', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
     this.geometry.addAttribute('stroke', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
@@ -109,7 +114,6 @@ export class NextNodes {
 
   private recalcAttributesFromData = (nodes: GraphVizNode[]) => {
     this.recalcPositionFromData(nodes)
-    this.recalcSizeFromData(nodes)
     this.recalcScaleFromData(nodes)
     this.recalcFillFromData(nodes)
     this.recalcStrokeFromData(nodes)
@@ -134,21 +138,6 @@ export class NextNodes {
     this.geometry.computeBoundingSphere()
   }
 
-  private recalcSizeFromData = (nodes: GraphVizNode[]) => {
-    const nodeSize = this.geometry.getAttribute('size') as THREE.BufferAttribute
-
-    const numNodes = size(nodes)
-    if (numNodes !== nodeSize.count) {
-      nodeSize.setArray(new Float32Array(nodeSize.itemSize * numNodes))
-    }
-
-    for (let i = 0; i < numNodes; i++) {
-      nodeSize.setX(i, nodes[i].size || DEFAULT_NODE_SIZE)
-    }
-
-    nodeSize.needsUpdate = true
-  }
-
   private recalcScaleFromData = (nodes: GraphVizNode[]) => {
     const scale = this.geometry.getAttribute('scale') as THREE.BufferAttribute
 
@@ -158,7 +147,7 @@ export class NextNodes {
     }
 
     for (let i = 0; i < numNodes; i++) {
-      scale.setX(i, 1)
+      scale.setX(i, nodes[i].scale || DEFAULT_NODE_SCALE)
     }
 
     scale.needsUpdate = true

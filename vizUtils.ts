@@ -10,8 +10,14 @@
  * neo4j (for the microsoft data, that's snake_case)
  */
 import * as THREE from 'three'
-import {ForceSimulationNode} from './lib/BasicForceSimulation'
-import {GraphVizNode} from './lib/NextNodes'
+import { ForceSimulationNode } from './lib/BasicForceSimulation'
+import {
+  DEFAULT_NODE_STROKE_WIDTH,
+  DEFAULT_STROKE_OPACITY,
+  GraphVizNode,
+  LOCKED_NODE_STROKE_OPACITY,
+  LOCKED_NODE_STROKE_WIDTH,
+} from './lib/NextNodes'
 
 export const NodeFillPalette: {[key: string]: string} = {
   artifact: '#00478D',
@@ -43,12 +49,6 @@ export const NodeOutlinePalette: {[key: string]: string} = {
   process: '#FC6600', // orange
 }
 
-export const DEFAULT_NODE_STROKE_WIDTH = 0.03
-export const DEFAULT_STROKE_OPACITY = 1.0
-
-export const LOCKED_NODE_STROKE_WIDTH = 0.3
-export const LOCKED_NODE_STROKE_OPACITY = 0.4
-
 export const toggleNodeLock = (
   node: Partial<ForceSimulationNode & GraphVizNode>,
   newPos?: THREE.Vector3,
@@ -72,6 +72,7 @@ export const lockNode = (
     node.fy = node.y
   }
 
+  node.scale = 1.5
   node.strokeWidth = LOCKED_NODE_STROKE_WIDTH
   node.strokeOpacity = LOCKED_NODE_STROKE_OPACITY
 }
@@ -80,6 +81,7 @@ export const unlockNode = (node: Partial<ForceSimulationNode & GraphVizNode>): v
   node.fx = null
   node.fy = null
 
+  node.scale = 1.0
   node.strokeWidth = DEFAULT_NODE_STROKE_WIDTH
   node.strokeOpacity = DEFAULT_STROKE_OPACITY
 }

@@ -1,7 +1,6 @@
 import * as THREE from 'three'
-import {GraphVizData} from './NextGraphVisualization'
-import {GraphVizNode} from './NextNodes'
-import {DEFAULT_NODE_SIZE} from './Nodes'
+import { GraphVizData } from './NextGraphVisualization'
+import { GraphVizNode } from './NextNodes'
 import fragmentShader from './shaders/links.fragment.glsl'
 import vertexShader from './shaders/links.vertex.glsl'
 
@@ -197,11 +196,11 @@ export class NextLinks {
         if (links[i].directed) {
           arrowHeight.setX(vertexIndex, QUAD_WIDTH / 2.0)
 
-          // NOTE:
-          // This is hardcoded right now: 0.2*nodeSize which is the absolute node radius within the point size
-          // FIXME: don't hardcode, by passing 0.2 to the node shader somehow
-          // TODO add 0.04*nodeSize for padding between arrow tip and node circumference
-          const offset = 0.24 * (links[i].target.size || DEFAULT_NODE_SIZE)
+          // FIXME:
+          // This is hardcoded right now:
+          // ((nodeInnerRadius=0.2)+(padding=0.04)) * (nodeSize=20.0)
+          // Instead we should pass passing 0.24 to the fragment shader and do this calculation within the shader
+          const offset = 0.24 * 20.0
           linkOffset.setX(vertexIndex, offset)
         } else {
           arrowHeight.setX(vertexIndex, 0)
