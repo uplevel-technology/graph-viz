@@ -1,7 +1,7 @@
-import {size} from 'lodash'
+import { size } from 'lodash'
 import * as THREE from 'three'
-import {Vector3} from 'three'
-import {getPopulatedGraphLinks, GraphVizLink, NextLinks} from './NextLinks'
+import { Vector3 } from 'three'
+import { getPopulatedGraphLinks, GraphVizLink, NextLinks } from './NextLinks'
 import {
   ClickEventHandler,
   DragEndEventHandler,
@@ -12,7 +12,7 @@ import {
   PanEventHandler,
   ZoomEventHandler,
 } from './NextMouseInteraction'
-import {GraphVizNode, NextNodes} from './NextNodes'
+import { GraphVizNode, NextNodes } from './NextNodes'
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
@@ -150,7 +150,7 @@ export class NextGraphVisualization {
     // This function assumes the updatedGraphData hasn't changed in size or order and only the position attributes
     // have changed within each node datum.
     // Which should mean this.nodeIdToIndexMap is up to date
-    this.nodesMesh.updatePositions(updatedGraphData.nodes)
+    this.nodesMesh.updateAllPositions(updatedGraphData.nodes)
     this.linksMesh.updatePositions(getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap))
 
     if (!this.userHasAdjustedViewport) {
@@ -158,6 +158,11 @@ export class NextGraphVisualization {
     }
     this.render()
   })
+
+  public updateNode = (index: number, node: GraphVizNode) => {
+    this.nodesMesh.updateOne(index, node)
+    this.render()
+  }
 
   public zoomToFit = (graphData: GraphVizData) => {
     if (size(graphData.nodes) === 0) {
@@ -199,14 +204,14 @@ export class NextGraphVisualization {
 
   public update = (graphData: GraphVizData) => {
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
-    this.nodesMesh.redraw(graphData.nodes)
+    this.nodesMesh.updateAll(graphData.nodes)
     this.linksMesh.redraw(getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap))
   }
 
   // TODO: implement something like
   public updateSingleNodeAttribute = (nodeIdx: number) => {
-    // this.nodesMesh.redraw(this.graphData.nodes)
-    // TODO optimize and redraw only one node:
+    // this.nodesMesh.updateAll(this.graphData.nodes)
+    // TODO optimize and updateAll only one node:
     // this.nodesMesh.updateNodeAt(nodeIdx)
   }
 

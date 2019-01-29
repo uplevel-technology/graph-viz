@@ -68,8 +68,8 @@ export class NextLinks {
     this.geometry.addAttribute('color', new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3))
     this.geometry.addAttribute('arrowHeight', new THREE.BufferAttribute((new Float32Array(numVertices * 1)), 1))
     this.geometry.addAttribute('dashGap', new THREE.BufferAttribute((new Float32Array(numVertices * 1)), 1))
-    this.recalcPositionFromData(links)
-    this.recalcColorFromData(links)
+
+    this.redraw(links)
 
     this.material = new THREE.ShaderMaterial({
       vertexShader,

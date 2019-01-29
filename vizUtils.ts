@@ -12,9 +12,11 @@
 import * as THREE from 'three'
 import { ForceSimulationNode } from './lib/BasicForceSimulation'
 import {
+  DEFAULT_NODE_SCALE,
+  DEFAULT_NODE_STROKE_OPACITY,
   DEFAULT_NODE_STROKE_WIDTH,
-  DEFAULT_STROKE_OPACITY,
   GraphVizNode,
+  HOVERED_NODE_SCALE,
   LOCKED_NODE_STROKE_OPACITY,
   LOCKED_NODE_STROKE_WIDTH,
 } from './lib/NextNodes'
@@ -72,7 +74,6 @@ export const lockNode = (
     node.fy = node.y
   }
 
-  node.scale = 1.5
   node.strokeWidth = LOCKED_NODE_STROKE_WIDTH
   node.strokeOpacity = LOCKED_NODE_STROKE_OPACITY
 }
@@ -81,7 +82,14 @@ export const unlockNode = (node: Partial<ForceSimulationNode & GraphVizNode>): v
   node.fx = null
   node.fy = null
 
-  node.scale = 1.0
   node.strokeWidth = DEFAULT_NODE_STROKE_WIDTH
-  node.strokeOpacity = DEFAULT_STROKE_OPACITY
+  node.strokeOpacity = DEFAULT_NODE_STROKE_OPACITY
+}
+
+export const magnifyNode = (node: Partial<GraphVizNode>): void => {
+  node.scale = HOVERED_NODE_SCALE
+}
+
+export const resetNodeScale = (node: Partial<GraphVizNode>): void => {
+  node.scale = DEFAULT_NODE_SCALE
 }

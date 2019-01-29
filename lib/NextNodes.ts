@@ -29,6 +29,7 @@ export interface GraphVizNode {
 
   /**
    * node fill color hex string or hex number
+   * (default is 0x333333)
    */
   fill?: number | string
 
@@ -57,11 +58,13 @@ export interface GraphVizNode {
 /**
  * Reusable constants
  */
+export const DEFAULT_NODE_FILL = 0x333333
 export const DEFAULT_NODE_SCALE = 1.0
 export const DEFAULT_NODE_STROKE_WIDTH = 0.03
-export const DEFAULT_STROKE_OPACITY = 1.0
+export const DEFAULT_NODE_STROKE_OPACITY = 1.0
 export const LOCKED_NODE_STROKE_WIDTH = 0.3
 export const LOCKED_NODE_STROKE_OPACITY = 0.4
+export const HOVERED_NODE_SCALE = 1.5
 
 export class NextNodes {
   public object: THREE.Points
@@ -79,7 +82,7 @@ export class NextNodes {
     this.geometry.addAttribute('strokeWidth', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
     this.geometry.addAttribute('strokeOpacity', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
 
-    this.recalcAttributesFromData(nodes)
+    this.updateAll(nodes)
 
     this.material = new THREE.ShaderMaterial({
       fragmentShader,
@@ -94,17 +97,9 @@ export class NextNodes {
     this.object = new THREE.Points(this.geometry, this.material)
   }
 
-  public updatePositions = (nodes: GraphVizNode[]) => {
-    this.recalcPositionFromData(nodes)
-  }
-
   public handleCameraZoom = (zoom: number) => {
     this.material.uniforms.globalScale.value = zoom < 0.3 ? 0.3 : zoom
     this.material.uniforms.globalScale.value *= window.devicePixelRatio
-  }
-
-  public redraw = (nodes: GraphVizNode[]) => {
-    this.recalcAttributesFromData(nodes)
   }
 
   public dispose = () => {
@@ -112,16 +107,68 @@ export class NextNodes {
     this.material.dispose()
   }
 
-  private recalcAttributesFromData = (nodes: GraphVizNode[]) => {
-    this.recalcPositionFromData(nodes)
-    this.recalcScaleFromData(nodes)
-    this.recalcFillFromData(nodes)
-    this.recalcStrokeFromData(nodes)
-    this.recalcStrokeWidthFromData(nodes)
-    this.recalcStrokeOpacityFromData(nodes)
+  /**
+   * TODO:
+   * We should have some sort of mechanism for declaring what fields are dirty on the node
+   * and only update them conditionally here.
+   */
+  /**
+   * update all attributes of one node at a given index
+   * @param index
+   * @param node
+   */
+  public updateOne = (index: number, node: GraphVizNode) => {
+    const position = this.geometry.getAttribute('position') as THREE.BufferAttribute
+    const scale = this.geometry.getAttribute('scale') as THREE.BufferAttribute
+    const fill = this.geometry.getAttribute('fill') as THREE.BufferAttribute
+    const stroke = this.geometry.getAttribute('stroke') as THREE.BufferAttribute
+    const strokeWidth = this.geometry.getAttribute('strokeWidth') as THREE.BufferAttribute
+    const strokeOpacity = this.geometry.getAttribute('strokeOpacity') as THREE.BufferAttribute
+
+
+    position.setXYZ(index, node.x, node.y, 0)
+    scale.setX(index, defaultTo(node.scale, DEFAULT_NODE_SCALE))
+
+    const color = new THREE.Color()
+    color.set(defaultTo(node.fill, DEFAULT_NODE_FILL) as string)
+    fill.setXYZ(index, color.r, color.g, color.b)
+
+    if (node.stroke) {
+      color.set(node.stroke as string)
+    }
+    stroke.setXYZ(index, color.r, color.g, color.b)
+
+    strokeWidth.setX(index, defaultTo(node.strokeWidth, DEFAULT_NODE_STROKE_WIDTH))
+    strokeOpacity.setX(index, defaultTo(node.strokeOpacity, DEFAULT_NODE_STROKE_OPACITY))
+
+
+    position.needsUpdate = true
+    scale.needsUpdate = true
+    fill.needsUpdate = true
+    stroke.needsUpdate = true
+    strokeWidth.needsUpdate = true
+    strokeOpacity.needsUpdate = true
+
   }
 
-  private recalcPositionFromData = (nodes: GraphVizNode[]) => {
+  /**
+   * update all attributes of all nodes
+   * @param nodes
+   */
+  public updateAll = (nodes: GraphVizNode[]) => {
+    this.updateAllPositions(nodes)
+    this.updateAllScales(nodes)
+    this.updateAllFills(nodes)
+    this.updateAllStrokes(nodes)
+    this.updateAllStrokeWidths(nodes)
+    this.updateAllStrokeOpacities(nodes)
+  }
+
+  /**
+   * udpate position attributes of all nodes
+   * @param nodes
+   */
+  public updateAllPositions = (nodes: GraphVizNode[]) => {
     const position = this.geometry.getAttribute('position') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -138,7 +185,11 @@ export class NextNodes {
     this.geometry.computeBoundingSphere()
   }
 
-  private recalcScaleFromData = (nodes: GraphVizNode[]) => {
+  /**
+   * update scale attributes of all nodes
+   * @param nodes
+   */
+  public updateAllScales = (nodes: GraphVizNode[]) => {
     const scale = this.geometry.getAttribute('scale') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -153,7 +204,11 @@ export class NextNodes {
     scale.needsUpdate = true
   }
 
-  private recalcFillFromData = (nodes: GraphVizNode[]) => {
+  /**
+   * update fill attributes of all nodes
+   * @param nodes
+   */
+  public updateAllFills = (nodes: GraphVizNode[]) => {
     const fill = this.geometry.getAttribute('fill') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -163,14 +218,18 @@ export class NextNodes {
 
     const tmpColor = new THREE.Color() // for reuse
     for (let i = 0; i < numNodes; i++) {
-      tmpColor.set(defaultTo(nodes[i].fill, 0x333333) as string)
+      tmpColor.set(defaultTo(nodes[i].fill, DEFAULT_NODE_FILL) as string)
       fill.setXYZ(i, tmpColor.r, tmpColor.g, tmpColor.b)
     }
 
     fill.needsUpdate = true
   }
 
-  private recalcStrokeFromData = (nodes: GraphVizNode[]) => {
+  /**
+   * update stroke color attributes of all nodes
+   * @param nodes
+   */
+  public updateAllStrokes = (nodes: GraphVizNode[]) => {
     const stroke = this.geometry.getAttribute('stroke') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -187,7 +246,11 @@ export class NextNodes {
     stroke.needsUpdate = true
   }
 
-  private recalcStrokeWidthFromData = (nodes: GraphVizNode[]) => {
+  /**
+   * update stroke width attributes of all nodes
+   * @param nodes
+   */
+  public updateAllStrokeWidths = (nodes: GraphVizNode[]) => {
     const strokeWidth = this.geometry.getAttribute('strokeWidth') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -198,14 +261,18 @@ export class NextNodes {
     for (let i = 0; i < numNodes; i++) {
       // preserve stroke widths during data updates for locked nodes
       if (!this.lockedIds[i]) {
-        strokeWidth.setX(i, nodes[i].strokeWidth!)
+        strokeWidth.setX(i, defaultTo(nodes[i].strokeWidth, DEFAULT_NODE_STROKE_WIDTH))
       }
     }
 
     strokeWidth.needsUpdate = true
   }
 
-  private recalcStrokeOpacityFromData = (nodes: GraphVizNode[]) => {
+  /**
+   * update stroke opacity attributes of all nodes
+   * @param nodes
+   */
+  public updateAllStrokeOpacities = (nodes: GraphVizNode[]) => {
     const strokeOpacity = this.geometry.getAttribute('strokeOpacity') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -215,7 +282,7 @@ export class NextNodes {
 
     for (let i = 0; i < numNodes; i++) {
       if (!this.lockedIds[i]) {
-        strokeOpacity.setX(i, nodes[i].strokeOpacity!)
+        strokeOpacity.setX(i, defaultTo(nodes[i].strokeOpacity, DEFAULT_NODE_STROKE_OPACITY))
       }
     }
 

@@ -1,15 +1,20 @@
-import {PersistenceServiceClient} from '@core/services/persistence_service_pb_service'
-import {Empty} from '@core/wrappers_pb'
-import {Button, createStyles, Paper, Theme, Typography, WithStyles, withStyles} from '@material-ui/core'
+import { PersistenceServiceClient } from '@core/services/persistence_service_pb_service'
+import { Empty } from '@core/wrappers_pb'
+import { Button, createStyles, Paper, Theme, Typography, WithStyles, withStyles } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import * as React from 'react'
-import {PERSISTENCE_SERVICE_ADDRESS} from '../App'
-import {BasicForceSimulation, ForceSimulationData, ForceSimulationNode, NodePosition} from './lib/BasicForceSimulation'
-import {GraphVizData, NextGraphVisualization} from './lib/NextGraphVisualization'
-import {GraphVizLink} from './lib/NextLinks'
-import {NodeTooltips, TooltipNode} from './NodeTooltips'
-import {eventsToVizData} from './protoToNodeUtils'
-import {lockNode, toggleNodeLock} from './vizUtils'
+import { PERSISTENCE_SERVICE_ADDRESS } from '../App'
+import {
+  BasicForceSimulation,
+  ForceSimulationData,
+  ForceSimulationNode,
+  NodePosition,
+} from './lib/BasicForceSimulation'
+import { GraphVizData, NextGraphVisualization } from './lib/NextGraphVisualization'
+import { GraphVizLink } from './lib/NextLinks'
+import { NodeTooltips, TooltipNode } from './NodeTooltips'
+import { eventsToVizData } from './protoToNodeUtils'
+import { lockNode, magnifyNode, resetNodeScale, toggleNodeLock } from './vizUtils'
 
 const styles = (theme: Theme) => createStyles({
   root: {
@@ -33,7 +38,7 @@ const styles = (theme: Theme) => createStyles({
 
 interface State {
   readonly tooltipNode: TooltipNode | null
-  readonly tooltipNodeIdx: number | null
+  readonly currentlyHoveredIdx: number | null
   readonly errorMessage?: string
 }
 
@@ -56,7 +61,7 @@ class DevGraphBase extends React.Component<Props, State> {
 
   readonly state: State = {
     tooltipNode: null,
-    tooltipNodeIdx: null,
+    currentlyHoveredIdx: null,
   }
 
   componentDidMount(): void {
@@ -73,7 +78,9 @@ class DevGraphBase extends React.Component<Props, State> {
       const vizNode = this.vizData.nodes[hoveredNodeIdx]
       const screenCoords = this.visualization.toScreenSpacePoint(vizNode.x, vizNode.y)
 
-      // TODO increase node scale / magnify
+      magnifyNode(vizNode)
+
+      this.visualization.updateNode(hoveredNodeIdx, vizNode)
 
       this.setState({
         tooltipNode: {
@@ -81,7 +88,7 @@ class DevGraphBase extends React.Component<Props, State> {
           screenX: screenCoords.x,
           screenY: screenCoords.y,
         },
-        tooltipNodeIdx: hoveredNodeIdx,
+        currentlyHoveredIdx: hoveredNodeIdx,
       })
     })
 
@@ -94,8 +101,13 @@ class DevGraphBase extends React.Component<Props, State> {
     })
 
     this.visualization.onNodeHoverOut((hoveredOutNodeIdx) => {
-      if (hoveredOutNodeIdx === this.state.tooltipNodeIdx) {
-        this.setState({tooltipNode: null, tooltipNodeIdx: null})
+      const hoveredOutNode = this.vizData.nodes[hoveredOutNodeIdx]
+      resetNodeScale(hoveredOutNode)
+      this.visualization.updateNode(hoveredOutNodeIdx, hoveredOutNode)
+
+      // only hide tooltip if currently shown tooltip is hovered out
+      if (hoveredOutNodeIdx === this.state.currentlyHoveredIdx) {
+        this.setState({ tooltipNode: null, currentlyHoveredIdx: null })
       }
     })
 
@@ -106,10 +118,7 @@ class DevGraphBase extends React.Component<Props, State> {
       toggleNodeLock(this.vizData.nodes[clickedNodeIdx])
 
       this.simulation.update(this.vizData)
-
-      this.visualization.update(this.vizData)
-      // ^^ TODO implement the following instead (because the tick handler should automatically update the positions)
-      // this.visualization.updateStroke(this.vizData)
+      this.visualization.updateNode(clickedNodeIdx, this.vizData.nodes[clickedNodeIdx])
     }))
 
     this.visualization.onNodeDrag(((worldPos, draggedNodeIdx) => {
@@ -129,9 +138,7 @@ class DevGraphBase extends React.Component<Props, State> {
 
       lockNode(this.vizData.nodes[draggedNodeIdx])
 
-      this.visualization.update(this.vizData) // FIXME
-      // TODO: implement following instead
-      // this.visualization.updateStroke(this.vizData)
+      this.visualization.updateNode(draggedNodeIdx, this.vizData.nodes[draggedNodeIdx])
 
       this.simulation.reheat()
     })
