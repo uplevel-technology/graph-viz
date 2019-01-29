@@ -1,26 +1,65 @@
 import * as THREE from 'three'
-import {VisualGraphLink} from './GraphVisualization'
-import {DEFAULT_NODE_SIZE} from './Nodes'
+import { GraphVizData } from './GraphVisualization'
+import { GraphVizNode } from './Nodes'
 import fragmentShader from './shaders/links.fragment.glsl'
 import vertexShader from './shaders/links.vertex.glsl'
+import { defaultTo } from 'lodash'
 
 const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
 // TODO: make arrowWidth an attribute so it can be customized per node instead of being derived from QuadWidth
 const QUAD_WIDTH = 15
 
-const DEFAULT_COLOR = 0xbbbbbb
-const HIGHLIGHTED_COLOR = 0x333333
+/**
+ * Constants
+ */
+const DEFAULT_LINK_COLOR = 0xbbbbbb
+const HIGHLIGHTED_LINK_COLOR = 0x333333
+
+interface LinkStyleAttributes {
+  /**
+   * determines whether an arrow is drawn on the link
+   */
+  directed?: boolean
+
+  /**
+   * determine whether the line should be dashed
+   */
+  dashed?: boolean
+
+  /**
+   * hex color string or hex number
+   */
+  color?: string | number
+}
+
+export interface GraphVizLink extends LinkStyleAttributes {
+  source: string
+  target: string
+}
+
+export interface PopulatedGraphVizLink extends LinkStyleAttributes {
+  source: GraphVizNode
+  target: GraphVizNode
+}
+
+export function getPopulatedGraphLinks(
+  graphData: GraphVizData,
+  nodeIdToIdxMap: {[id: string]: number},
+  ): PopulatedGraphVizLink[] {
+  return graphData.links.map(link => ({
+    ...link,
+    source: graphData.nodes[nodeIdToIdxMap[link.source]],
+    target: graphData.nodes[nodeIdToIdxMap[link.target]],
+  }))
+}
 
 export class Links {
   public object: THREE.Mesh
 
-  private highlightEdges: boolean = false
-  private links: VisualGraphLink[]
   private readonly geometry: THREE.BufferGeometry
   private readonly material: THREE.ShaderMaterial
 
-  constructor(links: VisualGraphLink[]) {
-    this.links = links
+  constructor(links: PopulatedGraphVizLink[]) {
     const numLinks = links.length
     const numVertices = numLinks * VERTICES_PER_QUAD
 
@@ -32,8 +71,8 @@ export class Links {
     this.geometry.addAttribute('color', new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3))
     this.geometry.addAttribute('arrowHeight', new THREE.BufferAttribute((new Float32Array(numVertices * 1)), 1))
     this.geometry.addAttribute('dashGap', new THREE.BufferAttribute((new Float32Array(numVertices * 1)), 1))
-    this.recalcPositionFromData(links)
-    this.recalcColorFromData(links)
+
+    this.updateAll(links)
 
     this.material = new THREE.ShaderMaterial({
       vertexShader,
@@ -55,31 +94,25 @@ export class Links {
     this.material.uniforms.globalScale.value *= window.devicePixelRatio
   }
 
-  public enableEdgeHighlight = () => {
-    this.highlightEdges = true
-  }
-
-  public disableEdgeHighlight = () => {
-    this.highlightEdges = false
-  }
-
-  public updatePositions = (links: VisualGraphLink[]) => {
-    this.links = links
-    this.recalcPositionFromData(this.links)
-  }
-
-  public redraw = (links: VisualGraphLink[]) => {
-    this.links = links
-    this.recalcPositionFromData(this.links)
-    this.recalcColorFromData(this.links)
-  }
-
   public dispose = () => {
     this.geometry.dispose()
     this.material.dispose()
   }
 
-  private recalcPositionFromData = (links: VisualGraphLink[]) => {
+  /**
+   * update all attributes for all links
+   * @param links
+   */
+  public updateAll = (links: PopulatedGraphVizLink[]) => {
+    this.updateAllPositions(links)
+    this.updateAllColors(links)
+  }
+
+  /**
+   * update position, uv, quadLength, linkOffset, arrowHeight and dashGap attributes for all links
+   * @param links
+   */
+  public updateAllPositions = (links: PopulatedGraphVizLink[]) => {
     const position = this.geometry.getAttribute('position') as THREE.BufferAttribute
     const uv = this.geometry.getAttribute('uv') as THREE.BufferAttribute
     const quadLength = this.geometry.getAttribute('quadLength') as THREE.BufferAttribute
@@ -162,11 +195,11 @@ export class Links {
         if (links[i].directed) {
           arrowHeight.setX(vertexIndex, QUAD_WIDTH / 2.0)
 
-          // NOTE:
-          // This is hardcoded right now: 0.2*nodeSize which is the absolute node radius within the point size
-          // FIXME: don't hardcode, by passing 0.2 to the node shader somehow
-          // TODO add 0.04*nodeSize for padding between arrow tip and node circumference
-          const offset = 0.24 * (links[i].target.size || DEFAULT_NODE_SIZE)
+          // FIXME:
+          // This is hardcoded right now:
+          // ((nodeInnerRadius=0.2)+(padding=0.04)) * (nodeSize=20.0)
+          // Instead we should pass passing 0.24 to the fragment shader and do this calculation within the shader
+          const offset = 0.24 * 20.0
           linkOffset.setX(vertexIndex, offset)
         } else {
           arrowHeight.setX(vertexIndex, 0)
@@ -191,7 +224,11 @@ export class Links {
     this.geometry.computeBoundingSphere()
   }
 
-  private recalcColorFromData = (links: VisualGraphLink[]) => {
+  /**
+   * update color attributes for all links
+   * @param links
+   */
+  public updateAllColors = (links: PopulatedGraphVizLink[]) => {
     const color = this.geometry.getAttribute('color') as THREE.BufferAttribute
 
     const numLinks = links.length
@@ -205,14 +242,7 @@ export class Links {
 
     for (let i = 0; i < numLinks; i++) {
       const currentLink = links[i]
-      if (this.highlightEdges && !currentLink.source.inactive && !currentLink.target.inactive) {
-        tmpColor.set(HIGHLIGHTED_COLOR)
-      } else if (currentLink.color !== undefined) {
-        tmpColor.set(currentLink.color as string)
-      } else {
-        tmpColor.set(DEFAULT_COLOR)
-      }
-
+      tmpColor.set(defaultTo(currentLink.color, DEFAULT_LINK_COLOR) as string)
       // Repeat for all vertices of this quad:
       for (let vertexIndex = i * VERTICES_PER_QUAD; vertexIndex < (i + 1) * VERTICES_PER_QUAD; vertexIndex++) {
         color.setXYZ(vertexIndex, tmpColor.r, tmpColor.g, tmpColor.b)

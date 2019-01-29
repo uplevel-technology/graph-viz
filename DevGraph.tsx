@@ -10,8 +10,8 @@ import {
   ForceSimulationNode,
   NodePosition,
 } from './lib/BasicForceSimulation'
-import { GraphVizData, NextGraphVisualization } from './lib/NextGraphVisualization'
-import { GraphVizLink } from './lib/NextLinks'
+import { GraphVisualization, GraphVizData } from './lib/GraphVisualization'
+import { GraphVizLink } from './lib/Links'
 import { NodeTooltips, TooltipNode } from './NodeTooltips'
 import { eventsToVizData } from './protoToNodeUtils'
 import { lockNode, magnifyNode, resetNodeScale, toggleNodeLock } from './vizUtils'
@@ -49,7 +49,7 @@ interface Props extends WithStyles<typeof styles> {
 
 class DevGraphBase extends React.Component<Props, State> {
   client = new PersistenceServiceClient(PERSISTENCE_SERVICE_ADDRESS)
-  visualization: NextGraphVisualization
+  visualization: GraphVisualization
   vizData: GraphVizData = {
     nodes: [],
     links: [],
@@ -66,7 +66,7 @@ class DevGraphBase extends React.Component<Props, State> {
 
   componentDidMount(): void {
     const canvas = this.canvasRef.current! // this is safe when mounted
-    this.visualization = new NextGraphVisualization(
+    this.visualization = new GraphVisualization(
       this.vizData,
       canvas,
       this.props.width,

@@ -19,7 +19,7 @@ import {
   HOVERED_NODE_SCALE,
   LOCKED_NODE_STROKE_OPACITY,
   LOCKED_NODE_STROKE_WIDTH,
-} from './lib/NextNodes'
+} from './lib/Nodes'
 
 export const NodeFillPalette: {[key: string]: string} = {
   artifact: '#00478D',

@@ -1,162 +1,74 @@
-import {get, size} from 'lodash'
+import { size } from 'lodash'
 import * as THREE from 'three'
-import {DefaultForceSimulation} from './DefaultForceSimulation'
-import {Links} from './Links'
-import {MouseInteraction} from './MouseInteraction'
-import {Nodes} from './Nodes'
-import {SimulationInterface} from './SimulationInterface'
+import { Vector3 } from 'three'
+import { getPopulatedGraphLinks, GraphVizLink, Links } from './Links'
+import {
+  ClickEventHandler,
+  DragEndEventHandler,
+  DragStartEventHandler,
+  HoverEventHandler,
+  MouseInteraction,
+  NodeDragEventHandler,
+  PanEventHandler,
+  ZoomEventHandler,
+} from './MouseInteraction'
+import { GraphVizNode, Nodes } from './Nodes'
 
-// input data structure
-export interface VisualGraphData {
-  nodes: VisualGraphNode[]
-  links: VisualGraphLink[]
+const MAX_ZOOM = 5.0
+const PAN_SPEED = 1.0
+
+export interface GraphVizData {
+  nodes: GraphVizNode[]
+  links: GraphVizLink[]
 }
 
-// input node data structure
-// TODO: We need to better distinguish between the "current state" of the graph vs the visual attributes config.
-export interface VisualGraphNode {
-  /**
-   * Unique node id
-   */
-  id: string
+function constructIdToIdxMap(arr: Array<{id: string}>): {[id: string]: number} {
+  const map: {[id: string]: number} = {}
+  arr.forEach((elem, idx) => {
+    map[elem.id] = idx
+  })
 
-  /**
-   * inactive is a boolean that makes a node grey when set.
-   * TODO: this has to be deprecated soon. see TODO above.
-   */
-  inactive?: boolean
-
-  /**
-   * node fill color hex string or hex number
-   */
-  fill?: number | string
-
-  /**
-   * The node container's absolute size in pixels at the default zoom level
-   * TODO: This is a bad name. We need to make more sense of this by ensuring all visual attributes
-   * can be translated represented by a property name in VisualGraphNode. e.g. scale.
-   */
-  size?: number
-
-  /**
-   * node strike color hex string or hex number
-   */
-  stroke?: number | string
-
-  /**
-   * relative node stroke opacity (must be between 0.0 to 1.0)
-   */
-  strokeOpacity?: number
-
-  /**
-   * relative node stroke width (must be between 0.0 to 1.0)
-   */
-  strokeWidth?: number
-
-  /**
-   * information for tooltip
-   * TODO: pass this data directly to the Tooltip component instead of relying on the GraphVisualization to do so
-   */
-  displayName?: string
-  displayType?: string
-  formattedTime?: string
-
-  /**
-   * node’s current x-position
-   * TODO: we need to split this into x and simulationX or xt(x at time t), where x will be what we currently call fx
-   */
-  x?: number
-
-  /**
-   * node’s current y-position
-   * NOTE: this will soon change to simulationY
-   */
-  y?: number
-
-  /**
-   * node’s fixed x-position (if position was fixed)
-   */
-  fx?: number | null
-
-  /**
-   * node’s fixed y-position (if position was fixed)
-   */
-  fy?: number | null
-
-  forceX?: number | null
-  forceY?: number | null
-}
-
-// input link data structure
-export interface VisualGraphLink {
-  source: VisualGraphNode
-  target: VisualGraphNode
-
-  /**
-   * boolean to determine whether a link arrow should be drawn
-   */
-  directed?: boolean
-
-  /**
-   * determine with the line should be dashed
-   */
-  dashed?: boolean
-
-  /**
-   * hex string or hex number
-   */
-  color?: number | string
-}
-
-// interface with a VisualGraphNode's screen space coordinates
-interface ScreenSpaceNode extends VisualGraphNode {
-  /**
-   * Node’s screen space x-position
-   */
-  screenX: number
-  /**
-   * Node’s screen space y-position
-   */
-  screenY: number
+  return map
 }
 
 export class GraphVisualization {
-  public graph: VisualGraphData
   public nodesMesh: Nodes
   public linksMesh: Links
 
-  public onNodeClick: (clickedNode: VisualGraphNode) => {}
-  public onHover: (hoveredNode: ScreenSpaceNode | null) => void
+  public readonly canvas: HTMLCanvasElement
+  public readonly camera: THREE.OrthographicCamera
 
+  private nodeIdToIndexMap: {[key: string]: number} = {}
   private userHasAdjustedViewport: boolean
-  private readonly simulation: SimulationInterface
-  private readonly camera: THREE.OrthographicCamera
+
+  private registeredEventHandlers: {
+    click?: ClickEventHandler,
+    nodeHoverIn?: HoverEventHandler,
+    nodeHoverOut?: HoverEventHandler,
+    dragStart?: DragStartEventHandler,
+    dragEnd?: DragEndEventHandler,
+    nodeDrag?: NodeDragEventHandler,
+    pan?: PanEventHandler,
+    zoom?: ZoomEventHandler,
+  } = {}
+
   private readonly scene: THREE.Scene
   private readonly renderer: THREE.WebGLRenderer
   private readonly mouseInteraction: MouseInteraction
-  private readonly canvas: HTMLCanvasElement
   private readonly width: number
   private readonly height: number
 
   constructor(
-    graphData: VisualGraphData,
+    graphData: GraphVizData,
     canvas: HTMLCanvasElement,
     width: number,
     height: number,
-    simulation?: SimulationInterface,
   ) {
     this.canvas = canvas
     this.width = width
     this.height = height
 
-    if (simulation) {
-      this.simulation = simulation
-    } else {
-      this.simulation = new DefaultForceSimulation()
-      this.simulation.onSimulationTick(this.updatePositions)
-      this.simulation.initialize(graphData)
-    }
-    this.graph = this.simulation.getVisualGraph()
+    this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
 
     // init Scene and Camera
     this.scene = new THREE.Scene()
@@ -178,8 +90,8 @@ export class GraphVisualization {
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setSize(width, height)
 
-    this.nodesMesh = new Nodes(this.graph.nodes)
-    this.linksMesh = new Links(this.graph.links)
+    this.nodesMesh = new Nodes(graphData.nodes)
+    this.linksMesh = new Links(getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap))
 
     this.scene.add(this.linksMesh.object)
     this.nodesMesh.object.position.z = 3
@@ -188,31 +100,72 @@ export class GraphVisualization {
     this.render()
 
     this.mouseInteraction = new MouseInteraction(this.canvas, this.camera, this.nodesMesh)
-    this.mouseInteraction.onClick = this.handleClick
-    this.mouseInteraction.onHover = this.handleHover
-    this.mouseInteraction.onDragStart = this.handleDragStart
-    this.mouseInteraction.onDrag = this.handleDrag
-    this.mouseInteraction.onDragEnd = this.handleDragEnd
-    this.mouseInteraction.onPan = this.handlePan
-    this.mouseInteraction.onZoom = this.handleZoomOnWheel
+    this.mouseInteraction.onClick(this.handleClick)
+    this.mouseInteraction.onNodeHoverIn(this.handleHoverIn)
+    this.mouseInteraction.onNodeHoverOut(this.handleHoverOut)
+    this.mouseInteraction.onDragStart(this.handleDragStart)
+    this.mouseInteraction.onDragEnd(this.handleDragEnd)
+    this.mouseInteraction.onNodeDrag(this.handleNodeDrag)
+    this.mouseInteraction.onPan(this.handlePan)
+    this.mouseInteraction.onZoom(this.handleZoomOnWheel)
+  }
+
+  public onNodeHoverIn(callback: HoverEventHandler) {
+    this.registeredEventHandlers.nodeHoverIn = callback
+  }
+
+  public onNodeHoverOut(callback: HoverEventHandler) {
+    this.registeredEventHandlers.nodeHoverOut = callback
+  }
+
+  public onClick(callback: ClickEventHandler) {
+    this.registeredEventHandlers.click = callback
+  }
+
+  public onDragStart(callback: DragStartEventHandler) {
+    this.registeredEventHandlers.dragStart = callback
+  }
+
+  public onDragEnd(callback: DragEndEventHandler) {
+    this.registeredEventHandlers.dragEnd = callback
+  }
+
+  public onNodeDrag(callback: NodeDragEventHandler) {
+    this.registeredEventHandlers.nodeDrag = callback
+  }
+
+  public onPan(callback: PanEventHandler) {
+    this.registeredEventHandlers.pan = callback
+  }
+
+  public onZoom(callback: ZoomEventHandler) {
+    this.registeredEventHandlers.zoom = callback
   }
 
   public render = () => {
     this.renderer.render(this.scene, this.camera)
   }
 
-  private updatePositions = (updatedGraphData: VisualGraphData) => window.requestAnimationFrame(() => {
-    this.nodesMesh.updatePositions(updatedGraphData.nodes)
-    this.linksMesh.updatePositions(updatedGraphData.links)
+  public updatePositions = (updatedGraphData: GraphVizData) => window.requestAnimationFrame(() => {
+    // This function assumes the updatedGraphData hasn't changed in size or order and only the position attributes
+    // have changed within each node datum.
+    // Which should mean this.nodeIdToIndexMap is up to date
+    this.nodesMesh.updateAllPositions(updatedGraphData.nodes)
+    this.linksMesh.updateAllPositions(getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap))
 
     if (!this.userHasAdjustedViewport) {
-      this.zoomToFit()
+      this.zoomToFit(updatedGraphData)
     }
     this.render()
   })
 
-  public zoomToFit = () => {
-    if (size(this.graph.nodes) === 0) {
+  public updateNode = (index: number, node: GraphVizNode) => {
+    this.nodesMesh.updateOne(index, node)
+    this.render()
+  }
+
+  public zoomToFit = (graphData: GraphVizData) => {
+    if (size(graphData.nodes) === 0) {
       // Don't try to do this if there are no nodes.
       return
     }
@@ -249,55 +202,20 @@ export class GraphVisualization {
     this.linksMesh.handleCameraZoom(this.camera.zoom)
   }
 
-  public update = (graphData: VisualGraphData) => {
-    if (size(this.graph.nodes) === 0 && size(graphData.nodes) > 0) {
-      // Re-initialize simulation if it's the first load for better stabilization
-      this.simulation.initialize(graphData)
-    } else {
-      this.simulation.update(graphData)
-    }
-
-    this.graph = this.simulation.getVisualGraph()
-
-    this.nodesMesh.redraw(this.graph.nodes)
-    this.linksMesh.redraw(this.graph.links)
-
-    this.simulation.restart()
+  public update = (graphData: GraphVizData) => {
+    this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
+    this.nodesMesh.updateAll(graphData.nodes)
+    this.linksMesh.updateAll(getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap))
   }
 
-  public dispose() {
-    this.nodesMesh.dispose()
-    this.linksMesh.dispose()
-    this.renderer.dispose()
+  // TODO: implement something like
+  public updateSingleNodeAttribute = (nodeIdx: number) => {
+    // this.nodesMesh.updateAll(this.graphData.nodes)
+    // TODO optimize and updateAll only one node:
+    // this.nodesMesh.updateNodeAt(nodeIdx)
   }
 
-  private handleHover = (hoveredToNodeIdx: number | null, hoveredFromNodeIdx: number | null) => {
-    if (hoveredFromNodeIdx !== null) {
-      this.nodesMesh.scalePointAt(hoveredFromNodeIdx, 1.0) // reset previously hovered
-    }
-    if (hoveredToNodeIdx !== null) {
-      this.nodesMesh.scalePointAt(hoveredToNodeIdx, 1.75)
-    }
-    this.render()
-
-    if (!this.onHover) {
-      return
-    }
-
-    let screenNode: ScreenSpaceNode | null = null
-    if (hoveredToNodeIdx !== null && size(this.graph.nodes) > hoveredToNodeIdx) {
-      const node = this.graph.nodes[hoveredToNodeIdx]
-      const pos = this.toScreenSpacePoint(node.x, node.y)
-      screenNode = {
-        ...node,
-        screenX: pos.x,
-        screenY: pos.y,
-      }
-    }
-    this.onHover(screenNode)
-  }
-
-  private toScreenSpacePoint = (worldX: number = 0, worldY: number = 0): THREE.Vector3 => {
+  public toScreenSpacePoint = (worldX: number = 0, worldY: number = 0): THREE.Vector3 => {
     const pos = new THREE.Vector3(worldX, worldY, 0)
     pos.project(this.camera)
 
@@ -308,39 +226,7 @@ export class GraphVisualization {
     )
   }
 
-  private handleDragStart = (mouse: THREE.Vector3, draggedNodeIdx: number | null) => {
-    this.userHasAdjustedViewport = true
-    if (draggedNodeIdx !== null) {
-      this.simulation.reheat()
-    }
-  }
-
-  private handleDrag = (mouse: THREE.Vector3, draggedNodeIdx: number) => {
-    // lock node
-    const nodes = this.graph.nodes
-    nodes[draggedNodeIdx].fx = mouse.x
-    nodes[draggedNodeIdx].fy = mouse.y
-    this.nodesMesh.lockPointAt(draggedNodeIdx)
-    this.render()
-  }
-
-  private handleDragEnd = () => {
-    this.simulation.stop()
-  }
-
-  private handlePan = () => {
-    this.userHasAdjustedViewport = true
-    this.render()
-  }
-
-  private handleZoomOnWheel = () => {
-    this.userHasAdjustedViewport = true
-    this.nodesMesh.handleCameraZoom(this.camera.zoom)
-    this.linksMesh.handleCameraZoom(this.camera.zoom)
-    this.render()
-  }
-
-  private zoom = (factor: number) => {
+  public zoom = (factor: number = 0) => {
     this.userHasAdjustedViewport = true
     this.camera.zoom += factor * this.camera.zoom
     this.camera.updateProjectionMatrix()
@@ -349,25 +235,87 @@ export class GraphVisualization {
     this.render()
   }
 
-  private handleClick = (mouse: THREE.Vector3, clickedNodeIdx: number | null) => {
-    if (clickedNodeIdx !== null) {
-      const nodes = this.graph.nodes
-      if (get(nodes, `${clickedNodeIdx}.fx`)) {
-        // release node
-        nodes[clickedNodeIdx].fx = null
-        nodes[clickedNodeIdx].fy = null
-        this.nodesMesh.unlockPointAt(clickedNodeIdx)
-      } else {
-        nodes[clickedNodeIdx].fx = mouse.x
-        nodes[clickedNodeIdx].fy = mouse.y
-        this.nodesMesh.lockPointAt(clickedNodeIdx)
-      }
+  public dispose() {
+    this.nodesMesh.dispose()
+    this.linksMesh.dispose()
+    this.renderer.dispose()
+  }
 
-      if (this.onNodeClick) {
-        this.onNodeClick(nodes[clickedNodeIdx])
-      }
-
-      this.render()
+  private handleHoverIn = (hoveredToNodeIdx: number) => {
+    if (!this.registeredEventHandlers.nodeHoverIn) {
+      return
     }
+    this.registeredEventHandlers.nodeHoverIn(hoveredToNodeIdx)
+    this.render()
+  }
+
+  private handleHoverOut = (hoveredFromNodeIdx: number) => {
+    if (!this.registeredEventHandlers.nodeHoverOut) {
+      return
+    }
+    this.registeredEventHandlers.nodeHoverOut(hoveredFromNodeIdx)
+    this.render()
+  }
+
+  private handleDragStart = (worldSpaceMouse: THREE.Vector3, draggedNodeIdx: number | null) => {
+    this.userHasAdjustedViewport = true
+    if (this.registeredEventHandlers.dragStart) {
+      this.registeredEventHandlers.dragStart(worldSpaceMouse, draggedNodeIdx)
+    }
+    this.render() // <- this is probably not needed
+  }
+
+  private handleNodeDrag = (worldSpaceMouse: THREE.Vector3, draggedNodeIdx: number) => {
+    if (this.registeredEventHandlers.nodeDrag) {
+      this.registeredEventHandlers.nodeDrag(worldSpaceMouse, draggedNodeIdx)
+    }
+    this.render()
+  }
+
+  private handleDragEnd = () => {
+    if (this.registeredEventHandlers.dragEnd) {
+      this.registeredEventHandlers.dragEnd()
+    }
+  }
+
+  private handlePan = (panDelta: Vector3) => {
+    const rect = this.canvas.getBoundingClientRect()
+    panDelta.multiplyScalar(PAN_SPEED)
+
+    this.camera.position.x -= panDelta.x * (this.camera.right - this.camera.left) / this.camera.zoom / rect.width
+    this.camera.position.y += panDelta.y * (this.camera.top - this.camera.bottom) / this.camera.zoom / rect.height
+    this.camera.updateProjectionMatrix()
+
+    this.userHasAdjustedViewport = true
+
+    if (this.registeredEventHandlers.pan) {
+      this.registeredEventHandlers.pan(panDelta)
+    }
+    this.render()
+  }
+
+  private handleZoomOnWheel = (event: MouseWheelEvent) => {
+    this.userHasAdjustedViewport = true
+
+    const zoomFactor = event.deltaY < 0 ? 0.95 : 1.05
+    this.camera.zoom = Math.min(MAX_ZOOM, this.camera.zoom * zoomFactor)
+    this.camera.updateProjectionMatrix()
+
+    this.nodesMesh.handleCameraZoom(this.camera.zoom)
+    this.linksMesh.handleCameraZoom(this.camera.zoom)
+
+    if (this.registeredEventHandlers.zoom) {
+      this.registeredEventHandlers.zoom(event)
+    }
+    this.render()
+  }
+
+  private handleClick = (worldSpaceMouse: THREE.Vector3, clickedNodeIdx: number | null) => {
+    if (clickedNodeIdx === null || !this.registeredEventHandlers.click) {
+      return
+    }
+
+    this.registeredEventHandlers.click(worldSpaceMouse, clickedNodeIdx)
+    this.render()
   }
 }
