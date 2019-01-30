@@ -9,6 +9,7 @@ import {
 import fragmentShader from './shaders/links.fragment.glsl'
 import vertexShader from './shaders/links.vertex.glsl'
 import { defaultTo } from 'lodash'
+import { Labels } from './Labels'
 
 const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
 
@@ -79,6 +80,8 @@ export class Links {
   private readonly geometry: THREE.BufferGeometry
   private readonly material: THREE.ShaderMaterial
 
+  private readonly labels: Labels
+
   constructor(links: PopulatedGraphVizLink[]) {
     const numLinks = links.length
     const numVertices = numLinks * VERTICES_PER_QUAD
@@ -93,8 +96,6 @@ export class Links {
     this.geometry.addAttribute('arrowOffset', new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1))
     this.geometry.addAttribute('dashGap', new THREE.BufferAttribute((new Float32Array(numVertices * 1)), 1))
 
-    this.updateAll(links)
-
     this.material = new THREE.ShaderMaterial({
       vertexShader,
       fragmentShader,
@@ -107,6 +108,12 @@ export class Links {
 
     this.object = new THREE.Mesh(this.geometry, this.material)
     this.object.name = 'lines'
+
+    this.labels = new Labels()
+    this.labels.object.position.z = 1 // put in front of the lines
+    this.object.add(this.labels.object)
+
+    this.updateAll(links)
   }
 
   public handleCameraZoom = (zoom: number) => {
@@ -126,6 +133,7 @@ export class Links {
   public updateAll = (links: PopulatedGraphVizLink[]) => {
     this.updateAllPositions(links)
     this.updateAllColors(links)
+    this.updateAllLabels(links)
   }
 
   /**
@@ -166,6 +174,8 @@ export class Links {
     if (numVertices !== dashGap.count) {
       dashGap.setArray(new Float32Array(numVertices * dashGap.itemSize))
     }
+
+    let labelsNeedUpdate = false
 
     const source = new THREE.Vector2()
     const target = new THREE.Vector2()
@@ -230,6 +240,17 @@ export class Links {
           dashGap.setX(vertexIndex, 0)
         }
       }
+
+      if (links[i].label) {
+        labelsNeedUpdate = true
+      }
+    }
+
+    if (labelsNeedUpdate) {
+      // For now, just updating all of the labels if any of the links even have a
+      // label. If we're moving the links, we need to move the labels too!
+      // TODO: don't update labels again if we just did (e.g. inside this.updateAll)
+      this.updateAllLabels(links)
     }
 
     position.needsUpdate = true
@@ -268,5 +289,9 @@ export class Links {
     }
 
     color.needsUpdate = true
+  }
+
+  public updateAllLabels = (links: PopulatedGraphVizLink[]) => {
+    this.labels.updateAll(links)
   }
 }
