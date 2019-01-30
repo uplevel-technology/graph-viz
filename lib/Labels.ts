@@ -39,7 +39,8 @@ export class Labels {
 
       mesh.rotation.z = Math.atan2(dy, dx)
 
-      mesh.scale.x = Math.sqrt(dx * dx + dy * dy) / 2
+      const linkLength = Math.sqrt(dx * dx + dy * dy)
+      mesh.scale.x = Math.max(0, linkLength - 20)
       mesh.scale.y = 10
     })
   }
