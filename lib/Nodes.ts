@@ -28,9 +28,19 @@ export interface GraphVizNode {
   fill?: number | string
 
   /**
+   * the absolute side in pixels of the bounding square container of the node
+   * (default is 20 pixels)
+   */
+  absoluteSize?: number
+
+  /**
    * The node's container's scale factor (default is 1.0)
    */
   scale?: number
+
+  /**
+   * TODO: Support innerRadius configuration as needed
+   */
 
   /**
    * node strike color hex string or hex number
@@ -52,6 +62,7 @@ export interface GraphVizNode {
 /**
  * Reusable constants
  */
+const DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE = 20
 export const DEFAULT_NODE_FILL = 0x333333
 export const DEFAULT_NODE_SCALE = 1.0
 export const DEFAULT_NODE_STROKE_WIDTH = 0.03
@@ -70,6 +81,7 @@ export class Nodes {
     const numNodes = size(nodes)
     this.geometry = new THREE.BufferGeometry()
     this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
+    this.geometry.addAttribute('absoluteSize', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
     this.geometry.addAttribute('scale', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
     this.geometry.addAttribute('fill', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
     this.geometry.addAttribute('stroke', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
@@ -113,36 +125,38 @@ export class Nodes {
    */
   public updateOne = (index: number, node: GraphVizNode) => {
     const position = this.geometry.getAttribute('position') as THREE.BufferAttribute
+    const absoluteSize = this.geometry.getAttribute('absoluteSize') as THREE.BufferAttribute
     const scale = this.geometry.getAttribute('scale') as THREE.BufferAttribute
     const fill = this.geometry.getAttribute('fill') as THREE.BufferAttribute
     const stroke = this.geometry.getAttribute('stroke') as THREE.BufferAttribute
     const strokeWidth = this.geometry.getAttribute('strokeWidth') as THREE.BufferAttribute
     const strokeOpacity = this.geometry.getAttribute('strokeOpacity') as THREE.BufferAttribute
 
-
     position.setXYZ(index, node.x, node.y, 0)
+    position.needsUpdate = true
+
+    absoluteSize.setX(index, defaultTo(node.absoluteSize, DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE))
+    absoluteSize.needsUpdate = true
+
     scale.setX(index, defaultTo(node.scale, DEFAULT_NODE_SCALE))
+    scale.needsUpdate = true
 
     const color = new THREE.Color()
     color.set(defaultTo(node.fill, DEFAULT_NODE_FILL) as string)
     fill.setXYZ(index, color.r, color.g, color.b)
+    fill.needsUpdate = true
 
     if (node.stroke) {
       color.set(node.stroke as string)
     }
     stroke.setXYZ(index, color.r, color.g, color.b)
+    stroke.needsUpdate = true
 
     strokeWidth.setX(index, defaultTo(node.strokeWidth, DEFAULT_NODE_STROKE_WIDTH))
-    strokeOpacity.setX(index, defaultTo(node.strokeOpacity, DEFAULT_NODE_STROKE_OPACITY))
-
-
-    position.needsUpdate = true
-    scale.needsUpdate = true
-    fill.needsUpdate = true
-    stroke.needsUpdate = true
     strokeWidth.needsUpdate = true
-    strokeOpacity.needsUpdate = true
 
+    strokeOpacity.setX(index, defaultTo(node.strokeOpacity, DEFAULT_NODE_STROKE_OPACITY))
+    strokeOpacity.needsUpdate = true
   }
 
   /**
@@ -151,6 +165,7 @@ export class Nodes {
    */
   public updateAll = (nodes: GraphVizNode[]) => {
     this.updateAllPositions(nodes)
+    this.updateAllAbsoluteSizes(nodes)
     this.updateAllScales(nodes)
     this.updateAllFills(nodes)
     this.updateAllStrokes(nodes)
@@ -177,6 +192,25 @@ export class Nodes {
     position.needsUpdate = true
 
     this.geometry.computeBoundingSphere()
+  }
+
+  /**
+   * update absoluteSize attributes of all nodes
+   * @param nodes
+   */
+  public updateAllAbsoluteSizes = (nodes: GraphVizNode[]) => {
+    const absoluteSize = this.geometry.getAttribute('absoluteSize') as THREE.BufferAttribute
+
+    const numNodes = size(nodes)
+    if (numNodes !== absoluteSize.count) {
+      absoluteSize.setArray(new Float32Array(absoluteSize.itemSize * numNodes))
+    }
+
+    for (let i = 0; i < numNodes; i++) {
+      absoluteSize.setX(i, nodes[i].absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE)
+    }
+
+    absoluteSize.needsUpdate = true
   }
 
   /**
