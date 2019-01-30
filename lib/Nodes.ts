@@ -34,13 +34,16 @@ export interface GraphVizNode {
   absoluteSize?: number
 
   /**
-   * The node's container's scale factor (default is 1.0)
+   * node container's scale factor
+   * (default is 1.0)
    */
   scale?: number
 
   /**
-   * TODO: Support innerRadius configuration as needed
+   * inner radius of the node circle relative to the absolute container size
+   * (must be between 0.0 to 1.0). (default is 0.2)
    */
+  innerRadius?: number
 
   /**
    * node strike color hex string or hex number
@@ -48,7 +51,8 @@ export interface GraphVizNode {
   stroke?: number | string
 
   /**
-   * relative node stroke opacity (must be between 0.0 to 1.0)
+   * relative node stroke opacity
+   * (must be between 0.0 to 1.0)
    */
   strokeOpacity?: number
 
@@ -60,9 +64,10 @@ export interface GraphVizNode {
 }
 
 /**
- * Reusable constants
+ * Constants
  */
 const DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE = 20
+export const DEFAULT_NODE_INNER_RADIUS = 0.2
 export const DEFAULT_NODE_FILL = 0x333333
 export const DEFAULT_NODE_SCALE = 1.0
 export const DEFAULT_NODE_STROKE_WIDTH = 0.03
@@ -83,6 +88,7 @@ export class Nodes {
     this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
     this.geometry.addAttribute('absoluteSize', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
     this.geometry.addAttribute('scale', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
+    this.geometry.addAttribute('innerRadius', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
     this.geometry.addAttribute('fill', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
     this.geometry.addAttribute('stroke', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
     this.geometry.addAttribute('strokeWidth', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
@@ -127,6 +133,7 @@ export class Nodes {
     const position = this.geometry.getAttribute('position') as THREE.BufferAttribute
     const absoluteSize = this.geometry.getAttribute('absoluteSize') as THREE.BufferAttribute
     const scale = this.geometry.getAttribute('scale') as THREE.BufferAttribute
+    const innerRadius = this.geometry.getAttribute('innerRadius') as THREE.BufferAttribute
     const fill = this.geometry.getAttribute('fill') as THREE.BufferAttribute
     const stroke = this.geometry.getAttribute('stroke') as THREE.BufferAttribute
     const strokeWidth = this.geometry.getAttribute('strokeWidth') as THREE.BufferAttribute
@@ -140,6 +147,9 @@ export class Nodes {
 
     scale.setX(index, defaultTo(node.scale, DEFAULT_NODE_SCALE))
     scale.needsUpdate = true
+
+    innerRadius.setX(index, defaultTo(node.innerRadius, DEFAULT_NODE_INNER_RADIUS))
+    innerRadius.needsUpdate = true
 
     const color = new THREE.Color()
     color.set(defaultTo(node.fill, DEFAULT_NODE_FILL) as string)
@@ -167,6 +177,7 @@ export class Nodes {
     this.updateAllPositions(nodes)
     this.updateAllAbsoluteSizes(nodes)
     this.updateAllScales(nodes)
+    this.updateAllInnerRadii(nodes)
     this.updateAllFills(nodes)
     this.updateAllStrokes(nodes)
     this.updateAllStrokeWidths(nodes)
@@ -230,6 +241,25 @@ export class Nodes {
     }
 
     scale.needsUpdate = true
+  }
+
+  /**
+   * update innerRadius attributes of all nodes
+   * @param nodes
+   */
+  public updateAllInnerRadii = (nodes: GraphVizNode[]) => {
+    const innerRadius = this.geometry.getAttribute('innerRadius') as THREE.BufferAttribute
+
+    const numNodes = size(nodes)
+    if (numNodes !== innerRadius.count) {
+      innerRadius.setArray(new Float32Array(innerRadius.itemSize * numNodes))
+    }
+
+    for (let i = 0; i < numNodes; i++) {
+      innerRadius.setX(i, nodes[i].innerRadius || DEFAULT_NODE_INNER_RADIUS)
+    }
+
+    innerRadius.needsUpdate = true
   }
 
   /**
