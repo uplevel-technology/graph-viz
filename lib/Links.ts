@@ -1,6 +1,11 @@
 import * as THREE from 'three'
 import { GraphVizData } from './GraphVisualization'
-import { GraphVizNode } from './Nodes'
+import {
+  DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE,
+  DEFAULT_NODE_INNER_RADIUS,
+  DEFAULT_NODE_SCALE,
+  GraphVizNode,
+} from './Nodes'
 import fragmentShader from './shaders/links.fragment.glsl'
 import vertexShader from './shaders/links.vertex.glsl'
 import { defaultTo } from 'lodash'
@@ -10,11 +15,11 @@ const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
 /**
  * Constants
  */
-const DEFAULT_LINK_COLOR = 0xbbbbbb
-const DEFAULT_LINK_WIDTH = 0.5
-const HIGHLIGHTED_LINK_COLOR = 0x333333
-const DEFAULT_ARROW_WIDTH = 10
-const DEFAULT_ARROW_OFFSET = 5.0
+export const DEFAULT_LINK_COLOR = 0xbbbbbb
+export const DEFAULT_LINK_WIDTH = 0.5 // in absolute pixels. this is a subpixel default
+export const HIGHLIGHTED_LINK_COLOR = 0x333333
+export const DEFAULT_ARROW_WIDTH = 10
+export const LARGE_ARROW_WIDTH = 20
 
 interface LinkStyleAttributes {
   /**
@@ -33,7 +38,7 @@ interface LinkStyleAttributes {
   color?: string | number
 
   /**
-   * arrow width for directed links
+   * arrow width in pixels
    */
   arrowWidth?: number
 }
@@ -57,6 +62,13 @@ export function getPopulatedGraphLinks(
     source: graphData.nodes[nodeIdToIdxMap[link.source]],
     target: graphData.nodes[nodeIdToIdxMap[link.target]],
   }))
+}
+
+const calculateAbsoluteArrowOffset = (link: PopulatedGraphVizLink): number => {
+  const relativePadding = 0.05 // space between arrow tip and edge of node border
+  const outerRadius = defaultTo(link.target.innerRadius, DEFAULT_NODE_INNER_RADIUS) + defaultTo(link.target.strokeWidth, 0)
+  const absoluteContainerSize = defaultTo(link.target.absoluteSize, DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) * defaultTo(link.target.scale, DEFAULT_NODE_SCALE)
+  return (outerRadius + relativePadding) * absoluteContainerSize
 }
 
 export class Links {
@@ -204,7 +216,7 @@ export class Links {
 
         if (links[i].directed) {
           arrowWidth.setX(vertexIndex, links[i].arrowWidth || DEFAULT_ARROW_WIDTH)
-          arrowOffset.setX(vertexIndex, links[i].source.absoluteSize || DEFAULT_ARROW_OFFSET)
+          arrowOffset.setX(vertexIndex, calculateAbsoluteArrowOffset(links[i]))
         } else {
           arrowWidth.setX(vertexIndex, 0)
           arrowOffset.setX(vertexIndex, 0)

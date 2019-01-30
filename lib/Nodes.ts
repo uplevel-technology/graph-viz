@@ -66,7 +66,7 @@ export interface GraphVizNode {
 /**
  * Constants
  */
-const DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE = 20
+export const DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE = 20
 export const DEFAULT_NODE_INNER_RADIUS = 0.2
 export const DEFAULT_NODE_FILL = 0x333333
 export const DEFAULT_NODE_SCALE = 1.0
