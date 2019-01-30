@@ -15,8 +15,8 @@ const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
 /**
  * Constants
  */
-export const DEFAULT_LINK_COLOR = 0xbbbbbb
-export const DEFAULT_LINK_WIDTH = 0.5 // in absolute pixels. this is a subpixel default
+export const DEFAULT_LINK_COLOR = 0xcccccc
+export const DEFAULT_LINK_WIDTH = 1
 export const HIGHLIGHTED_LINK_COLOR = 0x333333
 export const DEFAULT_ARROW_WIDTH = 10
 export const LARGE_ARROW_WIDTH = 20
