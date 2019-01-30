@@ -24,7 +24,7 @@ export class Labels {
 
       if (!mesh) {
         mesh = new THREE.Mesh(
-          new THREE.PlaneBufferGeometry(20, 10),
+          new THREE.PlaneBufferGeometry(1, 1),
           new THREE.MeshBasicMaterial({color: 0xFF00FF}),
         )
         this.meshes[index] = mesh
@@ -34,10 +34,13 @@ export class Labels {
       mesh.position.x = (link.source.x + link.target.x) / 2
       mesh.position.y = (link.source.y + link.target.y) / 2
 
-      mesh.rotation.z = Math.atan2(
-        link.target.y - link.source.y,
-        link.target.x - link.source.x,
-      )
+      const dx = link.target.x - link.source.x
+      const dy = link.target.y - link.source.y
+
+      mesh.rotation.z = Math.atan2(dy, dx)
+
+      mesh.scale.x = Math.sqrt(dx * dx + dy * dy) / 2
+      mesh.scale.y = 10
     })
   }
 }
