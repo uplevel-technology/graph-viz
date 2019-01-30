@@ -41,6 +41,8 @@ interface LinkStyleAttributes {
    * arrow width in pixels
    */
   arrowWidth?: number
+
+  label?: string
 }
 
 export interface GraphVizLink extends LinkStyleAttributes {
