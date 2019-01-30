@@ -33,6 +33,11 @@ export class Labels {
 
       mesh.position.x = (link.source.x + link.target.x) / 2
       mesh.position.y = (link.source.y + link.target.y) / 2
+
+      mesh.rotation.z = Math.atan2(
+        link.target.y - link.source.y,
+        link.target.x - link.source.x,
+      )
     })
   }
 }
