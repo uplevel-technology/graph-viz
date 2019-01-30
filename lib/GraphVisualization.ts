@@ -146,6 +146,21 @@ export class GraphVisualization {
     this.renderer.render(this.scene, this.camera)
   }
 
+  /**
+   * update or redraw all attributes of nodes and links
+   * adds/removes new/deleted nodes
+   * @param graphData
+   */
+  public update = (graphData: GraphVizData) => {
+    this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
+    this.nodesMesh.updateAll(graphData.nodes)
+    this.linksMesh.updateAll(getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap))
+  }
+
+  /**
+   * update only the position attributes of existing nodes and links
+   * @param updatedGraphData
+   */
   public updatePositions = (updatedGraphData: GraphVizData) => window.requestAnimationFrame(() => {
     // This function assumes the updatedGraphData hasn't changed in size or order and only the position attributes
     // have changed within each node datum.
@@ -159,12 +174,55 @@ export class GraphVisualization {
     this.render()
   })
 
-  public updateNode = (index: number, node: GraphVizNode) => {
-    this.nodesMesh.updateOne(index, node)
+  /**
+   * update all the attributes of a single node at a given index
+   * @param index
+   * @param updatedNode
+   */
+  public updateNode = (index: number, updatedNode: GraphVizNode) => {
+    this.nodesMesh.updateOne(index, updatedNode)
     this.render()
   }
 
-  public zoomToFit = (graphData: GraphVizData) => {
+  /**
+   * converts a world space coordinate to screen space
+   * @param worldX
+   * @param worldY
+   */
+  public toScreenSpacePoint = (worldX: number = 0, worldY: number = 0): THREE.Vector3 => {
+    const pos = new THREE.Vector3(worldX, worldY, 0)
+    pos.project(this.camera)
+
+    return new THREE.Vector3(
+      THREE.Math.mapLinear(pos.x, -1, 1, 0, this.width),
+      THREE.Math.mapLinear(pos.y, 1, -1, 0, this.height),
+      0,
+    )
+  }
+
+  /**
+   * public method to zoom the graph
+   * @param factor
+   */
+  public zoom = (factor: number = 0) => {
+    this.userHasAdjustedViewport = true
+    this.camera.zoom += factor * this.camera.zoom
+    this.camera.updateProjectionMatrix()
+    this.nodesMesh.handleCameraZoom(this.camera.zoom)
+    this.linksMesh.handleCameraZoom(this.camera.zoom)
+    this.render()
+  }
+
+  /**
+   * disposes the graph viz context
+   */
+  public dispose() {
+    this.nodesMesh.dispose()
+    this.linksMesh.dispose()
+    this.renderer.dispose()
+  }
+
+  private zoomToFit = (graphData: GraphVizData) => {
     if (size(graphData.nodes) === 0) {
       // Don't try to do this if there are no nodes.
       return
@@ -200,45 +258,6 @@ export class GraphVisualization {
     this.camera.updateProjectionMatrix()
     this.nodesMesh.handleCameraZoom(this.camera.zoom)
     this.linksMesh.handleCameraZoom(this.camera.zoom)
-  }
-
-  public update = (graphData: GraphVizData) => {
-    this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
-    this.nodesMesh.updateAll(graphData.nodes)
-    this.linksMesh.updateAll(getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap))
-  }
-
-  // TODO: implement something like
-  public updateSingleNodeAttribute = (nodeIdx: number) => {
-    // this.nodesMesh.updateAll(this.graphData.nodes)
-    // TODO optimize and updateAll only one node:
-    // this.nodesMesh.updateNodeAt(nodeIdx)
-  }
-
-  public toScreenSpacePoint = (worldX: number = 0, worldY: number = 0): THREE.Vector3 => {
-    const pos = new THREE.Vector3(worldX, worldY, 0)
-    pos.project(this.camera)
-
-    return new THREE.Vector3(
-      THREE.Math.mapLinear(pos.x, -1, 1, 0, this.width),
-      THREE.Math.mapLinear(pos.y, 1, -1, 0, this.height),
-      0,
-    )
-  }
-
-  public zoom = (factor: number = 0) => {
-    this.userHasAdjustedViewport = true
-    this.camera.zoom += factor * this.camera.zoom
-    this.camera.updateProjectionMatrix()
-    this.nodesMesh.handleCameraZoom(this.camera.zoom)
-    this.linksMesh.handleCameraZoom(this.camera.zoom)
-    this.render()
-  }
-
-  public dispose() {
-    this.nodesMesh.dispose()
-    this.linksMesh.dispose()
-    this.renderer.dispose()
   }
 
   private handleHoverIn = (hoveredToNodeIdx: number) => {
