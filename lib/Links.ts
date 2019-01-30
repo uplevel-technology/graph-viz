@@ -6,14 +6,15 @@ import vertexShader from './shaders/links.vertex.glsl'
 import { defaultTo } from 'lodash'
 
 const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
-// TODO: make arrowWidth an attribute so it can be customized per node instead of being derived from QuadWidth
-const QUAD_WIDTH = 15
 
 /**
  * Constants
  */
 const DEFAULT_LINK_COLOR = 0xbbbbbb
+const DEFAULT_LINK_WIDTH = 0.5
 const HIGHLIGHTED_LINK_COLOR = 0x333333
+const DEFAULT_ARROW_WIDTH = 10
+const DEFAULT_ARROW_OFFSET = 5.0
 
 interface LinkStyleAttributes {
   /**
@@ -30,6 +31,11 @@ interface LinkStyleAttributes {
    * hex color string or hex number
    */
   color?: string | number
+
+  /**
+   * arrow width for directed links
+   */
+  arrowWidth?: number
 }
 
 export interface GraphVizLink extends LinkStyleAttributes {
@@ -66,10 +72,11 @@ export class Links {
     this.geometry = new THREE.BufferGeometry()
     this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3))
     this.geometry.addAttribute('uv', new THREE.BufferAttribute(new Float32Array(numVertices * 2), 2))
+    this.geometry.addAttribute('quadWidth', new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1))
     this.geometry.addAttribute('quadLength', new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1))
-    this.geometry.addAttribute('linkOffset', new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1))
     this.geometry.addAttribute('color', new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3))
-    this.geometry.addAttribute('arrowHeight', new THREE.BufferAttribute((new Float32Array(numVertices * 1)), 1))
+    this.geometry.addAttribute('arrowWidth', new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1))
+    this.geometry.addAttribute('arrowOffset', new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1))
     this.geometry.addAttribute('dashGap', new THREE.BufferAttribute((new Float32Array(numVertices * 1)), 1))
 
     this.updateAll(links)
@@ -79,8 +86,7 @@ export class Links {
       fragmentShader,
       transparent: true,
       uniforms: {
-        quadWidth: {value: QUAD_WIDTH},
-        lineWidth: {value: 0.5},
+        lineWidth: {value: DEFAULT_LINK_WIDTH},
         globalScale: {value: window.devicePixelRatio}, // TODO: update this with camera zoom
       },
     })
@@ -116,8 +122,8 @@ export class Links {
     const position = this.geometry.getAttribute('position') as THREE.BufferAttribute
     const uv = this.geometry.getAttribute('uv') as THREE.BufferAttribute
     const quadLength = this.geometry.getAttribute('quadLength') as THREE.BufferAttribute
-    const linkOffset = this.geometry.getAttribute('linkOffset') as THREE.BufferAttribute
-    const arrowHeight = this.geometry.getAttribute('arrowHeight') as THREE.BufferAttribute
+    const arrowWidth = this.geometry.getAttribute('arrowWidth') as THREE.BufferAttribute
+    const arrowOffset = this.geometry.getAttribute('arrowOffset') as THREE.BufferAttribute
     const dashGap = this.geometry.getAttribute('dashGap') as THREE.BufferAttribute
 
     const numLinks = links.length
@@ -135,12 +141,12 @@ export class Links {
       quadLength.setArray(new Float32Array(numVertices * quadLength.itemSize))
     }
 
-    if (numVertices !== linkOffset.count) {
-      linkOffset.setArray(new Float32Array(numVertices * linkOffset.itemSize))
+    if (numVertices !== arrowWidth.count) {
+      arrowWidth.setArray(new Float32Array(numVertices * arrowWidth.itemSize))
     }
 
-    if (numVertices !== arrowHeight.count) {
-      arrowHeight.setArray(new Float32Array(numVertices * arrowHeight.itemSize))
+    if (numVertices !== arrowOffset.count) {
+      arrowOffset.setArray(new Float32Array(numVertices * arrowOffset.itemSize))
     }
 
     if (numVertices !== dashGap.count) {
@@ -158,8 +164,12 @@ export class Links {
 
       tangent.copy(target).sub(source)
 
+      const quadWidth = links[i].directed
+        ? Math.max(DEFAULT_LINK_WIDTH, links[i].arrowWidth || DEFAULT_ARROW_WIDTH)
+        : DEFAULT_LINK_WIDTH
+
       normal.set(-tangent.y, tangent.x) // rotate 90 degrees to make it normal to the link
-      normal.normalize().multiplyScalar(QUAD_WIDTH / 2)
+      normal.normalize().multiplyScalar(quadWidth / 2)
 
       const totalLength = tangent.length()
 
@@ -181,29 +191,23 @@ export class Links {
 
       // First triangle, in coordinates relative to the quad:
       uv.setXY(i * VERTICES_PER_QUAD + 0, 0, 0)
-      uv.setXY(i * VERTICES_PER_QUAD + 1, QUAD_WIDTH, 0)
+      uv.setXY(i * VERTICES_PER_QUAD + 1, quadWidth, 0)
       uv.setXY(i * VERTICES_PER_QUAD + 2, 0, totalLength)
       // Second triangle:
-      uv.setXY(i * VERTICES_PER_QUAD + 3, QUAD_WIDTH, totalLength)
+      uv.setXY(i * VERTICES_PER_QUAD + 3, quadWidth, totalLength)
       uv.setXY(i * VERTICES_PER_QUAD + 4, 0, totalLength)
-      uv.setXY(i * VERTICES_PER_QUAD + 5, QUAD_WIDTH, 0)
+      uv.setXY(i * VERTICES_PER_QUAD + 5, quadWidth, 0)
 
       // Repeat for all vertices of this quad:
       for (let vertexIndex = i * VERTICES_PER_QUAD; vertexIndex < (i + 1) * VERTICES_PER_QUAD; vertexIndex++) {
         quadLength.setX(vertexIndex, totalLength)
 
         if (links[i].directed) {
-          arrowHeight.setX(vertexIndex, QUAD_WIDTH / 2.0)
-
-          // FIXME:
-          // This is hardcoded right now:
-          // ((nodeInnerRadius=0.2)+(padding=0.04)) * (nodeSize=20.0)
-          // Instead we should pass passing 0.24 to the fragment shader and do this calculation within the shader
-          const offset = 0.24 * 20.0
-          linkOffset.setX(vertexIndex, offset)
+          arrowWidth.setX(vertexIndex, links[i].arrowWidth || DEFAULT_ARROW_WIDTH)
+          arrowOffset.setX(vertexIndex, links[i].source.absoluteSize || DEFAULT_ARROW_OFFSET)
         } else {
-          arrowHeight.setX(vertexIndex, 0)
-          linkOffset.setX(vertexIndex, 0)
+          arrowWidth.setX(vertexIndex, 0)
+          arrowOffset.setX(vertexIndex, 0)
         }
 
         if (links[i].dashed) {
@@ -217,8 +221,8 @@ export class Links {
     position.needsUpdate = true
     uv.needsUpdate = true
     quadLength.needsUpdate = true
-    linkOffset.needsUpdate = true
-    arrowHeight.needsUpdate = true
+    arrowWidth.needsUpdate = true
+    arrowOffset.needsUpdate = true
     dashGap.needsUpdate = true
 
     this.geometry.computeBoundingSphere()

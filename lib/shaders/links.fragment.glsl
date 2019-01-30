@@ -2,12 +2,11 @@
 
 varying vec2 vUV;
 varying float vQuadLength;
-varying float vLinkOffset;
 varying vec3 vColor;
-varying float vArrowHeight;
+varying float vArrowWidth;
+varying float vArrowOffset;
 varying float vDashGap;
 
-uniform float quadWidth;
 uniform float lineWidth;
 uniform float globalScale;
 
@@ -21,14 +20,16 @@ float map(float value, float inMin, float inMax, float outMin, float outMax) {
 }
 
 void main() {
+  float quadWidth = max(vArrowWidth, lineWidth);
+  float arrowHeight = vArrowWidth / 3.0;
   vec2 arrowTip = vec2(
     quadWidth / 2.0,
-    vQuadLength - vLinkOffset
+    vQuadLength - vArrowOffset
   );
-  vec2 arrowBase = arrowTip - vec2(0.0, vArrowHeight);
+  vec2 arrowBase = arrowTip - vec2(0.0, arrowHeight);
 
   // Configure the arrowhead's "aspect ratio" here:
-  float arrowWidth = vArrowHeight * 1.5;
+  float arrowWidth = arrowHeight * 1.5;
 
   float xFromCenter = abs(vUV.x - arrowTip.x);
   float lineMask = 1.0 - aaStep(lineWidth / 2.0, xFromCenter);

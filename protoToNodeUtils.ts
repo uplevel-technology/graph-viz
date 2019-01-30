@@ -141,6 +141,7 @@ export const eventsToVizData = (events: Event[]): {
       links.push({
         source: eventNode.id!,
         target: from.id!,
+        directed: true,
       })
       links.push({
         source: eventNode.id!,
