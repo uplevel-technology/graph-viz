@@ -1,7 +1,7 @@
-import { size } from 'lodash'
+import {size} from 'lodash'
 import * as THREE from 'three'
-import { Vector3 } from 'three'
-import { getPopulatedGraphLinks, GraphVizLink, Links } from './Links'
+import {Vector3} from 'three'
+import {getPopulatedGraphLinks, GraphVizLink, Links} from './Links'
 import {
   ClickEventHandler,
   DragEndEventHandler,
@@ -12,7 +12,7 @@ import {
   PanEventHandler,
   ZoomEventHandler,
 } from './MouseInteraction'
-import { GraphVizNode, Nodes } from './Nodes'
+import {GraphVizNode, Nodes} from './Nodes'
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
@@ -42,14 +42,14 @@ export class GraphVisualization {
   private userHasAdjustedViewport: boolean
 
   private registeredEventHandlers: {
-    click?: ClickEventHandler,
-    nodeHoverIn?: HoverEventHandler,
-    nodeHoverOut?: HoverEventHandler,
-    dragStart?: DragStartEventHandler,
-    dragEnd?: DragEndEventHandler,
-    nodeDrag?: NodeDragEventHandler,
-    pan?: PanEventHandler,
-    zoom?: ZoomEventHandler,
+    click?: ClickEventHandler
+    nodeHoverIn?: HoverEventHandler
+    nodeHoverOut?: HoverEventHandler
+    dragStart?: DragStartEventHandler
+    dragEnd?: DragEndEventHandler
+    nodeDrag?: NodeDragEventHandler
+    pan?: PanEventHandler
+    zoom?: ZoomEventHandler
   } = {}
 
   private readonly scene: THREE.Scene
@@ -72,7 +72,14 @@ export class GraphVisualization {
 
     // init Scene and Camera
     this.scene = new THREE.Scene()
-    this.camera = new THREE.OrthographicCamera(width * -0.5, width * 0.5, height * 0.5, height * -0.5, 1, 10000)
+    this.camera = new THREE.OrthographicCamera(
+      width * -0.5,
+      width * 0.5,
+      height * 0.5,
+      height * -0.5,
+      1,
+      10000,
+    )
 
     // setup basic looks
     this.scene.add(this.camera)
@@ -91,7 +98,9 @@ export class GraphVisualization {
     this.renderer.setSize(width, height)
 
     this.nodesMesh = new Nodes(graphData.nodes)
-    this.linksMesh = new Links(getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap))
+    this.linksMesh = new Links(
+      getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
+    )
 
     this.scene.add(this.linksMesh.object)
     this.nodesMesh.object.position.z = 3
@@ -99,7 +108,11 @@ export class GraphVisualization {
 
     this.render()
 
-    this.mouseInteraction = new MouseInteraction(this.canvas, this.camera, this.nodesMesh)
+    this.mouseInteraction = new MouseInteraction(
+      this.canvas,
+      this.camera,
+      this.nodesMesh,
+    )
     this.mouseInteraction.onClick(this.handleClick)
     this.mouseInteraction.onNodeHoverIn(this.handleHoverIn)
     this.mouseInteraction.onNodeHoverOut(this.handleHoverOut)
@@ -154,25 +167,30 @@ export class GraphVisualization {
   public update = (graphData: GraphVizData) => {
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
     this.nodesMesh.updateAll(graphData.nodes)
-    this.linksMesh.updateAll(getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap))
+    this.linksMesh.updateAll(
+      getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
+    )
   }
 
   /**
    * update only the position attributes of existing nodes and links
    * @param updatedGraphData
    */
-  public updatePositions = (updatedGraphData: GraphVizData) => window.requestAnimationFrame(() => {
-    // This function assumes the updatedGraphData hasn't changed in size or order and only the position attributes
-    // have changed within each node datum.
-    // Which should mean this.nodeIdToIndexMap is up to date
-    this.nodesMesh.updateAllPositions(updatedGraphData.nodes)
-    this.linksMesh.updateAllPositions(getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap))
+  public updatePositions = (updatedGraphData: GraphVizData) =>
+    window.requestAnimationFrame(() => {
+      // This function assumes the updatedGraphData hasn't changed in size or order and only the position attributes
+      // have changed within each node datum.
+      // Which should mean this.nodeIdToIndexMap is up to date
+      this.nodesMesh.updateAllPositions(updatedGraphData.nodes)
+      this.linksMesh.updateAllPositions(
+        getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap),
+      )
 
-    if (!this.userHasAdjustedViewport) {
-      this.zoomToFit(updatedGraphData)
-    }
-    this.render()
-  })
+      if (!this.userHasAdjustedViewport) {
+        this.zoomToFit(updatedGraphData)
+      }
+      this.render()
+    })
 
   /**
    * update all the attributes of a single node at a given index
@@ -189,7 +207,10 @@ export class GraphVisualization {
    * @param worldX
    * @param worldY
    */
-  public toScreenSpacePoint = (worldX: number = 0, worldY: number = 0): THREE.Vector3 => {
+  public toScreenSpacePoint = (
+    worldX: number = 0,
+    worldY: number = 0,
+  ): THREE.Vector3 => {
     const pos = new THREE.Vector3(worldX, worldY, 0)
     pos.project(this.camera)
 
@@ -236,7 +257,10 @@ export class GraphVisualization {
     this.camera.position.x = center.x
     this.camera.position.y = center.y
 
-    let visibleBox = new THREE.Box3(new THREE.Vector3(-1, -1, 0), new THREE.Vector3(1, 1, 0))
+    let visibleBox = new THREE.Box3(
+      new THREE.Vector3(-1, -1, 0),
+      new THREE.Vector3(1, 1, 0),
+    )
     // Translate from "normalized device coordinates" to "world space" (the same
     // coordinate space as boundingBox):
     visibleBox.min.unproject(this.camera)
@@ -253,8 +277,13 @@ export class GraphVisualization {
     }
 
     const maxZoom = 2.0
-    const scale = visibleBox.getSize(new THREE.Vector3()).divide(boundingBox.getSize(new THREE.Vector3()))
-    this.camera.zoom = Math.min(maxZoom, this.camera.zoom * Math.min(scale.x, scale.y))
+    const scale = visibleBox
+      .getSize(new THREE.Vector3())
+      .divide(boundingBox.getSize(new THREE.Vector3()))
+    this.camera.zoom = Math.min(
+      maxZoom,
+      this.camera.zoom * Math.min(scale.x, scale.y),
+    )
     this.camera.updateProjectionMatrix()
     this.nodesMesh.handleCameraZoom(this.camera.zoom)
     this.linksMesh.handleCameraZoom(this.camera.zoom)
@@ -276,7 +305,10 @@ export class GraphVisualization {
     this.render()
   }
 
-  private handleDragStart = (worldSpaceMouse: THREE.Vector3, draggedNodeIdx: number | null) => {
+  private handleDragStart = (
+    worldSpaceMouse: THREE.Vector3,
+    draggedNodeIdx: number | null,
+  ) => {
     this.userHasAdjustedViewport = true
     if (this.registeredEventHandlers.dragStart) {
       this.registeredEventHandlers.dragStart(worldSpaceMouse, draggedNodeIdx)
@@ -284,7 +316,10 @@ export class GraphVisualization {
     this.render() // <- this is probably not needed
   }
 
-  private handleNodeDrag = (worldSpaceMouse: THREE.Vector3, draggedNodeIdx: number) => {
+  private handleNodeDrag = (
+    worldSpaceMouse: THREE.Vector3,
+    draggedNodeIdx: number,
+  ) => {
     if (this.registeredEventHandlers.nodeDrag) {
       this.registeredEventHandlers.nodeDrag(worldSpaceMouse, draggedNodeIdx)
     }
@@ -301,8 +336,14 @@ export class GraphVisualization {
     const rect = this.canvas.getBoundingClientRect()
     panDelta.multiplyScalar(PAN_SPEED)
 
-    this.camera.position.x -= panDelta.x * (this.camera.right - this.camera.left) / this.camera.zoom / rect.width
-    this.camera.position.y += panDelta.y * (this.camera.top - this.camera.bottom) / this.camera.zoom / rect.height
+    this.camera.position.x -=
+      (panDelta.x * (this.camera.right - this.camera.left)) /
+      this.camera.zoom /
+      rect.width
+    this.camera.position.y +=
+      (panDelta.y * (this.camera.top - this.camera.bottom)) /
+      this.camera.zoom /
+      rect.height
     this.camera.updateProjectionMatrix()
 
     this.userHasAdjustedViewport = true
@@ -329,7 +370,10 @@ export class GraphVisualization {
     this.render()
   }
 
-  private handleClick = (worldSpaceMouse: THREE.Vector3, clickedNodeIdx: number | null) => {
+  private handleClick = (
+    worldSpaceMouse: THREE.Vector3,
+    clickedNodeIdx: number | null,
+  ) => {
     if (clickedNodeIdx === null || !this.registeredEventHandlers.click) {
       return
     }

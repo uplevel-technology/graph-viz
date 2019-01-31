@@ -1,6 +1,6 @@
 // @flow
 
-import { defaultTo, size } from 'lodash'
+import {defaultTo, size} from 'lodash'
 import * as THREE from 'three'
 import fragmentShader from './shaders/nodes.fragment.glsl'
 import vertexShader from './shaders/nodes.vertex.glsl'
@@ -85,14 +85,38 @@ export class Nodes {
   constructor(nodes: GraphVizNode[]) {
     const numNodes = size(nodes)
     this.geometry = new THREE.BufferGeometry()
-    this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
-    this.geometry.addAttribute('absoluteSize', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
-    this.geometry.addAttribute('scale', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
-    this.geometry.addAttribute('innerRadius', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
-    this.geometry.addAttribute('fill', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
-    this.geometry.addAttribute('stroke', new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3))
-    this.geometry.addAttribute('strokeWidth', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
-    this.geometry.addAttribute('strokeOpacity', new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1))
+    this.geometry.addAttribute(
+      'position',
+      new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3),
+    )
+    this.geometry.addAttribute(
+      'absoluteSize',
+      new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1),
+    )
+    this.geometry.addAttribute(
+      'scale',
+      new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1),
+    )
+    this.geometry.addAttribute(
+      'innerRadius',
+      new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1),
+    )
+    this.geometry.addAttribute(
+      'fill',
+      new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3),
+    )
+    this.geometry.addAttribute(
+      'stroke',
+      new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3),
+    )
+    this.geometry.addAttribute(
+      'strokeWidth',
+      new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1),
+    )
+    this.geometry.addAttribute(
+      'strokeOpacity',
+      new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1),
+    )
 
     this.updateAll(nodes)
 
@@ -130,25 +154,41 @@ export class Nodes {
    * @param node
    */
   public updateOne = (index: number, node: GraphVizNode) => {
-    const position = this.geometry.getAttribute('position') as THREE.BufferAttribute
-    const absoluteSize = this.geometry.getAttribute('absoluteSize') as THREE.BufferAttribute
+    const position = this.geometry.getAttribute(
+      'position',
+    ) as THREE.BufferAttribute
+    const absoluteSize = this.geometry.getAttribute(
+      'absoluteSize',
+    ) as THREE.BufferAttribute
     const scale = this.geometry.getAttribute('scale') as THREE.BufferAttribute
-    const innerRadius = this.geometry.getAttribute('innerRadius') as THREE.BufferAttribute
+    const innerRadius = this.geometry.getAttribute(
+      'innerRadius',
+    ) as THREE.BufferAttribute
     const fill = this.geometry.getAttribute('fill') as THREE.BufferAttribute
     const stroke = this.geometry.getAttribute('stroke') as THREE.BufferAttribute
-    const strokeWidth = this.geometry.getAttribute('strokeWidth') as THREE.BufferAttribute
-    const strokeOpacity = this.geometry.getAttribute('strokeOpacity') as THREE.BufferAttribute
+    const strokeWidth = this.geometry.getAttribute(
+      'strokeWidth',
+    ) as THREE.BufferAttribute
+    const strokeOpacity = this.geometry.getAttribute(
+      'strokeOpacity',
+    ) as THREE.BufferAttribute
 
     position.setXYZ(index, node.x, node.y, 0)
     position.needsUpdate = true
 
-    absoluteSize.setX(index, defaultTo(node.absoluteSize, DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE))
+    absoluteSize.setX(
+      index,
+      defaultTo(node.absoluteSize, DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE),
+    )
     absoluteSize.needsUpdate = true
 
     scale.setX(index, defaultTo(node.scale, DEFAULT_NODE_SCALE))
     scale.needsUpdate = true
 
-    innerRadius.setX(index, defaultTo(node.innerRadius, DEFAULT_NODE_INNER_RADIUS))
+    innerRadius.setX(
+      index,
+      defaultTo(node.innerRadius, DEFAULT_NODE_INNER_RADIUS),
+    )
     innerRadius.needsUpdate = true
 
     const color = new THREE.Color()
@@ -162,10 +202,16 @@ export class Nodes {
     stroke.setXYZ(index, color.r, color.g, color.b)
     stroke.needsUpdate = true
 
-    strokeWidth.setX(index, defaultTo(node.strokeWidth, DEFAULT_NODE_STROKE_WIDTH))
+    strokeWidth.setX(
+      index,
+      defaultTo(node.strokeWidth, DEFAULT_NODE_STROKE_WIDTH),
+    )
     strokeWidth.needsUpdate = true
 
-    strokeOpacity.setX(index, defaultTo(node.strokeOpacity, DEFAULT_NODE_STROKE_OPACITY))
+    strokeOpacity.setX(
+      index,
+      defaultTo(node.strokeOpacity, DEFAULT_NODE_STROKE_OPACITY),
+    )
     strokeOpacity.needsUpdate = true
   }
 
@@ -189,7 +235,9 @@ export class Nodes {
    * @param nodes
    */
   public updateAllPositions = (nodes: GraphVizNode[]) => {
-    const position = this.geometry.getAttribute('position') as THREE.BufferAttribute
+    const position = this.geometry.getAttribute(
+      'position',
+    ) as THREE.BufferAttribute
 
     const numNodes = size(nodes)
     if (numNodes !== position.count) {
@@ -210,7 +258,9 @@ export class Nodes {
    * @param nodes
    */
   public updateAllAbsoluteSizes = (nodes: GraphVizNode[]) => {
-    const absoluteSize = this.geometry.getAttribute('absoluteSize') as THREE.BufferAttribute
+    const absoluteSize = this.geometry.getAttribute(
+      'absoluteSize',
+    ) as THREE.BufferAttribute
 
     const numNodes = size(nodes)
     if (numNodes !== absoluteSize.count) {
@@ -218,7 +268,10 @@ export class Nodes {
     }
 
     for (let i = 0; i < numNodes; i++) {
-      absoluteSize.setX(i, nodes[i].absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE)
+      absoluteSize.setX(
+        i,
+        nodes[i].absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE,
+      )
     }
 
     absoluteSize.needsUpdate = true
@@ -248,7 +301,9 @@ export class Nodes {
    * @param nodes
    */
   public updateAllInnerRadii = (nodes: GraphVizNode[]) => {
-    const innerRadius = this.geometry.getAttribute('innerRadius') as THREE.BufferAttribute
+    const innerRadius = this.geometry.getAttribute(
+      'innerRadius',
+    ) as THREE.BufferAttribute
 
     const numNodes = size(nodes)
     if (numNodes !== innerRadius.count) {
@@ -309,7 +364,9 @@ export class Nodes {
    * @param nodes
    */
   public updateAllStrokeWidths = (nodes: GraphVizNode[]) => {
-    const strokeWidth = this.geometry.getAttribute('strokeWidth') as THREE.BufferAttribute
+    const strokeWidth = this.geometry.getAttribute(
+      'strokeWidth',
+    ) as THREE.BufferAttribute
 
     const numNodes = size(nodes)
     if (numNodes !== strokeWidth.count) {
@@ -319,7 +376,10 @@ export class Nodes {
     for (let i = 0; i < numNodes; i++) {
       // preserve stroke widths during data updates for locked nodes
       if (!this.lockedIds[i]) {
-        strokeWidth.setX(i, defaultTo(nodes[i].strokeWidth, DEFAULT_NODE_STROKE_WIDTH))
+        strokeWidth.setX(
+          i,
+          defaultTo(nodes[i].strokeWidth, DEFAULT_NODE_STROKE_WIDTH),
+        )
       }
     }
 
@@ -331,16 +391,23 @@ export class Nodes {
    * @param nodes
    */
   public updateAllStrokeOpacities = (nodes: GraphVizNode[]) => {
-    const strokeOpacity = this.geometry.getAttribute('strokeOpacity') as THREE.BufferAttribute
+    const strokeOpacity = this.geometry.getAttribute(
+      'strokeOpacity',
+    ) as THREE.BufferAttribute
 
     const numNodes = size(nodes)
     if (numNodes !== strokeOpacity.count) {
-      strokeOpacity.setArray(new Float32Array(strokeOpacity.itemSize * numNodes))
+      strokeOpacity.setArray(
+        new Float32Array(strokeOpacity.itemSize * numNodes),
+      )
     }
 
     for (let i = 0; i < numNodes; i++) {
       if (!this.lockedIds[i]) {
-        strokeOpacity.setX(i, defaultTo(nodes[i].strokeOpacity, DEFAULT_NODE_STROKE_OPACITY))
+        strokeOpacity.setX(
+          i,
+          defaultTo(nodes[i].strokeOpacity, DEFAULT_NODE_STROKE_OPACITY),
+        )
       }
     }
 
