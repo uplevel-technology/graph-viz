@@ -3,8 +3,8 @@ import { PopulatedGraphVizLink } from './Links'
 
 interface TextLabel {
   texture: THREE.Texture,
-  width: number,
-  height: number,
+  size: THREE.Vector2,
+  textSize: THREE.Vector2,
 }
 
 function buildTextLabel(text: string): TextLabel {
@@ -13,16 +13,18 @@ function buildTextLabel(text: string): TextLabel {
 
   const dpr = window.devicePixelRatio
 
-  const size = 12 * dpr
+  const fontSize = 8 * dpr
   // Font names copied from inspector.
   // TODO: get from theme?
-  context.font = `${size}px "Roboto", "Helvetica", "Arial", sans-serif`
+  const fontString = `${fontSize}px "Roboto", "Helvetica", "Arial", sans-serif`
 
   // Measure the text we're about to write, then set the size of the canvas to fit:
-  const width = context.measureText(text).width
+  context.font = fontString
+  const textWidth = context.measureText(text).width
+  const textHeight = fontSize * 1.5 // make this up, big enough to show descender
   // WebGL textures need to have power-of-two dimensions:
-  canvas.width = THREE.Math.ceilPowerOfTwo(width)
-  canvas.height = THREE.Math.ceilPowerOfTwo(size)
+  canvas.width = THREE.Math.ceilPowerOfTwo(textWidth)
+  canvas.height = THREE.Math.ceilPowerOfTwo(textHeight)
 
   // Gradient background for debugging:
   const gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height)
@@ -34,12 +36,12 @@ function buildTextLabel(text: string): TextLabel {
   // Now we can actually draw the text:
   context.fillStyle = 'black'
   context.textBaseline = 'bottom'
-  context.font = `${size}px "Roboto", "Helvetica", "Arial", sans-serif`
-  const verticalNudge = 1 // this makes it look right...
+  context.font = fontString // for some reason, we need to set this again
+  const verticalNudge = 1 // "fudge factor" that makes it look right...
   context.fillText(
     text,
-    (canvas.width - width) / 2, // center horizontally
-    (canvas.height + size) / 2 + verticalNudge, // center vertically (y is upside down)
+    (canvas.width - textWidth) / 2, // center horizontally
+    (canvas.height + fontSize) / 2 + verticalNudge, // center vertically (y is upside down)
   )
 
   const texture = new THREE.Texture(canvas)
@@ -48,9 +50,37 @@ function buildTextLabel(text: string): TextLabel {
   return {
     texture,
     // Size of the texture in world coordinates:
-    width: canvas.width / dpr,
-    height: canvas.height / dpr,
+    size: new THREE.Vector2(canvas.width / dpr, canvas.height / dpr),
+    // Because of the power-of-2 constraint, the actual text can be a different
+    // size:
+    textSize: new THREE.Vector2(textWidth / dpr, textHeight / dpr),
   }
+}
+
+function buildMaterial(textLabel: TextLabel): THREE.ShaderMaterial {
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      map: {value: textLabel.texture},
+      offset: {value: new THREE.Vector2(0, 0)},
+      repeat: {value: new THREE.Vector2(1, 1)},
+    },
+    vertexShader: `
+      uniform vec2 offset;
+      uniform vec2 repeat;
+      varying vec2 vUV;
+      void main() {
+        vUV = uv * repeat + offset;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      varying vec2 vUV;
+      uniform sampler2D map;
+      void main() {
+        gl_FragColor = texture2D(map, vUV);
+      }
+    `,
+  })
 }
 
 export class Labels {
@@ -87,10 +117,7 @@ export class Labels {
       if (!mesh) {
         mesh = new THREE.Mesh(
           new THREE.PlaneBufferGeometry(1, 1),
-          new THREE.MeshBasicMaterial({
-            // transparent: true,
-            map: textLabel.texture,
-          }),
+          buildMaterial(textLabel),
         )
         this.meshes[index] = mesh
         this.object.add(mesh)
@@ -115,10 +142,22 @@ export class Labels {
       }
 
       // The geometry is 1x1, so we set a scale transform to make it the right size:
-      const linkLength = Math.sqrt(dx * dx + dy * dy)
-      mesh.scale.x = Math.max(0, Math.min(linkLength - 20, textLabel.width))
-      mesh.scale.y = textLabel.height
-      // FIXME: don't stretch
+      mesh.scale.x = Math.max(1e-6, textLabel.textSize.x)
+      mesh.scale.y = textLabel.textSize.y
+
+      const material = mesh.material as THREE.ShaderMaterial
+      const offset = material.uniforms.offset.value as THREE.Vector2
+      const repeat = material.uniforms.repeat.value as THREE.Vector2
+
+      repeat.x = mesh.scale.x / textLabel.size.x
+      repeat.y = mesh.scale.y / textLabel.size.y
+      offset.x = (1 - repeat.x) / 2
+      offset.y = (1 - repeat.y) / 2
+
+      // TODO: plumb camera zoom through to here
+      const fakeCameraZoom = 2
+      mesh.scale.x /= fakeCameraZoom
+      mesh.scale.y /= fakeCameraZoom
     })
   }
 }
