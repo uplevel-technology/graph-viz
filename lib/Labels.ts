@@ -135,13 +135,14 @@ export class Labels {
       }
 
       // The geometry is 1x1, so we set a scale transform to make it the right size:
-      mesh.scale.x = Math.max(1e-6, textLabel.textSize.x)
+      mesh.scale.x = textLabel.textSize.x
       mesh.scale.y = textLabel.textSize.y
 
+      // Setting repeat and offset tells the shader how to draw only the part of
+      // the texture that includes the text, without stretching:
       const material = mesh.material as THREE.ShaderMaterial
       const offset = material.uniforms.offset.value as THREE.Vector2
       const repeat = material.uniforms.repeat.value as THREE.Vector2
-
       repeat.x = mesh.scale.x / textLabel.size.x
       repeat.y = mesh.scale.y / textLabel.size.y
       offset.x = (1 - repeat.x) / 2
