@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { PopulatedGraphVizLink } from './Links'
+import { UPLEVEL_BASE_THEME } from '../../theme'
 
 interface TextLabel {
   texture: THREE.Texture,
@@ -14,9 +15,7 @@ function buildTextLabel(text: string): TextLabel {
   const dpr = window.devicePixelRatio
 
   const fontSize = 8 * dpr
-  // Font names copied from inspector.
-  // TODO: get from theme?
-  const fontString = `${fontSize}px "Roboto", "Helvetica", "Arial", sans-serif`
+  const fontString = `${fontSize}px ${UPLEVEL_BASE_THEME.typography.fontFamily}`
 
   // Measure the text we're about to write, then set the size of the canvas to fit:
   context.font = fontString
