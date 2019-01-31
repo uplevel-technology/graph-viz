@@ -69,8 +69,12 @@ export function getPopulatedGraphLinks(
 
 const calculateAbsoluteArrowOffset = (link: PopulatedGraphVizLink): number => {
   const relativePadding = 0.05 // space between arrow tip and edge of node border
-  const outerRadius = defaultTo(link.target.innerRadius, DEFAULT_NODE_INNER_RADIUS) + defaultTo(link.target.strokeWidth, 0)
-  const absoluteContainerSize = defaultTo(link.target.absoluteSize, DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) * defaultTo(link.target.scale, DEFAULT_NODE_SCALE)
+  const outerRadius =
+    defaultTo(link.target.innerRadius, DEFAULT_NODE_INNER_RADIUS)
+      + defaultTo(link.target.strokeWidth, 0)
+  const absoluteContainerSize =
+    defaultTo(link.target.absoluteSize, DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE)
+      * defaultTo(link.target.scale, DEFAULT_NODE_SCALE)
   return (outerRadius + relativePadding) * absoluteContainerSize
 }
 
