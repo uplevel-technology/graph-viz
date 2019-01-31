@@ -1,6 +1,6 @@
-import { noop, orderBy } from 'lodash'
+import {noop, orderBy} from 'lodash'
 import * as THREE from 'three'
-import { Nodes } from './Nodes'
+import {Nodes} from './Nodes'
 
 const MAX_CLICK_DURATION = 300
 
@@ -12,12 +12,18 @@ export type HoverEventHandler = (hoveredIdx: number) => void
 /**
  * dispatched when the canvas is clicked. if a node click is detected the clickedNodeIdx will be non-null
  */
-export type ClickEventHandler = (worldSpaceMousePosition: THREE.Vector3, clickedNodeIdx: number|null) => void
+export type ClickEventHandler = (
+  worldSpaceMousePosition: THREE.Vector3,
+  clickedNodeIdx: number | null,
+) => void
 
 /**
  * dispatched when a mouse drag start is detected anywhere on the canvas
  */
-export type DragStartEventHandler = (worldSpaceMousePosition: THREE.Vector3, draggedNodeIdx: number|null) => void
+export type DragStartEventHandler = (
+  worldSpaceMousePosition: THREE.Vector3,
+  draggedNodeIdx: number | null,
+) => void
 
 /**
  * dispatched when a mouse drag end is detected anywhere on the canvas
@@ -28,7 +34,10 @@ export type DragEndEventHandler = () => void
  * dispatched when a mouse dragging event is detected after dragStart was dispatched with a non-null node
  * i.e. node was dragged
  */
-export type NodeDragEventHandler = (worldSpaceMousePosition: THREE.Vector3, draggedNodeIdx: number) => void
+export type NodeDragEventHandler = (
+  worldSpaceMousePosition: THREE.Vector3,
+  draggedNodeIdx: number,
+) => void
 
 /**
  * dispatched when a mouse dragging event is detected after dragStart was dispatched with a null node
@@ -43,18 +52,18 @@ export type ZoomEventHandler = (event: MouseWheelEvent) => void
 
 export class MouseInteraction {
   private nodes: Nodes
-  private intersectedPointIdx: number|null
+  private intersectedPointIdx: number | null
   private dragging: boolean
   private registerClick: boolean
   private registeredEventHandlers: {
-    click: ClickEventHandler,
-    nodeHoverIn: HoverEventHandler,
-    nodeHoverOut: HoverEventHandler,
-    dragStart: DragStartEventHandler,
-    dragEnd: DragEndEventHandler,
-    nodeDrag: NodeDragEventHandler,
-    pan: PanEventHandler,
-    zoom: ZoomEventHandler,
+    click: ClickEventHandler
+    nodeHoverIn: HoverEventHandler
+    nodeHoverOut: HoverEventHandler
+    dragStart: DragStartEventHandler
+    dragEnd: DragEndEventHandler
+    nodeDrag: NodeDragEventHandler
+    pan: PanEventHandler
+    zoom: ZoomEventHandler
   } = {
     click: noop,
     nodeHoverIn: noop,
@@ -74,7 +83,11 @@ export class MouseInteraction {
   private readonly mouse: THREE.Vector2
   private readonly raycaster: THREE.Raycaster
 
-  constructor(canvas: HTMLCanvasElement, camera: THREE.OrthographicCamera, nodes: Nodes) {
+  constructor(
+    canvas: HTMLCanvasElement,
+    camera: THREE.OrthographicCamera,
+    nodes: Nodes,
+  ) {
     this.canvas = canvas
     this.camera = camera
     this.nodes = nodes
@@ -139,7 +152,10 @@ export class MouseInteraction {
     }, MAX_CLICK_DURATION)
 
     this.panStart.set(event.clientX, event.clientY, 0)
-    this.registeredEventHandlers.dragStart(this.getMouseInWorldSpace(0), this.intersectedPointIdx)
+    this.registeredEventHandlers.dragStart(
+      this.getMouseInWorldSpace(0),
+      this.intersectedPointIdx,
+    )
   }
 
   private onMouseUp = (event: MouseEvent) => {
@@ -148,7 +164,10 @@ export class MouseInteraction {
     this.registeredEventHandlers.dragEnd()
 
     if (this.registerClick) {
-      this.registeredEventHandlers.click(this.getMouseInWorldSpace(0), this.intersectedPointIdx)
+      this.registeredEventHandlers.click(
+        this.getMouseInWorldSpace(0),
+        this.intersectedPointIdx,
+      )
     }
   }
 
@@ -158,8 +177,20 @@ export class MouseInteraction {
 
     const rect = this.canvas.getBoundingClientRect()
 
-    this.mouse.x = THREE.Math.mapLinear(event.clientX - rect.left, 0, rect.width, -1, 1)
-    this.mouse.y = THREE.Math.mapLinear(event.clientY - rect.top, 0, rect.height, 1, -1)
+    this.mouse.x = THREE.Math.mapLinear(
+      event.clientX - rect.left,
+      0,
+      rect.width,
+      -1,
+      1,
+    )
+    this.mouse.y = THREE.Math.mapLinear(
+      event.clientY - rect.top,
+      0,
+      rect.height,
+      1,
+      -1,
+    )
 
     // handle hovers if not dragging
     if (!this.dragging) {
@@ -170,7 +201,8 @@ export class MouseInteraction {
       if (intersects.length > 0) {
         // hover in
         const nearestIntersect = orderBy(intersects, 'distanceToRay', 'asc')[0]
-        const nearestIndex = nearestIntersect.index === undefined ? null : nearestIntersect.index
+        const nearestIndex =
+          nearestIntersect.index === undefined ? null : nearestIntersect.index
         if (this.intersectedPointIdx !== nearestIndex) {
           if (nearestIndex != null) {
             this.registeredEventHandlers.nodeHoverIn(nearestIndex)
@@ -186,8 +218,10 @@ export class MouseInteraction {
       }
     } else if (this.intersectedPointIdx !== null) {
       // handle node drag interaction
-      this.registeredEventHandlers.nodeDrag(this.getMouseInWorldSpace(0), this.intersectedPointIdx)
-
+      this.registeredEventHandlers.nodeDrag(
+        this.getMouseInWorldSpace(0),
+        this.intersectedPointIdx,
+      )
     } else {
       // calculate the pan delta
       this.panEnd.set(event.clientX, event.clientY, 0)

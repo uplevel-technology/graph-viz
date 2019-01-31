@@ -1,11 +1,11 @@
 import * as THREE from 'three'
-import { PopulatedGraphVizLink } from './Links'
-import { UPLEVEL_BASE_THEME } from '../../theme'
+import {PopulatedGraphVizLink} from './Links'
+import {UPLEVEL_BASE_THEME} from '../../theme'
 
 interface TextLabel {
-  texture: THREE.Texture,
-  size: THREE.Vector2,
-  textSize: THREE.Vector2,
+  texture: THREE.Texture
+  size: THREE.Vector2
+  textSize: THREE.Vector2
 }
 
 function buildTextLabel(text: string): TextLabel {

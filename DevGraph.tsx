@@ -1,40 +1,49 @@
-import { PersistenceServiceClient } from '@core/services/persistence_service_pb_service'
-import { Empty } from '@core/wrappers_pb'
-import { Button, createStyles, Paper, Theme, Typography, WithStyles, withStyles } from '@material-ui/core'
+import {PersistenceServiceClient} from '@core/services/persistence_service_pb_service'
+import {Empty} from '@core/wrappers_pb'
+import {
+  Button,
+  createStyles,
+  Paper,
+  Theme,
+  Typography,
+  WithStyles,
+  withStyles,
+} from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import * as React from 'react'
-import { PERSISTENCE_SERVICE_ADDRESS } from '../App'
+import {PERSISTENCE_SERVICE_ADDRESS} from '../App'
 import {
   BasicForceSimulation,
   ForceSimulationData,
   ForceSimulationNode,
   NodePosition,
 } from './lib/BasicForceSimulation'
-import { GraphVisualization, GraphVizData } from './lib/GraphVisualization'
-import { GraphVizLink } from './lib/Links'
-import { NodeTooltips, TooltipNode } from './NodeTooltips'
-import { eventsToVizData } from './protoToNodeUtils'
-import { lockNode, magnifyNode, resetNodeScale, toggleNodeLock } from './vizUtils'
+import {GraphVisualization, GraphVizData} from './lib/GraphVisualization'
+import {GraphVizLink} from './lib/Links'
+import {NodeTooltips, TooltipNode} from './NodeTooltips'
+import {eventsToVizData} from './protoToNodeUtils'
+import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
 
-const styles = (theme: Theme) => createStyles({
-  root: {
-    position: 'relative',
-  },
-  canvas: {
-    background: 'white',
-  },
-  refreshButton: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-  },
-  errorMessage: {
-    position: 'absolute',
-    top: 0,
-    left: theme.spacing.unit,
-    color: 'red',
-  },
-})
+const styles = (theme: Theme) =>
+  createStyles({
+    root: {
+      position: 'relative',
+    },
+    canvas: {
+      background: 'white',
+    },
+    refreshButton: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+    },
+    errorMessage: {
+      position: 'absolute',
+      top: 0,
+      left: theme.spacing.unit,
+      color: 'red',
+    },
+  })
 
 interface State {
   readonly tooltipNode: TooltipNode | null
@@ -76,7 +85,10 @@ class DevGraphBase extends React.Component<Props, State> {
     this.simulation = new BasicForceSimulation()
     this.visualization.onNodeHoverIn((hoveredNodeIdx: number) => {
       const vizNode = this.vizData.nodes[hoveredNodeIdx]
-      const screenCoords = this.visualization.toScreenSpacePoint(vizNode.x, vizNode.y)
+      const screenCoords = this.visualization.toScreenSpacePoint(
+        vizNode.x,
+        vizNode.y,
+      )
 
       magnifyNode(vizNode)
 
@@ -100,28 +112,31 @@ class DevGraphBase extends React.Component<Props, State> {
       this.visualization.updatePositions(this.vizData) // fixme use updatePosition + updateSize
     })
 
-    this.visualization.onNodeHoverOut((hoveredOutNodeIdx) => {
+    this.visualization.onNodeHoverOut(hoveredOutNodeIdx => {
       const hoveredOutNode = this.vizData.nodes[hoveredOutNodeIdx]
       resetNodeScale(hoveredOutNode)
       this.visualization.updateNode(hoveredOutNodeIdx, hoveredOutNode)
 
       // only hide tooltip if currently shown tooltip is hovered out
       if (hoveredOutNodeIdx === this.state.currentlyHoveredIdx) {
-        this.setState({ tooltipNode: null, currentlyHoveredIdx: null })
+        this.setState({tooltipNode: null, currentlyHoveredIdx: null})
       }
     })
 
-    this.visualization.onClick(((worldPos, clickedNodeIdx) => {
+    this.visualization.onClick((worldPos, clickedNodeIdx) => {
       if (clickedNodeIdx === null) {
         return
       }
       toggleNodeLock(this.vizData.nodes[clickedNodeIdx])
 
       this.simulation.update(this.vizData)
-      this.visualization.updateNode(clickedNodeIdx, this.vizData.nodes[clickedNodeIdx])
-    }))
+      this.visualization.updateNode(
+        clickedNodeIdx,
+        this.vizData.nodes[clickedNodeIdx],
+      )
+    })
 
-    this.visualization.onNodeDrag(((worldPos, draggedNodeIdx) => {
+    this.visualization.onNodeDrag((worldPos, draggedNodeIdx) => {
       const node = this.vizData.nodes[draggedNodeIdx] as ForceSimulationNode
       node.x = worldPos.x
       node.y = worldPos.y
@@ -129,16 +144,19 @@ class DevGraphBase extends React.Component<Props, State> {
       node.fy = worldPos.y
       this.simulation.update(this.vizData)
       // ^ the simulation tick handler should handle the position updates after this in our viz
-    }))
+    })
 
-    this.visualization.onDragStart((mouse, draggedNodeIdx: number|null) => {
+    this.visualization.onDragStart((mouse, draggedNodeIdx: number | null) => {
       if (draggedNodeIdx === null) {
         return
       }
 
       lockNode(this.vizData.nodes[draggedNodeIdx])
 
-      this.visualization.updateNode(draggedNodeIdx, this.vizData.nodes[draggedNodeIdx])
+      this.visualization.updateNode(
+        draggedNodeIdx,
+        this.vizData.nodes[draggedNodeIdx],
+      )
       this.simulation.reheat()
     })
 
@@ -155,12 +173,17 @@ class DevGraphBase extends React.Component<Props, State> {
     this.client.readAllEvents(new Empty(), (error, response) => {
       if (error) {
         console.error(error) // tslint:disable-line no-console
-        this.setState({errorMessage: `Error reading graph: ${error.message || 'unknown error'}`})
+        this.setState({
+          errorMessage: `Error reading graph: ${error.message ||
+            'unknown error'}`,
+        })
         return
       }
 
       if (!response) {
-        this.setState({errorMessage: 'Error reading graph: received no response'})
+        this.setState({
+          errorMessage: 'Error reading graph: received no response',
+        })
         return
       }
 
@@ -172,7 +195,10 @@ class DevGraphBase extends React.Component<Props, State> {
       const nodePositions = this.simulation.getNodePositions()
 
       this.vizData = {
-        nodes: graphData.nodes.map((node, i) => ({...nodePositions[i], ...node})),
+        nodes: graphData.nodes.map((node, i) => ({
+          ...nodePositions[i],
+          ...node,
+        })),
         links: graphData.links as GraphVizLink[],
       }
       this.visualization.update(this.vizData)
@@ -184,9 +210,9 @@ class DevGraphBase extends React.Component<Props, State> {
 
     return (
       <Paper className={classes.root}>
-        <canvas ref={this.canvasRef} className={classes.canvas}/>
+        <canvas ref={this.canvasRef} className={classes.canvas} />
 
-        <NodeTooltips node={this.state.tooltipNode}/>
+        <NodeTooltips node={this.state.tooltipNode} />
 
         <Button
           size={'small'}
@@ -196,11 +222,11 @@ class DevGraphBase extends React.Component<Props, State> {
           <RefreshIcon />
         </Button>
 
-        {this.state.errorMessage &&
+        {this.state.errorMessage && (
           <Typography className={classes.errorMessage}>
             {this.state.errorMessage}
           </Typography>
-        }
+        )}
       </Paper>
     )
   }

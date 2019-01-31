@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { GraphVizData } from './GraphVisualization'
+import {GraphVizData} from './GraphVisualization'
 import {
   DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE,
   DEFAULT_NODE_INNER_RADIUS,
@@ -8,8 +8,8 @@ import {
 } from './Nodes'
 import fragmentShader from './shaders/links.fragment.glsl'
 import vertexShader from './shaders/links.vertex.glsl'
-import { defaultTo } from 'lodash'
-import { Labels } from './Labels'
+import {defaultTo} from 'lodash'
+import {Labels} from './Labels'
 
 const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
 
@@ -59,7 +59,7 @@ export interface PopulatedGraphVizLink extends LinkStyleAttributes {
 export function getPopulatedGraphLinks(
   graphData: GraphVizData,
   nodeIdToIdxMap: {[id: string]: number},
-  ): PopulatedGraphVizLink[] {
+): PopulatedGraphVizLink[] {
   return graphData.links.map(link => ({
     ...link,
     source: graphData.nodes[nodeIdToIdxMap[link.source]],
@@ -70,11 +70,11 @@ export function getPopulatedGraphLinks(
 const calculateAbsoluteArrowOffset = (link: PopulatedGraphVizLink): number => {
   const relativePadding = 0.05 // space between arrow tip and edge of node border
   const outerRadius =
-    defaultTo(link.target.innerRadius, DEFAULT_NODE_INNER_RADIUS)
-      + defaultTo(link.target.strokeWidth, 0)
+    defaultTo(link.target.innerRadius, DEFAULT_NODE_INNER_RADIUS) +
+    defaultTo(link.target.strokeWidth, 0)
   const absoluteContainerSize =
-    defaultTo(link.target.absoluteSize, DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE)
-      * defaultTo(link.target.scale, DEFAULT_NODE_SCALE)
+    defaultTo(link.target.absoluteSize, DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) *
+    defaultTo(link.target.scale, DEFAULT_NODE_SCALE)
   return (outerRadius + relativePadding) * absoluteContainerSize
 }
 
@@ -91,14 +91,38 @@ export class Links {
     const numVertices = numLinks * VERTICES_PER_QUAD
 
     this.geometry = new THREE.BufferGeometry()
-    this.geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3))
-    this.geometry.addAttribute('uv', new THREE.BufferAttribute(new Float32Array(numVertices * 2), 2))
-    this.geometry.addAttribute('quadWidth', new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1))
-    this.geometry.addAttribute('quadLength', new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1))
-    this.geometry.addAttribute('color', new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3))
-    this.geometry.addAttribute('arrowWidth', new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1))
-    this.geometry.addAttribute('arrowOffset', new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1))
-    this.geometry.addAttribute('dashGap', new THREE.BufferAttribute((new Float32Array(numVertices * 1)), 1))
+    this.geometry.addAttribute(
+      'position',
+      new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3),
+    )
+    this.geometry.addAttribute(
+      'uv',
+      new THREE.BufferAttribute(new Float32Array(numVertices * 2), 2),
+    )
+    this.geometry.addAttribute(
+      'quadWidth',
+      new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
+    )
+    this.geometry.addAttribute(
+      'quadLength',
+      new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
+    )
+    this.geometry.addAttribute(
+      'color',
+      new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3),
+    )
+    this.geometry.addAttribute(
+      'arrowWidth',
+      new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
+    )
+    this.geometry.addAttribute(
+      'arrowOffset',
+      new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
+    )
+    this.geometry.addAttribute(
+      'dashGap',
+      new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
+    )
 
     this.material = new THREE.ShaderMaterial({
       vertexShader,
@@ -145,12 +169,22 @@ export class Links {
    * @param links
    */
   public updateAllPositions = (links: PopulatedGraphVizLink[]) => {
-    const position = this.geometry.getAttribute('position') as THREE.BufferAttribute
+    const position = this.geometry.getAttribute(
+      'position',
+    ) as THREE.BufferAttribute
     const uv = this.geometry.getAttribute('uv') as THREE.BufferAttribute
-    const quadLength = this.geometry.getAttribute('quadLength') as THREE.BufferAttribute
-    const arrowWidth = this.geometry.getAttribute('arrowWidth') as THREE.BufferAttribute
-    const arrowOffset = this.geometry.getAttribute('arrowOffset') as THREE.BufferAttribute
-    const dashGap = this.geometry.getAttribute('dashGap') as THREE.BufferAttribute
+    const quadLength = this.geometry.getAttribute(
+      'quadLength',
+    ) as THREE.BufferAttribute
+    const arrowWidth = this.geometry.getAttribute(
+      'arrowWidth',
+    ) as THREE.BufferAttribute
+    const arrowOffset = this.geometry.getAttribute(
+      'arrowOffset',
+    ) as THREE.BufferAttribute
+    const dashGap = this.geometry.getAttribute(
+      'dashGap',
+    ) as THREE.BufferAttribute
 
     const numLinks = links.length
     const numVertices = numLinks * VERTICES_PER_QUAD
@@ -193,7 +227,10 @@ export class Links {
       tangent.copy(target).sub(source)
 
       const quadWidth = links[i].directed
-        ? Math.max(DEFAULT_LINK_WIDTH, links[i].arrowWidth || DEFAULT_ARROW_WIDTH)
+        ? Math.max(
+            DEFAULT_LINK_WIDTH,
+            links[i].arrowWidth || DEFAULT_ARROW_WIDTH,
+          )
         : DEFAULT_LINK_WIDTH
 
       normal.set(-tangent.y, tangent.x) // rotate 90 degrees to make it normal to the link
@@ -227,11 +264,18 @@ export class Links {
       uv.setXY(i * VERTICES_PER_QUAD + 5, quadWidth, 0)
 
       // Repeat for all vertices of this quad:
-      for (let vertexIndex = i * VERTICES_PER_QUAD; vertexIndex < (i + 1) * VERTICES_PER_QUAD; vertexIndex++) {
+      for (
+        let vertexIndex = i * VERTICES_PER_QUAD;
+        vertexIndex < (i + 1) * VERTICES_PER_QUAD;
+        vertexIndex++
+      ) {
         quadLength.setX(vertexIndex, totalLength)
 
         if (links[i].directed) {
-          arrowWidth.setX(vertexIndex, links[i].arrowWidth || DEFAULT_ARROW_WIDTH)
+          arrowWidth.setX(
+            vertexIndex,
+            links[i].arrowWidth || DEFAULT_ARROW_WIDTH,
+          )
           arrowOffset.setX(vertexIndex, calculateAbsoluteArrowOffset(links[i]))
         } else {
           arrowWidth.setX(vertexIndex, 0)
@@ -287,7 +331,11 @@ export class Links {
       const currentLink = links[i]
       tmpColor.set(defaultTo(currentLink.color, DEFAULT_LINK_COLOR) as string)
       // Repeat for all vertices of this quad:
-      for (let vertexIndex = i * VERTICES_PER_QUAD; vertexIndex < (i + 1) * VERTICES_PER_QUAD; vertexIndex++) {
+      for (
+        let vertexIndex = i * VERTICES_PER_QUAD;
+        vertexIndex < (i + 1) * VERTICES_PER_QUAD;
+        vertexIndex++
+      ) {
         color.setXYZ(vertexIndex, tmpColor.r, tmpColor.g, tmpColor.b)
       }
     }

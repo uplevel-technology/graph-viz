@@ -10,7 +10,7 @@
  * neo4j (for the microsoft data, that's snake_case)
  */
 import * as THREE from 'three'
-import { ForceSimulationNode } from './lib/BasicForceSimulation'
+import {ForceSimulationNode} from './lib/BasicForceSimulation'
 import {
   DEFAULT_NODE_SCALE,
   DEFAULT_NODE_STROKE_OPACITY,
@@ -41,7 +41,7 @@ export const NodeOutlinePalette: {[key: string]: string} = {
   attribute: '#FEC400',
   alert: '#921928', // red
   emailUpload: '#0d8721',
-  ip_address:    '#005DB8', // blue
+  ip_address: '#005DB8', // blue
   port: '#5986EC', // light blue
   file_name: '#5B129B', // purple
   file_path: '#EA80FC', // pink
@@ -78,7 +78,9 @@ export const lockNode = (
   node.strokeOpacity = LOCKED_NODE_STROKE_OPACITY
 }
 
-export const unlockNode = (node: Partial<ForceSimulationNode & GraphVizNode>): void => {
+export const unlockNode = (
+  node: Partial<ForceSimulationNode & GraphVizNode>,
+): void => {
   node.fx = null
   node.fy = null
 
