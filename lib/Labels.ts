@@ -26,13 +26,6 @@ function buildTextLabel(text: string): TextLabel {
   canvas.width = THREE.Math.ceilPowerOfTwo(textWidth)
   canvas.height = THREE.Math.ceilPowerOfTwo(textHeight)
 
-  // Gradient background for debugging:
-  const gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height)
-  gradient.addColorStop(0, '#ff3333')
-  gradient.addColorStop(1, '#3333ff')
-  context.fillStyle = gradient
-  context.fillRect(0, 0, canvas.width, canvas.height)
-
   // Now we can actually draw the text:
   context.fillStyle = 'black'
   context.textBaseline = 'bottom'
