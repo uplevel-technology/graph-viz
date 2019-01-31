@@ -152,6 +152,14 @@ export class Labels {
       const fakeCameraZoom = 2
       mesh.scale.x /= fakeCameraZoom
       mesh.scale.y /= fakeCameraZoom
+
+      const linkLength = Math.sqrt(dx * dx + dy * dy)
+      // Pad away from the ends of the link:
+      // TODO: could use node size?
+      const labelPadding = 20
+      // Hide if there wouldn't be room:
+      // TODO: show ellipses if hidden?
+      mesh.visible = mesh.scale.x < linkLength - labelPadding
     })
   }
 }
