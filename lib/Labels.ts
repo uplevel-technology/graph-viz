@@ -78,11 +78,14 @@ function buildMaterial(textLabel: TextLabel): THREE.ShaderMaterial {
 
 export class Labels {
   public object: THREE.Object3D
+  private planeGeometry: THREE.PlaneBufferGeometry
   private readonly meshes: {[linkIndex: number]: THREE.Mesh}
   private readonly textLabels: {[text: string]: TextLabel}
 
   constructor() {
     this.object = new THREE.Object3D()
+    // We'll reuse this for every label:
+    this.planeGeometry = new THREE.PlaneBufferGeometry(1, 1)
     this.meshes = {}
     this.textLabels = {}
   }
@@ -108,10 +111,7 @@ export class Labels {
       // TODO: dispose of unused textures
 
       if (!mesh) {
-        mesh = new THREE.Mesh(
-          new THREE.PlaneBufferGeometry(1, 1),
-          buildMaterial(textLabel),
-        )
+        mesh = new THREE.Mesh(this.planeGeometry, buildMaterial(textLabel))
         this.meshes[index] = mesh
         this.object.add(mesh)
       }
