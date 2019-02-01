@@ -60,14 +60,14 @@ interface Uniforms {
   repeat: {value: THREE.Vector2}
 }
 
-function buildMaterial(texture: THREE.Texture): THREE.ShaderMaterial {
+function buildMaterial(): THREE.ShaderMaterial {
   // Textures + MeshBasicMaterial supports repeat/offset, but these values
   // are owned by the _texture_, not the material. Because we expect textures
   // to be shared between materials on different meshes, we need to introduce
   // our own uniforms, and make the instance of the material in charge of them.
 
   const uniforms: Uniforms = {
-    map: {value: texture},
+    map: {value: new THREE.Texture()},
     offset: {value: new THREE.Vector2(0, 0)},
     repeat: {value: new THREE.Vector2(1, 1)},
   }
@@ -154,13 +154,8 @@ export class Labels {
         return
       }
 
-      const texture = this.getTexture(link.label)
-
       if (!mesh) {
-        mesh = new THREE.Mesh(
-          this.planeGeometry,
-          buildMaterial(texture.texture),
-        )
+        mesh = new THREE.Mesh(this.planeGeometry, buildMaterial())
         this.meshes[index] = mesh
         this.object.add(mesh)
       }
@@ -183,18 +178,25 @@ export class Labels {
         mesh.rotation.z += Math.PI
       }
 
-      setMeshTexture(mesh, texture)
-
-      // TODO: scale down if the camera is really zoomed in, to avoid the
-      // ugliness of visible pixels, and also to make better use of space.
+      setMeshTexture(mesh, this.getTexture(link.label))
 
       const linkLength = Math.sqrt(dx * dx + dy * dy)
       // Pad away from the ends of the link:
       // TODO: could use node size?
       const labelPadding = 20
-      // Hide if there wouldn't be room:
-      // TODO: show ellipses if hidden?
+
+      // TODO: if we want, we could swap out the label for ellipses if there
+      // wouldn't be room, like so:
+      // if (mesh.scale.x > linkLength - labelPadding) {
+      //   setMeshTexture(mesh, this.getTexture('...'))
+      // }
+
+      // Completely hide if there still isn't room:
       mesh.visible = mesh.scale.x < linkLength - labelPadding
+
+      // TODO: scale down if the camera is really zoomed in, to avoid the
+      // ugliness of visible pixels, and also to make better use of space.
+      // Also could be good to hide labels if the camera is really zoomed out.
     })
   }
 }
