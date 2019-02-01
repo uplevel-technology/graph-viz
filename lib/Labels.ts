@@ -12,19 +12,17 @@ function buildTexture(text: string): TextTexture {
   const canvas = document.createElement('canvas')
   const context = canvas.getContext('2d')!
 
-  const dpr = window.devicePixelRatio
-  // So that we can zoom in and the text still looks good, we render it at a
-  // bigger size, then pretend it was smaller:
-  const extraScale = 4
+  // On higher res displays, and so that we can zoom in and the text still looks
+  // good, we render it at a bigger size, then pretend it was smaller.
+  const extraScale = 4 * window.devicePixelRatio
   const xPadding = 2
 
-  const fontSize = 4 * dpr * extraScale
+  const fontSize = 4 * extraScale
   const fontString = `${fontSize}px ${UPLEVEL_BASE_THEME.typography.fontFamily}`
 
   // Measure the text we're about to write, then set the size of the canvas to fit:
   context.font = fontString
-  const textWidth =
-    context.measureText(text).width + xPadding * dpr * extraScale
+  const textWidth = context.measureText(text).width + xPadding * extraScale
   const textHeight = fontSize * 1.5 // make this up, big enough to show descender
   // WebGL textures need to have power-of-two dimensions:
   canvas.width = THREE.Math.ceilPowerOfTwo(textWidth)
@@ -37,7 +35,7 @@ function buildTexture(text: string): TextTexture {
   const verticalNudge = 1 // "fudge factor" that makes it look right...
   context.fillText(
     text,
-    (canvas.width - textWidth + xPadding * dpr * extraScale) / 2, // center horizontally
+    (canvas.width - textWidth + xPadding * extraScale) / 2, // center horizontally
     (canvas.height + fontSize) / 2 + verticalNudge, // center vertically (y is upside down)
   )
 
@@ -48,13 +46,11 @@ function buildTexture(text: string): TextTexture {
     texture,
     // Size of the texture in world coordinates:
     size: new THREE.Vector2(canvas.width, canvas.height).divideScalar(
-      dpr * extraScale,
+      extraScale,
     ),
     // Because of the power-of-two constraint, the actual text can be a
     // different size, and we want the caller to know:
-    textSize: new THREE.Vector2(textWidth, textHeight).divideScalar(
-      dpr * extraScale,
-    ),
+    textSize: new THREE.Vector2(textWidth, textHeight).divideScalar(extraScale),
   }
 }
 
