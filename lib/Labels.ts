@@ -2,13 +2,13 @@ import * as THREE from 'three'
 import {PopulatedGraphVizLink} from './Links'
 import {UPLEVEL_BASE_THEME} from '../../theme'
 
-interface TextLabel {
+interface TextTexture {
   texture: THREE.Texture
   size: THREE.Vector2
   textSize: THREE.Vector2
 }
 
-function buildTextLabel(text: string): TextLabel {
+function buildTexture(text: string): TextTexture {
   const canvas = document.createElement('canvas')
   const context = canvas.getContext('2d')!
 
@@ -49,10 +49,11 @@ function buildTextLabel(text: string): TextLabel {
   }
 }
 
-function buildMaterial(textLabel: TextLabel): THREE.ShaderMaterial {
+function buildMaterial(texture: THREE.Texture): THREE.ShaderMaterial {
+  // Textures + MeshBasicMaterial supports repeat/offset, but these
   return new THREE.ShaderMaterial({
     uniforms: {
-      map: {value: textLabel.texture},
+      map: {value: texture},
       offset: {value: new THREE.Vector2(0, 0)},
       repeat: {value: new THREE.Vector2(1, 1)},
     },
@@ -76,17 +77,17 @@ function buildMaterial(textLabel: TextLabel): THREE.ShaderMaterial {
 }
 
 export class Labels {
-  public object: THREE.Object3D
-  private planeGeometry: THREE.PlaneBufferGeometry
+  public readonly object: THREE.Object3D
+  private readonly planeGeometry: THREE.PlaneBufferGeometry
   private readonly meshes: {[linkIndex: number]: THREE.Mesh}
-  private readonly textLabels: {[text: string]: TextLabel}
+  private readonly textures: {[text: string]: TextTexture}
 
   constructor() {
     this.object = new THREE.Object3D()
     // We'll reuse this for every label:
     this.planeGeometry = new THREE.PlaneBufferGeometry(1, 1)
     this.meshes = {}
-    this.textLabels = {}
+    this.textures = {}
   }
 
   public updateAll(links: PopulatedGraphVizLink[]) {
@@ -102,15 +103,18 @@ export class Labels {
       }
 
       // Get a texture of the text for reuse:
-      let textLabel = this.textLabels[link.label]
-      if (!textLabel) {
-        textLabel = buildTextLabel(link.label)
-        this.textLabels[link.label] = textLabel
+      let texture = this.textures[link.label]
+      if (!texture) {
+        texture = buildTexture(link.label)
+        this.textures[link.label] = texture
       }
       // TODO: dispose of unused textures
 
       if (!mesh) {
-        mesh = new THREE.Mesh(this.planeGeometry, buildMaterial(textLabel))
+        mesh = new THREE.Mesh(
+          this.planeGeometry,
+          buildMaterial(texture.texture),
+        )
         this.meshes[index] = mesh
         this.object.add(mesh)
       }
@@ -134,16 +138,16 @@ export class Labels {
       }
 
       // The geometry is 1x1, so we set a scale transform to make it the right size:
-      mesh.scale.x = textLabel.textSize.x
-      mesh.scale.y = textLabel.textSize.y
+      mesh.scale.x = texture.textSize.x
+      mesh.scale.y = texture.textSize.y
 
       // Setting repeat and offset tells the shader how to draw only the part of
       // the texture that includes the text, without stretching:
       const material = mesh.material as THREE.ShaderMaterial
       const offset = material.uniforms.offset.value as THREE.Vector2
       const repeat = material.uniforms.repeat.value as THREE.Vector2
-      repeat.x = mesh.scale.x / textLabel.size.x
-      repeat.y = mesh.scale.y / textLabel.size.y
+      repeat.x = mesh.scale.x / texture.size.x
+      repeat.y = mesh.scale.y / texture.size.y
       offset.x = (1 - repeat.x) / 2
       offset.y = (1 - repeat.y) / 2
 
