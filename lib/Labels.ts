@@ -165,8 +165,8 @@ export class Labels {
 
       // Setting repeat and offset tells the shader how to draw only the part of
       // the texture that includes the text, without stretching:
-      const offset = uniforms.offset.value as THREE.Vector2
-      const repeat = uniforms.repeat.value as THREE.Vector2
+      const offset = uniforms.offset.value
+      const repeat = uniforms.repeat.value
       repeat.x = mesh.scale.x / texture.size.x
       repeat.y = mesh.scale.y / texture.size.y
       offset.x = (1 - repeat.x) / 2
