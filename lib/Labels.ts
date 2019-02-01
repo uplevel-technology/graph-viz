@@ -134,6 +134,16 @@ export class Labels {
     this.textures = {}
   }
 
+  private getTexture(text: string): TextTexture {
+    let texture = this.textures[text]
+    if (!texture) {
+      texture = buildTexture(text)
+    }
+    this.textures[text] = texture
+    // TODO: dispose of unused textures
+    return texture
+  }
+
   public updateAll(links: PopulatedGraphVizLink[]) {
     links.forEach((link, index) => {
       let mesh = this.meshes[index]
@@ -146,13 +156,7 @@ export class Labels {
         return
       }
 
-      // Get a texture of the text for reuse:
-      let texture = this.textures[link.label]
-      if (!texture) {
-        texture = buildTexture(link.label)
-        this.textures[link.label] = texture
-      }
-      // TODO: dispose of unused textures
+      const texture = this.getTexture(link.label)
 
       if (!mesh) {
         mesh = new THREE.Mesh(
