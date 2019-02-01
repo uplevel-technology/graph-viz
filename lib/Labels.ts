@@ -141,9 +141,14 @@ export class Labels {
       mesh.scale.x = texture.textSize.x
       mesh.scale.y = texture.textSize.y
 
+      const material = mesh.material as THREE.ShaderMaterial
+
+      // In case the text of the label had changed, make sure this mesh is
+      // always showing the correct texture:
+      material.uniforms.map.value = texture.texture
+
       // Setting repeat and offset tells the shader how to draw only the part of
       // the texture that includes the text, without stretching:
-      const material = mesh.material as THREE.ShaderMaterial
       const offset = material.uniforms.offset.value as THREE.Vector2
       const repeat = material.uniforms.repeat.value as THREE.Vector2
       repeat.x = mesh.scale.x / texture.size.x
