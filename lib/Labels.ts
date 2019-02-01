@@ -95,6 +95,31 @@ function buildMaterial(texture: THREE.Texture): THREE.ShaderMaterial {
   })
 }
 
+function setMeshTexture(mesh: THREE.Mesh, texture: TextTexture) {
+  // Even though this material was built with `buildMaterial`, we've lost some
+  // type information by passing it through `mesh`. We gain that back here, by
+  // explicitly telling the type checker to trust us:
+  const material = mesh.material as THREE.ShaderMaterial
+  const uniforms = (material.uniforms as unknown) as Uniforms
+
+  // In case the text of the label had changed, make sure this mesh is
+  // always showing the correct texture:
+  uniforms.map.value = texture.texture
+
+  // The geometry is 1x1, so we set a scale transform to make it the right size:
+  mesh.scale.x = texture.textSize.x
+  mesh.scale.y = texture.textSize.y
+
+  // Setting repeat and offset tells the shader how to draw only the part of
+  // the texture that includes the text, without stretching:
+  const offset = uniforms.offset.value
+  const repeat = uniforms.repeat.value
+  repeat.x = mesh.scale.x / texture.size.x
+  repeat.y = mesh.scale.y / texture.size.y
+  offset.x = (1 - repeat.x) / 2
+  offset.y = (1 - repeat.y) / 2
+}
+
 export class Labels {
   public readonly object: THREE.Object3D
   private readonly planeGeometry: THREE.PlaneBufferGeometry
@@ -156,31 +181,10 @@ export class Labels {
         mesh.rotation.z += Math.PI
       }
 
-      // The geometry is 1x1, so we set a scale transform to make it the right size:
-      mesh.scale.x = texture.textSize.x
-      mesh.scale.y = texture.textSize.y
+      setMeshTexture(mesh, texture)
 
       // TODO: scale down if the camera is really zoomed in, to avoid the
       // ugliness of visible pixels, and also to make better use of space.
-
-      // Even though this material was built with `buildMaterial` above, we've
-      // lost some type information by passing it through `mesh`. We gain that
-      // back here, by explicitly telling the type checker to trust us:
-      const material = mesh.material as THREE.ShaderMaterial
-      const uniforms = (material.uniforms as unknown) as Uniforms
-
-      // In case the text of the label had changed, make sure this mesh is
-      // always showing the correct texture:
-      uniforms.map.value = texture.texture
-
-      // Setting repeat and offset tells the shader how to draw only the part of
-      // the texture that includes the text, without stretching:
-      const offset = uniforms.offset.value
-      const repeat = uniforms.repeat.value
-      repeat.x = mesh.scale.x / texture.size.x
-      repeat.y = mesh.scale.y / texture.size.y
-      offset.x = (1 - repeat.x) / 2
-      offset.y = (1 - repeat.y) / 2
 
       const linkLength = Math.sqrt(dx * dx + dy * dy)
       // Pad away from the ends of the link:
