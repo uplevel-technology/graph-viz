@@ -13,8 +13,11 @@ function buildTexture(text: string): TextTexture {
   const context = canvas.getContext('2d')!
 
   const dpr = window.devicePixelRatio
+  // So that we can zoom in and the text still looks good, we render it at a
+  // bigger size, then pretend it was smaller:
+  const extraScale = 4
 
-  const fontSize = 8 * dpr
+  const fontSize = 4 * dpr * extraScale
   const fontString = `${fontSize}px ${UPLEVEL_BASE_THEME.typography.fontFamily}`
 
   // Measure the text we're about to write, then set the size of the canvas to fit:
@@ -42,10 +45,14 @@ function buildTexture(text: string): TextTexture {
   return {
     texture,
     // Size of the texture in world coordinates:
-    size: new THREE.Vector2(canvas.width / dpr, canvas.height / dpr),
-    // Because of the power-of-2 constraint, the actual text can be a different
-    // size:
-    textSize: new THREE.Vector2(textWidth / dpr, textHeight / dpr),
+    size: new THREE.Vector2(canvas.width, canvas.height).divideScalar(
+      dpr * extraScale,
+    ),
+    // Because of the power-of-two constraint, the actual text can be a
+    // different size, and we want the caller to know:
+    textSize: new THREE.Vector2(textWidth, textHeight).divideScalar(
+      dpr * extraScale,
+    ),
   }
 }
 
@@ -153,6 +160,9 @@ export class Labels {
       mesh.scale.x = texture.textSize.x
       mesh.scale.y = texture.textSize.y
 
+      // TODO: scale down if the camera is really zoomed in, to avoid the
+      // ugliness of visible pixels, and also to make better use of space.
+
       // Even though this material was built with `buildMaterial` above, we've
       // lost some type information by passing it through `mesh`. We gain that
       // back here, by explicitly telling the type checker to trust us:
@@ -171,11 +181,6 @@ export class Labels {
       repeat.y = mesh.scale.y / texture.size.y
       offset.x = (1 - repeat.x) / 2
       offset.y = (1 - repeat.y) / 2
-
-      // TODO: plumb camera zoom through to here
-      const fakeCameraZoom = 2
-      mesh.scale.x /= fakeCameraZoom
-      mesh.scale.y /= fakeCameraZoom
 
       const linkLength = Math.sqrt(dx * dx + dy * dy)
       // Pad away from the ends of the link:
