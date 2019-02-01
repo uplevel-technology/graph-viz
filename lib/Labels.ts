@@ -49,14 +49,26 @@ function buildTexture(text: string): TextTexture {
   }
 }
 
+interface Uniforms {
+  map: {value: THREE.Texture}
+  offset: {value: THREE.Vector2}
+  repeat: {value: THREE.Vector2}
+}
+
 function buildMaterial(texture: THREE.Texture): THREE.ShaderMaterial {
-  // Textures + MeshBasicMaterial supports repeat/offset, but these
+  // Textures + MeshBasicMaterial supports repeat/offset, but these values
+  // are owned by the _texture_, not the material. Because we expect textures
+  // to be shared between materials on different meshes, we need to introduce
+  // our own uniforms, and make the instance of the material in charge of them.
+
+  const uniforms: Uniforms = {
+    map: {value: texture},
+    offset: {value: new THREE.Vector2(0, 0)},
+    repeat: {value: new THREE.Vector2(1, 1)},
+  }
+
   return new THREE.ShaderMaterial({
-    uniforms: {
-      map: {value: texture},
-      offset: {value: new THREE.Vector2(0, 0)},
-      repeat: {value: new THREE.Vector2(1, 1)},
-    },
+    uniforms,
     vertexShader: `
       uniform vec2 offset;
       uniform vec2 repeat;
@@ -141,16 +153,20 @@ export class Labels {
       mesh.scale.x = texture.textSize.x
       mesh.scale.y = texture.textSize.y
 
+      // Even though this material was built with `buildMaterial` above, we've
+      // lost some type information by passing it through `mesh`. We gain that
+      // back here, by explicitly telling the type checker to trust us:
       const material = mesh.material as THREE.ShaderMaterial
+      const uniforms = (material.uniforms as unknown) as Uniforms
 
       // In case the text of the label had changed, make sure this mesh is
       // always showing the correct texture:
-      material.uniforms.map.value = texture.texture
+      uniforms.map.value = texture.texture
 
       // Setting repeat and offset tells the shader how to draw only the part of
       // the texture that includes the text, without stretching:
-      const offset = material.uniforms.offset.value as THREE.Vector2
-      const repeat = material.uniforms.repeat.value as THREE.Vector2
+      const offset = uniforms.offset.value as THREE.Vector2
+      const repeat = uniforms.repeat.value as THREE.Vector2
       repeat.x = mesh.scale.x / texture.size.x
       repeat.y = mesh.scale.y / texture.size.y
       offset.x = (1 - repeat.x) / 2
