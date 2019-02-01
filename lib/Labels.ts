@@ -16,13 +16,15 @@ function buildTexture(text: string): TextTexture {
   // So that we can zoom in and the text still looks good, we render it at a
   // bigger size, then pretend it was smaller:
   const extraScale = 4
+  const xPadding = 2
 
   const fontSize = 4 * dpr * extraScale
   const fontString = `${fontSize}px ${UPLEVEL_BASE_THEME.typography.fontFamily}`
 
   // Measure the text we're about to write, then set the size of the canvas to fit:
   context.font = fontString
-  const textWidth = context.measureText(text).width
+  const textWidth =
+    context.measureText(text).width + xPadding * dpr * extraScale
   const textHeight = fontSize * 1.5 // make this up, big enough to show descender
   // WebGL textures need to have power-of-two dimensions:
   canvas.width = THREE.Math.ceilPowerOfTwo(textWidth)
@@ -35,7 +37,7 @@ function buildTexture(text: string): TextTexture {
   const verticalNudge = 1 // "fudge factor" that makes it look right...
   context.fillText(
     text,
-    (canvas.width - textWidth) / 2, // center horizontally
+    (canvas.width - textWidth + xPadding * dpr * extraScale) / 2, // center horizontally
     (canvas.height + fontSize) / 2 + verticalNudge, // center vertically (y is upside down)
   )
 
