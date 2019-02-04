@@ -161,7 +161,6 @@ export class Links {
   public updateAll = (links: PopulatedGraphVizLink[]) => {
     this.updateAllPositions(links)
     this.updateAllColors(links)
-    this.updateAllLabels(links)
   }
 
   /**
@@ -297,7 +296,6 @@ export class Links {
     if (labelsNeedUpdate) {
       // For now, just updating all of the labels if any of the links even have a
       // label. If we're moving the links, we need to move the labels too!
-      // TODO: don't update labels again if we just did (e.g. inside this.updateAll)
       this.updateAllLabels(links)
     }
 
@@ -343,6 +341,9 @@ export class Links {
     color.needsUpdate = true
   }
 
+  // updateAllLabels must be called directly when the _text_ of the labels
+  // change. Calling updateAllPositions will do this automatically, because the
+  // labels always need updating if the links move.
   public updateAllLabels = (links: PopulatedGraphVizLink[]) => {
     this.labels.updateAll(links)
   }
