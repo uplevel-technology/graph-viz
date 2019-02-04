@@ -180,23 +180,24 @@ export class Labels {
 
       setMeshTexture(mesh, this.getTexture(link.label))
 
+      // TODO: scale down if the camera is really zoomed in, to avoid the
+      // ugliness of visible pixels, and also to make better use of space.
+      // Also could be good to hide labels if the camera is really zoomed out.
+
       const linkLength = Math.sqrt(dx * dx + dy * dy)
       // Pad away from the ends of the link:
       // TODO: could use node size?
       const labelPadding = 20
+      const availableX = Math.max(0, linkLength - labelPadding)
 
-      // TODO: if we want, we could swap out the label for ellipses if there
-      // wouldn't be room, like so:
-      // if (mesh.scale.x > linkLength - labelPadding) {
-      //   setMeshTexture(mesh, this.getTexture('...'))
-      // }
-
-      // Completely hide if there still isn't room:
-      mesh.visible = mesh.scale.x < linkLength - labelPadding
-
-      // TODO: scale down if the camera is really zoomed in, to avoid the
-      // ugliness of visible pixels, and also to make better use of space.
-      // Also could be good to hide labels if the camera is really zoomed out.
+      // Try to squish the label down to make it fit:
+      const squishFactor = Math.max(1, mesh.scale.x / availableX)
+      mesh.scale.x /= squishFactor
+      mesh.scale.y /= squishFactor
+      // The most we're allowed to squish a label:
+      const maximumSquishFactor = 2
+      // Completely hide if we've squished it too much:
+      mesh.visible = squishFactor <= maximumSquishFactor
     })
   }
 }
