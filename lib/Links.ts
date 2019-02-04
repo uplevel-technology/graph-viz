@@ -100,10 +100,6 @@ export class Links {
       new THREE.BufferAttribute(new Float32Array(numVertices * 2), 2),
     )
     this.geometry.addAttribute(
-      'quadWidth',
-      new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
-    )
-    this.geometry.addAttribute(
       'quadLength',
       new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
     )
