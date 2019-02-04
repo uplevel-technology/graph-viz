@@ -161,7 +161,7 @@ class DevGraphBase extends React.Component<Props, State> {
     })
 
     this.visualization.onDragEnd(() => {
-      this.simulation.stop()
+      this.simulation.settle()
     })
 
     this.readGraph()

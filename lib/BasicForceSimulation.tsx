@@ -44,7 +44,7 @@ export interface NodePosition {
 }
 
 export class BasicForceSimulation {
-  private simulation: D3Simulation
+  private simulation: D3Simulation | undefined
   private registeredEventHandlers: {
     tick: (nodePositions: NodePosition[]) => void
   } = {
@@ -85,6 +85,9 @@ export class BasicForceSimulation {
   }
 
   public getNodePositions(): NodePosition[] {
+    if (!this.simulation) {
+      return []
+    }
     const nodes = this.simulation.nodes() as ForceSimulationNode[]
 
     return nodes.map(node => ({
@@ -99,6 +102,10 @@ export class BasicForceSimulation {
   }
 
   public update(graph: ForceSimulationData) {
+    if (!this.simulation) {
+      return
+    }
+
     const nodesCopy = graph.nodes.map(node => ({...node}))
     const linksCopy = graph.links.map(link => ({...link}))
 
@@ -113,15 +120,31 @@ export class BasicForceSimulation {
   }
 
   public restart() {
+    if (!this.simulation) {
+      return
+    }
     this.simulation.alpha(1)
     this.simulation.restart()
   }
 
   public reheat() {
+    if (!this.simulation) {
+      return
+    }
     this.simulation.alphaTarget(0.8).restart()
   }
 
-  public stop() {
+  public settle() {
+    if (!this.simulation) {
+      return
+    }
     this.simulation.alphaTarget(0)
+  }
+
+  public stop() {
+    if (!this.simulation) {
+      return
+    }
+    this.simulation.stop()
   }
 }
