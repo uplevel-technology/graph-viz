@@ -181,6 +181,7 @@ export class GraphVisualization {
       // This function assumes the updatedGraphData hasn't changed in size or order and only the position attributes
       // have changed within each node datum.
       // Which should mean this.nodeIdToIndexMap is up to date
+      // TODO: This is linear time anyway, should we do a deep equality check instead?
       if (size(updatedGraphData.nodes) !== size(this.nodeIdToIndexMap)) {
         return
       }
