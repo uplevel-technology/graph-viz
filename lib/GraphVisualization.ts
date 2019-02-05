@@ -181,6 +181,10 @@ export class GraphVisualization {
       // This function assumes the updatedGraphData hasn't changed in size or order and only the position attributes
       // have changed within each node datum.
       // Which should mean this.nodeIdToIndexMap is up to date
+      if (size(updatedGraphData.nodes) !== size(this.nodeIdToIndexMap)) {
+        return
+      }
+
       this.nodesMesh.updateAllPositions(updatedGraphData.nodes)
       this.linksMesh.updateAllPositions(
         getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap),
