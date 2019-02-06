@@ -3,7 +3,11 @@ import {Attribute} from '@core/attribute_pb'
 import {Event} from '@core/event_pb'
 import {ObservableNode} from '@core/observable_pb'
 import {values} from 'lodash'
-import {getArtifactNodeLabel, getAttributeNodeLabel} from '../displayTypes'
+import {
+  getArtifactNodeLabel,
+  getAttributeNodeLabel,
+  ObservableRelationshipDisplayTypes,
+} from '../displayTypes'
 import {GraphVizLink} from './lib/Links'
 import {GraphVizNode} from './lib/Nodes'
 import {TooltipNode} from './NodeTooltips'
@@ -157,6 +161,7 @@ export const eventsToVizData = (
       }
 
       links.push({
+        label: ObservableRelationshipDisplayTypes[rel.getType()],
         source: from.id!,
         target: to.id!,
       })
