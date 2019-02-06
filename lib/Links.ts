@@ -271,7 +271,7 @@ export class Links {
         }
 
         if (links[i].dashed) {
-          dashGap.setX(vertexIndex, 10)
+          dashGap.setX(vertexIndex, 5)
         } else {
           dashGap.setX(vertexIndex, 0)
         }
