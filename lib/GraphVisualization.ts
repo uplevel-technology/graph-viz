@@ -208,6 +208,24 @@ export class GraphVisualization {
   }
 
   /**
+   * resize the canvas
+   * @param width
+   * @param height
+   */
+  public resize(width: number, height: number) {
+    if (width === this.width || height === this.height) {
+      return
+    }
+    this.renderer.setSize(width, height)
+    this.camera.left = -width / 2
+    this.camera.right = width / 2
+    this.camera.top = height / 2
+    this.camera.bottom = -height / 2
+    this.camera.updateProjectionMatrix()
+    this.render()
+  }
+
+  /**
    * converts a world space coordinate to screen space
    * @param worldX
    * @param worldY
