@@ -52,11 +52,12 @@ export class GraphVisualization {
     zoom?: ZoomEventHandler
   } = {}
 
+  private width: number
+  private height: number
+
   private readonly scene: THREE.Scene
   private readonly renderer: THREE.WebGLRenderer
   private readonly mouseInteraction: MouseInteraction
-  private readonly width: number
-  private readonly height: number
 
   constructor(
     graphData: GraphVizData,
@@ -73,10 +74,10 @@ export class GraphVisualization {
     // init Scene and Camera
     this.scene = new THREE.Scene()
     this.camera = new THREE.OrthographicCamera(
-      width * -0.5,
-      width * 0.5,
-      height * 0.5,
-      height * -0.5,
+      -width / 2,
+      width / 2,
+      height / 2,
+      -height / 2,
       1,
       10000,
     )
@@ -213,9 +214,12 @@ export class GraphVisualization {
    * @param height
    */
   public resize(width: number, height: number) {
-    if (width === this.width || height === this.height) {
+    if (width === this.width && height === this.height) {
       return
     }
+    this.width = width
+    this.height = height
+
     this.renderer.setSize(width, height)
     this.camera.left = -width / 2
     this.camera.right = width / 2
