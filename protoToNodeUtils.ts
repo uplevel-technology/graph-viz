@@ -2,7 +2,7 @@ import {Artifact} from '@core/artifact_pb'
 import {Attribute} from '@core/attribute_pb'
 import {Event} from '@core/event_pb'
 import {ObservableNode} from '@core/observable_pb'
-import {values} from 'lodash'
+import {camelCase, values} from 'lodash'
 import {
   getArtifactNodeLabel,
   getAttributeNodeLabel,
@@ -29,13 +29,21 @@ export const artifactToTooltipNode = (
 
 export const attributeToNode = (
   attribute: Attribute,
-): Partial<GraphVizNode> => ({
-  id: `${getAttributeNodeLabel(attribute.getType())}::${attribute.getValue()}`,
-  fill: NodeFillPalette.attribute,
-  stroke: NodeOutlinePalette.attribute,
-  strokeWidth: 0.03,
-  strokeOpacity: 1.0,
-})
+): Partial<GraphVizNode> => {
+  const attributeType = getAttributeNodeLabel(attribute.getType())
+  return {
+    id: `${getAttributeNodeLabel(
+      attribute.getType(),
+    )}::${attribute.getValue()}`,
+    fill:
+      NodeFillPalette[camelCase(attributeType)] || NodeFillPalette.attribute,
+    stroke:
+      NodeOutlinePalette[camelCase(attributeType)] ||
+      NodeOutlinePalette.attribute,
+    strokeWidth: 0.03,
+    strokeOpacity: 1.0,
+  }
+}
 
 export const attributeToTooltipNode = (
   attribute: Attribute,
