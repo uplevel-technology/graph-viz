@@ -188,18 +188,17 @@ class DevGraphBase extends React.Component<Props, State> {
       }
 
       const data = eventsToVizData(response.getValuesList())
-      const graphData = data.graphData
-      this.tooltipNodeList = data.tooltipsNodes as TooltipNode[]
+      this.tooltipNodeList = data.tooltips as TooltipNode[]
 
-      this.simulation.initialize(graphData as ForceSimulationData)
+      this.simulation.initialize(data as ForceSimulationData)
       const nodePositions = this.simulation.getNodePositions()
 
       this.vizData = {
-        nodes: graphData.nodes.map((node, i) => ({
+        nodes: data.nodes.map((node, i) => ({
           ...nodePositions[i],
           ...node,
         })),
-        links: graphData.links as GraphVizLink[],
+        links: data.links as GraphVizLink[],
       }
       this.visualization.update(this.vizData)
     })

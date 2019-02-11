@@ -101,17 +101,13 @@ export const eventToTooltipNode = (event: Event): Partial<TooltipNode> => {
   }
 }
 
-interface PartialGraphVizData {
+interface VizData {
   nodes: Partial<GraphVizNode>[]
   links: Partial<GraphVizLink>[]
+  tooltips: Partial<TooltipNode>[]
 }
 
-export const eventsToVizData = (
-  events: Event[],
-): {
-  graphData: PartialGraphVizData
-  tooltipsNodes: Partial<TooltipNode>[]
-} => {
+export const eventsToVizData = (events: Event[]): VizData => {
   // We want a deduped list of all nodes, because they can be repeated. We'll
   // build that up in this object:
   const seenVizNodesById: {
@@ -180,10 +176,8 @@ export const eventsToVizData = (
   const seenNodes = values(seenVizNodesById)
 
   return {
-    graphData: {
-      nodes: seenNodes.map(it => it.vizNode),
-      links,
-    },
-    tooltipsNodes: seenNodes.map(it => it.tooltipNode),
+    nodes: seenNodes.map(it => it.vizNode),
+    links,
+    tooltips: seenNodes.map(it => it.tooltipNode),
   }
 }
