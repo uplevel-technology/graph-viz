@@ -26,10 +26,15 @@ export const NodeFillPalette: {[key: string]: string} = {
   attribute: '#FEC400',
   alert: '#F16576', // red
   emailUpload: '#0d8721',
-  ip_address: '#86B4EA', // blue
+  ipAddress: '#86B4EA', // blue
   port: '#CFDEFF', // light blue
-  file_name: '#A68ABE', // purple
-  file_path: '#EED6F2', // pink
+  fileName: '#A68ABE', // purple
+  filePath: '#EED6F2', // pink
+
+  // TODO fix this inconsistency
+  filename: '#A68ABE', // purple
+  filepath: '#EED6F2', // pink
+
   hash: '#C0F3FA', // cyan
   url: '#7ED3C0', // green
   application: '#CCFF90', // light green
@@ -41,10 +46,14 @@ export const NodeOutlinePalette: {[key: string]: string} = {
   attribute: '#FEC400',
   alert: '#921928', // red
   emailUpload: '#0d8721',
-  ip_address: '#005DB8', // blue
+  ipAddress: '#005DB8', // blue
   port: '#5986EC', // light blue
-  file_name: '#5B129B', // purple
-  file_path: '#EA80FC', // pink
+  fileName: '#5B129B', // purple
+  filePath: '#EA80FC', // pink
+
+  // TODO fix this inconsistency
+  filename: '#5B129B', // purple
+  filepath: '#EA80FC', // pink
   hash: '#08A7BB', // cyan
   url: '#278C90', // green
   application: '#9ACA95', // light green
