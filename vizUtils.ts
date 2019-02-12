@@ -28,13 +28,8 @@ export const NodeFillPalette: {[key: string]: string} = {
   emailUpload: '#0d8721',
   ipAddress: '#86B4EA', // blue
   port: '#CFDEFF', // light blue
-  fileName: '#A68ABE', // purple
   filePath: '#EED6F2', // pink
-
-  // TODO fix this inconsistency
   filename: '#A68ABE', // purple
-  filepath: '#EED6F2', // pink
-
   hash: '#C0F3FA', // cyan
   url: '#7ED3C0', // green
   application: '#CCFF90', // light green
@@ -48,12 +43,8 @@ export const NodeOutlinePalette: {[key: string]: string} = {
   emailUpload: '#0d8721',
   ipAddress: '#005DB8', // blue
   port: '#5986EC', // light blue
-  fileName: '#5B129B', // purple
   filePath: '#EA80FC', // pink
-
-  // TODO fix this inconsistency
   filename: '#5B129B', // purple
-  filepath: '#EA80FC', // pink
   hash: '#08A7BB', // cyan
   url: '#278C90', // green
   application: '#9ACA95', // light green
