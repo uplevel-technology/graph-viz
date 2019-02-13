@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core'
 import * as React from 'react'
 import {CSSProperties} from 'react'
+import classNames = require('classnames');
 
 export interface TooltipNode {
   id: string
@@ -40,6 +41,9 @@ const styles = (theme: Theme) =>
       borderRadius: 3,
       textTransform: 'capitalize',
     },
+    origCase: {
+      textTransform: 'none',
+    },
     breakLongWord: {
       wordBreak: 'break-word',
     },
@@ -67,7 +71,7 @@ class NodeTooltipsBase extends React.Component<Props> {
             {this.props.node.displayType}
           </Typography>
         )}
-        <Typography variant={'body2'} className={classes.breakLongWord}>
+        <Typography variant={'body2'} className={classNames(classes.breakLongWord, classes.origCase)}>
           {this.props.node.displayName}
         </Typography>
         {this.props.node.formattedTime && (
