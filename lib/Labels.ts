@@ -144,22 +144,22 @@ export class Labels {
   }
 
   public updateAll(links: PopulatedGraphVizLink[]) {
-    links.forEach((link, index) => {
-      let mesh = this.meshes[index]
+    // remove all labels to reset
+    this.object.remove(...this.object.children)
 
+    links.forEach((link, index) => {
       if (!link.label) {
-        if (mesh) {
-          this.object.remove(mesh)
-          delete this.meshes[index]
-        }
         return
       }
+
+      let mesh = this.meshes[index]
 
       if (!mesh) {
         mesh = new THREE.Mesh(this.planeGeometry, buildMaterial())
         this.meshes[index] = mesh
-        this.object.add(mesh)
       }
+
+      this.object.add(mesh)
 
       // Position at the center of the link:
       mesh.position.x = (link.source.x + link.target.x) / 2
@@ -208,4 +208,6 @@ export class Labels {
       mesh.visible = squishFactor <= maxSquishThreshold
     })
   }
+
+  // TODO: implement dispose()
 }

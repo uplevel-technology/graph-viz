@@ -157,6 +157,8 @@ export class Links {
   public dispose = () => {
     this.geometry.dispose()
     this.material.dispose()
+    // TODO dispose labels
+    // this.labels.dispose()
   }
 
   /**
@@ -166,6 +168,7 @@ export class Links {
   public updateAll = (links: PopulatedGraphVizLink[]) => {
     this.updateAllPositions(links)
     this.updateAllColors(links)
+    this.updateAllLabels(links)
   }
 
   /**
