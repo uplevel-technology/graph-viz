@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import {PopulatedGraphVizLink} from './Links'
 import {UPLEVEL_BASE_THEME} from '../../theme'
 import {DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE} from './Nodes'
+import {values} from 'lodash'
 
 interface TextTexture {
   texture: THREE.Texture
@@ -209,5 +210,15 @@ export class Labels {
     })
   }
 
-  // TODO: implement dispose()
+  public dispose() {
+    values(this.meshes).forEach(mesh => {
+      mesh.geometry.dispose()
+      const material = mesh.material as THREE.ShaderMaterial
+      material.dispose()
+    })
+
+    values(this.textures).forEach((t: TextTexture) => {
+      t.texture.dispose()
+    })
+  }
 }
