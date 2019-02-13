@@ -6,6 +6,7 @@ import {camelCase, values} from 'lodash'
 import {
   getArtifactNodeLabel,
   getAttributeNodeLabel,
+  getEventNodeLabel,
   ObservableRelationshipDisplayTypes,
 } from '../displayTypes'
 import {GraphVizLink} from './lib/Links'
@@ -188,4 +189,36 @@ export const eventsToVizData = (events: Event[]): VizData => {
     links,
     tooltips: seenNodes.map(it => it.tooltipNode),
   }
+}
+
+export const getLegendData = (events: Event[]): string[] => {
+  const allTypes: Set<string> = new Set()
+
+  const getObsLabel = (t: ObservableNode) => {
+    if (t.getValueCase() === ObservableNode.ValueCase.ARTIFACT) {
+      return 'artifact' // FIXME: magic string
+    } else {
+      return getAttributeNodeLabel(t.getAttribute()!.getType())
+    }
+  }
+
+  events.forEach(event => {
+    const observed = event.getObserved()
+    if (!observed) {
+      return
+    }
+
+    allTypes.add(getEventNodeLabel(event.getEventType()))
+
+    observed.getAttributesList().forEach(ao => {
+      allTypes.add(getAttributeNodeLabel(ao.getAttribute()!.getType()))
+    })
+
+    observed.getRelationshipsList().forEach(rel => {
+      allTypes.add(getObsLabel(rel.getFrom()!))
+      allTypes.add(getObsLabel(rel.getTo()!))
+    })
+  })
+
+  return Array.from(allTypes)
 }
