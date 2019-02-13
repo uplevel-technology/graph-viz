@@ -29,11 +29,13 @@ export const NodeFillPalette: {[key: string]: string} = {
   ipAddress: '#86B4EA', // blue
   port: '#CFDEFF', // light blue
   filePath: '#EED6F2', // pink
+  subject: '#EED6F2', // pink // WARNING same color as filePath (they do not occur in same alerts in demo datasets)
   filename: '#A68ABE', // purple
   hash: '#C0F3FA', // cyan
   url: '#7ED3C0', // green
   application: '#CCFF90', // light green
   process: '#FFA76B', // orange
+  emailAddress: '#FFA76B', // orange // WARNING same color as process (they do not occur in same alerts in demo datasets)
 }
 
 export const NodeOutlinePalette: {[key: string]: string} = {
@@ -44,11 +46,13 @@ export const NodeOutlinePalette: {[key: string]: string} = {
   ipAddress: '#005DB8', // blue
   port: '#5986EC', // light blue
   filePath: '#EA80FC', // pink
+  subject: '#EA80FC', // pink // WARNING same color as filePath (they do not occur in same alerts in demo datasets)
   filename: '#5B129B', // purple
   hash: '#08A7BB', // cyan
   url: '#278C90', // green
   application: '#9ACA95', // light green
   process: '#FC6600', // orange
+  emailAddress: '#FC6600', // orange // WARNING same color as process (they do not occur in same alerts in demo datasets)
 }
 
 export const toggleNodeLock = (
