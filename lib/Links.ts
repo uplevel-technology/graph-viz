@@ -43,7 +43,16 @@ interface LinkStyleAttributes {
    */
   arrowWidth?: number
 
+  /**
+   * text to display
+   */
   label?: string
+
+  /**
+   * relative scale of the label.
+   * default is 1.0
+   */
+  labelScale?: number
 }
 
 export interface GraphVizLink extends LinkStyleAttributes {

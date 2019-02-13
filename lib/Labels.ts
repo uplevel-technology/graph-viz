@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import {PopulatedGraphVizLink} from './Links'
 import {UPLEVEL_BASE_THEME} from '../../theme'
+import {DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE} from './Nodes'
 
 interface TextTexture {
   texture: THREE.Texture
@@ -8,13 +9,13 @@ interface TextTexture {
   textSize: THREE.Vector2
 }
 
-function buildTexture(text: string): TextTexture {
+function buildTexture(text: string, labelScale: number = 1): TextTexture {
   const canvas = document.createElement('canvas')
   const context = canvas.getContext('2d')!
 
   // On higher res displays, and so that we can zoom in and the text still looks
   // good, we render it at a bigger size, then pretend it was smaller.
-  const extraScale = 4 * window.devicePixelRatio
+  const extraScale = 4 * window.devicePixelRatio * labelScale
   const xPadding = 2
 
   const fontSize = 4 * extraScale
@@ -132,10 +133,10 @@ export class Labels {
     this.textures = {}
   }
 
-  private getTexture(text: string): TextTexture {
+  private getTexture(text: string, labelScale: number = 1): TextTexture {
     let texture = this.textures[text]
     if (!texture) {
-      texture = buildTexture(text)
+      texture = buildTexture(text, labelScale)
     }
     this.textures[text] = texture
     // TODO: dispose of unused textures
@@ -178,7 +179,7 @@ export class Labels {
         mesh.rotation.z += Math.PI
       }
 
-      setMeshTexture(mesh, this.getTexture(link.label))
+      setMeshTexture(mesh, this.getTexture(link.label, link.labelScale))
 
       // TODO: scale down if the camera is really zoomed in, to avoid the
       // ugliness of visible pixels, and also to make better use of space.
@@ -186,18 +187,25 @@ export class Labels {
 
       const linkLength = Math.sqrt(dx * dx + dy * dy)
       // Pad away from the ends of the link:
-      // TODO: could use node size?
-      const labelPadding = 20
+      const sourceRadius =
+        (link.target.absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) / 2
+      const targetRadius =
+        (link.source.absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) / 2
+      const labelPadding = sourceRadius + targetRadius
+
       const availableX = Math.max(0, linkLength - labelPadding)
 
       // Try to squish the label down to make it fit:
-      const squishFactor = Math.max(1, mesh.scale.x / availableX)
+      const labelScale = link.labelScale || 1
+      const maxSquishScaled = 1 / labelScale
+      const squishFactor = Math.max(maxSquishScaled, mesh.scale.x / availableX)
       mesh.scale.x /= squishFactor
       mesh.scale.y /= squishFactor
+
       // The most we're allowed to squish a label:
-      const maximumSquishFactor = 2
+      const maxSquishThreshold = 2
       // Completely hide if we've squished it too much:
-      mesh.visible = squishFactor <= maximumSquishFactor
+      mesh.visible = squishFactor <= maxSquishThreshold
     })
   }
 }
