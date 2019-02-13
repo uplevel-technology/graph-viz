@@ -157,8 +157,7 @@ export class Links {
   public dispose = () => {
     this.geometry.dispose()
     this.material.dispose()
-    // TODO dispose labels
-    // this.labels.dispose()
+    this.labels.dispose()
   }
 
   /**
