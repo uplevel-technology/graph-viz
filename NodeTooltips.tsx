@@ -71,7 +71,10 @@ class NodeTooltipsBase extends React.Component<Props> {
             {this.props.node.displayType}
           </Typography>
         )}
-        <Typography variant={'body2'} className={cx(classes.breakLongWord, classes.origCase)}>
+        <Typography
+          variant={'body2'}
+          className={cx(classes.breakLongWord, classes.origCase)}
+        >
           {this.props.node.displayName}
         </Typography>
         {this.props.node.formattedTime && (
