@@ -25,6 +25,7 @@ export const NodeFillPalette: {[key: string]: string} = {
   artifact: '#00478D',
   attribute: '#FEC400',
   alert: '#F16576', // red
+  event: '#F16576', // red // intentionally the same as alert
   emailUpload: '#0d8721',
   ipAddress: '#86B4EA', // blue
   port: '#CFDEFF', // light blue
@@ -32,8 +33,10 @@ export const NodeFillPalette: {[key: string]: string} = {
   subject: '#EED6F2', // pink // WARNING same color as filePath (they do not occur in same alerts in demo datasets)
   filename: '#A68ABE', // purple
   hash: '#C0F3FA', // cyan
+  channel: '#C0F3FA', // cyan // WARNING same color as hash (they do not occur in same alerts in demo datasets)
   url: '#7ED3C0', // green
   application: '#CCFF90', // light green
+  body: '#CCFF90', // light green // WARNING same color as application (they do not occur in same alerts in demo datasets)
   process: '#FFA76B', // orange
   emailAddress: '#FFA76B', // orange // WARNING same color as process (they do not occur in same alerts in demo datasets)
 }
@@ -42,6 +45,7 @@ export const NodeOutlinePalette: {[key: string]: string} = {
   artifact: '#00478D',
   attribute: '#FEC400',
   alert: '#921928', // red
+  event: '#921928', // red // intentionally the same as alert
   emailUpload: '#0d8721',
   ipAddress: '#005DB8', // blue
   port: '#5986EC', // light blue
@@ -49,8 +53,10 @@ export const NodeOutlinePalette: {[key: string]: string} = {
   subject: '#EA80FC', // pink // WARNING same color as filePath (they do not occur in same alerts in demo datasets)
   filename: '#5B129B', // purple
   hash: '#08A7BB', // cyan
+  channel: '#08A7BB', // cyan // WARNING same color as hash (they do not occur in same alerts in demo datasets)
   url: '#278C90', // green
   application: '#9ACA95', // light green
+  body: '#9ACA95', // light green // WARNING same color as application (they do not occur in same alerts in demo datasets)
   process: '#FC6600', // orange
   emailAddress: '#FC6600', // orange // WARNING same color as process (they do not occur in same alerts in demo datasets)
 }
