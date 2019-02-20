@@ -10,11 +10,11 @@ import {
   ObservableRelationshipDisplayTypes,
 } from '../displayTypes'
 import {GraphVizLink} from './lib/Links'
-import {GraphVizNode} from './lib/Nodes'
 import {TooltipNode} from './NodeTooltips'
 import {NodeFillPalette, NodeOutlinePalette} from './vizUtils'
+import {PartialGraphVizNode} from './GraphVizComponent'
 
-export const artifactToNode = (artifact: Artifact): Partial<GraphVizNode> => ({
+export const artifactToNode = (artifact: Artifact): PartialGraphVizNode => ({
   id: artifact.getUid()!.getValue(),
   fill: NodeFillPalette.artifact,
   stroke: NodeOutlinePalette.artifact,
@@ -28,9 +28,7 @@ export const artifactToTooltipNode = (
   displayName: getArtifactNodeLabel(artifact.getType()),
 })
 
-export const attributeToNode = (
-  attribute: Attribute,
-): Partial<GraphVizNode> => {
+export const attributeToNode = (attribute: Attribute): PartialGraphVizNode => {
   const attributeType = getAttributeNodeLabel(attribute.getType())
   return {
     id: `${getAttributeNodeLabel(
@@ -54,7 +52,7 @@ export const attributeToTooltipNode = (
 
 export const observableToNode = (
   observable: ObservableNode,
-): Partial<GraphVizNode> => {
+): PartialGraphVizNode => {
   switch (observable.getValueCase()) {
     case ObservableNode.ValueCase.ARTIFACT:
       return artifactToNode(observable.getArtifact()!)
@@ -80,7 +78,7 @@ export const observableToTooltipNode = (
   )
 }
 
-export const eventToNode = (event: Event): Partial<GraphVizNode> => ({
+export const eventToNode = (event: Event): PartialGraphVizNode => ({
   id: event.getUid()!.getValue(),
   fill:
     event.getEventType() === Event.Type.ALERT
@@ -111,8 +109,8 @@ export const eventToTooltipNode = (event: Event): Partial<TooltipNode> => {
 }
 
 interface VizData {
-  nodes: Partial<GraphVizNode>[]
-  links: Partial<GraphVizLink>[]
+  nodes: PartialGraphVizNode[]
+  links: GraphVizLink[]
   tooltips: Partial<TooltipNode>[]
 }
 
@@ -121,7 +119,7 @@ export const eventsToVizData = (events: Event[]): VizData => {
   // build that up in this object:
   const seenVizNodesById: {
     [id: string]: {
-      vizNode: Partial<GraphVizNode>
+      vizNode: PartialGraphVizNode
       tooltipNode: Partial<TooltipNode>
     }
   } = {}

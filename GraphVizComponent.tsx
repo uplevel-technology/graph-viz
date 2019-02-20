@@ -29,9 +29,10 @@ import {GraphVizNode} from './lib/Nodes'
 const styles = (theme: Theme) =>
   createStyles({
     root: {
+      display: 'flex',
       position: 'relative',
       width: '100%',
-      height: 'calc(100vh - 150px)', // FIXME: fix hardcoded height
+      height: '100%', // FIXME: fix hardcoded height
     },
     canvas: {
       background: 'white',
@@ -55,20 +56,17 @@ interface State {
   readonly errorMessage?: string
 }
 
-interface PartialGraphVizNode extends Partial<GraphVizNode> {
-  id: string
-  displayName: string
-}
-
-interface PartialTooltipNode extends Partial<TooltipNode> {
+// A partial GraphVizNode with a required id parameter
+// Better naming suggestions welcome
+export interface PartialGraphVizNode extends Partial<GraphVizNode> {
   id: string
 }
 
 interface Props extends WithStyles<typeof styles> {
   nodes: PartialGraphVizNode[]
   links: GraphVizLink[]
-  tooltips: PartialTooltipNode[]
-  onRefresh: () => any
+  tooltips: Partial<TooltipNode>[]
+  onRefresh?: () => any
 }
 
 class GraphVizComponentBase extends React.Component<Props, State> {
