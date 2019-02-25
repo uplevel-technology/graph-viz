@@ -32,12 +32,15 @@ export const NodeFillPalette: {[key: string]: string} = {
   filePath: '#EED6F2', // pink
   subject: '#EED6F2', // pink // WARNING same color as filePath (they do not occur in same alerts in demo datasets)
   filename: '#A68ABE', // purple
-  hash: '#C0F3FA', // cyan
-  channel: '#C0F3FA', // cyan // WARNING same color as hash (they do not occur in same alerts in demo datasets)
+  md5: '#C0F3FA', // cyan
+  channel: '#C0F3FA', // cyan // WARNING same color as md5 (they do not occur in same alerts in demo datasets)
+  sha1: '#0796a8',
+  sha256: '#068595',
+  protocol: '#fd9f3e',
   url: '#7ED3C0', // green
   application: '#CCFF90', // light green
   body: '#CCFF90', // light green // WARNING same color as application (they do not occur in same alerts in demo datasets)
-  process: '#FFA76B', // orange
+  processName: '#FFA76B', // orange
   emailAddress: '#FFA76B', // orange // WARNING same color as process (they do not occur in same alerts in demo datasets)
 }
 
@@ -52,12 +55,15 @@ export const NodeOutlinePalette: {[key: string]: string} = {
   filePath: '#EA80FC', // pink
   subject: '#EA80FC', // pink // WARNING same color as filePath (they do not occur in same alerts in demo datasets)
   filename: '#5B129B', // purple
-  hash: '#08A7BB', // cyan
-  channel: '#08A7BB', // cyan // WARNING same color as hash (they do not occur in same alerts in demo datasets)
+  md5: '#08A7BB', // cyan
+  channel: '#08A7BB', // cyan // WARNING same color as md5 (they do not occur in same alerts in demo datasets)
+  sha1: '#08A7BB',
+  sha256: '#08A7BB',
+  protocol: '#FD9225',
   url: '#278C90', // green
   application: '#9ACA95', // light green
   body: '#9ACA95', // light green // WARNING same color as application (they do not occur in same alerts in demo datasets)
-  process: '#FC6600', // orange
+  processName: '#FC6600', // orange
   emailAddress: '#FC6600', // orange // WARNING same color as process (they do not occur in same alerts in demo datasets)
 }
 
