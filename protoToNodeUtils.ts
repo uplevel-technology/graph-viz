@@ -14,6 +14,7 @@ import {GraphVizLink} from './lib/Links'
 import {TooltipNode} from './NodeTooltips'
 import {NodeFillPalette, NodeOutlinePalette} from './vizUtils'
 import {PartialGraphVizNode} from './GraphVizComponent'
+import * as moment from 'moment'
 
 export const artifactToNode = (artifact: Artifact): PartialGraphVizNode => ({
   id: artifact.getUid()!.getValue(),
@@ -54,7 +55,8 @@ export const getAttributeId = (attribute: Attribute): string => {
 export const attributeToTooltipNode = (
   attribute: Attribute,
 ): Partial<TooltipNode> => ({
-  displayName: getAttributeNodeLabel(attribute.getType()),
+  displayType: getAttributeNodeLabel(attribute.getType()),
+  displayName: attribute.getValue(),
 })
 
 export const observableToNode = (
@@ -112,6 +114,10 @@ export const eventToTooltipNode = (event: Event): Partial<TooltipNode> => {
 
   return {
     displayName,
+    displayType: 'event',
+    formattedTime: moment(event.getOccurredAt()!.toDate()).format(
+      'MMM DD YYYY',
+    ),
   }
 }
 
