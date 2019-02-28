@@ -5,7 +5,6 @@ import {ObservableNode} from '@core/observable_pb'
 import {camelCase, values} from 'lodash'
 import {
   getArtifactNodeLabel,
-  getAttributeDisplayType,
   getAttributeNodeLabel,
   getEventNodeLabel,
   ObservableRelationshipDisplayTypes,
@@ -47,7 +46,7 @@ export const attributeToNode = (attribute: Attribute): PartialGraphVizNode => {
 }
 
 export const getAttributeId = (attribute: Attribute): string => {
-  return `${getAttributeDisplayType(
+  return `${getAttributeNodeLabel(
     attribute.getType(),
   )}::${attribute.getValue()}`
 }
