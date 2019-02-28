@@ -4,7 +4,8 @@ import {Event} from '@core/event_pb'
 import {ObservableNode} from '@core/observable_pb'
 import {camelCase, values} from 'lodash'
 import {
-  getArtifactNodeLabel,
+  getArtifactDisplayType,
+  getAttributeDisplayType,
   getAttributeNodeLabel,
   getEventNodeLabel,
   ObservableRelationshipDisplayTypes,
@@ -26,7 +27,7 @@ export const artifactToNode = (artifact: Artifact): PartialGraphVizNode => ({
 export const artifactToTooltipNode = (
   artifact: Artifact,
 ): Partial<TooltipNode> => ({
-  displayName: getArtifactNodeLabel(artifact.getType()),
+  displayName: getArtifactDisplayType(artifact.getType()),
 })
 
 export const attributeToNode = (attribute: Attribute): PartialGraphVizNode => {
@@ -54,7 +55,7 @@ export const getAttributeId = (attribute: Attribute): string => {
 export const attributeToTooltipNode = (
   attribute: Attribute,
 ): Partial<TooltipNode> => ({
-  displayType: getAttributeNodeLabel(attribute.getType()),
+  displayType: getAttributeDisplayType(attribute.getType()),
   displayName: attribute.getValue(),
 })
 
@@ -206,9 +207,9 @@ export const getLegendData = (events: Event[]): string[] => {
 
   const getObsLabel = (t: ObservableNode) => {
     if (t.getValueCase() === ObservableNode.ValueCase.ARTIFACT) {
-      return 'artifact' // FIXME: magic string
+      return 'Artifact'
     } else {
-      return getAttributeNodeLabel(t.getAttribute()!.getType())
+      return getAttributeDisplayType(t.getAttribute()!.getType())
     }
   }
 
@@ -221,7 +222,7 @@ export const getLegendData = (events: Event[]): string[] => {
     allTypes.add(getEventNodeLabel(event.getEventType()))
 
     observed.getAttributesList().forEach(ao => {
-      allTypes.add(getAttributeNodeLabel(ao.getAttribute()!.getType()))
+      allTypes.add(getAttributeDisplayType(ao.getAttribute()!.getType()))
     })
 
     observed.getRelationshipsList().forEach(rel => {
