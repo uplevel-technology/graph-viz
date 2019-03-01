@@ -114,7 +114,7 @@ export const eventToTooltipNode = (event: Event): Partial<TooltipNode> => {
 
   return {
     displayName,
-    displayType: 'event',
+    displayType: 'Event',
     formattedTime: moment(event.getOccurredAt()!.toDate()).format(
       'MMM DD YYYY',
     ),
