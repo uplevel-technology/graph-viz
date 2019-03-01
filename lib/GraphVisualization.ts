@@ -31,6 +31,22 @@ function constructIdToIdxMap(arr: Array<{id: string}>): {[id: string]: number} {
   return map
 }
 
+export interface ConfigurationOptions {
+  disableClick?: boolean
+  disableHover?: boolean
+  disablePan?: boolean
+  disableZoom?: boolean
+  disableDrag?: boolean
+}
+
+const DEFAULT_CONFIG_OPTIONS: ConfigurationOptions = {
+  disableClick: false,
+  disableHover: false,
+  disablePan: false,
+  disableZoom: false,
+  disableDrag: false,
+}
+
 export class GraphVisualization {
   public nodesMesh: Nodes
   public linksMesh: Links
@@ -64,6 +80,7 @@ export class GraphVisualization {
     canvas: HTMLCanvasElement,
     width: number,
     height: number,
+    config: ConfigurationOptions = {},
   ) {
     this.canvas = canvas
     this.width = width
@@ -114,14 +131,34 @@ export class GraphVisualization {
       this.camera,
       this.nodesMesh,
     )
-    this.mouseInteraction.onClick(this.handleClick)
-    this.mouseInteraction.onNodeHoverIn(this.handleHoverIn)
-    this.mouseInteraction.onNodeHoverOut(this.handleHoverOut)
-    this.mouseInteraction.onDragStart(this.handleDragStart)
-    this.mouseInteraction.onDragEnd(this.handleDragEnd)
-    this.mouseInteraction.onNodeDrag(this.handleNodeDrag)
-    this.mouseInteraction.onPan(this.handlePan)
-    this.mouseInteraction.onZoom(this.handleZoomOnWheel)
+
+    const configWithDefault = {
+      ...DEFAULT_CONFIG_OPTIONS,
+      ...config,
+    }
+
+    if (!configWithDefault.disableClick) {
+      this.mouseInteraction.onClick(this.handleClick)
+    }
+
+    if (!configWithDefault.disableHover) {
+      this.mouseInteraction.onNodeHoverIn(this.handleHoverIn)
+      this.mouseInteraction.onNodeHoverOut(this.handleHoverOut)
+    }
+
+    if (!configWithDefault.disableDrag) {
+      this.mouseInteraction.onDragStart(this.handleDragStart)
+      this.mouseInteraction.onDragEnd(this.handleDragEnd)
+      this.mouseInteraction.onNodeDrag(this.handleNodeDrag)
+    }
+
+    if (!configWithDefault.disablePan) {
+      this.mouseInteraction.onPan(this.handlePan)
+    }
+
+    if (!configWithDefault.disableZoom) {
+      this.mouseInteraction.onZoom(this.handleZoomOnWheel)
+    }
   }
 
   public onNodeHoverIn(callback: HoverEventHandler) {

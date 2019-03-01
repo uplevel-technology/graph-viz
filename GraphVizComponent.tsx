@@ -19,7 +19,11 @@ import {
   ForceSimulationNode,
   NodePosition,
 } from './lib/BasicForceSimulation'
-import {GraphVisualization, GraphVizData} from './lib/GraphVisualization'
+import {
+  ConfigurationOptions,
+  GraphVisualization,
+  GraphVizData,
+} from './lib/GraphVisualization'
 import {GraphVizLink} from './lib/Links'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
@@ -67,6 +71,7 @@ interface Props extends WithStyles<typeof styles> {
   links: GraphVizLink[]
   tooltips: Partial<TooltipNode>[]
   onRefresh?: () => any
+  config?: ConfigurationOptions
 }
 
 class GraphVizComponentBase extends React.Component<Props, State> {
@@ -110,6 +115,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       canvas,
       width,
       height,
+      this.props.config,
     )
 
     window.addEventListener('resize', this.onWindowResize)
