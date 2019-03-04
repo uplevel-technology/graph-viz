@@ -46,7 +46,7 @@ export const attributeToNode = (attribute: Attribute): PartialGraphVizNode => {
   }
 }
 
-export const getAttributeId = (attribute: Attribute): string => {
+export const getAttributeLexeme = (attribute: Attribute): string => {
   return `${getAttributeNodeLabel(
     attribute.getType(),
   )}::${attribute.getValue()}`
