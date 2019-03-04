@@ -37,7 +37,9 @@ export const NodeFillPalette: {[key: string]: string} = {
   sha1: '#0796a8',
   sha256: '#068595',
   protocol: '#fd9f3e',
+  processId: '#fd9f3e', // WARNING same color as protocol
   url: '#7ED3C0', // green
+  commandLine: '#7ED3C0', // WARNING same color as url
   application: '#CCFF90', // light green
   body: '#CCFF90', // light green // WARNING same color as application (they do not occur in same alerts in demo datasets)
   processName: '#FFA76B', // orange
@@ -60,7 +62,9 @@ export const NodeOutlinePalette: {[key: string]: string} = {
   sha1: '#08A7BB',
   sha256: '#08A7BB',
   protocol: '#FD9225',
+  processId: '#FD9225', // WARNING same color as protocol
   url: '#278C90', // green
+  commandLine: '#278C90', // WARNING same color as url
   application: '#9ACA95', // light green
   body: '#9ACA95', // light green // WARNING same color as application (they do not occur in same alerts in demo datasets)
   processName: '#FC6600', // orange
