@@ -72,6 +72,7 @@ interface Props extends WithStyles<typeof styles> {
   tooltips: Partial<TooltipNode>[]
   onRefresh?: () => any
   config?: ConfigurationOptions
+  showControls?: boolean
 }
 
 class GraphVizComponentBase extends React.Component<Props, State> {
@@ -247,7 +248,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   }
 
   render() {
-    const {classes, onRefresh} = this.props
+    const {classes, onRefresh, showControls} = this.props
 
     return (
       <div ref={this.rootRef} className={classes.root}>
@@ -255,22 +256,24 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
         <NodeTooltips node={this.state.currentTooltipNode} />
 
-        <Grid
-          container
-          direction={'column'}
-          alignItems={'flex-end'}
-          className={classes.actionButtons}
-        >
-          <Button size={'small'} onClick={onRefresh}>
-            <RefreshIcon />
-          </Button>
-          <Button size={'small'} onClick={this.zoomIn}>
-            <ZoomInIcon />
-          </Button>
-          <Button size={'small'} onClick={this.zoomOut}>
-            <ZoomOutIcon />
-          </Button>
-        </Grid>
+        {showControls && (
+          <Grid
+            container
+            direction={'column'}
+            alignItems={'flex-end'}
+            className={classes.actionButtons}
+          >
+            <Button size={'small'} onClick={onRefresh}>
+              <RefreshIcon />
+            </Button>
+            <Button size={'small'} onClick={this.zoomIn}>
+              <ZoomInIcon />
+            </Button>
+            <Button size={'small'} onClick={this.zoomOut}>
+              <ZoomOutIcon />
+            </Button>
+          </Grid>
+        )}
 
         {this.state.errorMessage && (
           <Typography className={classes.errorMessage}>
