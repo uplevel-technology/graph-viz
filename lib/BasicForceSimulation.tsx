@@ -60,15 +60,19 @@ export class BasicForceSimulation {
 
     this.simulation = d3
       .forceSimulation(nodesCopy)
-      // TODO figure out how to conditionally apply force in x direction based on node value
-      // (because apply force in direction of 0 is not what we want!)
       .force(
         'x',
-        d3.forceX().x((node: ForceSimulationNode) => node.forceX || 0),
+        d3
+          .forceX()
+          .strength((node: ForceSimulationNode) => (node.forceX ? 0.1 : 0))
+          .x((node: ForceSimulationNode) => node.forceX || 0),
       )
       .force(
         'y',
-        d3.forceY().y((node: ForceSimulationNode) => node.forceY || 0),
+        d3
+          .forceY()
+          .strength((node: ForceSimulationNode) => (node.forceY ? 0.1 : 0))
+          .y((node: ForceSimulationNode) => node.forceY || 0),
       )
       .force(
         'links',
@@ -77,7 +81,13 @@ export class BasicForceSimulation {
           .id((n: ForceSimulationNode) => n.id)
           .distance(linkForceDistance),
       )
-      .force('charge', d3.forceManyBody().strength(-100))
+      .force(
+        'charge',
+        d3
+          .forceManyBody()
+          .strength(-100)
+          .distanceMax(250),
+      )
       .velocityDecay(0.5)
       .on('tick', () => {
         this.registeredEventHandlers.tick(this.getNodePositions())
