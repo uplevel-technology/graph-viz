@@ -64,14 +64,18 @@ export class BasicForceSimulation {
         'x',
         d3
           .forceX()
-          .strength((node: ForceSimulationNode) => (node.forceX ? 0.1 : 0))
+          .strength((node: ForceSimulationNode) =>
+            node.forceX !== undefined ? 0.1 : 0,
+          )
           .x((node: ForceSimulationNode) => node.forceX || 0),
       )
       .force(
         'y',
         d3
           .forceY()
-          .strength((node: ForceSimulationNode) => (node.forceY ? 0.1 : 0))
+          .strength((node: ForceSimulationNode) =>
+            node.forceY !== undefined ? 0.1 : 0,
+          )
           .y((node: ForceSimulationNode) => node.forceY || 0),
       )
       .force(
