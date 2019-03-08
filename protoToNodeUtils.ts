@@ -55,6 +55,7 @@ export const getAttributeLexeme = (attribute: Attribute): string => {
 export const attributeToTooltipNode = (
   attribute: Attribute,
 ): Partial<TooltipNode> => ({
+  id: getAttributeLexeme(attribute),
   displayType: getAttributeDisplayType(attribute.getType()),
   displayName: attribute.getValue(),
 })
@@ -113,6 +114,7 @@ export const eventToTooltipNode = (event: Event): Partial<TooltipNode> => {
   }
 
   return {
+    id: event.getUid()!.getValue(),
     displayName,
     displayType: 'Event',
     formattedTime: moment(event.getOccurredAt()!.toDate()).format(
