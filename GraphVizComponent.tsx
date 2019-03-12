@@ -210,7 +210,10 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.nodes !== this.props.nodes) {
+    if (
+      prevProps.nodes !== this.props.nodes ||
+      prevProps.links !== this.props.links
+    ) {
       this.vizData = {
         nodes: this.props.nodes as GraphVizNode[],
         links: this.props.links as GraphVizLink[],
