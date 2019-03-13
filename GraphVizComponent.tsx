@@ -58,6 +58,7 @@ interface State {
   readonly currentTooltipNode: TooltipNode | null
   readonly currentlyHoveredIdx: number | null
   readonly errorMessage?: string
+  readonly pairNode?: PartialGraphVizNode
 }
 
 // A partial GraphVizNode with a required id parameter
@@ -93,6 +94,10 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   readonly state: State = {
     currentTooltipNode: null,
     currentlyHoveredIdx: null,
+  }
+
+  static defaultProps = {
+    onPairSelect: noop,
   }
 
   onWindowResize = debounce(() => {
@@ -168,6 +173,17 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       if (clickedNodeIdx === null) {
         return
       }
+
+      if (this.props.editMode) {
+        const clickedNode = this.vizData.nodes[clickedNodeIdx]
+        if (this.state.pairNode) {
+          this.props.onPairSelect(this.state.pairNode, clickedNode)
+          this.setState({pairNode: undefined})
+        } else {
+          this.setState({pairNode: clickedNode})
+        }
+      }
+
       toggleNodeLock(this.vizData.nodes[clickedNodeIdx])
 
       this.simulation.update(this.vizData)
