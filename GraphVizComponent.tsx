@@ -27,7 +27,7 @@ import {
 import {GraphVizLink} from './lib/Links'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
-import {debounce} from 'lodash'
+import {debounce, noop} from 'lodash'
 import {GraphVizNode} from './lib/Nodes'
 
 const styles = (theme: Theme) =>
@@ -73,6 +73,8 @@ interface Props extends WithStyles<typeof styles> {
   onRefresh?: () => any
   config?: ConfigurationOptions
   showControls?: boolean
+  editMode?: boolean
+  onPairSelect: (node1: PartialGraphVizNode, node2: PartialGraphVizNode) => any
 }
 
 class GraphVizComponentBase extends React.Component<Props, State> {
