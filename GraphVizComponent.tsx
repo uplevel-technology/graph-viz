@@ -140,14 +140,18 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
       this.visualization.updateNode(hoveredNodeIdx, vizNode)
 
-      this.setState({
-        currentTooltipNode: {
-          ...this.tooltipNodes[hoveredNodeIdx],
-          screenX: screenCoords.x,
-          screenY: screenCoords.y,
-        },
-        currentlyHoveredIdx: hoveredNodeIdx,
-      })
+      this.setState({currentlyHoveredIdx: hoveredNodeIdx})
+
+      const tooltipNode = this.tooltipNodes[hoveredNodeIdx]
+      if (tooltipNode) {
+        this.setState({
+          currentTooltipNode: {
+            ...tooltipNode,
+            screenX: screenCoords.x,
+            screenY: screenCoords.y,
+          },
+        })
+      }
     })
 
     this.simulation.onTick((nodePositions: NodePosition[]) => {
