@@ -199,14 +199,14 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
     this.visualization.onNodeDrag((worldPos, draggedNodeIdx) => {
       if (this.props.editMode) {
-        const placeholderNode = this.vizData.nodes[
+        const draftNode = this.vizData.nodes[
           this.vizData.nodes.length - 1
         ] as ForceSimulationNode
 
-        placeholderNode.x = worldPos.x
-        placeholderNode.y = worldPos.y
-        placeholderNode.fx = worldPos.x
-        placeholderNode.fy = worldPos.y
+        draftNode.x = worldPos.x
+        draftNode.y = worldPos.y
+        draftNode.fx = worldPos.x
+        draftNode.fy = worldPos.y
       } else {
         const node = this.vizData.nodes[draggedNodeIdx] as ForceSimulationNode
         node.x = worldPos.x
@@ -225,8 +225,8 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
       if (this.props.editMode) {
         const draggedNode = this.vizData.nodes[draggedNodeIdx]
-        const placeholderTargetNode = {
-          id: 'placeholder',
+        const draftNode = {
+          id: 'draft-node',
           x: mouse.x,
           y: mouse.y,
           absoluteSize: 5,
@@ -234,21 +234,19 @@ class GraphVizComponentBase extends React.Component<Props, State> {
         }
         const draftLink = {
           source: draggedNode.id,
-          target: placeholderTargetNode.id,
+          target: draftNode.id,
           color: 'orange',
         }
-        this.vizData.nodes.push(placeholderTargetNode)
+        this.vizData.nodes.push(draftNode)
         this.vizData.links.push(draftLink)
+        this.visualization.update(this.vizData)
+      } else {
+        lockNode(this.vizData.nodes[draggedNodeIdx])
+        this.visualization.updateNode(
+          draggedNodeIdx,
+          this.vizData.nodes[draggedNodeIdx],
+        )
       }
-
-      lockNode(this.vizData.nodes[draggedNodeIdx])
-
-      this.visualization.update(this.vizData)
-
-      // this.visualization.updateNode(
-      //   draggedNodeIdx,
-      //   this.vizData.nodes[draggedNodeIdx],
-      // )
       this.simulation.reheat()
     })
 
