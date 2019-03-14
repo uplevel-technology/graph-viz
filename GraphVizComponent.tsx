@@ -178,15 +178,15 @@ class GraphVizComponentBase extends React.Component<Props, State> {
         return
       }
 
-      if (this.props.editMode) {
-        const clickedNode = this.vizData.nodes[clickedNodeIdx]
-        if (this.state.pairNode) {
-          this.props.onPairSelect(this.state.pairNode, clickedNode)
-          this.setState({pairNode: undefined})
-        } else {
-          this.setState({pairNode: clickedNode})
-        }
-      }
+      // if (this.props.editMode) {
+      //   const clickedNode = this.vizData.nodes[clickedNodeIdx]
+      //   if (this.state.pairNode) {
+      //     this.props.onPairSelect(this.state.pairNode, clickedNode)
+      //     this.setState({pairNode: undefined})
+      //   } else {
+      //     this.setState({pairNode: clickedNode})
+      //   }
+      // }
 
       toggleNodeLock(this.vizData.nodes[clickedNodeIdx])
 
@@ -198,11 +198,22 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     })
 
     this.visualization.onNodeDrag((worldPos, draggedNodeIdx) => {
-      const node = this.vizData.nodes[draggedNodeIdx] as ForceSimulationNode
-      node.x = worldPos.x
-      node.y = worldPos.y
-      node.fx = worldPos.x
-      node.fy = worldPos.y
+      if (this.props.editMode) {
+        const placeholderNode = this.vizData.nodes[
+          this.vizData.nodes.length - 1
+        ] as ForceSimulationNode
+
+        placeholderNode.x = worldPos.x
+        placeholderNode.y = worldPos.y
+        placeholderNode.fx = worldPos.x
+        placeholderNode.fy = worldPos.y
+      } else {
+        const node = this.vizData.nodes[draggedNodeIdx] as ForceSimulationNode
+        node.x = worldPos.x
+        node.y = worldPos.y
+        node.fx = worldPos.x
+        node.fy = worldPos.y
+      }
       this.simulation.update(this.vizData)
       // ^ the simulation tick handler should handle the position updates after this in our viz
     })
@@ -212,16 +223,39 @@ class GraphVizComponentBase extends React.Component<Props, State> {
         return
       }
 
+      if (this.props.editMode) {
+        const draggedNode = this.vizData.nodes[draggedNodeIdx]
+        const placeholderTargetNode = {
+          id: 'placeholder',
+          x: mouse.x,
+          y: mouse.y,
+          absoluteSize: 5,
+          charge: 0,
+        }
+        const draftLink = {
+          source: draggedNode.id,
+          target: placeholderTargetNode.id,
+          color: 'orange',
+        }
+        this.vizData.nodes.push(placeholderTargetNode)
+        this.vizData.links.push(draftLink)
+      }
+
       lockNode(this.vizData.nodes[draggedNodeIdx])
 
-      this.visualization.updateNode(
-        draggedNodeIdx,
-        this.vizData.nodes[draggedNodeIdx],
-      )
+      this.visualization.update(this.vizData)
+
+      // this.visualization.updateNode(
+      //   draggedNodeIdx,
+      //   this.vizData.nodes[draggedNodeIdx],
+      // )
       this.simulation.reheat()
     })
 
     this.visualization.onDragEnd(() => {
+      this.vizData.nodes.pop()
+      this.vizData.links.pop()
+      this.visualization.update(this.vizData)
       this.simulation.settle()
     })
 
