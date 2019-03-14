@@ -7,7 +7,7 @@ const MAX_CLICK_DURATION = 300
 /**
  * dispatched when a node is hovered in or out
  */
-export type HoverEventHandler = (hoveredIdx: number) => void
+export type HoverEventHandler = (hoveredIdx: number) => any
 
 /**
  * dispatched when the canvas is clicked. if a node click is detected the clickedNodeIdx will be non-null
@@ -15,7 +15,7 @@ export type HoverEventHandler = (hoveredIdx: number) => void
 export type ClickEventHandler = (
   worldSpaceMousePosition: THREE.Vector3,
   clickedNodeIdx: number | null,
-) => void
+) => any
 
 /**
  * dispatched when a mouse drag start is detected anywhere on the canvas
@@ -23,12 +23,15 @@ export type ClickEventHandler = (
 export type DragStartEventHandler = (
   worldSpaceMousePosition: THREE.Vector3,
   draggedNodeIdx: number | null,
-) => void
+) => any
 
 /**
  * dispatched when a mouse drag end is detected anywhere on the canvas
  */
-export type DragEndEventHandler = () => void
+export type DragEndEventHandler = (
+  worldSpaceMousePosition: THREE.Vector3,
+  draggedNodeIdx: number | null,
+) => any
 
 /**
  * dispatched when a mouse dragging event is detected after dragStart was dispatched with a non-null node
@@ -37,18 +40,18 @@ export type DragEndEventHandler = () => void
 export type NodeDragEventHandler = (
   worldSpaceMousePosition: THREE.Vector3,
   draggedNodeIdx: number,
-) => void
+) => any
 
 /**
  * dispatched when a mouse dragging event is detected after dragStart was dispatched with a null node
  * i.e. canvas was panned
  */
-export type PanEventHandler = (panDelta: THREE.Vector3) => void
+export type PanEventHandler = (panDelta: THREE.Vector3) => any
 
 /**
  * dispatched on mouse wheel change
  */
-export type ZoomEventHandler = (event: MouseWheelEvent) => void
+export type ZoomEventHandler = (event: MouseWheelEvent) => any
 
 export class MouseInteraction {
   private nodes: Nodes
@@ -161,13 +164,11 @@ export class MouseInteraction {
   private onMouseUp = (event: MouseEvent) => {
     event.preventDefault()
     this.dragging = false
-    this.registeredEventHandlers.dragEnd()
+    const worldMouse = this.getMouseInWorldSpace(0)
+    this.registeredEventHandlers.dragEnd(worldMouse, this.intersectedPointIdx)
 
     if (this.registerClick) {
-      this.registeredEventHandlers.click(
-        this.getMouseInWorldSpace(0),
-        this.intersectedPointIdx,
-      )
+      this.registeredEventHandlers.click(worldMouse, this.intersectedPointIdx)
     }
   }
 
