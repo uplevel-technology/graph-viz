@@ -213,21 +213,25 @@ export class MouseInteraction {
       }
     }
 
+    // Maybe we can simplify this highly branched code
+    // for better readability
+
     // handle hovers if not dragging
     if (!this.dragging) {
-      // if a close intersection is found, handle hovers
+      // if a nearest intersection is found, fire node hover in/out events
       if (nearestIndex !== null) {
         if (this.intersectedPointIdx !== nearestIndex) {
           // hover in newly intersected node
           this.registeredEventHandlers.nodeHoverIn(nearestIndex)
 
           if (this.intersectedPointIdx !== null) {
-            // hover out previously intersected node
+            // hover out any previously intersected node
             this.registeredEventHandlers.nodeHoverOut(this.intersectedPointIdx)
           }
           this.intersectedPointIdx = nearestIndex
         }
       } else if (this.intersectedPointIdx !== null) {
+        // hover out previously intersected node and set current intersection to null
         this.registeredEventHandlers.nodeHoverOut(this.intersectedPointIdx)
         this.intersectedPointIdx = null
       }
