@@ -178,16 +178,6 @@ class GraphVizComponentBase extends React.Component<Props, State> {
         return
       }
 
-      // if (this.props.editMode) {
-      //   const clickedNode = this.vizData.nodes[clickedNodeIdx]
-      //   if (this.state.draftLinkSourceNode) {
-      //     this.props.onPairSelect(this.state.draftLinkSourceNode, clickedNode)
-      //     this.setState({draftLinkSourceNode: undefined})
-      //   } else {
-      //     this.setState({draftLinkSourceNode: clickedNode})
-      //   }
-      // }
-
       toggleNodeLock(this.vizData.nodes[clickedNodeIdx])
 
       this.simulation.update(this.vizData)
