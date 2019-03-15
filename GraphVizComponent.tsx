@@ -223,6 +223,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
           absoluteSize: 1,
           charge: 0,
           disableInteractions: true,
+          fill: 'orange',
         }
         const draftLink = {
           source: draggedNode.id,
