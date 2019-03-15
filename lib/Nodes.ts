@@ -61,6 +61,12 @@ export interface GraphVizNode {
    * (This width is relative to the node container. Must be between 0.0 to 1.0)
    */
   strokeWidth?: number
+
+  /**
+   * disables interactions on this node if set
+   * (default is false)
+   */
+  disableInteractions?: boolean
 }
 
 /**
