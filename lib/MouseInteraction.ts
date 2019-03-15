@@ -1,4 +1,4 @@
-import {noop, orderBy} from 'lodash'
+import {get, noop, orderBy} from 'lodash'
 import * as THREE from 'three'
 import {Nodes} from './Nodes'
 
@@ -193,22 +193,36 @@ export class MouseInteraction {
       -1,
     )
 
+    this.raycaster.setFromCamera(this.mouse, this.camera)
+    const intersects = this.raycaster.intersectObject(this.nodes.object, true)
+    let nearestIndex = null
+    if (intersects.length > 0) {
+      const validNearestIntersects = orderBy(
+        intersects,
+        'distanceToRay',
+        'asc',
+      ).filter(
+        point => !get(this.nodes.data, `${point.index}.disableInteractions`),
+      )
+
+      if (
+        validNearestIntersects.length > 0 &&
+        validNearestIntersects[0].index !== undefined
+      ) {
+        nearestIndex = validNearestIntersects[0].index
+      }
+    }
+
     // handle hovers if not dragging
     if (!this.dragging) {
-      this.raycaster.setFromCamera(this.mouse, this.camera)
-
-      const intersects = this.raycaster.intersectObject(this.nodes.object, true)
-
-      if (intersects.length > 0) {
-        // hover in
-        const nearestIntersect = orderBy(intersects, 'distanceToRay', 'asc')[0]
-        const nearestIndex =
-          nearestIntersect.index === undefined ? null : nearestIntersect.index
+      // if a close intersection is found, handle hovers
+      if (nearestIndex !== null) {
         if (this.intersectedPointIdx !== nearestIndex) {
-          if (nearestIndex != null) {
-            this.registeredEventHandlers.nodeHoverIn(nearestIndex)
-          }
+          // hover in newly intersected node
+          this.registeredEventHandlers.nodeHoverIn(nearestIndex)
+
           if (this.intersectedPointIdx !== null) {
+            // hover out previously intersected node
             this.registeredEventHandlers.nodeHoverOut(this.intersectedPointIdx)
           }
           this.intersectedPointIdx = nearestIndex
@@ -218,6 +232,9 @@ export class MouseInteraction {
         this.intersectedPointIdx = null
       }
     } else if (this.intersectedPointIdx !== null) {
+      if (nearestIndex !== null) {
+        this.intersectedPointIdx = nearestIndex
+      }
       // handle node drag interaction
       this.registeredEventHandlers.nodeDrag(
         this.getMouseInWorldSpace(0),
