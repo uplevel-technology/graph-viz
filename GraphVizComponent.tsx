@@ -58,7 +58,7 @@ interface State {
   readonly currentTooltipNode: TooltipNode | null
   readonly currentlyHoveredIdx: number | null
   readonly errorMessage?: string
-  readonly pairNode?: PartialGraphVizNode
+  readonly draftLinkSourceNode?: PartialGraphVizNode
 }
 
 // A partial GraphVizNode with a required id parameter
@@ -180,11 +180,11 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
       // if (this.props.editMode) {
       //   const clickedNode = this.vizData.nodes[clickedNodeIdx]
-      //   if (this.state.pairNode) {
-      //     this.props.onPairSelect(this.state.pairNode, clickedNode)
-      //     this.setState({pairNode: undefined})
+      //   if (this.state.draftLinkSourceNode) {
+      //     this.props.onPairSelect(this.state.draftLinkSourceNode, clickedNode)
+      //     this.setState({draftLinkSourceNode: undefined})
       //   } else {
-      //     this.setState({pairNode: clickedNode})
+      //     this.setState({draftLinkSourceNode: clickedNode})
       //   }
       // }
 
@@ -222,15 +222,17 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       if (draggedNodeIdx === null) {
         return
       }
+      const draggedNode = this.vizData.nodes[draggedNodeIdx]
 
       if (this.props.editMode) {
-        const draggedNode = this.vizData.nodes[draggedNodeIdx]
+        this.setState({draftLinkSourceNode: draggedNode})
         const draftNode = {
           id: 'draft-node',
           x: mouse.x,
           y: mouse.y,
-          absoluteSize: 5,
+          absoluteSize: 1,
           charge: 0,
+          disableInteractions: true,
         }
         const draftLink = {
           source: draggedNode.id,
@@ -240,20 +242,35 @@ class GraphVizComponentBase extends React.Component<Props, State> {
         this.vizData.nodes.push(draftNode)
         this.vizData.links.push(draftLink)
         this.visualization.update(this.vizData)
-      } else {
-        lockNode(this.vizData.nodes[draggedNodeIdx])
-        this.visualization.updateNode(
-          draggedNodeIdx,
-          this.vizData.nodes[draggedNodeIdx],
-        )
       }
+      lockNode(this.vizData.nodes[draggedNodeIdx])
+      this.visualization.updateNode(
+        draggedNodeIdx,
+        this.vizData.nodes[draggedNodeIdx],
+      )
       this.simulation.reheat()
     })
 
-    this.visualization.onDragEnd(() => {
-      this.vizData.nodes.pop()
-      this.vizData.links.pop()
-      this.visualization.update(this.vizData)
+    this.visualization.onDragEnd((mouse, nodeIdx) => {
+      if (this.props.editMode) {
+        if (this.state.draftLinkSourceNode) {
+          // this means a draft link was being drawn.
+          // Remove the placeholder (draftNode, draftLink) pair
+          // which is logically guaranteed to be
+          // the last element of the array
+          // because dragEnd will ALWAYS execute after dragStart
+          this.vizData.nodes.pop()
+          this.vizData.links.pop()
+          this.visualization.update(this.vizData)
+        }
+
+        if (nodeIdx !== null) {
+          const sourceNode = this.state.draftLinkSourceNode!
+          const targetNode = this.vizData.nodes[nodeIdx]
+          this.props.onPairSelect(sourceNode, targetNode)
+          this.setState({draftLinkSourceNode: undefined})
+        }
+      }
       this.simulation.settle()
     })
 
