@@ -127,7 +127,7 @@ export class GraphVisualization {
     this.nodesMesh.object.position.z = 3
     this.scene.add(this.nodesMesh.object)
     this.scene.add(this.clustersMesh.object)
-    this.clustersMesh.object.position.z = 0
+    // this.clustersMesh.object.position.z = 0
 
     this.render()
 

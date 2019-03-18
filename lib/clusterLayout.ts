@@ -4,7 +4,7 @@ import {map} from 'lodash'
 import {PartialGraphVizNode} from '../GraphVizComponent'
 
 export function getClusters(nodes: PartialGraphVizNode[]): GraphVizCluster[] {
-  const nodesByClusters: {[clusterId: string]: GraphVizNode[]} = {}
+  const nodesByClusters: {[clusterId: string]: PartialGraphVizNode[]} = {}
 
   nodes.forEach(n => {
     if (n.clusterIds) {
@@ -17,6 +17,8 @@ export function getClusters(nodes: PartialGraphVizNode[]): GraphVizCluster[] {
       })
     }
   })
+
+  console.log(nodesByClusters)
 
   const clusters = map(
     nodesByClusters,
@@ -47,5 +49,5 @@ export function getClusters(nodes: PartialGraphVizNode[]): GraphVizCluster[] {
 
   console.log(clusters)
 
-  return clusters
+  return clusters as GraphVizCluster[]
 }

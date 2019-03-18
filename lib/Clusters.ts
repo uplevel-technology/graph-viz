@@ -8,7 +8,7 @@ export interface GraphVizCluster {
   /**
    * optional cluster id
    */
-  clusterId: string
+  id: string
 
   /**
    * x coordinate of the cluster center
