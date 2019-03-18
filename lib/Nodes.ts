@@ -12,6 +12,11 @@ export interface GraphVizNode {
   id: string
 
   /**
+   * optional cluster id
+   */
+  clusterIds?: string[]
+
+  /**
    * x coordinate of the node position
    */
   x: number

@@ -13,6 +13,7 @@ import {
   ZoomEventHandler,
 } from './MouseInteraction'
 import {GraphVizNode, Nodes} from './Nodes'
+import {Clusters} from './Clusters'
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
@@ -50,6 +51,7 @@ const DEFAULT_CONFIG_OPTIONS: ConfigurationOptions = {
 export class GraphVisualization {
   public nodesMesh: Nodes
   public linksMesh: Links
+  public clustersMesh: Clusters
 
   public readonly canvas: HTMLCanvasElement
   public readonly camera: THREE.OrthographicCamera
@@ -119,10 +121,13 @@ export class GraphVisualization {
     this.linksMesh = new Links(
       getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
     )
+    this.clustersMesh = new Clusters(graphData.nodes)
 
     this.scene.add(this.linksMesh.object)
     this.nodesMesh.object.position.z = 3
     this.scene.add(this.nodesMesh.object)
+    this.scene.add(this.clustersMesh.object)
+    this.clustersMesh.object.position.z = 0
 
     this.render()
 
