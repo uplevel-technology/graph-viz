@@ -125,6 +125,7 @@ export const eventToTooltipNode = (event: Event): Partial<TooltipNode> => {
     displayName,
     displayType: 'Event',
     formattedTime,
+    clusterId: event.getClusterId()!,
   }
 }
 
@@ -161,7 +162,10 @@ export const eventsToVizData = (events: Event[]): VizData => {
       const attrNode = attributeToNode(ao.getAttribute()!)
       seenVizNodesById[attrNode.id!] = {
         vizNode: attrNode,
-        tooltipNode: attributeToTooltipNode(ao.getAttribute()!),
+        tooltipNode: {
+          ...attributeToTooltipNode(ao.getAttribute()!),
+          clusterId: event.getClusterId(),
+        },
       }
 
       links.push({
@@ -174,13 +178,19 @@ export const eventsToVizData = (events: Event[]): VizData => {
       const from = observableToNode(rel.getFrom()!)
       seenVizNodesById[from.id!] = {
         vizNode: from,
-        tooltipNode: observableToTooltipNode(rel.getFrom()!),
+        tooltipNode: {
+          ...observableToTooltipNode(rel.getFrom()!),
+          clusterId: event.getClusterId(),
+        },
       }
 
       const to = observableToNode(rel.getTo()!)
       seenVizNodesById[to.id!] = {
         vizNode: to,
-        tooltipNode: observableToTooltipNode(rel.getTo()!),
+        tooltipNode: {
+          ...observableToTooltipNode(rel.getTo()!),
+          clusterId: event.getClusterId(),
+        },
       }
 
       links.push({
