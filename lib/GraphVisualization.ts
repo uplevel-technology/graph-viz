@@ -122,7 +122,7 @@ export class GraphVisualization {
     this.linksMesh = new Links(
       getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
     )
-    this.clustersMesh = new Clusters(graphData.nodes)
+    this.clustersMesh = (new Nodes(graphData.nodes) as unknown) as Clusters
 
     this.linksMesh.object.position.z = 1
     this.scene.add(this.linksMesh.object)
@@ -362,6 +362,7 @@ export class GraphVisualization {
     this.camera.updateProjectionMatrix()
     this.nodesMesh.handleCameraZoom(this.camera.zoom)
     this.linksMesh.handleCameraZoom(this.camera.zoom)
+    this.clustersMesh.handleCameraZoom(this.camera.zoom)
   }
 
   private handleHoverIn = (hoveredToNodeIdx: number) => {
@@ -438,6 +439,7 @@ export class GraphVisualization {
 
     this.nodesMesh.handleCameraZoom(this.camera.zoom)
     this.linksMesh.handleCameraZoom(this.camera.zoom)
+    this.clustersMesh.handleCameraZoom(this.camera.zoom)
 
     if (this.registeredEventHandlers.zoom) {
       this.registeredEventHandlers.zoom(event)
