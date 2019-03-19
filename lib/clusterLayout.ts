@@ -21,6 +21,9 @@ export function getClusters(nodes: PartialGraphVizNode[]): GraphVizCluster[] {
   const clusters = map(
     nodesByClusters,
     (nodesInCluster: GraphVizNode[], clusterId: string) => {
+      // TODO
+      // this is super naive and will most likely result in incorrect values
+      // What we actually need is to compute the convex hull
       const xPositions = nodesInCluster.map(n => n.x).sort((a, b) => a - b)
       const yPositions = nodesInCluster.map(n => n.y).sort((a, b) => a - b)
 
@@ -34,17 +37,18 @@ export function getClusters(nodes: PartialGraphVizNode[]): GraphVizCluster[] {
         Math.pow(xMax - xMin, 2) + Math.pow(yMax - yMin, 2),
       )
 
-      const centerX = xMin + diameter / 2
-      const centerY = yMin + diameter / 2
+      const centerX = xMax - diameter / 2
+      const centerY = yMax - diameter / 2
 
-      console.log(diameter)
+      console.log('Max: ', [xMax, yMax])
+      console.log('Min: ', [xMin, yMin])
 
       return {
         id: clusterId,
         x: centerX,
         y: centerY,
-        fill: 'bisque',
-        absoluteSize: diameter * 10,
+        fill: 'lemonchiffon',
+        // absoluteSize: diameter * 2,
       }
     },
   )
