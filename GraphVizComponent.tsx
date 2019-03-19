@@ -85,6 +85,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   vizData: GraphVizData = {
     nodes: [],
     links: [],
+    clusters: [],
   }
   tooltipNodes: TooltipNode[]
   simulation: BasicForceSimulation
@@ -115,6 +116,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.vizData = {
       nodes: this.props.nodes as GraphVizNode[],
       links: this.props.links as GraphVizLink[],
+      clusters: [],
     }
     this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
@@ -160,7 +162,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
         node.x = nodePositions[i].x
         node.y = nodePositions[i].y
       })
-      const clusters = getClusters(this.vizData.nodes)
+      this.vizData.clusters = getClusters(this.vizData.nodes)
       this.visualization.updatePositions(this.vizData) // fixme use updatePosition + updateSize
     })
 
@@ -278,10 +280,11 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       prevProps.nodes !== this.props.nodes ||
       prevProps.links !== this.props.links
     ) {
-      this.vizData = {
-        nodes: this.props.nodes as GraphVizNode[],
-        links: this.props.links as GraphVizLink[],
-      }
+      // this.vizData = {
+      //   nodes: this.props.nodes as GraphVizNode[],
+      //   links: this.props.links as GraphVizLink[],
+      //   clusters: [],
+      // }
       this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
       this.initData()
@@ -302,12 +305,13 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       ...node,
     }))
 
-    const clusters = getClusters(nodesWithPositions)
-
-    this.visualization.update({
+    this.vizData = {
       nodes: nodesWithPositions,
       links: this.props.links as GraphVizLink[],
-    })
+      clusters: getClusters(nodesWithPositions),
+    }
+
+    this.visualization.update(this.vizData)
   }
 
   zoomIn = () => {
