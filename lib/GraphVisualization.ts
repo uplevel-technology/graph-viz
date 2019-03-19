@@ -13,7 +13,7 @@ import {
   ZoomEventHandler,
 } from './MouseInteraction'
 import {GraphVizNode, Nodes} from './Nodes'
-import {Clusters} from './Clusters'
+import {Clusters, GraphVizCluster} from './Clusters'
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
@@ -21,6 +21,7 @@ const PAN_SPEED = 1.0
 export interface GraphVizData {
   nodes: GraphVizNode[]
   links: GraphVizLink[]
+  clusters: GraphVizCluster[]
 }
 
 function constructIdToIdxMap(arr: Array<{id: string}>): {[id: string]: number} {
@@ -123,11 +124,14 @@ export class GraphVisualization {
     )
     this.clustersMesh = new Clusters(graphData.nodes)
 
+    this.linksMesh.object.position.z = 1
     this.scene.add(this.linksMesh.object)
+
     this.nodesMesh.object.position.z = 3
     this.scene.add(this.nodesMesh.object)
+
+    this.clustersMesh.object.position.z = 0
     this.scene.add(this.clustersMesh.object)
-    // this.clustersMesh.object.position.z = 0
 
     this.render()
 
@@ -213,6 +217,7 @@ export class GraphVisualization {
     this.linksMesh.updateAll(
       getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
     )
+    this.clustersMesh.updateAll(graphData.clusters)
   }
 
   /**
@@ -233,6 +238,7 @@ export class GraphVisualization {
       this.linksMesh.updateAllPositions(
         getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap),
       )
+      this.clustersMesh.updateAll(updatedGraphData.clusters)
 
       if (!this.userHasAdjustedViewport) {
         this.zoomToFit(updatedGraphData)
