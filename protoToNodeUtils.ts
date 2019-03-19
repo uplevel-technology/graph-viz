@@ -9,6 +9,7 @@ import {
   getAttributeNodeLabel,
   getEventNodeLabel,
   ObservableRelationshipDisplayTypes,
+  getEventNodeDisplayType,
 } from '../displayTypes'
 import {GraphVizLink} from './lib/Links'
 import {TooltipNode} from './NodeTooltips'
@@ -220,7 +221,10 @@ export const eventsToVizData = (events: Event[]): VizData => {
 }
 
 export const getLegendData = (events: Event[]): string[] => {
-  const allTypes: Set<string> = new Set()
+  // Seed with Alert and Email upload
+  // Set preserves iteration order
+  // plus we mostly always want these items to show up in the legend
+  const allTypes: Set<string> = new Set(['Alert', 'Email upload'])
 
   const getObsLabel = (t: ObservableNode) => {
     if (t.getValueCase() === ObservableNode.ValueCase.ARTIFACT) {
@@ -236,7 +240,7 @@ export const getLegendData = (events: Event[]): string[] => {
       return
     }
 
-    allTypes.add(getEventNodeLabel(event.getEventType()))
+    allTypes.add(getEventNodeDisplayType(event.getEventType()))
 
     observed.getAttributesList().forEach(ao => {
       allTypes.add(getAttributeDisplayType(ao.getAttribute()!.getType()))
