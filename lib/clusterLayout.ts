@@ -18,8 +18,6 @@ export function getClusters(nodes: PartialGraphVizNode[]): GraphVizCluster[] {
     }
   })
 
-  console.log(nodesByClusters)
-
   const clusters = map(
     nodesByClusters,
     (nodesInCluster: GraphVizNode[], clusterId: string) => {
@@ -32,22 +30,24 @@ export function getClusters(nodes: PartialGraphVizNode[]): GraphVizCluster[] {
       const yMin = yPositions[0]
       const yMax = yPositions[yPositions.length - 1]
 
-      const diameter = Math.max(xMax - xMin, yMax - yMin)
+      const diameter = Math.sqrt(
+        Math.pow(xMax - xMin, 2) + Math.pow(yMax - yMin, 2),
+      )
 
       const centerX = xMin + diameter / 2
       const centerY = yMin + diameter / 2
+
+      console.log(diameter)
 
       return {
         id: clusterId,
         x: centerX,
         y: centerY,
-        fill: '#eeeeee',
-        absoluteSize: diameter,
+        fill: 'bisque',
+        absoluteSize: diameter * 10,
       }
     },
   )
-
-  console.log(clusters)
 
   return clusters as GraphVizCluster[]
 }
