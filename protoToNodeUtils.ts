@@ -113,13 +113,16 @@ export const eventToTooltipNode = (event: Event): Partial<TooltipNode> => {
     displayName = display.getName()
   }
 
+  // all events should have occurred timestamps, but in case one doesn't
+  // this check avoids breaking the viz
+  const occurred =
+    (event.getOccurredAt() && event.getOccurredAt()!.toDate()) || Date.now()
+
   return {
     id: event.getUid()!.getValue(),
     displayName,
     displayType: 'Event',
-    formattedTime: moment(event.getOccurredAt()!.toDate()).format(
-      'MMM DD YYYY',
-    ),
+    formattedTime: moment(occurred).format('MMM DD YYYY'),
   }
 }
 
