@@ -221,6 +221,9 @@ export const eventsToVizData = (events: Event[]): VizData => {
 }
 
 export const getLegendData = (events: Event[]): string[] => {
+  // keep track of event and attribute types separately so that
+  // we can make the event types appear first in the legend
+
   const eventTypes: Set<string> = new Set()
   const attrTypes: Set<string> = new Set([])
 
