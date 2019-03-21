@@ -221,10 +221,8 @@ export const eventsToVizData = (events: Event[]): VizData => {
 }
 
 export const getLegendData = (events: Event[]): string[] => {
-  // Seed with Alert and Email upload
-  // Set preserves iteration order
-  // plus we mostly always want these items to show up in the legend
-  const allTypes: Set<string> = new Set(['Alert', 'Email upload'])
+  const eventTypes: Set<string> = new Set()
+  const attrTypes: Set<string> = new Set([])
 
   const getObsLabel = (t: ObservableNode) => {
     if (t.getValueCase() === ObservableNode.ValueCase.ARTIFACT) {
@@ -240,17 +238,17 @@ export const getLegendData = (events: Event[]): string[] => {
       return
     }
 
-    allTypes.add(getEventNodeDisplayType(event.getEventType()))
+    eventTypes.add(getEventNodeDisplayType(event.getEventType()))
 
     observed.getAttributesList().forEach(ao => {
-      allTypes.add(getAttributeDisplayType(ao.getAttribute()!.getType()))
+      attrTypes.add(getAttributeDisplayType(ao.getAttribute()!.getType()))
     })
 
     observed.getRelationshipsList().forEach(rel => {
-      allTypes.add(getObsLabel(rel.getFrom()!))
-      allTypes.add(getObsLabel(rel.getTo()!))
+      attrTypes.add(getObsLabel(rel.getFrom()!))
+      attrTypes.add(getObsLabel(rel.getTo()!))
     })
   })
 
-  return Array.from(allTypes)
+  return Array.from(eventTypes).concat(Array.from(attrTypes))
 }
