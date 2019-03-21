@@ -1,6 +1,10 @@
 import * as THREE from 'three'
+import 'three/examples/js/geometries/ConvexGeometry'
 import {GraphVizNode} from './Nodes'
 import {PartialGraphVizNode} from '../GraphVizComponent'
+import {initConvexGeometry} from './ConvexGeometry'
+
+initConvexGeometry(THREE)
 
 const getClusters = (
   nodes: GraphVizNode[],
