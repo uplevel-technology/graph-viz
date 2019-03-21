@@ -3,8 +3,57 @@ import {GraphVizCluster} from './Clusters'
 import {map} from 'lodash'
 import {PartialGraphVizNode} from '../GraphVizComponent'
 
-export function getClusters(nodes: PartialGraphVizNode[]): GraphVizCluster[] {
-  const nodesByClusters: {[clusterId: string]: PartialGraphVizNode[]} = {}
+interface NodeWithPosition extends PartialGraphVizNode {
+  x: number
+  y: number
+}
+
+/**
+ * this doesn't really find the convex hull
+ * it only calculates the maximum distance between two points
+ * in a given array of points in a bad/brute-force O(N2) fashion
+ * @param nodes
+ */
+
+interface ConvexHull {
+  nodes: NodeWithPosition[]
+  center: {x: number; y: number}
+  diameter: number
+}
+
+function getConvexHull(nodes: NodeWithPosition[]): ConvexHull {
+  const hull: ConvexHull = {
+    nodes: [],
+    center: {x: 0, y: 0},
+    diameter: 0,
+  }
+
+  if (nodes.length < 2) {
+    return hull
+  }
+
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const {x: x1, y: y1} = nodes[i]
+      const {x: x2, y: y2} = nodes[j]
+
+      const distance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
+      if (distance > hull.diameter) {
+        hull.diameter = distance
+        hull.nodes = [nodes[i], nodes[j]]
+        hull.center = {
+          x: (x1 + x2) / 2,
+          y: (y1 + y2) / 2,
+        }
+      }
+    }
+  }
+
+  return hull
+}
+
+export function getClusters(nodes: NodeWithPosition[]): GraphVizCluster[] {
+  const nodesByClusters: {[clusterId: string]: NodeWithPosition[]} = {}
 
   nodes.forEach(n => {
     if (n.clusterIds) {
@@ -21,34 +70,14 @@ export function getClusters(nodes: PartialGraphVizNode[]): GraphVizCluster[] {
   const clusters = map(
     nodesByClusters,
     (nodesInCluster: GraphVizNode[], clusterId: string) => {
-      // TODO
-      // this is super naive and will most likely result in incorrect values
-      // What we actually need is to compute the convex hull
-      const xPositions = nodesInCluster.map(n => n.x).sort((a, b) => a - b)
-      const yPositions = nodesInCluster.map(n => n.y).sort((a, b) => a - b)
-
-      const xMin = xPositions[0]
-      const xMax = xPositions[xPositions.length - 1]
-
-      const yMin = yPositions[0]
-      const yMax = yPositions[yPositions.length - 1]
-
-      const diameter = Math.sqrt(
-        Math.pow(xMax - xMin, 2) + Math.pow(yMax - yMin, 2),
-      )
-
-      const centerX = xMax - diameter / 2
-      const centerY = yMax - diameter / 2
-
-      console.log('Max: ', [xMax, yMax])
-      console.log('Min: ', [xMin, yMin])
+      const convexHull = getConvexHull(nodesInCluster)
 
       return {
         id: clusterId,
-        x: centerX,
-        y: centerY,
+        x: convexHull.center.x,
+        y: convexHull.center.y,
         fill: 'lemonchiffon',
-        // absoluteSize: diameter * 2,
+        absoluteSize: convexHull.diameter * 2 + 150, // multiply by 2 to compensate for the relative radius inside. sad.
       }
     },
   )
