@@ -45,6 +45,7 @@ const styles = (theme: Theme) =>
       position: 'absolute',
       top: 0,
       right: 0,
+      width: '5%',
     },
     errorMessage: {
       position: 'absolute',
