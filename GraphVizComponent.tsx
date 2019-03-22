@@ -74,8 +74,16 @@ interface Props extends WithStyles<typeof styles> {
   onRefresh?: () => any
   config?: ConfigurationOptions
   showControls?: boolean
+  /**
+   * enables graph editing
+   * i.e. for now only the drawing of links
+   */
   editMode?: boolean
-  onPairSelect: (node1: PartialGraphVizNode, node2: PartialGraphVizNode) => any
+
+  /**
+   * callback that will be called when a valid link is drawn
+   */
+  onLinkDrawn: (source: PartialGraphVizNode, target: PartialGraphVizNode) => any
 }
 
 class GraphVizComponentBase extends React.Component<Props, State> {
@@ -96,8 +104,8 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     currentlyHoveredIdx: null,
   }
 
-  static defaultProps = {
-    onPairSelect: noop,
+  static defaultProps: Partial<Props> = {
+    onLinkDrawn: noop,
   }
 
   onWindowResize = debounce(() => {
@@ -188,22 +196,18 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     })
 
     this.visualization.onNodeDrag((worldPos, draggedNodeIdx) => {
+      let node
       if (this.props.editMode) {
-        const draftNode = this.vizData.nodes[
+        node = this.vizData.nodes[
           this.vizData.nodes.length - 1
         ] as ForceSimulationNode
-
-        draftNode.x = worldPos.x
-        draftNode.y = worldPos.y
-        draftNode.fx = worldPos.x
-        draftNode.fy = worldPos.y
       } else {
-        const node = this.vizData.nodes[draggedNodeIdx] as ForceSimulationNode
-        node.x = worldPos.x
-        node.y = worldPos.y
-        node.fx = worldPos.x
-        node.fy = worldPos.y
+        node = this.vizData.nodes[draggedNodeIdx] as ForceSimulationNode
       }
+      node.x = worldPos.x
+      node.y = worldPos.y
+      node.fx = worldPos.x
+      node.fy = worldPos.y
       this.simulation.update(this.vizData)
       // ^ the simulation tick handler should handle the position updates after this in our viz
     })
@@ -221,7 +225,11 @@ class GraphVizComponentBase extends React.Component<Props, State> {
           x: mouse.x,
           y: mouse.y,
           absoluteSize: 1,
+          // setting charge to 0 is required to ensure that the draftNode
+          // does not repel the targets
           charge: 0,
+          // Important: disableInteractions on the draft node to make sure hover,
+          // click, dragEnd and other events ignore this node
           disableInteractions: true,
           fill: 'orange',
         }
@@ -258,7 +266,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
         if (nodeIdx !== null) {
           const sourceNode = this.state.draftLinkSourceNode!
           const targetNode = this.vizData.nodes[nodeIdx]
-          this.props.onPairSelect(sourceNode, targetNode)
+          this.props.onLinkDrawn(sourceNode, targetNode)
           this.setState({draftLinkSourceNode: undefined})
         }
       }
