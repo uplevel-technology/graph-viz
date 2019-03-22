@@ -89,10 +89,14 @@ interface Props extends WithStyles<typeof styles> {
 class GraphVizComponentBase extends React.Component<Props, State> {
   client = new PersistenceServiceClient(PERSISTENCE_SERVICE_ADDRESS)
   visualization: GraphVisualization
+
+  // There is no need for vizData to be in state as this data is used by the
+  // GraphVisualization class' render cycle and not React.
   vizData: GraphVizData = {
     nodes: [],
     links: [],
   }
+
   tooltipNodes: TooltipNode[]
   simulation: BasicForceSimulation
 
@@ -250,7 +254,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       this.simulation.reheat()
     })
 
-    this.visualization.onDragEnd((mouse, nodeIdx) => {
+    this.visualization.onDragEnd((mouse, targetNodeIdx: number | null) => {
       if (this.props.editMode) {
         if (this.state.draftLinkSourceNode) {
           // this means a draft link was being drawn.
@@ -261,13 +265,15 @@ class GraphVizComponentBase extends React.Component<Props, State> {
           this.vizData.nodes.pop()
           this.vizData.links.pop()
           this.visualization.update(this.vizData)
-        }
 
-        if (nodeIdx !== null) {
-          const sourceNode = this.state.draftLinkSourceNode!
-          const targetNode = this.vizData.nodes[nodeIdx]
-          this.props.onLinkDrawn(sourceNode, targetNode)
-          this.setState({draftLinkSourceNode: undefined})
+          if (targetNodeIdx !== null) {
+            const sourceNode = this.state.draftLinkSourceNode!
+            const targetNode = this.vizData.nodes[targetNodeIdx]
+            if (sourceNode !== targetNode) {
+              this.props.onLinkDrawn(sourceNode, targetNode)
+            }
+            this.setState({draftLinkSourceNode: undefined})
+          }
         }
       }
       this.simulation.settle()
