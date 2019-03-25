@@ -3,7 +3,7 @@
 import {defaultTo, size} from 'lodash'
 import * as THREE from 'three'
 import fragmentShader from './shaders/nodes.fragment.glsl'
-import vertexShader from './shaders/nodes.vertex.glsl'
+import vertexShader from './shaders/clusters.vertex.glsl'
 
 export interface GraphVizNode {
   /**
@@ -33,6 +33,12 @@ export interface GraphVizNode {
   fill?: number | string
 
   /**
+   * relative node fill opacity
+   * (must be between 0.0 - 1.0)
+   */
+  fillOpacity?: number
+
+  /**
    * the absolute side in pixels of the bounding square container of the node
    * (default is 20 pixels)
    */
@@ -57,7 +63,7 @@ export interface GraphVizNode {
 
   /**
    * relative node stroke opacity
-   * (must be between 0.0 to 1.0)
+   * (must be between 0.0 - 1.0)
    */
   strokeOpacity?: number
 
@@ -80,6 +86,7 @@ export interface GraphVizNode {
 export const DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE = 20
 export const DEFAULT_NODE_INNER_RADIUS = 0.2
 export const DEFAULT_NODE_FILL = 0x333333
+export const DEFAULT_NODE_FILL_OPACITY = 1.0
 export const DEFAULT_NODE_SCALE = 1.0
 export const DEFAULT_NODE_STROKE_WIDTH = 0.03
 export const DEFAULT_NODE_STROKE_OPACITY = 1.0
@@ -135,6 +142,10 @@ export class Nodes {
     this.geometry.addAttribute(
       'fill',
       new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3),
+    )
+    this.geometry.addAttribute(
+      'fillOpacity',
+      new THREE.BufferAttribute(new Float32Array(numNodes * 1), 3),
     )
     this.geometry.addAttribute(
       'stroke',
@@ -196,6 +207,9 @@ export class Nodes {
       'innerRadius',
     ) as THREE.BufferAttribute
     const fill = this.geometry.getAttribute('fill') as THREE.BufferAttribute
+    const fillOpacity = this.geometry.getAttribute(
+      'fillOpacity',
+    ) as THREE.BufferAttribute
     const stroke = this.geometry.getAttribute('stroke') as THREE.BufferAttribute
     const strokeWidth = this.geometry.getAttribute(
       'strokeWidth',
@@ -226,6 +240,11 @@ export class Nodes {
     color.set(defaultTo(node.fill, DEFAULT_NODE_FILL) as string)
     fill.setXYZ(index, color.r, color.g, color.b)
     fill.needsUpdate = true
+
+    fillOpacity.setX(
+      index,
+      defaultTo(node.fillOpacity, DEFAULT_NODE_FILL_OPACITY),
+    )
 
     if (node.stroke) {
       color.set(node.stroke as string)
@@ -354,25 +373,34 @@ export class Nodes {
   }
 
   /**
-   * update fill attributes of all nodes
+   * update fill and fillOpacity attributes of all nodes
    * @param nodes
    */
   public updateAllFills = (nodes: GraphVizNode[]) => {
     this.data = nodes
     const fill = this.geometry.getAttribute('fill') as THREE.BufferAttribute
+    const fillOpacity = this.geometry.getAttribute(
+      'fillOpacity',
+    ) as THREE.BufferAttribute
 
     const numNodes = size(nodes)
     if (numNodes !== fill.count) {
       fill.setArray(new Float32Array(fill.itemSize * numNodes))
+      fillOpacity.setArray(new Float32Array(fillOpacity.itemSize * numNodes))
     }
 
     const tmpColor = new THREE.Color() // for reuse
     for (let i = 0; i < numNodes; i++) {
       tmpColor.set(defaultTo(nodes[i].fill, DEFAULT_NODE_FILL) as string)
       fill.setXYZ(i, tmpColor.r, tmpColor.g, tmpColor.b)
+      fillOpacity.setX(
+        i,
+        defaultTo(nodes[i].fillOpacity, DEFAULT_NODE_FILL_OPACITY),
+      )
     }
 
     fill.needsUpdate = true
+    fillOpacity.needsUpdate = true
   }
 
   /**
