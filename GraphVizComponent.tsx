@@ -332,22 +332,19 @@ class GraphVizComponentBase extends React.Component<Props, State> {
         <NodeTooltips node={this.state.currentTooltipNode} />
 
         {showControls && (
-          <Grid
-            container
-            direction={'column'}
-            alignItems={'flex-end'}
-            className={classes.actionButtons}
-          >
-            <Button size={'small'} onClick={onRefresh}>
-              <RefreshIcon />
-            </Button>
-            <Button size={'small'} onClick={this.zoomIn}>
-              <ZoomInIcon />
-            </Button>
-            <Button size={'small'} onClick={this.zoomOut}>
-              <ZoomOutIcon />
-            </Button>
-          </Grid>
+          <div className={classes.actionButtons}>
+            <Grid container direction={'column'}>
+              <Button size={'small'} onClick={onRefresh}>
+                <RefreshIcon />
+              </Button>
+              <Button size={'small'} onClick={this.zoomIn}>
+                <ZoomInIcon />
+              </Button>
+              <Button size={'small'} onClick={this.zoomOut}>
+                <ZoomOutIcon />
+              </Button>
+            </Grid>
+          </div>
         )}
 
         {this.state.errorMessage && (
