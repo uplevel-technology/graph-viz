@@ -3,7 +3,7 @@
 import {defaultTo, size} from 'lodash'
 import * as THREE from 'three'
 import fragmentShader from './shaders/nodes.fragment.glsl'
-import vertexShader from './shaders/clusters.vertex.glsl'
+import vertexShader from './shaders/nodes.vertex.glsl'
 
 export interface GraphVizNode {
   /**
@@ -145,7 +145,7 @@ export class Nodes {
     )
     this.geometry.addAttribute(
       'fillOpacity',
-      new THREE.BufferAttribute(new Float32Array(numNodes * 1), 3),
+      new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1),
     )
     this.geometry.addAttribute(
       'stroke',

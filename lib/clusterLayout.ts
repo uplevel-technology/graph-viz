@@ -1,5 +1,4 @@
 import {GraphVizNode} from './Nodes'
-import {GraphVizCluster} from './Clusters'
 import {map} from 'lodash'
 import {PartialGraphVizNode} from '../GraphVizComponent'
 
@@ -52,6 +51,7 @@ function getConvexHull(nodes: NodeWithPosition[]): ConvexHull {
   return hull
 }
 
+type GraphVizCluster = GraphVizNode
 export function getClusters(nodes: NodeWithPosition[]): GraphVizCluster[] {
   const nodesByClusters: {[clusterId: string]: NodeWithPosition[]} = {}
 
@@ -77,6 +77,10 @@ export function getClusters(nodes: NodeWithPosition[]): GraphVizCluster[] {
         x: convexHull.center.x,
         y: convexHull.center.y,
         fill: 'lemonchiffon',
+        fillOpacity: 0.5,
+        stroke: 'blue',
+        strokeWidth: 0.005,
+        strokeOpacity: 0.5,
         absoluteSize: convexHull.diameter * 2 + 150, // multiply by 2 to compensate for the relative radius inside. sad.
       }
     },

@@ -13,7 +13,6 @@ import {
   ZoomEventHandler,
 } from './MouseInteraction'
 import {GraphVizNode, Nodes} from './Nodes'
-import {Clusters, GraphVizCluster} from './Clusters'
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
@@ -21,7 +20,7 @@ const PAN_SPEED = 1.0
 export interface GraphVizData {
   nodes: GraphVizNode[]
   links: GraphVizLink[]
-  clusters: GraphVizCluster[]
+  clusters: GraphVizNode[]
 }
 
 function constructIdToIdxMap(arr: Array<{id: string}>): {[id: string]: number} {
@@ -52,7 +51,16 @@ const DEFAULT_CONFIG_OPTIONS: ConfigurationOptions = {
 export class GraphVisualization {
   public nodesMesh: Nodes
   public linksMesh: Links
-  public clustersMesh: Clusters
+
+  /**
+   * NOTE:
+   * This clusters are represented just nodes for now
+   * because functionally the mesh only renders a circle.
+   *
+   * We will eventually break it apart into a separate Clusters class and
+   * swap out the circular clusters with some sort of convex-hull meshes.
+   */
+  public clustersMesh: Nodes
 
   public readonly canvas: HTMLCanvasElement
   public readonly camera: THREE.OrthographicCamera
@@ -122,16 +130,16 @@ export class GraphVisualization {
     this.linksMesh = new Links(
       getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
     )
-    this.clustersMesh = (new Nodes(graphData.nodes) as unknown) as Clusters
+    this.clustersMesh = new Nodes(graphData.clusters)
+
+    this.clustersMesh.object.position.z = 0
+    this.scene.add(this.clustersMesh.object)
 
     this.linksMesh.object.position.z = 1
     this.scene.add(this.linksMesh.object)
 
-    this.nodesMesh.object.position.z = 3
+    this.nodesMesh.object.position.z = 2
     this.scene.add(this.nodesMesh.object)
-
-    this.clustersMesh.object.position.z = 0
-    this.scene.add(this.clustersMesh.object)
 
     this.render()
 
