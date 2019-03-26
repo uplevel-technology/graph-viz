@@ -269,6 +269,7 @@ export class GraphVisualization {
    */
   public updateNode = (index: number, updatedNode: GraphVizNode) => {
     this.nodesMesh.updateOne(index, updatedNode)
+    // TODO: update clusters here
     this.render()
   }
 
