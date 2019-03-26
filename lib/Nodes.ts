@@ -76,6 +76,7 @@ export interface GraphVizNode {
   /**
    * disables interactions on this node if set
    * (default is false)
+   * NOTE: this could be defined on a mouse interaction node interface
    */
   disableInteractions?: boolean
 }
