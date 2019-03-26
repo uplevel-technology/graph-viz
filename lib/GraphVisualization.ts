@@ -13,6 +13,7 @@ import {
   ZoomEventHandler,
 } from './MouseInteraction'
 import {GraphVizNode, Nodes} from './Nodes'
+import {Clusters} from './Clusters'
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
@@ -61,6 +62,7 @@ export class GraphVisualization {
    * swap out the circular clusters with some sort of convex-hull meshes.
    */
   public clustersMesh: Nodes
+  public convexHull: Clusters // FIXME rename
 
   public readonly canvas: HTMLCanvasElement
   public readonly camera: THREE.OrthographicCamera
@@ -131,9 +133,13 @@ export class GraphVisualization {
       getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
     )
     this.clustersMesh = new Nodes(graphData.clusters)
+    this.convexHull = new Clusters(graphData.nodes)
 
-    this.clustersMesh.object.position.z = 0
-    this.scene.add(this.clustersMesh.object)
+    this.convexHull.object.position.z = 0
+    this.scene.add(this.convexHull.object)
+
+    // this.clustersMesh.object.position.z = 0
+    // this.scene.add(this.clustersMesh.object)
 
     this.linksMesh.object.position.z = 1
     this.scene.add(this.linksMesh.object)
@@ -226,6 +232,7 @@ export class GraphVisualization {
       getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
     )
     this.clustersMesh.updateAll(graphData.clusters)
+    this.convexHull.updateAll(graphData.nodes)
   }
 
   /**
@@ -247,6 +254,7 @@ export class GraphVisualization {
         getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap),
       )
       this.clustersMesh.updateAll(updatedGraphData.clusters)
+      this.convexHull.updateAll(updatedGraphData.nodes)
 
       if (!this.userHasAdjustedViewport) {
         this.zoomToFit(updatedGraphData)
