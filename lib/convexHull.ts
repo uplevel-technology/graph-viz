@@ -14,12 +14,12 @@ interface Point {
  * @param points
  */
 export function get2DConvexHull(points: Point[]): Point[] {
+  if (points.length <= 1) {
+    return [...points]
+  }
+
   // 1. Sort points first by x-coordinate, and in case of a tie, by y-coordinate
   const sortedPoints = [...points].sort(byPosition)
-
-  if (sortedPoints.length <= 1) {
-    return sortedPoints.slice()
-  }
 
   // 2. Compute the upper hull
   const upperHull: Point[] = []
@@ -59,17 +59,6 @@ export function get2DConvexHull(points: Point[]): Point[] {
   lowerHull.pop()
 
   return [...upperHull, ...lowerHull]
-
-  // if (
-  //   upperHull.length === 1 &&
-  //   lowerHull.length === 1 &&
-  //   upperHull[0].x === lowerHull[0].x &&
-  //   upperHull[0].y === lowerHull[0].y
-  // ) {
-  //   return upperHull
-  // } else {
-  //   return upperHull.concat(lowerHull)
-  // }
 }
 
 /**
