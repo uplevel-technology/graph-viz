@@ -197,6 +197,7 @@ export class Nodes {
    * @param node
    */
   public updateOne = (index: number, node: GraphVizNode) => {
+    this.data[index] = node
     const position = this.geometry.getAttribute(
       'position',
     ) as THREE.BufferAttribute
