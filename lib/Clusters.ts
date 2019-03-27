@@ -42,6 +42,7 @@ export class Clusters {
 
       // if new cluster
       if (this.meshes[clusterId] === undefined) {
+        // NOTE: we probably don't need a BufferGeometry after r102 amirite?
         const g = new THREE.Geometry()
 
         g.vertices = convexHull.map(n => new THREE.Vector3(n.x, n.y, 0))
