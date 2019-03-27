@@ -55,9 +55,10 @@ export class Clusters {
 
       position.needsUpdate = true
 
+      // We would need this if we were to detect interactions
+      // on Clusters
       // geometry.computeBoundingSphere()
     })
-    console.log(this.meshes)
   }
 
   public getClusters(
