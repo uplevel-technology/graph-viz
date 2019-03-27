@@ -269,7 +269,12 @@ export class GraphVisualization {
    */
   public updateNode = (index: number, updatedNode: GraphVizNode) => {
     this.nodesMesh.updateOne(index, updatedNode)
-    // TODO: update clusters here
+
+    // WARNING:
+    // The following call is fragile for now because it assumes
+    // data to be present on the nodesMesh class.
+    // The data property is staged for deprecation from the nodesMesh class.
+    this.convexHull.updateAll(this.nodesMesh.data)
     this.render()
   }
 
