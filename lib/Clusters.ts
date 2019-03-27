@@ -6,11 +6,7 @@ import {get2DConvexHull} from './convexHull'
 
 export class Clusters {
   public object = new THREE.Group()
-
   private meshes: {[clusterId: string]: THREE.Mesh} = {}
-
-  private readonly geometries: THREE.BufferGeometry
-  private readonly materials: THREE.ShaderMaterial
 
   constructor(nodes: GraphVizNode[]) {
     this.updateAll(nodes)
