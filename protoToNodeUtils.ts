@@ -114,18 +114,13 @@ export const eventToTooltipNode = (event: Event): Partial<TooltipNode> => {
     displayName = display.getName()
   }
 
-  let formattedTime = 'Mar 19 2019' // drew is fixing this right now!
-  if (event.getOccurredAt()) {
-    formattedTime = moment(event.getOccurredAt()!.toDate()).format(
-      'MMM DD YYYY',
-    )
-  }
-
   return {
     id: event.getUid()!.getValue(),
     displayName,
     displayType: 'Event',
-    formattedTime,
+    formattedTime: moment(event.getOccurredAt()!.toDate()).format(
+      'MMM DD YYYY',
+    ),
     clusterId: event.getClusterId()!,
   }
 }
