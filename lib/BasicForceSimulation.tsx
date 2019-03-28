@@ -15,6 +15,12 @@ export interface ForceSimulationNode extends d3.SimulationNodeDatum {
    * @see https://github.com/d3/d3-force#forceY
    */
   forceY?: number
+
+  /**
+   * d3 force manyBody strength
+   * @see https://github.com/d3/d3-force#forceManyBody
+   */
+  charge?: number
 }
 
 export interface ForceSimulationLink {
@@ -89,7 +95,9 @@ export class BasicForceSimulation {
         'charge',
         d3
           .forceManyBody()
-          .strength(-100)
+          .strength((n: ForceSimulationNode) =>
+            n.charge !== undefined ? n.charge : -100,
+          )
           .distanceMax(250),
       )
       .velocityDecay(0.5)

@@ -390,9 +390,9 @@ export class GraphVisualization {
     this.render()
   }
 
-  private handleDragEnd = () => {
+  private handleDragEnd = (worldSpaceMouse: THREE.Vector3, nodeIdx: number) => {
     if (this.registeredEventHandlers.dragEnd) {
-      this.registeredEventHandlers.dragEnd()
+      this.registeredEventHandlers.dragEnd(worldSpaceMouse, nodeIdx)
     }
   }
 

@@ -27,7 +27,7 @@ import {
 import {GraphVizLink} from './lib/Links'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
-import {debounce} from 'lodash'
+import {debounce, noop} from 'lodash'
 import {GraphVizNode} from './lib/Nodes'
 
 const styles = (theme: Theme) =>
@@ -58,6 +58,7 @@ interface State {
   readonly currentTooltipNode: TooltipNode | null
   readonly currentlyHoveredIdx: number | null
   readonly errorMessage?: string
+  readonly draftLinkSourceNode?: PartialGraphVizNode
 }
 
 // A partial GraphVizNode with a required id parameter
@@ -73,15 +74,29 @@ interface Props extends WithStyles<typeof styles> {
   onRefresh?: () => any
   config?: ConfigurationOptions
   showControls?: boolean
+  /**
+   * enables graph editing
+   * i.e. for now only the drawing of links
+   */
+  editMode?: boolean
+
+  /**
+   * callback that will be called when a valid link is drawn
+   */
+  onLinkDrawn: (source: PartialGraphVizNode, target: PartialGraphVizNode) => any
 }
 
 class GraphVizComponentBase extends React.Component<Props, State> {
   client = new PersistenceServiceClient(PERSISTENCE_SERVICE_ADDRESS)
   visualization: GraphVisualization
+
+  // There is no need for vizData to be in state as this data is used by the
+  // GraphVisualization class' render cycle and not React.
   vizData: GraphVizData = {
     nodes: [],
     links: [],
   }
+
   tooltipNodes: TooltipNode[]
   simulation: BasicForceSimulation
 
@@ -91,6 +106,10 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   readonly state: State = {
     currentTooltipNode: null,
     currentlyHoveredIdx: null,
+  }
+
+  static defaultProps: Partial<Props> = {
+    onLinkDrawn: noop,
   }
 
   onWindowResize = debounce(() => {
@@ -133,14 +152,18 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
       this.visualization.updateNode(hoveredNodeIdx, vizNode)
 
-      this.setState({
-        currentTooltipNode: {
-          ...this.tooltipNodes[hoveredNodeIdx],
-          screenX: screenCoords.x,
-          screenY: screenCoords.y,
-        },
-        currentlyHoveredIdx: hoveredNodeIdx,
-      })
+      this.setState({currentlyHoveredIdx: hoveredNodeIdx})
+
+      const tooltipNode = this.tooltipNodes[hoveredNodeIdx]
+      if (tooltipNode) {
+        this.setState({
+          currentTooltipNode: {
+            ...tooltipNode,
+            screenX: screenCoords.x,
+            screenY: screenCoords.y,
+          },
+        })
+      }
     })
 
     this.simulation.onTick((nodePositions: NodePosition[]) => {
@@ -166,6 +189,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       if (clickedNodeIdx === null) {
         return
       }
+
       toggleNodeLock(this.vizData.nodes[clickedNodeIdx])
 
       this.simulation.update(this.vizData)
@@ -176,7 +200,14 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     })
 
     this.visualization.onNodeDrag((worldPos, draggedNodeIdx) => {
-      const node = this.vizData.nodes[draggedNodeIdx] as ForceSimulationNode
+      let node
+      if (this.props.editMode) {
+        node = this.vizData.nodes[
+          this.vizData.nodes.length - 1
+        ] as ForceSimulationNode
+      } else {
+        node = this.vizData.nodes[draggedNodeIdx] as ForceSimulationNode
+      }
       node.x = worldPos.x
       node.y = worldPos.y
       node.fx = worldPos.x
@@ -189,9 +220,33 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       if (draggedNodeIdx === null) {
         return
       }
+      const draggedNode = this.vizData.nodes[draggedNodeIdx]
 
+      if (this.props.editMode) {
+        this.setState({draftLinkSourceNode: draggedNode})
+        const draftNode = {
+          id: 'draft-node',
+          x: mouse.x,
+          y: mouse.y,
+          absoluteSize: 1,
+          // setting charge to 0 is required to ensure that the draftNode
+          // does not repel the targets
+          charge: 0,
+          // Important: disableInteractions on the draft node to make sure hover,
+          // click, dragEnd and other events ignore this node
+          disableInteractions: true,
+          fill: 'orange',
+        }
+        const draftLink = {
+          source: draggedNode.id,
+          target: draftNode.id,
+          color: 'orange',
+        }
+        this.vizData.nodes.push(draftNode)
+        this.vizData.links.push(draftLink)
+        this.visualization.update(this.vizData)
+      }
       lockNode(this.vizData.nodes[draggedNodeIdx])
-
       this.visualization.updateNode(
         draggedNodeIdx,
         this.vizData.nodes[draggedNodeIdx],
@@ -199,7 +254,28 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       this.simulation.reheat()
     })
 
-    this.visualization.onDragEnd(() => {
+    this.visualization.onDragEnd((mouse, targetNodeIdx: number | null) => {
+      if (this.props.editMode) {
+        if (this.state.draftLinkSourceNode) {
+          // this means a draft link was being drawn.
+          // Remove the placeholder (draftNode, draftLink) pair
+          // which is logically guaranteed to be
+          // the last element of the array
+          // because dragEnd will ALWAYS execute after dragStart
+          this.vizData.nodes.pop()
+          this.vizData.links.pop()
+          this.visualization.update(this.vizData)
+
+          if (targetNodeIdx !== null) {
+            const sourceNode = this.state.draftLinkSourceNode!
+            const targetNode = this.vizData.nodes[targetNodeIdx]
+            if (sourceNode !== targetNode) {
+              this.props.onLinkDrawn(sourceNode, targetNode)
+            }
+            this.setState({draftLinkSourceNode: undefined})
+          }
+        }
+      }
       this.simulation.settle()
     })
 
@@ -210,7 +286,10 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.nodes !== this.props.nodes) {
+    if (
+      prevProps.nodes !== this.props.nodes ||
+      prevProps.links !== this.props.links
+    ) {
       this.vizData = {
         nodes: this.props.nodes as GraphVizNode[],
         links: this.props.links as GraphVizLink[],
