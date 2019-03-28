@@ -25,14 +25,16 @@ function byPosition(a: Point, b: Point): number {
  * This function is an implementation of the Monotone Chain Algorithm (A.M Andrew, 1979)
  * and runs in O(n log(n)) time.
  *
+ * If input has less than three points, it trivially runs in constant time.
+ *
  * Alternatively you can provide a padding for the output convex polygon
  *
  * @param points
  * @param padding
  */
 export function get2DConvexHull(points: Point[], padding: number = 0): Point[] {
-  if (points.length <= 1) {
-    return [...points]
+  if (points.length < 3) {
+    return points
   }
 
   // 1. Sort points first by x-coordinate, and in case of a tie, by y-coordinate
