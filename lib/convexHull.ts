@@ -1,7 +1,21 @@
-// We could use Vector2 but trying to to couple this with THREE js for no reason
+import {meanBy} from 'lodash'
+
 interface Point {
   x: number
   y: number
+  radius?: number
+}
+
+/**
+ * predicate to sort two points by x and y coordinates
+ * @param a
+ * @param b
+ */
+function byPosition(a: Point, b: Point): number {
+  if (a.x === b.x) {
+    return a.y - b.y
+  }
+  return a.x - b.x
 }
 
 /**
@@ -11,9 +25,12 @@ interface Point {
  * This function is an implementation of the Monotone Chain Algorithm (A.M Andrew, 1979)
  * and runs in O(n log(n)) time.
  *
+ * Alternatively you can provide a padding for the output convex polygon
+ *
  * @param points
+ * @param padding
  */
-export function get2DConvexHull(points: Point[]): Point[] {
+export function get2DConvexHull(points: Point[], padding: number = 0): Point[] {
   if (points.length <= 1) {
     return [...points]
   }
@@ -58,7 +75,30 @@ export function get2DConvexHull(points: Point[]): Point[] {
   upperHull.pop()
   lowerHull.pop()
 
-  return [...upperHull, ...lowerHull]
+  const hull = [...upperHull, ...lowerHull]
+  const centroid = getCentroid(hull)
+
+  const paddedHull = hull.map(vertex => {
+    const slope = (vertex.y - centroid.y) / (vertex.x - centroid.x)
+    const offset = (vertex.radius || 0) + padding
+
+    // this might be considerably more readable if we use THREE.Vector3 instead of Point
+    // get a unit vector along vector CV where C = centroid and V = vertex
+    // and add (the normalized vector scaled by the Offset)
+    const directionX = vertex.x - centroid.x > 0 ? 1 : -1
+    const paddedX =
+      vertex.x +
+      directionX * Math.sqrt(Math.pow(offset, 2) / (Math.pow(slope, 2) + 1))
+
+    const paddedY = vertex.y + slope * (paddedX - vertex.x)
+
+    return {
+      x: paddedX,
+      y: paddedY,
+    }
+  })
+
+  return paddedHull
 }
 
 /**
@@ -74,9 +114,9 @@ function cross(o: Point, p: Point, q: Point): number {
   return (p.x - o.x) * (q.y - o.y) - (p.y - o.y) * (q.x - o.x)
 }
 
-function byPosition(a: Point, b: Point): number {
-  if (a.x === b.x) {
-    return a.y - b.y
+export function getCentroid(points: Point[]): Point {
+  return {
+    x: meanBy(points, p => p.x),
+    y: meanBy(points, p => p.y),
   }
-  return a.x - b.x
 }

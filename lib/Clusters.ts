@@ -1,4 +1,4 @@
-import {GraphVizNode} from './Nodes'
+import {DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE, GraphVizNode} from './Nodes'
 import {map, pickBy} from 'lodash'
 import * as THREE from 'three'
 import {MeshBasicMaterial} from 'three'
@@ -38,24 +38,29 @@ export class Clusters {
       //   this.object.add(this.meshes[clusterId])
       // }
 
-      const convexHull = get2DConvexHull(nodesInCluster)
+      const convexHull = get2DConvexHull(
+        nodesInCluster.map(n => ({
+          ...n,
+          radius: n.absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE,
+        })),
+      )
 
       // if new cluster
       if (this.meshes[clusterId] === undefined) {
         // NOTE: we probably don't need a BufferGeometry after r102 amirite?
-        const g = new THREE.Geometry()
+        const geometry = new THREE.Geometry()
 
-        g.vertices = convexHull.map(n => new THREE.Vector3(n.x, n.y, 0))
+        geometry.vertices = convexHull.map(n => new THREE.Vector3(n.x, n.y, 0))
 
         const faces: any = []
-        for (let i = 0; i < g.vertices.length - 2; i++) {
+        for (let i = 0; i < geometry.vertices.length - 2; i++) {
           faces.push(new THREE.Face3(0, i + 1, i + 2))
         }
-        g.faces = faces
-        g.computeBoundingSphere()
+        geometry.faces = faces
+        geometry.computeBoundingSphere()
 
         const material = new MeshBasicMaterial({color: 0xff00ff, opacity: 0.3})
-        this.meshes[clusterId] = new THREE.Mesh(g, material)
+        this.meshes[clusterId] = new THREE.Mesh(geometry, material)
         this.object.add(this.meshes[clusterId])
       } else {
         const geometry = this.meshes[clusterId].geometry as THREE.Geometry
