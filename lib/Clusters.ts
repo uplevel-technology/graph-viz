@@ -2,7 +2,7 @@ import {DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE, GraphVizNode} from './Nodes'
 import {map, pickBy} from 'lodash'
 import * as THREE from 'three'
 import {MeshBasicMaterial} from 'three'
-import {get2DConvexHull} from './convexHull'
+import {get2DConvexHull, getPaddedConvexPolygon} from './convexHull'
 
 export class Clusters {
   public object = new THREE.Group()
@@ -38,12 +38,13 @@ export class Clusters {
       //   this.object.add(this.meshes[clusterId])
       // }
 
-      const convexHull = get2DConvexHull(
-        nodesInCluster.map(n => ({
+      let convexHull = get2DConvexHull(nodesInCluster) as GraphVizNode[]
+      convexHull = getPaddedConvexPolygon(
+        convexHull.map(n => ({
           ...n,
           radius: n.absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE,
         })),
-      )
+      ) as GraphVizNode[]
 
       // if new cluster
       if (this.meshes[clusterId] === undefined) {
