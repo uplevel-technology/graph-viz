@@ -9,6 +9,7 @@ import {
   getAttributeNodeLabel,
   getEventNodeLabel,
   ObservableRelationshipDisplayTypes,
+  getEventNodeDisplayType,
 } from '../displayTypes'
 import {GraphVizLink} from './lib/Links'
 import {TooltipNode} from './NodeTooltips'
@@ -123,6 +124,7 @@ export const eventToTooltipNode = (event: Event): Partial<TooltipNode> => {
     displayName,
     displayType: 'Event',
     formattedTime: moment(occurred).format('MMM DD YYYY'),
+    clusterId: event.getClusterId()!,
   }
 }
 
@@ -159,7 +161,10 @@ export const eventsToVizData = (events: Event[]): VizData => {
       const attrNode = attributeToNode(ao.getAttribute()!)
       seenVizNodesById[attrNode.id!] = {
         vizNode: attrNode,
-        tooltipNode: attributeToTooltipNode(ao.getAttribute()!),
+        tooltipNode: {
+          ...attributeToTooltipNode(ao.getAttribute()!),
+          clusterId: event.getClusterId(),
+        },
       }
 
       links.push({
@@ -172,13 +177,19 @@ export const eventsToVizData = (events: Event[]): VizData => {
       const from = observableToNode(rel.getFrom()!)
       seenVizNodesById[from.id!] = {
         vizNode: from,
-        tooltipNode: observableToTooltipNode(rel.getFrom()!),
+        tooltipNode: {
+          ...observableToTooltipNode(rel.getFrom()!),
+          clusterId: event.getClusterId(),
+        },
       }
 
       const to = observableToNode(rel.getTo()!)
       seenVizNodesById[to.id!] = {
         vizNode: to,
-        tooltipNode: observableToTooltipNode(rel.getTo()!),
+        tooltipNode: {
+          ...observableToTooltipNode(rel.getTo()!),
+          clusterId: event.getClusterId(),
+        },
       }
 
       links.push({
@@ -208,7 +219,11 @@ export const eventsToVizData = (events: Event[]): VizData => {
 }
 
 export const getLegendData = (events: Event[]): string[] => {
-  const allTypes: Set<string> = new Set()
+  // keep track of event and attribute types separately so that
+  // we can make the event types appear first in the legend
+
+  const eventTypes: Set<string> = new Set()
+  const attrTypes: Set<string> = new Set([])
 
   const getObsLabel = (t: ObservableNode) => {
     if (t.getValueCase() === ObservableNode.ValueCase.ARTIFACT) {
@@ -224,17 +239,17 @@ export const getLegendData = (events: Event[]): string[] => {
       return
     }
 
-    allTypes.add(getEventNodeLabel(event.getEventType()))
+    eventTypes.add(getEventNodeDisplayType(event.getEventType()))
 
     observed.getAttributesList().forEach(ao => {
-      allTypes.add(getAttributeDisplayType(ao.getAttribute()!.getType()))
+      attrTypes.add(getAttributeDisplayType(ao.getAttribute()!.getType()))
     })
 
     observed.getRelationshipsList().forEach(rel => {
-      allTypes.add(getObsLabel(rel.getFrom()!))
-      allTypes.add(getObsLabel(rel.getTo()!))
+      attrTypes.add(getObsLabel(rel.getFrom()!))
+      attrTypes.add(getObsLabel(rel.getTo()!))
     })
   })
 
-  return Array.from(allTypes)
+  return Array.from(eventTypes).concat(Array.from(attrTypes))
 }
