@@ -24,6 +24,10 @@ export class Clusters {
         })),
       ) as GraphVizNode[]
 
+      const spline = new THREE.SplineCurve(
+        convexHull.map(v => new THREE.Vector2(v.x, v.y)),
+      )
+
       let geometry
 
       // if new cluster
@@ -37,7 +41,8 @@ export class Clusters {
         geometry = this.meshes[clusterId].geometry as THREE.Geometry
       }
 
-      geometry.vertices = convexHull.map(n => new THREE.Vector3(n.x, n.y, 0))
+      geometry.setFromPoints(spline.getPoints(200))
+      // geometry.vertices = convexHull.map(n => new THREE.Vector3(n.x, n.y, 0))
 
       const faces: any = []
       for (let i = 0; i < geometry.vertices.length - 2; i++) {
