@@ -16,28 +16,6 @@ export class Clusters {
     const nodesByClusters = this.getClusters(nodes)
 
     map(nodesByClusters, (nodesInCluster, clusterId) => {
-      // if (this.meshes[clusterId] === undefined) {
-      //   if (nodesInCluster.length < 4) {
-      //     return
-      //   }
-      //   const nodePositions = nodesInCluster.map(
-      //     (n: any) => new THREE.Vector3(n.x, n.y, n.z),
-      //   )
-      //   console.log(nodePositions)
-      //   const geometry = new (THREE as any).ConvexGeometry(nodePositions)
-      //   const material = new MeshBasicMaterial({color: 0xff00ff, opacity: 0.3})
-      //   this.meshes[clusterId] = new THREE.Mesh(geometry, material)
-      //   this.meshes[clusterId].name = clusterId
-      //   this.object.add(this.meshes[clusterId])
-      // } else {
-      //   const nodePositions = nodesInCluster.map(
-      //     (n: any) => new THREE.Vector3(n.x, n.y, n.z),
-      //   )
-      //   const geometry = new (THREE as any).ConvexGeometry(nodePositions)
-      //   this.meshes[clusterId].geometry = geometry
-      //   this.object.add(this.meshes[clusterId])
-      // }
-
       let convexHull = get2DConvexHull(nodesInCluster) as GraphVizNode[]
       convexHull = getPaddedConvexPolygon(
         convexHull.map(n => ({
@@ -46,43 +24,29 @@ export class Clusters {
         })),
       ) as GraphVizNode[]
 
+      let geometry
+
       // if new cluster
       if (this.meshes[clusterId] === undefined) {
         // NOTE: we probably don't need a BufferGeometry after r102 amirite?
-        const geometry = new THREE.Geometry()
-
-        geometry.vertices = convexHull.map(n => new THREE.Vector3(n.x, n.y, 0))
-
-        const faces: any = []
-        for (let i = 0; i < geometry.vertices.length - 2; i++) {
-          faces.push(new THREE.Face3(0, i + 1, i + 2))
-        }
-        geometry.faces = faces
-        geometry.computeBoundingSphere()
-
+        geometry = new THREE.Geometry()
         const material = new MeshBasicMaterial({color: 0xff00ff, opacity: 0.3})
         this.meshes[clusterId] = new THREE.Mesh(geometry, material)
         this.object.add(this.meshes[clusterId])
       } else {
-        const geometry = this.meshes[clusterId].geometry as THREE.Geometry
-
-        geometry.vertices = convexHull.map(n => new THREE.Vector3(n.x, n.y, 0))
-
-        const faces: any = []
-        for (let i = 0; i < geometry.vertices.length - 2; i++) {
-          faces.push(new THREE.Face3(0, i + 1, i + 2))
-        }
-        geometry.faces = faces
-        geometry.computeBoundingSphere()
-
-        geometry.elementsNeedUpdate = true
+        geometry = this.meshes[clusterId].geometry as THREE.Geometry
       }
 
-      // position.needsUpdate = true
+      geometry.vertices = convexHull.map(n => new THREE.Vector3(n.x, n.y, 0))
 
-      // We would need this if we were to detect interactions
-      // on Clusters
-      // geometry.computeBoundingSphere()
+      const faces: any = []
+      for (let i = 0; i < geometry.vertices.length - 2; i++) {
+        faces.push(new THREE.Face3(0, i + 1, i + 2))
+      }
+      geometry.faces = faces
+      geometry.computeBoundingSphere()
+
+      geometry.elementsNeedUpdate = true
     })
   }
 
