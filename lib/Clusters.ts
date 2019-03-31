@@ -6,7 +6,7 @@ import {get2DConvexHull, getPaddedConvexPolygon} from './convexHull'
 
 export class Clusters {
   public object = new THREE.Group()
-  private meshes: {[clusterId: string]: THREE.Mesh} = {}
+  private meshes: {[clusterId: string]: THREE.Mesh | THREE.Points} = {}
 
   constructor(nodes: GraphVizNode[]) {
     this.updateAll(nodes)
@@ -29,20 +29,33 @@ export class Clusters {
       // )
 
       let geometry
+      let pointsGeometry
 
       // if new cluster
       if (this.meshes[clusterId] === undefined) {
         // NOTE: we probably don't need a BufferGeometry after r102 amirite?
         geometry = new THREE.Geometry()
+        pointsGeometry = new THREE.Geometry()
         const material = new MeshBasicMaterial({color: 0xff00ff, opacity: 0.3})
+        const pointsMat = new THREE.PointsMaterial({size: 5, color: 0xff0000})
         this.meshes[clusterId] = new THREE.Mesh(geometry, material)
+        this.meshes[`helper-${clusterId}`] = new THREE.Points(
+          pointsGeometry,
+          pointsMat,
+        )
         this.object.add(this.meshes[clusterId])
+        this.object.add(this.meshes[`helper-${clusterId}`])
       } else {
         geometry = this.meshes[clusterId].geometry as THREE.Geometry
+        pointsGeometry = this.meshes[`helper-${clusterId}`]
+          .geometry as THREE.Geometry
       }
 
       // geometry.setFromPoints(spline.getPoints(200))
       geometry.setFromPoints(vertices)
+      pointsGeometry.vertices = vertices.map(
+        v => new THREE.Vector3(v.x, v.y, 0),
+      )
 
       const faces: any = []
       for (let i = 0; i < geometry.vertices.length - 2; i++) {
@@ -52,6 +65,8 @@ export class Clusters {
       geometry.computeBoundingSphere()
 
       geometry.elementsNeedUpdate = true
+      pointsGeometry.elementsNeedUpdate = true
+      pointsGeometry.verticesNeedUpdate = true
     })
   }
 
