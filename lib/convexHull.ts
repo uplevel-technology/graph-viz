@@ -151,30 +151,67 @@ export function getPaddedConvexPolygon(
     const nextSlope =
       (paddedVertex.y - nextVertex.y) / (paddedVertex.x - nextVertex.x)
 
-    const prevAnchorX =
+    const prevAnchorX1 =
       (vertex.y - prevVertex.y + prevSlope * prevVertex.x) / prevSlope
+    const prevAnchorY1 = vertex.y
+    const prevAnchor1Dist = prevAnchorX1 - vertex.x
 
-    const prevAnchorY = vertex.y
+    const nextAnchorX1 = vertex.x
+    const nextAnchorY1 = nextSlope * (vertex.x - nextVertex.x) + nextVertex.y
+    const nextAnchor1Dist = nextAnchorY1 - vertex.y
 
-    const nextAnchorX = vertex.x
+    const proximity1 = prevAnchor1Dist + nextAnchor1Dist
 
-    const nextAnchorY = nextSlope * (vertex.x - nextVertex.x) + nextVertex.y
+    const prevAnchorX2 = vertex.x
+    const prevAnchorY2 = prevSlope * (vertex.x - prevVertex.x) + prevVertex.y
+    const prevAnchor2Dist = prevAnchorY2 - vertex.y
+
+    const nextAnchorX2 =
+      (vertex.y - nextVertex.y + nextSlope * nextVertex.x) / nextSlope
+    const nextAnchorY2 = vertex.y
+    const nextAnchor2Dist = nextAnchorX2 - vertex.x
+
+    const proximity2 = prevAnchor2Dist + nextAnchor2Dist
+
+    let prevAnchor = {
+      x: prevAnchorX1,
+      y: prevAnchorY1,
+    }
+    let nextAnchor = {
+      x: nextAnchorX1,
+      y: nextAnchorY1,
+    }
+
+    if (proximity2 < proximity1) {
+      prevAnchor = {
+        x: prevAnchorX2,
+        y: prevAnchorY2,
+      }
+      nextAnchor = {
+        x: nextAnchorX2,
+        y: nextAnchorY2,
+      }
+    }
 
     const anchorPoints = [
-      new THREE.Vector2(prevAnchorX, prevAnchorY),
+      new THREE.Vector2(prevAnchor.x, prevAnchor.y),
       new THREE.Vector2(paddedVertex.x, paddedVertex.y),
-      new THREE.Vector2(nextAnchorX, nextAnchorY),
+      new THREE.Vector2(nextAnchor.x, nextAnchor.y),
     ]
 
     const spline = new THREE.QuadraticBezierCurve(
-      new THREE.Vector2(prevAnchorX, prevAnchorY),
+      new THREE.Vector2(prevAnchor.x, prevAnchor.y),
       new THREE.Vector2(paddedVertex.x, paddedVertex.y),
-      new THREE.Vector2(nextAnchorX, nextAnchorY),
+      new THREE.Vector2(nextAnchor.x, nextAnchor.y),
     )
 
-    allVertices.push(...anchorPoints)
-    // allVertices.push(...spline.getPoints(200))
+    // allVertices.push(...anchorPoints)
+    allVertices.push(...spline.getPoints(200))
   }
 
   return allVertices
+}
+
+function distance(x1: number, y1: number, x2: number, y2: number): number {
+  return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
 }
