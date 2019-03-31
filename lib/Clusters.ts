@@ -16,17 +16,17 @@ export class Clusters {
     const nodesByClusters = this.getClusters(nodes)
 
     map(nodesByClusters, (nodesInCluster, clusterId) => {
-      let convexHull = get2DConvexHull(nodesInCluster) as GraphVizNode[]
-      convexHull = getPaddedConvexPolygon(
-        convexHull.map(n => ({
+      const convexHullz = get2DConvexHull(nodesInCluster) as GraphVizNode[]
+      const vertices = getPaddedConvexPolygon(
+        convexHullz.map(n => ({
           ...n,
           radius: n.absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE,
         })),
-      ) as GraphVizNode[]
-
-      const spline = new THREE.SplineCurve(
-        convexHull.map(v => new THREE.Vector2(v.x, v.y)),
       )
+
+      // const spline = new THREE.SplineCurve(
+      //   convexHull.map(v => new THREE.Vector2(v.x, v.y)),
+      // )
 
       let geometry
 
@@ -41,8 +41,8 @@ export class Clusters {
         geometry = this.meshes[clusterId].geometry as THREE.Geometry
       }
 
-      geometry.setFromPoints(spline.getPoints(200))
-      // geometry.vertices = convexHull.map(n => new THREE.Vector3(n.x, n.y, 0))
+      // geometry.setFromPoints(spline.getPoints(200))
+      geometry.setFromPoints(vertices)
 
       const faces: any = []
       for (let i = 0; i < geometry.vertices.length - 2; i++) {

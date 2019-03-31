@@ -1,4 +1,5 @@
 import {meanBy} from 'lodash'
+import * as THREE from 'three'
 
 interface Point {
   x: number
@@ -103,11 +104,14 @@ export function getCentroid(points: Point[]): Point {
 export function getPaddedConvexPolygon(
   vertices: Point[],
   padding: number = 0,
-): Point[] {
+): THREE.Vector2[] {
   // the centroid of a convex polygon is guaranteed to be inside the polygon
   const centroid = getCentroid(vertices)
+  console.log(vertices.map(v => (v as any).id))
 
-  return vertices.map(vertex => {
+  const allVertices: THREE.Vector2[] = []
+
+  const paddedVertices = vertices.map(vertex => {
     const slope = (vertex.y - centroid.y) / (vertex.x - centroid.x)
     const offset = (vertex.radius || 0) + padding
 
@@ -127,4 +131,50 @@ export function getPaddedConvexPolygon(
       y: paddedY,
     }
   })
+
+  const path = new THREE.Path()
+
+  for (let i = 0; i < paddedVertices.length; i++) {
+    const vertex = vertices[i]
+    const paddedVertex = paddedVertices[i]
+    const prevVertex =
+      i === 0
+        ? paddedVertices[paddedVertices.length - 1]
+        : paddedVertices[i - 1]
+    const nextVertex =
+      i === paddedVertices.length - 1
+        ? paddedVertices[0]
+        : paddedVertices[i + 1]
+
+    const prevSlope =
+      (paddedVertex.y - prevVertex.y) / (paddedVertex.x - prevVertex.x)
+    const nextSlope =
+      (paddedVertex.y - nextVertex.y) / (paddedVertex.x - nextVertex.x)
+
+    const prevAnchorX =
+      (vertex.y - prevVertex.y + prevSlope * prevVertex.x) / prevSlope
+
+    const prevAnchorY = vertex.y
+
+    const nextAnchorX = vertex.x
+
+    const nextAnchorY = nextSlope * (vertex.x - nextVertex.x) + nextVertex.y
+
+    const anchorPoints = [
+      new THREE.Vector2(prevAnchorX, prevAnchorY),
+      new THREE.Vector2(paddedVertex.x, paddedVertex.y),
+      new THREE.Vector2(nextAnchorX, nextAnchorY),
+    ]
+
+    const spline = new THREE.QuadraticBezierCurve(
+      new THREE.Vector2(prevAnchorX, prevAnchorY),
+      new THREE.Vector2(paddedVertex.x, paddedVertex.y),
+      new THREE.Vector2(nextAnchorX, nextAnchorY),
+    )
+
+    allVertices.push(...anchorPoints)
+    // allVertices.push(...spline.getPoints(200))
+  }
+
+  return allVertices
 }
