@@ -30,20 +30,26 @@ export const NodeFillPalette: {[key: string]: string} = {
   ipAddress: '#86B4EA', // blue
   port: '#CFDEFF', // light blue
   filePath: '#EED6F2', // pink
-  subject: '#EED6F2', // pink // WARNING same color as filePath (they do not occur in same alerts in demo datasets)
+  subject: '#761F84', // purple
   filename: '#A68ABE', // purple
   md5: '#C0F3FA', // cyan
-  channel: '#C0F3FA', // cyan // WARNING same color as md5 (they do not occur in same alerts in demo datasets)
+  channel: '#E8EF94', // yellow
   sha1: '#0796a8',
   sha256: '#068595',
   protocol: '#fd9f3e',
-  processId: '#fd9f3e', // WARNING same color as protocol
+  processId: '#FEC400', // WARNING same color as attribute
   url: '#7ED3C0', // green
-  commandLine: '#7ED3C0', // WARNING same color as url
+  commandLine: '#617FBF', // blue
   application: '#CCFF90', // light green
   body: '#CCFF90', // light green // WARNING same color as application (they do not occur in same alerts in demo datasets)
   processName: '#FFA76B', // orange
-  emailAddress: '#FFA76B', // orange // WARNING same color as process (they do not occur in same alerts in demo datasets)
+  emailAddress: '#00478D', // orange // WARNING same color as artifact
+  domainName: '#EFBC88',
+  applicationName: '#BC2DB0',
+  cve: '#577C6E',
+  machineName: '#63628C',
+  userName: '#E25FA9',
+  accountName: '#A7DD73',
 }
 
 export const NodeOutlinePalette: {[key: string]: string} = {
@@ -55,20 +61,26 @@ export const NodeOutlinePalette: {[key: string]: string} = {
   ipAddress: '#005DB8', // blue
   port: '#5986EC', // light blue
   filePath: '#EA80FC', // pink
-  subject: '#EA80FC', // pink // WARNING same color as filePath (they do not occur in same alerts in demo datasets)
+  subject: '#561660',
   filename: '#5B129B', // purple
   md5: '#08A7BB', // cyan
-  channel: '#08A7BB', // cyan // WARNING same color as md5 (they do not occur in same alerts in demo datasets)
+  channel: '#E9F285',
   sha1: '#08A7BB',
   sha256: '#08A7BB',
   protocol: '#FD9225',
-  processId: '#FD9225', // WARNING same color as protocol
+  processId: '#F4BC02',
   url: '#278C90', // green
-  commandLine: '#278C90', // WARNING same color as url
+  commandLine: '#50699E',
   application: '#9ACA95', // light green
   body: '#9ACA95', // light green // WARNING same color as application (they do not occur in same alerts in demo datasets)
   processName: '#FC6600', // orange
-  emailAddress: '#FC6600', // orange // WARNING same color as process (they do not occur in same alerts in demo datasets)
+  emailAddress: '#00478D', // WARNING same color as artifact
+  domainName: '#F4A453',
+  applicationName: '#A32398',
+  cve: '#47665A',
+  machineName: '#4A4968',
+  userName: '#B74284',
+  accountName: '#8EC15D',
 }
 
 export const toggleNodeLock = (
