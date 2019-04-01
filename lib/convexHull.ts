@@ -92,15 +92,33 @@ function cross(o: Point, p: Point, q: Point): number {
   return (p.x - o.x) * (q.y - o.y) - (p.y - o.y) * (q.x - o.x)
 }
 
-export function getCentroid(points: Point[]): Point {
-  return {
-    x: meanBy(points, p => p.x),
-    y: meanBy(points, p => p.y),
-  }
-}
-
-export function getPaddedConvexPolygon(
-  vertices: Point[],
+/**
+ * Gets the rounded offset polygon.
+ * ---------------------------------
+ * This implementation is loosely based on the method highlighted in this
+ * thread: https://discourse.threejs.org/t/offsetcontour-function/3185
+ *
+ * First, find the offset contour by using the bisector method:
+ *
+ * For each vertex V calculate the padded vertex:
+ *  1. Find the bisector B for the outer angle between vectors V1→V and V2→V,
+ *     where V1 and V2 are previous and next vertices respectively.
+ *  2. Translate a point P = V along vector B for a distance of
+ *     offset = node.radius + padding.
+ *  3. Return P (the padded vertex)
+ *
+ * Then round the vertices:
+ *
+ * Replace each padded vertex with a QuadraticBezierCurve s.t.:
+ * the paddedVertex P is the control point of the curve
+ * and the start and the end points are the intersection points of perpendiculars
+ * drawn from vertex V to tangents V1→V and V2→V.
+ *
+ * @param nodes
+ * @param padding
+ */
+export function getNiceOffsetPolygon(
+  nodes: GraphVizNode[],
   padding: number = 0,
 ): THREE.Vector2[] {
   const vertices = nodes.map(n => new THREE.Vector2(n.x, n.y))
