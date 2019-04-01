@@ -132,84 +132,51 @@ export function getPaddedConvexPolygon(
     }
   })
 
-  const path = new THREE.Path()
-
   for (let i = 0; i < paddedVertices.length; i++) {
     const vertex = vertices[i]
-    const paddedVertex = paddedVertices[i]
-    const prevVertex =
+    const v = paddedVertices[i]
+    const vPrev =
       i === 0
         ? paddedVertices[paddedVertices.length - 1]
         : paddedVertices[i - 1]
-    const nextVertex =
+    const vNext =
       i === paddedVertices.length - 1
         ? paddedVertices[0]
         : paddedVertices[i + 1]
 
-    const prevSlope =
-      (paddedVertex.y - prevVertex.y) / (paddedVertex.x - prevVertex.x)
-    const nextSlope =
-      (paddedVertex.y - nextVertex.y) / (paddedVertex.x - nextVertex.x)
-
-    const prevAnchorX1 =
-      (vertex.y - prevVertex.y + prevSlope * prevVertex.x) / prevSlope
-    const prevAnchorY1 = vertex.y
-    const prevAnchor1Dist = prevAnchorX1 - vertex.x
-
-    const nextAnchorX1 = vertex.x
-    const nextAnchorY1 = nextSlope * (vertex.x - nextVertex.x) + nextVertex.y
-    const nextAnchor1Dist = nextAnchorY1 - vertex.y
-
-    const proximity1 = prevAnchor1Dist + nextAnchor1Dist
-
-    const prevAnchorX2 = vertex.x
-    const prevAnchorY2 = prevSlope * (vertex.x - prevVertex.x) + prevVertex.y
-    const prevAnchor2Dist = prevAnchorY2 - vertex.y
-
-    const nextAnchorX2 =
-      (vertex.y - nextVertex.y + nextSlope * nextVertex.x) / nextSlope
-    const nextAnchorY2 = vertex.y
-    const nextAnchor2Dist = nextAnchorX2 - vertex.x
-
-    const proximity2 = prevAnchor2Dist + nextAnchor2Dist
-
-    let prevAnchor = {
-      x: prevAnchorX1,
-      y: prevAnchorY1,
-    }
-    let nextAnchor = {
-      x: nextAnchorX1,
-      y: nextAnchorY1,
-    }
-
-    if (proximity2 < proximity1) {
-      prevAnchor = {
-        x: prevAnchorX2,
-        y: prevAnchorY2,
-      }
-      nextAnchor = {
-        x: nextAnchorX2,
-        y: nextAnchorY2,
-      }
-    }
+    const prevAnchor = findNormalViaIntersection(vPrev, v, vertex)
+    const nextAnchor = findNormalViaIntersection(v, vNext, vertex)
 
     const anchorPoints = [
       new THREE.Vector2(prevAnchor.x, prevAnchor.y),
-      new THREE.Vector2(paddedVertex.x, paddedVertex.y),
+      new THREE.Vector2(v.x, v.y),
       new THREE.Vector2(nextAnchor.x, nextAnchor.y),
     ]
 
-    const spline = new THREE.QuadraticBezierCurve(
+    const curve = new THREE.QuadraticBezierCurve(
       new THREE.Vector2(prevAnchor.x, prevAnchor.y),
-      new THREE.Vector2(paddedVertex.x, paddedVertex.y),
+      new THREE.Vector2(v.x, v.y),
       new THREE.Vector2(nextAnchor.x, nextAnchor.y),
     )
 
     // allVertices.push(...anchorPoints)
-    allVertices.push(...spline.getPoints(200))
+    allVertices.push(...curve.getPoints(5))
   }
 
   return allVertices
+}
+
+function findNormalViaIntersection(v1: Point, v2: Point, via: Point): Point {
+  const slope = (v2.y - v1.y) / (v2.x - v1.x)
+  const normalSlope = -1 / slope
+
+  const c = v1.y - slope * v1.x
+  const normalC = via.y - normalSlope * via.x
+
+  const x = (c - normalC) / (normalSlope - slope)
+  const y = slope * x + c
+
+  return {x, y}
 }
 
 function distance(x1: number, y1: number, x2: number, y2: number): number {
