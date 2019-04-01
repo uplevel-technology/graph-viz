@@ -1,8 +1,8 @@
-import {DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE, GraphVizNode} from './Nodes'
+import {GraphVizNode} from './Nodes'
 import {map, pickBy} from 'lodash'
 import * as THREE from 'three'
 import {MeshBasicMaterial} from 'three'
-import {get2DConvexHull, getPaddedConvexPolygon} from './convexHull'
+import {get2DConvexHull, getNiceOffsetPolygon} from './convexHull'
 
 export class Clusters {
   public object = new THREE.Group()
@@ -16,17 +16,8 @@ export class Clusters {
     const nodesByClusters = this.getClusters(nodes)
 
     map(nodesByClusters, (nodesInCluster, clusterId) => {
-      const convexHullz = get2DConvexHull(nodesInCluster) as GraphVizNode[]
-      const vertices = getPaddedConvexPolygon(
-        convexHullz.map(n => ({
-          ...n,
-          radius: n.absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE,
-        })),
-      )
-
-      // const spline = new THREE.SplineCurve(
-      //   convexHull.map(v => new THREE.Vector2(v.x, v.y)),
-      // )
+      const convexHull = get2DConvexHull(nodesInCluster)
+      const vertices = getNiceOffsetPolygon(convexHull)
 
       let geometry
       let pointsGeometry
@@ -36,7 +27,13 @@ export class Clusters {
         // NOTE: we probably don't need a BufferGeometry after r102 amirite?
         geometry = new THREE.Geometry()
         pointsGeometry = new THREE.Geometry()
-        const material = new MeshBasicMaterial({color: 0xff00ff, opacity: 0.3})
+        const material = new MeshBasicMaterial({
+          color: 0xff00ff,
+          opacity: 0.3,
+          polygonOffset: true,
+          polygonOffsetFactor: 100,
+          polygonOffsetUnits: 10,
+        })
         const pointsMat = new THREE.PointsMaterial({size: 5, color: 0xff0000})
         this.meshes[clusterId] = new THREE.Mesh(geometry, material)
         this.meshes[`helper-${clusterId}`] = new THREE.Points(
@@ -51,7 +48,6 @@ export class Clusters {
           .geometry as THREE.Geometry
       }
 
-      // geometry.setFromPoints(spline.getPoints(200))
       geometry.setFromPoints(vertices)
       pointsGeometry.vertices = vertices.map(
         v => new THREE.Vector3(v.x, v.y, 0),
