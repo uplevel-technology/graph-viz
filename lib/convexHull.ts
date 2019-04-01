@@ -1,10 +1,9 @@
-import {meanBy} from 'lodash'
 import * as THREE from 'three'
+import {DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE, GraphVizNode} from './Nodes'
 
 interface Point {
   x: number
   y: number
-  radius?: number
 }
 
 /**
@@ -31,9 +30,8 @@ function byPosition(a: Point, b: Point): number {
  * Alternatively you can provide a padding for the output convex polygon
  *
  * @param points
- * @param padding
  */
-export function get2DConvexHull(points: Point[], padding: number = 0): Point[] {
+export function get2DConvexHull(points: GraphVizNode[]): GraphVizNode[] {
   if (points.length < 3) {
     return points
   }
@@ -42,7 +40,7 @@ export function get2DConvexHull(points: Point[], padding: number = 0): Point[] {
   const sortedPoints = [...points].sort(byPosition)
 
   // 2. Compute the upper hull
-  const upperHull: Point[] = []
+  const upperHull: GraphVizNode[] = []
   for (const p of sortedPoints) {
     while (upperHull.length >= 2) {
       const q = upperHull[upperHull.length - 1]
@@ -58,7 +56,7 @@ export function get2DConvexHull(points: Point[], padding: number = 0): Point[] {
   }
 
   // 3. Computer the lower hull
-  const lowerHull: Point[] = []
+  const lowerHull: GraphVizNode[] = []
   for (let i = sortedPoints.length - 1; i >= 0; i--) {
     const p = sortedPoints[i]
     while (lowerHull.length >= 2) {
@@ -105,31 +103,62 @@ export function getPaddedConvexPolygon(
   vertices: Point[],
   padding: number = 0,
 ): THREE.Vector2[] {
-  // the centroid of a convex polygon is guaranteed to be inside the polygon
-  const centroid = getCentroid(vertices)
-  console.log(vertices.map(v => (v as any).id))
+  const vertices = nodes.map(n => new THREE.Vector2(n.x, n.y))
 
   const allVertices: THREE.Vector2[] = []
 
-  const paddedVertices = vertices.map(vertex => {
-    const slope = (vertex.y - centroid.y) / (vertex.x - centroid.x)
-    const offset = (vertex.radius || 0) + padding
+  const paddedVertices = vertices.map((v, i) => {
+    // this assumes the array of vertices is in order and is circular
+    const vPrev = i === 0 ? vertices[vertices.length - 1] : vertices[i - 1]
+    const vNext = i === vertices.length - 1 ? vertices[0] : vertices[i + 1]
 
-    // this might be considerably more readable if we use THREE.Vector3 instead of Point
-    // get a unit vector along vector CV where C = centroid and V = vertex
-    // and add (the normalized vector scaled by the Offset)
-    const directionX = vertex.x - centroid.x > 0 ? 1 : -1
-    const paddedX =
-      vertex.x +
-      directionX * Math.sqrt(Math.pow(offset, 2) / (Math.pow(slope, 2) + 1))
+    const v1 = new THREE.Vector2().subVectors(vPrev, v)
+    const v2 = new THREE.Vector2().subVectors(vNext, v)
 
-    const paddedY = vertex.y + slope * (paddedX - vertex.x)
+    const angle = v2.angle() - v1.angle()
 
-    return {
-      ...vertex,
-      x: paddedX,
-      y: paddedY,
-    }
+    const halfAngle = angle / 2
+    const rHalfAngle = v2.angle() + Math.PI / 2
+
+    const shift = Math.tan(halfAngle - Math.PI / 2) // shift by slope in the opposite direction
+
+    // tslint:disable prettier
+    const shiftMatrix = new THREE.Matrix4().set(
+      1, 0, 0, 0,
+      -shift, 1, 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1
+    )
+
+    const rotationMatrix = new THREE.Matrix4().set(
+      Math.cos(rHalfAngle), -Math.sin(rHalfAngle), 0, 0,
+      Math.sin(rHalfAngle),  Math.cos(rHalfAngle), 0, 0,
+      0,                    0, 1, 0,
+      0,                    0, 0, 1
+    )
+
+    const translationMatrix = new THREE.Matrix4().set(
+      1, 0,  0, vertices[i].x,
+      0, 1, 0, vertices[i].y,
+      0, 0, 1, 0,
+      0, 0, 0, 1,
+    )
+    // tslint:enable prettier
+
+    const offset =
+      (nodes[i].absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) + padding
+
+    const offMag = (-offset * Math.sqrt(2)) / 2
+
+    const offsetAttr = new THREE.BufferAttribute(
+      new Float32Array([offMag, 0, 0]),
+      3,
+    )
+    shiftMatrix.applyToBufferAttribute(offsetAttr)
+    rotationMatrix.applyToBufferAttribute(offsetAttr)
+    translationMatrix.applyToBufferAttribute(offsetAttr)
+
+    return new THREE.Vector2(offsetAttr.getX(0), offsetAttr.getY(0))
   })
 
   for (let i = 0; i < paddedVertices.length; i++) {
@@ -147,26 +176,19 @@ export function getPaddedConvexPolygon(
     const prevAnchor = findNormalViaIntersection(vPrev, v, vertex)
     const nextAnchor = findNormalViaIntersection(v, vNext, vertex)
 
-    const anchorPoints = [
-      new THREE.Vector2(prevAnchor.x, prevAnchor.y),
-      new THREE.Vector2(v.x, v.y),
-      new THREE.Vector2(nextAnchor.x, nextAnchor.y),
-    ]
+    const curve = new THREE.QuadraticBezierCurve(prevAnchor, v, nextAnchor)
 
-    const curve = new THREE.QuadraticBezierCurve(
-      new THREE.Vector2(prevAnchor.x, prevAnchor.y),
-      new THREE.Vector2(v.x, v.y),
-      new THREE.Vector2(nextAnchor.x, nextAnchor.y),
-    )
-
-    // allVertices.push(...anchorPoints)
     allVertices.push(...curve.getPoints(5))
   }
 
   return allVertices
 }
 
-function findNormalViaIntersection(v1: Point, v2: Point, via: Point): Point {
+function findNormalViaIntersection(
+  v1: THREE.Vector2,
+  v2: THREE.Vector2,
+  via: THREE.Vector2,
+): THREE.Vector2 {
   const slope = (v2.y - v1.y) / (v2.x - v1.x)
   const normalSlope = -1 / slope
 
@@ -176,9 +198,5 @@ function findNormalViaIntersection(v1: Point, v2: Point, via: Point): Point {
   const x = (c - normalC) / (normalSlope - slope)
   const y = slope * x + c
 
-  return {x, y}
-}
-
-function distance(x1: number, y1: number, x2: number, y2: number): number {
-  return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
+  return new THREE.Vector2(x, y)
 }
