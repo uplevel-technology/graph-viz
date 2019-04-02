@@ -31,7 +31,7 @@ function byPosition(a: Point, b: Point): number {
  *
  * @param points
  */
-export function get2DConvexHull(points: GraphVizNode[]): GraphVizNode[] {
+export function get2DConvexHull(points: Point[]): Point[] {
   if (points.length < 3) {
     return points
   }
@@ -40,11 +40,12 @@ export function get2DConvexHull(points: GraphVizNode[]): GraphVizNode[] {
   const sortedPoints = [...points].sort(byPosition)
 
   // 2. Compute the upper hull
-  const upperHull: GraphVizNode[] = []
+  const upperHull: Point[] = []
   for (const p of sortedPoints) {
     while (upperHull.length >= 2) {
       const q = upperHull[upperHull.length - 1]
       const o = upperHull[upperHull.length - 2]
+
       // remove point from the upper hull if we see a clockwise turn
       if (cross(o, q, p) <= 0) {
         upperHull.pop()
@@ -56,7 +57,7 @@ export function get2DConvexHull(points: GraphVizNode[]): GraphVizNode[] {
   }
 
   // 3. Computer the lower hull
-  const lowerHull: GraphVizNode[] = []
+  const lowerHull: Point[] = []
   for (let i = sortedPoints.length - 1; i >= 0; i--) {
     const p = sortedPoints[i]
     while (lowerHull.length >= 2) {
@@ -84,6 +85,9 @@ export function get2DConvexHull(points: GraphVizNode[]): GraphVizNode[] {
  * i.e. z-component of their 3D cross product.
  * Returns a positive value, if vector OPQ makes a counter-clockwise turn,
  * negative for clockwise turn, and zero if the points are collinear.
+ *
+ * NOTE: We could use THREE.Vector2().cross() instead of this function.
+ *
  * @param o
  * @param p
  * @param q
