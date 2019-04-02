@@ -52,17 +52,7 @@ const DEFAULT_CONFIG_OPTIONS: ConfigurationOptions = {
 export class GraphVisualization {
   public nodesMesh: Nodes
   public linksMesh: Links
-
-  /**
-   * NOTE:
-   * This clusters are represented just nodes for now
-   * because functionally the mesh only renders a circle.
-   *
-   * We will eventually break it apart into a separate Clusters class and
-   * swap out the circular clusters with some sort of convex-hull meshes.
-   */
-  public clustersMesh: Nodes
-  public convexHull: Clusters // FIXME rename
+  public clustersMesh: Clusters
 
   public readonly canvas: HTMLCanvasElement
   public readonly camera: THREE.OrthographicCamera
@@ -132,14 +122,10 @@ export class GraphVisualization {
     this.linksMesh = new Links(
       getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
     )
-    this.clustersMesh = new Nodes(graphData.clusters)
-    this.convexHull = new Clusters(graphData.nodes)
+    this.clustersMesh = new Clusters(graphData.nodes)
 
-    this.convexHull.object.position.z = 0
-    this.scene.add(this.convexHull.object)
-
-    // this.clustersMesh.object.position.z = 0
-    // this.scene.add(this.clustersMesh.object)
+    this.clustersMesh.object.position.z = 0
+    this.scene.add(this.clustersMesh.object)
 
     this.linksMesh.object.position.z = 1
     this.scene.add(this.linksMesh.object)
@@ -231,8 +217,7 @@ export class GraphVisualization {
     this.linksMesh.updateAll(
       getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
     )
-    this.clustersMesh.updateAll(graphData.clusters)
-    this.convexHull.updateAll(graphData.nodes)
+    this.clustersMesh.updateAll(graphData.nodes)
   }
 
   /**
@@ -253,8 +238,7 @@ export class GraphVisualization {
       this.linksMesh.updateAllPositions(
         getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap),
       )
-      this.clustersMesh.updateAll(updatedGraphData.clusters)
-      this.convexHull.updateAll(updatedGraphData.nodes)
+      this.clustersMesh.updateAll(updatedGraphData.nodes)
 
       if (!this.userHasAdjustedViewport) {
         this.zoomToFit(updatedGraphData)
@@ -274,7 +258,7 @@ export class GraphVisualization {
     // The following call is fragile for now because it assumes
     // data to be present on the nodesMesh class.
     // The data property is staged for deprecation from the nodesMesh class.
-    this.convexHull.updateAll(this.nodesMesh.data)
+    this.clustersMesh.updateAll(this.nodesMesh.data)
     this.render()
   }
 
@@ -384,7 +368,6 @@ export class GraphVisualization {
     this.camera.updateProjectionMatrix()
     this.nodesMesh.handleCameraZoom(this.camera.zoom)
     this.linksMesh.handleCameraZoom(this.camera.zoom)
-    this.clustersMesh.handleCameraZoom(this.camera.zoom)
   }
 
   private handleHoverIn = (hoveredToNodeIdx: number) => {
@@ -461,7 +444,6 @@ export class GraphVisualization {
 
     this.nodesMesh.handleCameraZoom(this.camera.zoom)
     this.linksMesh.handleCameraZoom(this.camera.zoom)
-    this.clustersMesh.handleCameraZoom(this.camera.zoom)
 
     if (this.registeredEventHandlers.zoom) {
       this.registeredEventHandlers.zoom(event)
