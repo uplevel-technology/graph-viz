@@ -29,7 +29,6 @@ import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
 import {debounce, noop} from 'lodash'
 import {GraphVizNode} from './lib/Nodes'
-import {getClusters} from './lib/clusterLayout'
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -96,7 +95,6 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   vizData: GraphVizData = {
     nodes: [],
     links: [],
-    clusters: [],
   }
 
   tooltipNodes: TooltipNode[]
@@ -128,7 +126,6 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.vizData = {
       nodes: this.props.nodes as GraphVizNode[],
       links: this.props.links as GraphVizLink[],
-      clusters: [],
     }
     this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
@@ -174,7 +171,6 @@ class GraphVizComponentBase extends React.Component<Props, State> {
         node.x = nodePositions[i].x
         node.y = nodePositions[i].y
       })
-      this.vizData.clusters = getClusters(this.vizData.nodes)
       this.visualization.updatePositions(this.vizData) // fixme use updatePosition + updateSize
     })
 
@@ -322,7 +318,6 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.vizData = {
       nodes: nodesWithPositions,
       links: this.props.links as GraphVizLink[],
-      clusters: getClusters(nodesWithPositions),
     }
 
     this.visualization.update(this.vizData)
