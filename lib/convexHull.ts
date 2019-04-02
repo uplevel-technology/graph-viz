@@ -207,6 +207,17 @@ export function getNiceOffsetPolygon(
   return allVertices
 }
 
+/**
+ * Finds the intersection point P of:
+ *  1. The vector V1→V2, and,
+ *  2. A vector normal to V1→V2 that passes through point "via".
+ *
+ * In other words, we drop a perpendicular on line V1→V2 at point P
+ * that passes through point "via".
+ * @param v1
+ * @param v2
+ * @param via
+ */
 function findNormalViaIntersection(
   v1: THREE.Vector2,
   v2: THREE.Vector2,
