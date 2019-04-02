@@ -63,7 +63,7 @@ export function get2DConvexHull(points: Point[]): Point[] {
     while (lowerHull.length >= 2) {
       const q = lowerHull[lowerHull.length - 1]
       const o = lowerHull[lowerHull.length - 2]
-      // add point from the lower hull if we see a clockwise turn
+      // remove point from the lower hull if we see a clockwise turn
       if (cross(o, q, p) <= 0) {
         lowerHull.pop()
       } else {
@@ -115,8 +115,9 @@ function cross(o: Point, p: Point, q: Point): number {
  *
  * Replace each padded vertex with a QuadraticBezierCurve s.t.:
  * the paddedVertex P is the control point of the curve
- * and the start and the end points are the intersection points of perpendiculars
- * drawn from vertex V to tangents V1→V and V2→V.
+ * and the intersection points of perpendiculars drawn from
+ * vertex V to tangents V1→V and V2→V, are the start and the end points of the
+ * curve respectively.
  *
  * @param nodes
  * @param padding
