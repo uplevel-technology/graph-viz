@@ -15,6 +15,7 @@ export interface TooltipNode {
   displayName: string
   displayType?: string
   formattedTime?: string
+  clusterId?: number
   screenX: number
   screenY: number
 }
@@ -66,11 +67,28 @@ class NodeTooltipsBase extends React.Component<Props> {
         className={classes.root}
         style={getTooltipStyle(this.props.node)}
       >
-        {this.props.node.displayType && (
-          <Typography style={{fontSize: 10, fontWeight: 'bold'}}>
-            {this.props.node.displayType}
-          </Typography>
-        )}
+        <Grid container direction={'row'} justify={'space-between'}>
+          <Grid item>
+            {this.props.node.displayType && (
+              <Typography style={{fontSize: 10, fontWeight: 'bold'}}>
+                {this.props.node.displayType}
+              </Typography>
+            )}
+          </Grid>
+          <Grid item>
+            {this.props.node.clusterId && (
+              <Typography
+                style={{
+                  textTransform: 'none',
+                  fontSize: 10,
+                  color: '#555555',
+                }}
+              >
+                {`Cluster ${this.props.node.clusterId!}`}
+              </Typography>
+            )}
+          </Grid>
+        </Grid>
         <Typography
           variant={'body2'}
           className={cx(classes.breakLongWord, classes.origCase)}
