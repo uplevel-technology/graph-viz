@@ -16,7 +16,7 @@ export class Clusters {
     const nodesByClusters = this.getClusters(nodes)
 
     map(nodesByClusters, (nodesInCluster, clusterId) => {
-      const convexHull = get2DConvexHull(nodesInCluster)
+      const convexHull = get2DConvexHull(nodesInCluster) as GraphVizNode[]
       const vertices = getNiceOffsetPolygon(convexHull)
 
       let geometry
