@@ -31,7 +31,6 @@ export class Clusters {
         })
         this.meshes[clusterId] = new THREE.Mesh(geometry, material)
         this.object.add(this.meshes[clusterId])
-        this.object.add(this.meshes[`helper-${clusterId}`])
       } else {
         geometry = this.meshes[clusterId].geometry as THREE.Geometry
       }
