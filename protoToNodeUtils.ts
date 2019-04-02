@@ -90,6 +90,7 @@ export const observableToTooltipNode = (
 
 export const eventToNode = (event: Event): PartialGraphVizNode => ({
   id: event.getUid()!.getValue(),
+  clusterIds: [event.getClusterId().toString()],
   fill:
     event.getEventType() === Event.Type.ALERT
       ? NodeFillPalette.alert
@@ -158,7 +159,10 @@ export const eventsToVizData = (events: Event[]): VizData => {
     }
 
     observed.getAttributesList().forEach(ao => {
-      const attrNode = attributeToNode(ao.getAttribute()!)
+      const attrNode = {
+        ...attributeToNode(ao.getAttribute()!),
+        clusterIds: [event.getClusterId().toString()],
+      }
       seenVizNodesById[attrNode.id!] = {
         vizNode: attrNode,
         tooltipNode: {
@@ -174,7 +178,10 @@ export const eventsToVizData = (events: Event[]): VizData => {
     })
 
     observed.getRelationshipsList().forEach(rel => {
-      const from = observableToNode(rel.getFrom()!)
+      const from = {
+        ...observableToNode(rel.getFrom()!),
+        clusterIds: [event.getClusterId().toString()],
+      }
       seenVizNodesById[from.id!] = {
         vizNode: from,
         tooltipNode: {
@@ -183,7 +190,10 @@ export const eventsToVizData = (events: Event[]): VizData => {
         },
       }
 
-      const to = observableToNode(rel.getTo()!)
+      const to = {
+        ...observableToNode(rel.getTo()!),
+        clusterIds: [event.getClusterId().toString()],
+      }
       seenVizNodesById[to.id!] = {
         vizNode: to,
         tooltipNode: {
