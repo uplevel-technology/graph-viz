@@ -28,9 +28,6 @@ export class Clusters {
         const material = new MeshBasicMaterial({
           color: 0xff00ff,
           opacity: 0.3,
-          polygonOffset: true,
-          polygonOffsetFactor: 100,
-          polygonOffsetUnits: 10,
         })
         this.meshes[clusterId] = new THREE.Mesh(geometry, material)
         this.object.add(this.meshes[clusterId])
