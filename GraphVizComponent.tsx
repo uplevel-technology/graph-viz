@@ -290,11 +290,10 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       prevProps.nodes !== this.props.nodes ||
       prevProps.links !== this.props.links
     ) {
-      // this.vizData = {
-      //   nodes: this.props.nodes as GraphVizNode[],
-      //   links: this.props.links as GraphVizLink[],
-      //   clusters: [],
-      // }
+      this.vizData = {
+        nodes: this.props.nodes as GraphVizNode[],
+        links: this.props.links as GraphVizLink[],
+      }
       this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
       this.initData()
