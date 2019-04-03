@@ -25,7 +25,7 @@ export interface GraphVizCluster {
 }
 
 export const DEFAULT_CLUSTER_FILL = 0x000000
-export const DEFAULT_CLUSTER_FILL_OPACITY = 0.03
+export const DEFAULT_CLUSTER_FILL_OPACITY = 0.09
 
 export class Clusters {
   public object = new THREE.Group()
@@ -40,6 +40,9 @@ export class Clusters {
 
     for (const cluster of clusters) {
       const nodesInCluster = nodesByClusters[cluster.id]
+      if (!nodesInCluster) {
+        continue
+      }
       const convexHull = get2DConvexHull(nodesInCluster) as GraphVizNode[]
       const vertices = getNiceOffsetPolygon(convexHull, cluster.padding)
 
