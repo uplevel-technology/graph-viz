@@ -1,6 +1,6 @@
 import {get, noop, orderBy} from 'lodash'
 import * as THREE from 'three'
-import {Nodes} from './Nodes'
+import {GraphVizNode, Nodes} from './Nodes'
 
 const MAX_CLICK_DURATION = 300
 
@@ -54,7 +54,8 @@ export type PanEventHandler = (panDelta: THREE.Vector3) => any
 export type ZoomEventHandler = (event: MouseWheelEvent) => any
 
 export class MouseInteraction {
-  private nodes: Nodes
+  private nodesMesh: Nodes
+  private nodesData: GraphVizNode[]
   private intersectedPointIdx: number | null
   private dragging: boolean
   private registerClick: boolean
@@ -89,11 +90,13 @@ export class MouseInteraction {
   constructor(
     canvas: HTMLCanvasElement,
     camera: THREE.OrthographicCamera,
-    nodes: Nodes,
+    nodesMesh: Nodes,
+    nodesData: GraphVizNode[],
   ) {
     this.canvas = canvas
     this.camera = camera
-    this.nodes = nodes
+    this.nodesMesh = nodesMesh
+    this.nodesData = nodesData
 
     this.intersectedPointIdx = null
     this.dragging = false
@@ -111,6 +114,10 @@ export class MouseInteraction {
     this.canvas.addEventListener('mousemove', this.onMouseMove)
     this.canvas.addEventListener('mouseup', this.onMouseUp)
     this.canvas.addEventListener('wheel', this.onMouseWheel)
+  }
+
+  public updateData(nodesData: GraphVizNode[]) {
+    this.nodesData = nodesData
   }
 
   public onNodeHoverIn(callback: HoverEventHandler) {
@@ -194,7 +201,10 @@ export class MouseInteraction {
     )
 
     this.raycaster.setFromCamera(this.mouse, this.camera)
-    const intersects = this.raycaster.intersectObject(this.nodes.object, true)
+    const intersects = this.raycaster.intersectObject(
+      this.nodesMesh.object,
+      true,
+    )
     let nearestIndex = null
     if (intersects.length > 0) {
       const validNearestIntersects = orderBy(
@@ -202,7 +212,7 @@ export class MouseInteraction {
         'distanceToRay',
         'asc',
       ).filter(
-        point => !get(this.nodes.data, `${point.index}.disableInteractions`),
+        point => !get(this.nodesData, `${point.index}.disableInteractions`),
       )
 
       if (
