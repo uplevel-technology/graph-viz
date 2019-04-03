@@ -54,8 +54,6 @@ export type PanEventHandler = (panDelta: THREE.Vector3) => any
 export type ZoomEventHandler = (event: MouseWheelEvent) => any
 
 export class MouseInteraction {
-  private nodesMesh: Nodes
-  private nodesData: GraphVizNode[]
   private intersectedPointIdx: number | null
   private dragging: boolean
   private registerClick: boolean
@@ -79,6 +77,8 @@ export class MouseInteraction {
     zoom: noop,
   }
 
+  private readonly nodesMesh: Nodes
+  private readonly nodesData: GraphVizNode[]
   private readonly canvas: HTMLCanvasElement
   private readonly camera: THREE.OrthographicCamera
   private readonly panStart: THREE.Vector3
@@ -114,10 +114,6 @@ export class MouseInteraction {
     this.canvas.addEventListener('mousemove', this.onMouseMove)
     this.canvas.addEventListener('mouseup', this.onMouseUp)
     this.canvas.addEventListener('wheel', this.onMouseWheel)
-  }
-
-  public updateData(nodesData: GraphVizNode[]) {
-    this.nodesData = nodesData
   }
 
   public onNodeHoverIn(callback: HoverEventHandler) {
