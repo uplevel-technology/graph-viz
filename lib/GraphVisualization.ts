@@ -239,6 +239,8 @@ export class GraphVisualization {
         return
       }
 
+      this.data = updatedGraphData
+
       this.nodesMesh.updateAllPositions(updatedGraphData.nodes)
       this.linksMesh.updateAllPositions(
         getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap),
@@ -264,6 +266,7 @@ export class GraphVisualization {
     this.data.nodes[index] = updatedNode
     this.nodesMesh.updateOne(index, updatedNode)
     this.mouseInteraction.updateData(this.data.nodes)
+    this.clustersMesh.updateAll(this.data.nodes, this.data.clusters)
     this.render()
   }
 
@@ -276,7 +279,8 @@ export class GraphVisualization {
    */
   public updateClusters = (clusters: GraphVizCluster[]) => {
     this.data.clusters = clusters
-    this.clustersMesh.updateAll(this.data.nodes, clusters)
+    this.clustersMesh.updateAll(this.data.nodes, this.data.clusters)
+    this.render()
   }
 
   /**

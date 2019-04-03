@@ -295,8 +295,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     if (
       prevProps.nodes !== this.props.nodes ||
-      prevProps.links !== this.props.links ||
-      prevProps.clusters !== this.props.clusters
+      prevProps.links !== this.props.links
     ) {
       this.vizData = {
         nodes: this.props.nodes as GraphVizNode[],
@@ -306,6 +305,9 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
       this.initData()
+    }
+    if (prevProps.clusters !== this.props.clusters) {
+      this.visualization.updateClusters(this.props.clusters)
     }
   }
 

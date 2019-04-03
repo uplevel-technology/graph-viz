@@ -74,6 +74,15 @@ export class Clusters {
       geometry.computeBoundingSphere()
       geometry.elementsNeedUpdate = true
     }
+
+    for (const clusterId in nodesByClusters) {
+      if (clusters.find(c => c.id === clusterId) === undefined) {
+        // console.log('removing...', clusterId)
+        this.object.remove(this.meshes[clusterId])
+        delete this.meshes[clusterId]
+        console.log(this.meshes)
+      }
+    }
   }
 
   public groupNodesByClusters(
