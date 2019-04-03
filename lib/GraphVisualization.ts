@@ -268,6 +268,18 @@ export class GraphVisualization {
   }
 
   /**
+   * updates only the clusters mesh.
+   * Useful in situations that require ONLY clusters to update.
+   * E.g. toggling a cluster on or off when the nodes within a cluster
+   * have NOT changed.
+   * @param clusters
+   */
+  public updateClusters = (clusters: GraphVizCluster[]) => {
+    this.data.clusters = clusters
+    this.clustersMesh.updateAll(this.data.nodes, clusters)
+  }
+
+  /**
    * resize the canvas
    * @param width
    * @param height
