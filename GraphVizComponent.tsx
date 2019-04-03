@@ -29,6 +29,7 @@ import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
 import {debounce, noop} from 'lodash'
 import {GraphVizNode} from './lib/Nodes'
+import {GraphVizCluster} from './lib/Clusters'
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -63,13 +64,15 @@ interface State {
 
 // A partial GraphVizNode with a required id parameter
 // Better naming suggestions welcome
-export interface PartialGraphVizNode extends Partial<GraphVizNode> {
+export interface PartialGraphVizNode
+  extends Partial<GraphVizNode & ForceSimulationNode> {
   id: string
 }
 
 interface Props extends WithStyles<typeof styles> {
   nodes: PartialGraphVizNode[]
   links: GraphVizLink[]
+  clusters: GraphVizCluster[]
   tooltips: Partial<TooltipNode>[]
   onRefresh?: () => any
   config?: ConfigurationOptions
@@ -95,6 +98,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   vizData: GraphVizData = {
     nodes: [],
     links: [],
+    clusters: [],
   }
 
   tooltipNodes: TooltipNode[]
@@ -109,6 +113,8 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   }
 
   static defaultProps: Partial<Props> = {
+    tooltips: [],
+    clusters: [],
     onLinkDrawn: noop,
   }
 
@@ -126,6 +132,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.vizData = {
       nodes: this.props.nodes as GraphVizNode[],
       links: this.props.links as GraphVizLink[],
+      clusters: this.props.clusters,
     }
     this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
@@ -288,11 +295,13 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     if (
       prevProps.nodes !== this.props.nodes ||
-      prevProps.links !== this.props.links
+      prevProps.links !== this.props.links ||
+      prevProps.clusters !== this.props.clusters
     ) {
       this.vizData = {
         nodes: this.props.nodes as GraphVizNode[],
         links: this.props.links as GraphVizLink[],
+        clusters: this.props.clusters,
       }
       this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
@@ -317,6 +326,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.visualization.update({
       nodes: nodesWithPositions,
       links: this.props.links as GraphVizLink[],
+      clusters: this.props.clusters,
     })
   }
 
