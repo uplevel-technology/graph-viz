@@ -222,6 +222,7 @@ export class GraphVisualization {
       getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
     )
     this.clustersMesh.updateAll(graphData.nodes, graphData.clusters || [])
+    this.mouseInteraction.updateData(this.data.nodes)
   }
 
   /**
@@ -238,8 +239,6 @@ export class GraphVisualization {
         return
       }
 
-      this.data = updatedGraphData
-
       this.nodesMesh.updateAllPositions(updatedGraphData.nodes)
       this.linksMesh.updateAllPositions(
         getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap),
@@ -248,6 +247,7 @@ export class GraphVisualization {
         updatedGraphData.nodes,
         updatedGraphData.clusters || [],
       )
+      this.mouseInteraction.updateData(this.data.nodes)
 
       if (!this.userHasAdjustedViewport) {
         this.zoomToFit(updatedGraphData)
@@ -263,11 +263,7 @@ export class GraphVisualization {
   public updateNode = (index: number, updatedNode: GraphVizNode) => {
     this.data.nodes[index] = updatedNode
     this.nodesMesh.updateOne(index, updatedNode)
-
-    // WARNING:
-    // The following call is fragile for now because it assumes
-    // data to be present on the nodesMesh class.
-    // The data property is staged for deprecation from the nodesMesh class.
+    this.mouseInteraction.updateData(this.data.nodes)
     this.clustersMesh.updateAll(this.data.nodes, this.data.clusters || [])
     this.render()
   }
