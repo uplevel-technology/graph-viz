@@ -1,5 +1,5 @@
 import {GraphVizNode} from './Nodes'
-import {map, pickBy} from 'lodash'
+import {pickBy} from 'lodash'
 import * as THREE from 'three'
 import {MeshBasicMaterial} from 'three'
 import {get2DConvexHull, getNiceOffsetPolygon} from './convexHull'
@@ -31,32 +31,33 @@ export class Clusters {
   public object = new THREE.Group()
   private meshes: {[clusterId: string]: THREE.Mesh | THREE.Points} = {}
 
-  constructor(nodes: GraphVizNode[]) {
-    this.updateAll(nodes)
+  constructor(nodes: GraphVizNode[], clusters: GraphVizCluster[]) {
+    this.updateAll(nodes, clusters)
   }
 
-  public updateAll(nodes: GraphVizNode[]) {
-    const nodesByClusters = this.getClusters(nodes)
+  public updateAll(nodes: GraphVizNode[], clusters: GraphVizCluster[]) {
+    const nodesByClusters = this.groupNodesByClusters(nodes)
 
-    map(nodesByClusters, (nodesInCluster, clusterId) => {
+    for (const cluster of clusters) {
+      const nodesInCluster = nodesByClusters[cluster.id]
       const convexHull = get2DConvexHull(nodesInCluster) as GraphVizNode[]
-      const vertices = getNiceOffsetPolygon(convexHull)
+      const vertices = getNiceOffsetPolygon(convexHull, cluster.padding)
 
       let geometry
 
       // if new cluster
-      if (this.meshes[clusterId] === undefined) {
+      if (this.meshes[cluster.id] === undefined) {
         // NOTE: we probably don't need a BufferGeometry after r102 amirite?
         geometry = new THREE.Geometry()
         const material = new MeshBasicMaterial({
-          color: DEFAULT_CLUSTER_FILL,
-          opacity: DEFAULT_CLUSTER_FILL_OPACITY,
+          color: cluster.fill || DEFAULT_CLUSTER_FILL,
+          opacity: cluster.fillOpacity || DEFAULT_CLUSTER_FILL_OPACITY,
           transparent: true,
         })
-        this.meshes[clusterId] = new THREE.Mesh(geometry, material)
-        this.object.add(this.meshes[clusterId])
+        this.meshes[cluster.id] = new THREE.Mesh(geometry, material)
+        this.object.add(this.meshes[cluster.id])
       } else {
-        geometry = this.meshes[clusterId].geometry as THREE.Geometry
+        geometry = this.meshes[cluster.id].geometry as THREE.Geometry
       }
 
       geometry.setFromPoints(vertices)
@@ -65,14 +66,14 @@ export class Clusters {
       for (let i = 0; i < geometry.vertices.length - 2; i++) {
         faces.push(new THREE.Face3(0, i + 1, i + 2))
       }
+
       geometry.faces = faces
       geometry.computeBoundingSphere()
-
       geometry.elementsNeedUpdate = true
-    })
+    }
   }
 
-  public getClusters(
+  public groupNodesByClusters(
     nodes: GraphVizNode[],
   ): {[clusterId: string]: GraphVizNode[]} {
     const nodesByClusters: {[clusterId: string]: GraphVizNode[]} = {}
