@@ -57,6 +57,7 @@ export class GraphVisualization {
   public readonly canvas: HTMLCanvasElement
   public readonly camera: THREE.OrthographicCamera
 
+  private data: GraphVizData
   private nodeIdToIndexMap: {[key: string]: number} = {}
   private userHasAdjustedViewport: boolean
 
@@ -85,6 +86,7 @@ export class GraphVisualization {
     height: number,
     config: ConfigurationOptions = {},
   ) {
+    this.data = graphData
     this.canvas = canvas
     this.width = width
     this.height = height
@@ -139,6 +141,7 @@ export class GraphVisualization {
       this.canvas,
       this.camera,
       this.nodesMesh,
+      this.data.nodes,
     )
 
     const configWithDefault = {
@@ -212,6 +215,7 @@ export class GraphVisualization {
    * @param graphData
    */
   public update = (graphData: GraphVizData) => {
+    this.data = graphData
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
     this.nodesMesh.updateAll(graphData.nodes)
     this.linksMesh.updateAll(
@@ -229,10 +233,12 @@ export class GraphVisualization {
       // This function assumes the updatedGraphData hasn't changed in size or order and only the position attributes
       // have changed within each node datum.
       // Which should mean this.nodeIdToIndexMap is up to date
-      // TODO: This is linear time anyway, should we do a deep equality check instead?
+      // TODO: This is linear time as written, should we do a deep equality check instead?
       if (size(updatedGraphData.nodes) !== size(this.nodeIdToIndexMap)) {
         return
       }
+
+      this.data = updatedGraphData
 
       this.nodesMesh.updateAllPositions(updatedGraphData.nodes)
       this.linksMesh.updateAllPositions(
@@ -255,13 +261,14 @@ export class GraphVisualization {
    * @param updatedNode
    */
   public updateNode = (index: number, updatedNode: GraphVizNode) => {
+    this.data.nodes[index] = updatedNode
     this.nodesMesh.updateOne(index, updatedNode)
 
     // WARNING:
     // The following call is fragile for now because it assumes
     // data to be present on the nodesMesh class.
     // The data property is staged for deprecation from the nodesMesh class.
-    this.clustersMesh.updateAll(this.nodesMesh.data)
+    this.clustersMesh.updateAll(this.data.nodes, this.data.clusters || [])
     this.render()
   }
 
