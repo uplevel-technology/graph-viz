@@ -13,7 +13,7 @@ import {
   ZoomEventHandler,
 } from './MouseInteraction'
 import {GraphVizNode, Nodes} from './Nodes'
-import {Clusters} from './Clusters'
+import {Clusters, GraphVizCluster} from './Clusters'
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
@@ -21,6 +21,7 @@ const PAN_SPEED = 1.0
 export interface GraphVizData {
   nodes: GraphVizNode[]
   links: GraphVizLink[]
+  clusters?: GraphVizCluster[]
 }
 
 function constructIdToIdxMap(arr: Array<{id: string}>): {[id: string]: number} {

@@ -4,7 +4,7 @@ import * as THREE from 'three'
 import {MeshBasicMaterial} from 'three'
 import {get2DConvexHull, getNiceOffsetPolygon} from './convexHull'
 
-interface GraphVizCluster {
+export interface GraphVizCluster {
   id: string | number
   /**
    * node fill color hex string or hex number
@@ -23,6 +23,9 @@ interface GraphVizCluster {
    */
   padding?: number
 }
+
+export const DEFAULT_CLUSTER_FILL = 0x000000
+export const DEFAULT_CLUSTER_FILL_OPACITY = 0.03
 
 export class Clusters {
   public object = new THREE.Group()
@@ -46,8 +49,8 @@ export class Clusters {
         // NOTE: we probably don't need a BufferGeometry after r102 amirite?
         geometry = new THREE.Geometry()
         const material = new MeshBasicMaterial({
-          color: 0xff00ff,
-          opacity: 0.1,
+          color: DEFAULT_CLUSTER_FILL,
+          opacity: DEFAULT_CLUSTER_FILL_OPACITY,
           transparent: true,
         })
         this.meshes[clusterId] = new THREE.Mesh(geometry, material)
