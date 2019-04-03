@@ -98,31 +98,12 @@ export const HOVERED_NODE_SCALE = 1.5
 export class Nodes {
   public object: THREE.Points
 
-  /**
-   * FIXME:
-   * Storing a copy of  nodes data here is undesirable because we don't really
-   * want to make this class stateful.
-   *
-   * This is currently a stop-gap, quick-fix solution written because
-   * MouseInteraction class is now data driven, i.e. nodes can declare separate
-   * interaction related fields such as disableInteraction and so we need to
-   * maintain a reference to the original nodes data here only to pass it down
-   * to the MouseInteraction class.
-   *
-   * This is not ideal and we should pass this data to MouseInteraction in some
-   * other way.
-   *
-   * FIXME please
-   */
-  public data: GraphVizNode[]
-
   private readonly geometry: THREE.BufferGeometry
   private readonly material: THREE.ShaderMaterial
   private lockedIds: {[id: string]: boolean} = {}
 
   constructor(nodes: GraphVizNode[]) {
     const numNodes = size(nodes)
-    this.data = nodes
     this.geometry = new THREE.BufferGeometry()
     this.geometry.addAttribute(
       'position',
@@ -197,7 +178,6 @@ export class Nodes {
    * @param node
    */
   public updateOne = (index: number, node: GraphVizNode) => {
-    this.data[index] = node
     const position = this.geometry.getAttribute(
       'position',
     ) as THREE.BufferAttribute
@@ -272,7 +252,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAll = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     this.updateAllPositions(nodes)
     this.updateAllAbsoluteSizes(nodes)
     this.updateAllScales(nodes)
@@ -288,7 +267,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAllPositions = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     const position = this.geometry.getAttribute(
       'position',
     ) as THREE.BufferAttribute
@@ -312,7 +290,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAllAbsoluteSizes = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     const absoluteSize = this.geometry.getAttribute(
       'absoluteSize',
     ) as THREE.BufferAttribute
@@ -337,7 +314,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAllScales = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     const scale = this.geometry.getAttribute('scale') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -357,7 +333,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAllInnerRadii = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     const innerRadius = this.geometry.getAttribute(
       'innerRadius',
     ) as THREE.BufferAttribute
@@ -379,7 +354,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAllFills = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     const fill = this.geometry.getAttribute('fill') as THREE.BufferAttribute
     const fillOpacity = this.geometry.getAttribute(
       'fillOpacity',
@@ -410,7 +384,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAllStrokes = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     const stroke = this.geometry.getAttribute('stroke') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -432,7 +405,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAllStrokeWidths = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     const strokeWidth = this.geometry.getAttribute(
       'strokeWidth',
     ) as THREE.BufferAttribute
@@ -460,7 +432,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAllStrokeOpacities = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     const strokeOpacity = this.geometry.getAttribute(
       'strokeOpacity',
     ) as THREE.BufferAttribute
