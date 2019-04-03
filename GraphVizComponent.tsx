@@ -314,12 +314,10 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       ...node,
     }))
 
-    this.vizData = {
+    this.visualization.update({
       nodes: nodesWithPositions,
       links: this.props.links as GraphVizLink[],
-    }
-
-    this.visualization.update(this.vizData)
+    })
   }
 
   zoomIn = () => {
