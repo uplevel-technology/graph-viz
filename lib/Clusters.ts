@@ -1,5 +1,4 @@
 import {GraphVizNode} from './Nodes'
-import {pickBy} from 'lodash'
 import * as THREE from 'three'
 import {MeshBasicMaterial} from 'three'
 import {get2DConvexHull, getNiceOffsetPolygon} from './convexHull'
@@ -38,6 +37,8 @@ export class Clusters {
   public updateAll(nodes: GraphVizNode[], clusters: GraphVizCluster[]) {
     const nodesByClusters = this.groupNodesByClusters(nodes)
 
+    const renderedClusterIds = new Set()
+
     for (const cluster of clusters) {
       const nodesInCluster = nodesByClusters[cluster.id]
       if (!nodesInCluster) {
@@ -48,7 +49,7 @@ export class Clusters {
 
       let geometry
 
-      // if new cluster
+      // add new cluster
       if (this.meshes[cluster.id] === undefined) {
         // NOTE: we probably don't need a BufferGeometry after r102 amirite?
         geometry = new THREE.Geometry()
@@ -60,6 +61,7 @@ export class Clusters {
         this.meshes[cluster.id] = new THREE.Mesh(geometry, material)
         this.object.add(this.meshes[cluster.id])
       } else {
+        // update existing cluster
         geometry = this.meshes[cluster.id].geometry as THREE.Geometry
       }
 
@@ -73,14 +75,15 @@ export class Clusters {
       geometry.faces = faces
       geometry.computeBoundingSphere()
       geometry.elementsNeedUpdate = true
+
+      renderedClusterIds.add(cluster.id)
     }
 
-    for (const clusterId in nodesByClusters) {
-      if (clusters.find(c => c.id === clusterId) === undefined) {
-        // console.log('removing...', clusterId)
+    // remove deleted clusters
+    for (const clusterId in this.meshes) {
+      if (!renderedClusterIds.has(clusterId)) {
         this.object.remove(this.meshes[clusterId])
         delete this.meshes[clusterId]
-        console.log(this.meshes)
       }
     }
   }
@@ -100,6 +103,6 @@ export class Clusters {
         })
       }
     })
-    return pickBy(nodesByClusters, nodesInCluster => nodesInCluster.length > 2)
+    return nodesByClusters
   }
 }
