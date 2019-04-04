@@ -240,9 +240,8 @@ export class GraphVisualization {
         throw new Error(
           `GraphVisualization.updatePositions should only be used 
           when the size and the order of the nodes has not changed. 
-          Currently rendered ${
-            this.data.nodes.length
-          } nodes. Received update for ${updatedGraphData.nodes.length} nodes.`,
+          Currently rendered ${this.data.nodes.length} nodes.
+          Received update for ${updatedGraphData.nodes.length} nodes.`,
         )
       }
 
