@@ -232,15 +232,18 @@ export const eventsToVizData = (events: Event[]): VizData => {
 
 export const clusterListToVizClusters = (
   clusterList: EventCluster[],
-): GraphVizCluster[] => {
+): {[clusterId: number]: GraphVizCluster} => {
   return clusterList
     .filter(cluster => cluster.getEventsList().length > 2)
-    .map(cluster => ({
-      id: cluster.getId().toString(),
-      fill: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(
-        Math.random() * 255,
-      )}, ${Math.floor(Math.random() * 255)})`,
-    }))
+    .reduce((acc: {[clusterId: number]: GraphVizCluster}, cluster) => {
+      acc[cluster.getId()] = {
+        id: cluster.getId().toString(),
+        fill: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(
+          Math.random() * 255,
+        )}, ${Math.floor(Math.random() * 255)})`,
+      }
+      return acc
+    }, {})
 }
 
 export const getLegendData = (events: Event[]): string[] => {

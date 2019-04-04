@@ -4,7 +4,7 @@ import {MeshBasicMaterial} from 'three'
 import {get2DConvexHull, getNiceOffsetPolygon} from './convexHull'
 
 export interface GraphVizCluster {
-  id: string | number
+  id: string
   /**
    * node fill color hex string or hex number
    * (default is 0x333333)
@@ -28,7 +28,7 @@ export const DEFAULT_CLUSTER_FILL_OPACITY = 0.09
 
 export class Clusters {
   public object = new THREE.Group()
-  private meshes: {[clusterId: string]: THREE.Mesh | THREE.Points} = {}
+  private meshes: {[clusterId: string]: THREE.Mesh} = {}
 
   constructor(nodes: GraphVizNode[], clusters: GraphVizCluster[]) {
     this.updateAll(nodes, clusters)
