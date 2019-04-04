@@ -226,17 +226,24 @@ export class GraphVisualization {
   }
 
   /**
-   * update only the position attributes of existing nodes and links
+   * update only the position attributes of existing nodes and links.
+   *
+   * This function assumes that the nodeIdToIndexMap is up to date and
+   * that the updatedGraphData hasn't changed in size or order
+   * and only the position attributes have changed within each node datum.
+   *
    * @param updatedGraphData
    */
   public updatePositions = (updatedGraphData: GraphVizData) =>
     window.requestAnimationFrame(() => {
-      // This function assumes the updatedGraphData hasn't changed in size or order and only the position attributes
-      // have changed within each node datum.
-      // Which should mean this.nodeIdToIndexMap is up to date
-      // TODO: This is linear time as written, should we do a deep equality check instead?
-      if (size(updatedGraphData.nodes) !== size(this.nodeIdToIndexMap)) {
-        return
+      if (updatedGraphData.nodes.length !== this.data.nodes.length) {
+        throw new Error(
+          `GraphVisualization.updatePositions should only be used 
+          when the size and the order of the nodes has not changed. 
+          Currently rendered ${
+            this.data.nodes.length
+          } nodes. Received update for ${updatedGraphData.nodes.length} nodes.`,
+        )
       }
 
       this.data = updatedGraphData
