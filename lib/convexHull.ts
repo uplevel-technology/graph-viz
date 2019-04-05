@@ -27,8 +27,6 @@ function byPosition(a: Point, b: Point): number {
  *
  * If input has less than three points, it trivially runs in constant time.
  *
- * Alternatively you can provide a padding for the output convex polygon
- *
  * @param points
  */
 export function get2DConvexHull(points: Point[]): Point[] {
