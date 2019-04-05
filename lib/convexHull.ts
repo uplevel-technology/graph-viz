@@ -27,8 +27,6 @@ function byPosition(a: Point, b: Point): number {
  *
  * If input has less than three points, it trivially runs in constant time.
  *
- * Alternatively you can provide a padding for the output convex polygon
- *
  * @param points
  */
 export function get2DConvexHull(points: Point[]): Point[] {
@@ -56,7 +54,7 @@ export function get2DConvexHull(points: Point[]): Point[] {
     upperHull.push(p)
   }
 
-  // 3. Computer the lower hull
+  // 3. Compute the lower hull
   const lowerHull: Point[] = []
   for (let i = sortedPoints.length - 1; i >= 0; i--) {
     const p = sortedPoints[i]
