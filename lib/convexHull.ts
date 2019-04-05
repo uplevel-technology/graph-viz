@@ -56,7 +56,7 @@ export function get2DConvexHull(points: Point[]): Point[] {
     upperHull.push(p)
   }
 
-  // 3. Computer the lower hull
+  // 3. Compute the lower hull
   const lowerHull: Point[] = []
   for (let i = sortedPoints.length - 1; i >= 0; i--) {
     const p = sortedPoints[i]
