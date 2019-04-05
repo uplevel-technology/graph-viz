@@ -156,6 +156,7 @@ export class MouseInteraction {
     event.preventDefault()
     this.dragging = true
     this.registerClick = true
+    // this.intersectedPointIdx = this.findNearestNodeIndex(event)
 
     setTimeout(() => {
       this.registerClick = false
@@ -179,10 +180,7 @@ export class MouseInteraction {
     }
   }
 
-  // should we debounced this on requestAnimationFrame?
-  private onMouseMove = (event: MouseEvent) => {
-    event.preventDefault()
-
+  private findNearestNodeIndex = (event: MouseEvent): number | null => {
     const rect = this.canvas.getBoundingClientRect()
 
     this.mouse.x = THREE.Math.mapLinear(
@@ -222,9 +220,14 @@ export class MouseInteraction {
         nearestIndex = validNearestIntersects[0].index
       }
     }
+    return nearestIndex
+  }
 
-    // Maybe we can simplify this highly branched code
-    // for better readability
+  // should we debounced this on requestAnimationFrame?
+  private onMouseMove = (event: MouseEvent) => {
+    event.preventDefault()
+
+    const nearestIndex = this.findNearestNodeIndex(event)
 
     // handle hovers if not dragging
     if (!this.dragging) {
@@ -249,6 +252,7 @@ export class MouseInteraction {
       if (nearestIndex !== null) {
         this.intersectedPointIdx = nearestIndex
       }
+      console.log(nearestIndex)
       // handle node drag interaction
       this.registeredEventHandlers.nodeDrag(
         this.getMouseInWorldSpace(0),
