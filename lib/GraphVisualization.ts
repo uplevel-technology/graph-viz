@@ -21,7 +21,7 @@ const PAN_SPEED = 1.0
 export interface GraphVizData {
   nodes: GraphVizNode[]
   links: GraphVizLink[]
-  clusters: GraphVizCluster[]
+  highlightedClusters: GraphVizCluster[]
 }
 
 function constructIdToIdxMap(arr: Array<{id: string}>): {[id: string]: number} {
@@ -124,7 +124,10 @@ export class GraphVisualization {
     this.linksMesh = new Links(
       getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
     )
-    this.clustersMesh = new Clusters(graphData.nodes, graphData.clusters)
+    this.clustersMesh = new Clusters(
+      graphData.nodes,
+      graphData.highlightedClusters,
+    )
 
     this.clustersMesh.object.position.z = 0
     this.scene.add(this.clustersMesh.object)
@@ -221,7 +224,7 @@ export class GraphVisualization {
     this.linksMesh.updateAll(
       getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
     )
-    this.clustersMesh.updateAll(graphData.nodes, graphData.clusters)
+    this.clustersMesh.updateAll(graphData.nodes, graphData.highlightedClusters)
     this.mouseInteraction.updateData(this.data.nodes)
   }
 
@@ -253,7 +256,7 @@ export class GraphVisualization {
       )
       this.clustersMesh.updateAll(
         updatedGraphData.nodes,
-        updatedGraphData.clusters,
+        updatedGraphData.highlightedClusters,
       )
       this.mouseInteraction.updateData(this.data.nodes)
 
@@ -272,7 +275,7 @@ export class GraphVisualization {
     this.data.nodes[index] = updatedNode
     this.nodesMesh.updateOne(index, updatedNode)
     this.mouseInteraction.updateData(this.data.nodes)
-    this.clustersMesh.updateAll(this.data.nodes, this.data.clusters)
+    this.clustersMesh.updateAll(this.data.nodes, this.data.highlightedClusters)
     this.render()
   }
 
@@ -284,8 +287,8 @@ export class GraphVisualization {
    * @param clusters
    */
   public updateClusters = (clusters: GraphVizCluster[]) => {
-    this.data.clusters = clusters
-    this.clustersMesh.updateAll(this.data.nodes, this.data.clusters)
+    this.data.highlightedClusters = clusters
+    this.clustersMesh.updateAll(this.data.nodes, this.data.highlightedClusters)
     this.render()
   }
 
