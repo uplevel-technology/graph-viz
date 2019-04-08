@@ -67,7 +67,7 @@ function forceCluster() {
     })
 
     for (const node of nodes) {
-      if (node.clusterIds) {
+      if (node.clusterIds && node.clusterIds.length > 0) {
         const {x: cx, y: cy} = centroidsById[node.clusterIds[0]]
         node.vx! -= (node.x! - cx) * l
         node.vy! -= (node.y! - cy) * l
