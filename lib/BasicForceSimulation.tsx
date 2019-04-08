@@ -1,8 +1,11 @@
 import * as d3 from 'd3'
-import {noop} from 'lodash'
+import {get, noop, size} from 'lodash'
+import {GraphVizCluster} from './Clusters'
 
 export interface ForceSimulationNode extends d3.SimulationNodeDatum {
   id: string
+
+  clusterIds?: string[]
 
   /**
    * d3 forceX seed value
@@ -31,6 +34,7 @@ export interface ForceSimulationLink {
 export interface ForceSimulationData {
   nodes: ForceSimulationNode[]
   links: ForceSimulationLink[]
+  clusters: GraphVizCluster[]
 }
 
 type D3Simulation = d3.Simulation<d3.SimulationNodeDatum, ForceSimulationLink>
@@ -49,6 +53,26 @@ export interface NodePosition {
   z?: number
 }
 
+const forceCluster = (
+  nodes: ForceSimulationNode[],
+  clusters: GraphVizCluster[],
+) => (alpha: number) => {
+  for (
+    let i = 0, n = nodes.length, node: any, cluster: any, k = alpha * 1;
+    i < n;
+    ++i
+  ) {
+    node = nodes[i]
+    if (size(node.clusterIds) > 0) {
+      cluster = clusters.find(c => c.id === node.clusterIds[0])
+      if (cluster) {
+        node.vx -= (node.x - cluster.x) * k
+        node.vy -= (node.y - cluster.y) * k
+      }
+    }
+  }
+}
+
 export class BasicForceSimulation {
   private simulation: D3Simulation | undefined
   private registeredEventHandlers: {
@@ -59,8 +83,16 @@ export class BasicForceSimulation {
   }
 
   public initialize(graph: ForceSimulationData) {
-    const nodesCopy = graph.nodes.map(node => ({...node}))
+    const nodesCopy = graph.nodes.map(node => ({
+      ...node,
+      cluster: get(node.clusterIds, 0, 1),
+    }))
     const linksCopy = graph.links.map(link => ({...link}))
+    const clustersCopy = graph.clusters.map(c => ({
+      ...c,
+      x: Math.random() * 200,
+      y: Math.random() * 200,
+    }))
 
     const linkForceDistance = getForceLinkDistance(linksCopy)
 
@@ -72,6 +104,7 @@ export class BasicForceSimulation {
 
     this.simulation = d3
       .forceSimulation(nodesCopy)
+      .force('cluster', forceCluster(nodesCopy, clustersCopy))
       .force(
         'x',
         d3
