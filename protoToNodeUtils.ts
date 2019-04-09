@@ -144,6 +144,11 @@ export const eventsToVizData = (
   events: Event[],
   patternGroups?: AttributePatternGroup[],
 ): VizData => {
+  // do not show anything if only pattern data is provided
+  if (events.length === 0) {
+    return {nodes: [], links: [], tooltips: []}
+  }
+
   // We want a deduped list of all nodes, because they can be repeated. We'll
   // build that up in this object:
   const seenVizNodesById: {
@@ -252,7 +257,6 @@ export const eventsToVizData = (
       seenVizNodesById[patLexeme] = {
         vizNode: {
           ...attributeToNode(patAttr),
-          strokeWidth: 0.03,
           absoluteSize: 5,
         },
         tooltipNode: {
@@ -269,7 +273,7 @@ export const eventsToVizData = (
       )
     })
   }
-  
+
   const seenNodes = values(seenVizNodesById)
 
   return {
