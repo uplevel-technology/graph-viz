@@ -102,6 +102,7 @@ export const eventToNode = (event: EventFields): PartialGraphVizNode => ({
       : NodeOutlinePalette.emailUpload,
   strokeWidth: 0.03,
   strokeOpacity: 1.0,
+  absoluteSize: 30,
 })
 
 export const eventToTooltipNode = (event: EventFields): Partial<TooltipNode> => {
