@@ -237,34 +237,33 @@ export class GraphVisualization {
    *
    * @param updatedGraphData
    */
-  public updatePositions = (updatedGraphData: GraphVizData) =>
-    window.requestAnimationFrame(() => {
-      if (updatedGraphData.nodes.length !== this.data.nodes.length) {
-        throw new Error(
-          `GraphVisualization.updatePositions should only be used 
+  public updatePositions = (updatedGraphData: GraphVizData) => {
+    if (updatedGraphData.nodes.length !== this.data.nodes.length) {
+      throw new Error(
+        `GraphVisualization.updatePositions should only be used 
           when the size and the order of the nodes has not changed. 
           Currently rendered ${this.data.nodes.length} nodes.
           Received update for ${updatedGraphData.nodes.length} nodes.`,
-        )
-      }
-
-      this.data = updatedGraphData
-
-      this.nodesMesh.updateAllPositions(updatedGraphData.nodes)
-      this.linksMesh.updateAllPositions(
-        getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap),
       )
-      this.clustersMesh.updateAll(
-        updatedGraphData.nodes,
-        updatedGraphData.highlightedClusters,
-      )
-      this.mouseInteraction.updateData(this.data.nodes)
+    }
 
-      if (!this.userHasAdjustedViewport) {
-        this.zoomToFit(updatedGraphData)
-      }
-      this.render()
-    })
+    this.data = updatedGraphData
+
+    this.nodesMesh.updateAllPositions(updatedGraphData.nodes)
+    this.linksMesh.updateAllPositions(
+      getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap),
+    )
+    this.clustersMesh.updateAll(
+      updatedGraphData.nodes,
+      updatedGraphData.highlightedClusters,
+    )
+    this.mouseInteraction.updateData(this.data.nodes)
+
+    if (!this.userHasAdjustedViewport) {
+      this.zoomToFit(updatedGraphData)
+    }
+    this.render()
+  }
 
   /**
    * update all the attributes of a single node at a given index
