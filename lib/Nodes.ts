@@ -12,6 +12,11 @@ export interface GraphVizNode {
   id: string
 
   /**
+   * optional cluster id
+   */
+  clusterIds?: string[]
+
+  /**
    * x coordinate of the node position
    */
   x: number
@@ -26,6 +31,12 @@ export interface GraphVizNode {
    * (default is 0x333333)
    */
   fill?: number | string
+
+  /**
+   * relative node fill opacity
+   * (must be between 0.0 - 1.0)
+   */
+  fillOpacity?: number
 
   /**
    * the absolute side in pixels of the bounding square container of the node
@@ -52,7 +63,7 @@ export interface GraphVizNode {
 
   /**
    * relative node stroke opacity
-   * (must be between 0.0 to 1.0)
+   * (must be between 0.0 - 1.0)
    */
   strokeOpacity?: number
 
@@ -76,6 +87,7 @@ export interface GraphVizNode {
 export const DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE = 20
 export const DEFAULT_NODE_INNER_RADIUS = 0.2
 export const DEFAULT_NODE_FILL = 0x333333
+export const DEFAULT_NODE_FILL_OPACITY = 1.0
 export const DEFAULT_NODE_SCALE = 1.0
 export const DEFAULT_NODE_STROKE_WIDTH = 0.03
 export const DEFAULT_NODE_STROKE_OPACITY = 1.0
@@ -86,31 +98,12 @@ export const HOVERED_NODE_SCALE = 1.5
 export class Nodes {
   public object: THREE.Points
 
-  /**
-   * FIXME:
-   * Storing a copy of  nodes data here is undesirable because we don't really
-   * want to make this class stateful.
-   *
-   * This is currently a stop-gap, quick-fix solution written because
-   * MouseInteraction class is now data driven, i.e. nodes can declare separate
-   * interaction related fields such as disableInteraction and so we need to
-   * maintain a reference to the original nodes data here only to pass it down
-   * to the MouseInteraction class.
-   *
-   * This is not ideal and we should pass this data to MouseInteraction in some
-   * other way.
-   *
-   * FIXME please
-   */
-  public data: GraphVizNode[]
-
   private readonly geometry: THREE.BufferGeometry
   private readonly material: THREE.ShaderMaterial
   private lockedIds: {[id: string]: boolean} = {}
 
   constructor(nodes: GraphVizNode[]) {
     const numNodes = size(nodes)
-    this.data = nodes
     this.geometry = new THREE.BufferGeometry()
     this.geometry.addAttribute(
       'position',
@@ -131,6 +124,10 @@ export class Nodes {
     this.geometry.addAttribute(
       'fill',
       new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3),
+    )
+    this.geometry.addAttribute(
+      'fillOpacity',
+      new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1),
     )
     this.geometry.addAttribute(
       'stroke',
@@ -192,6 +189,9 @@ export class Nodes {
       'innerRadius',
     ) as THREE.BufferAttribute
     const fill = this.geometry.getAttribute('fill') as THREE.BufferAttribute
+    const fillOpacity = this.geometry.getAttribute(
+      'fillOpacity',
+    ) as THREE.BufferAttribute
     const stroke = this.geometry.getAttribute('stroke') as THREE.BufferAttribute
     const strokeWidth = this.geometry.getAttribute(
       'strokeWidth',
@@ -223,6 +223,11 @@ export class Nodes {
     fill.setXYZ(index, color.r, color.g, color.b)
     fill.needsUpdate = true
 
+    fillOpacity.setX(
+      index,
+      defaultTo(node.fillOpacity, DEFAULT_NODE_FILL_OPACITY),
+    )
+
     if (node.stroke) {
       color.set(node.stroke as string)
     }
@@ -247,7 +252,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAll = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     this.updateAllPositions(nodes)
     this.updateAllAbsoluteSizes(nodes)
     this.updateAllScales(nodes)
@@ -263,7 +267,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAllPositions = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     const position = this.geometry.getAttribute(
       'position',
     ) as THREE.BufferAttribute
@@ -287,7 +290,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAllAbsoluteSizes = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     const absoluteSize = this.geometry.getAttribute(
       'absoluteSize',
     ) as THREE.BufferAttribute
@@ -312,7 +314,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAllScales = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     const scale = this.geometry.getAttribute('scale') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -332,7 +333,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAllInnerRadii = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     const innerRadius = this.geometry.getAttribute(
       'innerRadius',
     ) as THREE.BufferAttribute
@@ -350,25 +350,33 @@ export class Nodes {
   }
 
   /**
-   * update fill attributes of all nodes
+   * update fill and fillOpacity attributes of all nodes
    * @param nodes
    */
   public updateAllFills = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     const fill = this.geometry.getAttribute('fill') as THREE.BufferAttribute
+    const fillOpacity = this.geometry.getAttribute(
+      'fillOpacity',
+    ) as THREE.BufferAttribute
 
     const numNodes = size(nodes)
     if (numNodes !== fill.count) {
       fill.setArray(new Float32Array(fill.itemSize * numNodes))
+      fillOpacity.setArray(new Float32Array(fillOpacity.itemSize * numNodes))
     }
 
     const tmpColor = new THREE.Color() // for reuse
     for (let i = 0; i < numNodes; i++) {
       tmpColor.set(defaultTo(nodes[i].fill, DEFAULT_NODE_FILL) as string)
       fill.setXYZ(i, tmpColor.r, tmpColor.g, tmpColor.b)
+      fillOpacity.setX(
+        i,
+        defaultTo(nodes[i].fillOpacity, DEFAULT_NODE_FILL_OPACITY),
+      )
     }
 
     fill.needsUpdate = true
+    fillOpacity.needsUpdate = true
   }
 
   /**
@@ -376,7 +384,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAllStrokes = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     const stroke = this.geometry.getAttribute('stroke') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -398,7 +405,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAllStrokeWidths = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     const strokeWidth = this.geometry.getAttribute(
       'strokeWidth',
     ) as THREE.BufferAttribute
@@ -426,7 +432,6 @@ export class Nodes {
    * @param nodes
    */
   public updateAllStrokeOpacities = (nodes: GraphVizNode[]) => {
-    this.data = nodes
     const strokeOpacity = this.geometry.getAttribute(
       'strokeOpacity',
     ) as THREE.BufferAttribute

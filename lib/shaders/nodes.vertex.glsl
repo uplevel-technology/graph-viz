@@ -1,6 +1,7 @@
 uniform float globalScale;
 
 attribute vec3 fill;
+attribute float fillOpacity;
 attribute float absoluteSize;
 attribute float scale;
 attribute float innerRadius;
@@ -9,6 +10,7 @@ attribute float strokeOpacity;
 attribute float strokeWidth;
 
 varying vec3 vFill;
+varying float vFillOpacity;
 varying vec3 vStroke;
 varying float vStrokeWidth;
 varying float vStrokeOpacity;
@@ -21,6 +23,7 @@ void main() {
     vStrokeOpacity = strokeOpacity;
     vInnerRadius = innerRadius;
     vFill = fill;
+    vFillOpacity = fillOpacity;
 
     vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
 

@@ -64,6 +64,12 @@ export class BasicForceSimulation {
 
     const linkForceDistance = getForceLinkDistance(linksCopy)
 
+    // stop any previous simulation before reinitializing to prevent
+    // zombie tick events
+    if (this.simulation) {
+      this.simulation.stop()
+    }
+
     this.simulation = d3
       .forceSimulation(nodesCopy)
       .force(

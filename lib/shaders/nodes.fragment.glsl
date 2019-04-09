@@ -1,6 +1,7 @@
 #define SQRT_2 1.41421
 
 varying vec3 vFill;
+varying float vFillOpacity;
 varying vec3 vStroke;
 varying float vStrokeWidth;
 varying float vStrokeOpacity;
@@ -18,5 +19,5 @@ void main() {
     float fillMask = 1.0 - smoothstep(vInnerRadius, vInnerRadius + edgeWidth, distanceFromCenter);
 
     gl_FragColor.rgb = mix(vFill, vStroke, strokeMask);
-    gl_FragColor.a = max(strokeMask * vStrokeOpacity, fillMask);
+    gl_FragColor.a = max(strokeMask * vStrokeOpacity, fillMask * vFillOpacity);
 }

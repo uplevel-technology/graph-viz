@@ -7,9 +7,8 @@ import {
   getArtifactDisplayType,
   getAttributeDisplayType,
   getAttributeNodeLabel,
-  getEventNodeLabel,
-  ObservableRelationshipDisplayTypes,
   getEventNodeDisplayType,
+  ObservableRelationshipDisplayTypes,
 } from '../displayTypes'
 import {GraphVizLink} from './lib/Links'
 import {TooltipNode} from './NodeTooltips'
@@ -92,6 +91,7 @@ export const observableToTooltipNode = (
 
 export const eventToNode = (event: EventFields): PartialGraphVizNode => ({
   id: event.getUid()!.getValue(),
+  clusterIds: [event.getClusterId().toString()],
   fill:
     event.getEventType() === EventType.ALERT
       ? NodeFillPalette.alert
@@ -105,7 +105,9 @@ export const eventToNode = (event: EventFields): PartialGraphVizNode => ({
   absoluteSize: 30,
 })
 
-export const eventToTooltipNode = (event: EventFields): Partial<TooltipNode> => {
+export const eventToTooltipNode = (
+  event: EventFields,
+): Partial<TooltipNode> => {
   let displayName =
     event.getEventType() === EventType.ALERT
       ? `Alert (${event.getUid()})`
@@ -160,7 +162,10 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
     }
 
     observed.getAttributesList().forEach(ao => {
-      const attrNode = attributeToNode(ao.getAttribute()!)
+      const attrNode = {
+        ...attributeToNode(ao.getAttribute()!),
+        clusterIds: [event.getClusterId().toString()],
+      }
       seenVizNodesById[attrNode.id!] = {
         vizNode: attrNode,
         tooltipNode: {
@@ -176,7 +181,10 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
     })
 
     observed.getRelationshipsList().forEach(rel => {
-      const from = observableToNode(rel.getFrom()!)
+      const from = {
+        ...observableToNode(rel.getFrom()!),
+        clusterIds: [event.getClusterId().toString()],
+      }
       seenVizNodesById[from.id!] = {
         vizNode: from,
         tooltipNode: {
@@ -185,7 +193,10 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
         },
       }
 
-      const to = observableToNode(rel.getTo()!)
+      const to = {
+        ...observableToNode(rel.getTo()!),
+        clusterIds: [event.getClusterId().toString()],
+      }
       seenVizNodesById[to.id!] = {
         vizNode: to,
         tooltipNode: {

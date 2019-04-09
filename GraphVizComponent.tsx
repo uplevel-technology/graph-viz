@@ -29,6 +29,7 @@ import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
 import {debounce, noop} from 'lodash'
 import {GraphVizNode} from './lib/Nodes'
+import {GraphVizCluster} from './lib/Clusters'
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -63,13 +64,15 @@ interface State {
 
 // A partial GraphVizNode with a required id parameter
 // Better naming suggestions welcome
-export interface PartialGraphVizNode extends Partial<GraphVizNode> {
+export interface PartialGraphVizNode
+  extends Partial<GraphVizNode & ForceSimulationNode> {
   id: string
 }
 
 interface Props extends WithStyles<typeof styles> {
   nodes: PartialGraphVizNode[]
   links: GraphVizLink[]
+  clustersToHighlight: GraphVizCluster[]
   tooltips: Partial<TooltipNode>[]
   onRefresh?: () => any
   config?: ConfigurationOptions
@@ -95,6 +98,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   vizData: GraphVizData = {
     nodes: [],
     links: [],
+    highlightedClusters: [],
   }
 
   tooltipNodes: TooltipNode[]
@@ -109,6 +113,8 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   }
 
   static defaultProps: Partial<Props> = {
+    tooltips: [],
+    clustersToHighlight: [],
     onLinkDrawn: noop,
   }
 
@@ -126,6 +132,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.vizData = {
       nodes: this.props.nodes as GraphVizNode[],
       links: this.props.links as GraphVizLink[],
+      highlightedClusters: this.props.clustersToHighlight,
     }
     this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
@@ -293,10 +300,14 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       this.vizData = {
         nodes: this.props.nodes as GraphVizNode[],
         links: this.props.links as GraphVizLink[],
+        highlightedClusters: this.props.clustersToHighlight,
       }
       this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
       this.initData()
+    }
+    if (prevProps.clustersToHighlight !== this.props.clustersToHighlight) {
+      this.visualization.updateClusters(this.props.clustersToHighlight)
     }
   }
 
@@ -309,12 +320,15 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.simulation.initialize(this.props as ForceSimulationData)
 
     const nodePositions = this.simulation.getNodePositions()
+    const nodesWithPositions = this.props.nodes.map((node, i) => ({
+      ...nodePositions[i],
+      ...node,
+    }))
+
     this.visualization.update({
-      nodes: this.props.nodes.map((node, i) => ({
-        ...nodePositions[i],
-        ...node,
-      })),
+      nodes: nodesWithPositions,
       links: this.props.links as GraphVizLink[],
+      highlightedClusters: this.props.clustersToHighlight,
     })
   }
 

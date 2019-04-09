@@ -1,6 +1,6 @@
 import {get, noop, orderBy} from 'lodash'
 import * as THREE from 'three'
-import {Nodes} from './Nodes'
+import {GraphVizNode, Nodes} from './Nodes'
 
 const MAX_CLICK_DURATION = 300
 
@@ -54,7 +54,7 @@ export type PanEventHandler = (panDelta: THREE.Vector3) => any
 export type ZoomEventHandler = (event: MouseWheelEvent) => any
 
 export class MouseInteraction {
-  private nodes: Nodes
+  private nodesData: GraphVizNode[]
   private intersectedPointIdx: number | null
   private dragging: boolean
   private registerClick: boolean
@@ -78,6 +78,7 @@ export class MouseInteraction {
     zoom: noop,
   }
 
+  private readonly nodesMesh: Nodes
   private readonly canvas: HTMLCanvasElement
   private readonly camera: THREE.OrthographicCamera
   private readonly panStart: THREE.Vector3
@@ -89,11 +90,13 @@ export class MouseInteraction {
   constructor(
     canvas: HTMLCanvasElement,
     camera: THREE.OrthographicCamera,
-    nodes: Nodes,
+    nodesMesh: Nodes,
+    nodesData: GraphVizNode[],
   ) {
     this.canvas = canvas
     this.camera = camera
-    this.nodes = nodes
+    this.nodesMesh = nodesMesh
+    this.nodesData = nodesData
 
     this.intersectedPointIdx = null
     this.dragging = false
@@ -111,6 +114,10 @@ export class MouseInteraction {
     this.canvas.addEventListener('mousemove', this.onMouseMove)
     this.canvas.addEventListener('mouseup', this.onMouseUp)
     this.canvas.addEventListener('wheel', this.onMouseWheel)
+  }
+
+  public updateData(nodesData: GraphVizNode[]) {
+    this.nodesData = nodesData
   }
 
   public onNodeHoverIn(callback: HoverEventHandler) {
@@ -145,37 +152,7 @@ export class MouseInteraction {
     this.registeredEventHandlers.zoom = callback
   }
 
-  private onMouseDown = (event: MouseEvent) => {
-    event.preventDefault()
-    this.dragging = true
-    this.registerClick = true
-
-    setTimeout(() => {
-      this.registerClick = false
-    }, MAX_CLICK_DURATION)
-
-    this.panStart.set(event.clientX, event.clientY, 0)
-    this.registeredEventHandlers.dragStart(
-      this.getMouseInWorldSpace(0),
-      this.intersectedPointIdx,
-    )
-  }
-
-  private onMouseUp = (event: MouseEvent) => {
-    event.preventDefault()
-    this.dragging = false
-    const worldMouse = this.getMouseInWorldSpace(0)
-    this.registeredEventHandlers.dragEnd(worldMouse, this.intersectedPointIdx)
-
-    if (this.registerClick) {
-      this.registeredEventHandlers.click(worldMouse, this.intersectedPointIdx)
-    }
-  }
-
-  // should we debounced this on requestAnimationFrame?
-  private onMouseMove = (event: MouseEvent) => {
-    event.preventDefault()
-
+  private findNearestNodeIndex = (event: MouseEvent): number | null => {
     const rect = this.canvas.getBoundingClientRect()
 
     this.mouse.x = THREE.Math.mapLinear(
@@ -194,7 +171,10 @@ export class MouseInteraction {
     )
 
     this.raycaster.setFromCamera(this.mouse, this.camera)
-    const intersects = this.raycaster.intersectObject(this.nodes.object, true)
+    const intersects = this.raycaster.intersectObject(
+      this.nodesMesh.object,
+      true,
+    )
     let nearestIndex = null
     if (intersects.length > 0) {
       const validNearestIntersects = orderBy(
@@ -202,7 +182,7 @@ export class MouseInteraction {
         'distanceToRay',
         'asc',
       ).filter(
-        point => !get(this.nodes.data, `${point.index}.disableInteractions`),
+        point => !get(this.nodesData, `${point.index}.disableInteractions`),
       )
 
       if (
@@ -212,9 +192,43 @@ export class MouseInteraction {
         nearestIndex = validNearestIntersects[0].index
       }
     }
+    return nearestIndex
+  }
 
-    // Maybe we can simplify this highly branched code
-    // for better readability
+  private onMouseDown = (event: MouseEvent) => {
+    event.preventDefault()
+    this.dragging = true
+    this.registerClick = true
+    this.intersectedPointIdx = this.findNearestNodeIndex(event)
+
+    setTimeout(() => {
+      this.registerClick = false
+    }, MAX_CLICK_DURATION)
+
+    this.panStart.set(event.clientX, event.clientY, 0)
+    this.registeredEventHandlers.dragStart(
+      this.getMouseInWorldSpace(0),
+      this.intersectedPointIdx,
+    )
+  }
+
+  private onMouseUp = (event: MouseEvent) => {
+    event.preventDefault()
+    this.dragging = false
+    const worldMouse = this.getMouseInWorldSpace(0)
+
+    this.intersectedPointIdx = this.findNearestNodeIndex(event)
+    this.registeredEventHandlers.dragEnd(worldMouse, this.intersectedPointIdx)
+
+    if (this.registerClick) {
+      this.registeredEventHandlers.click(worldMouse, this.intersectedPointIdx)
+    }
+  }
+
+  // should we debounced this on requestAnimationFrame?
+  private onMouseMove = (event: MouseEvent) => {
+    event.preventDefault()
+    const nearestIndex = this.findNearestNodeIndex(event)
 
     // handle hovers if not dragging
     if (!this.dragging) {
@@ -236,9 +250,6 @@ export class MouseInteraction {
         this.intersectedPointIdx = null
       }
     } else if (this.intersectedPointIdx !== null) {
-      if (nearestIndex !== null) {
-        this.intersectedPointIdx = nearestIndex
-      }
       // handle node drag interaction
       this.registeredEventHandlers.nodeDrag(
         this.getMouseInWorldSpace(0),

@@ -13,6 +13,7 @@ import {
   ZoomEventHandler,
 } from './MouseInteraction'
 import {GraphVizNode, Nodes} from './Nodes'
+import {Clusters, GraphVizCluster} from './Clusters'
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
@@ -20,6 +21,7 @@ const PAN_SPEED = 1.0
 export interface GraphVizData {
   nodes: GraphVizNode[]
   links: GraphVizLink[]
+  highlightedClusters: GraphVizCluster[]
 }
 
 function constructIdToIdxMap(arr: Array<{id: string}>): {[id: string]: number} {
@@ -50,10 +52,12 @@ const DEFAULT_CONFIG_OPTIONS: ConfigurationOptions = {
 export class GraphVisualization {
   public nodesMesh: Nodes
   public linksMesh: Links
+  public clustersMesh: Clusters
 
   public readonly canvas: HTMLCanvasElement
   public readonly camera: THREE.OrthographicCamera
 
+  private data: GraphVizData
   private nodeIdToIndexMap: {[key: string]: number} = {}
   private userHasAdjustedViewport: boolean
 
@@ -82,6 +86,7 @@ export class GraphVisualization {
     height: number,
     config: ConfigurationOptions = {},
   ) {
+    this.data = graphData
     this.canvas = canvas
     this.width = width
     this.height = height
@@ -119,9 +124,18 @@ export class GraphVisualization {
     this.linksMesh = new Links(
       getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
     )
+    this.clustersMesh = new Clusters(
+      graphData.nodes,
+      graphData.highlightedClusters,
+    )
 
+    this.clustersMesh.object.position.z = 0
+    this.scene.add(this.clustersMesh.object)
+
+    this.linksMesh.object.position.z = 1
     this.scene.add(this.linksMesh.object)
-    this.nodesMesh.object.position.z = 3
+
+    this.nodesMesh.object.position.z = 2
     this.scene.add(this.nodesMesh.object)
 
     this.render()
@@ -130,6 +144,7 @@ export class GraphVisualization {
       this.canvas,
       this.camera,
       this.nodesMesh,
+      this.data.nodes,
     )
 
     const configWithDefault = {
@@ -203,31 +218,47 @@ export class GraphVisualization {
    * @param graphData
    */
   public update = (graphData: GraphVizData) => {
+    this.data = graphData
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
     this.nodesMesh.updateAll(graphData.nodes)
     this.linksMesh.updateAll(
       getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
     )
+    this.clustersMesh.updateAll(graphData.nodes, graphData.highlightedClusters)
+    this.mouseInteraction.updateData(this.data.nodes)
   }
 
   /**
-   * update only the position attributes of existing nodes and links
+   * update only the position attributes of existing nodes and links.
+   *
+   * This function assumes that the nodeIdToIndexMap is up to date and
+   * that the updatedGraphData hasn't changed in size or order
+   * and only the position attributes have changed within each node datum.
+   *
    * @param updatedGraphData
    */
   public updatePositions = (updatedGraphData: GraphVizData) =>
     window.requestAnimationFrame(() => {
-      // This function assumes the updatedGraphData hasn't changed in size or order and only the position attributes
-      // have changed within each node datum.
-      // Which should mean this.nodeIdToIndexMap is up to date
-      // TODO: This is linear time anyway, should we do a deep equality check instead?
-      if (size(updatedGraphData.nodes) !== size(this.nodeIdToIndexMap)) {
-        return
+      if (updatedGraphData.nodes.length !== this.data.nodes.length) {
+        throw new Error(
+          `GraphVisualization.updatePositions should only be used 
+          when the size and the order of the nodes has not changed. 
+          Currently rendered ${this.data.nodes.length} nodes.
+          Received update for ${updatedGraphData.nodes.length} nodes.`,
+        )
       }
+
+      this.data = updatedGraphData
 
       this.nodesMesh.updateAllPositions(updatedGraphData.nodes)
       this.linksMesh.updateAllPositions(
         getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap),
       )
+      this.clustersMesh.updateAll(
+        updatedGraphData.nodes,
+        updatedGraphData.highlightedClusters,
+      )
+      this.mouseInteraction.updateData(this.data.nodes)
 
       if (!this.userHasAdjustedViewport) {
         this.zoomToFit(updatedGraphData)
@@ -241,7 +272,23 @@ export class GraphVisualization {
    * @param updatedNode
    */
   public updateNode = (index: number, updatedNode: GraphVizNode) => {
+    this.data.nodes[index] = updatedNode
     this.nodesMesh.updateOne(index, updatedNode)
+    this.mouseInteraction.updateData(this.data.nodes)
+    this.clustersMesh.updateAll(this.data.nodes, this.data.highlightedClusters)
+    this.render()
+  }
+
+  /**
+   * updates only the clusters mesh.
+   * Useful in situations that require ONLY clusters to update.
+   * E.g. toggling a cluster on or off when the nodes within a cluster
+   * have NOT changed.
+   * @param clusters
+   */
+  public updateClusters = (clusters: GraphVizCluster[]) => {
+    this.data.highlightedClusters = clusters
+    this.clustersMesh.updateAll(this.data.nodes, this.data.highlightedClusters)
     this.render()
   }
 
