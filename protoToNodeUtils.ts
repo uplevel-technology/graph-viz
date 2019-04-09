@@ -15,6 +15,7 @@ import {TooltipNode} from './NodeTooltips'
 import {NodeFillPalette, NodeOutlinePalette} from './vizUtils'
 import {PartialGraphVizNode} from './GraphVizComponent'
 import * as moment from 'moment'
+import {AttributePatternGroup} from '@core/services/persistence_service_pb'
 
 export const artifactToNode = (artifact: Artifact): PartialGraphVizNode => ({
   id: artifact.getUid()!.getValue(),
@@ -33,9 +34,7 @@ export const artifactToTooltipNode = (
 export const attributeToNode = (attribute: Attribute): PartialGraphVizNode => {
   const attributeType = getAttributeNodeLabel(attribute.getType())
   return {
-    id: `${getAttributeNodeLabel(
-      attribute.getType(),
-    )}::${attribute.getValue()}`,
+    id: getAttributeLexeme(attribute),
     fill:
       NodeFillPalette[camelCase(attributeType)] || NodeFillPalette.attribute,
     stroke:
@@ -54,11 +53,17 @@ export const getAttributeLexeme = (attribute: Attribute): string => {
 
 export const attributeToTooltipNode = (
   attribute: Attribute,
-): Partial<TooltipNode> => ({
-  id: getAttributeLexeme(attribute),
-  displayType: getAttributeDisplayType(attribute.getType()),
-  displayName: attribute.getValue(),
-})
+): Partial<TooltipNode> => {
+  let displayType = getAttributeDisplayType(attribute.getType())
+  if (attribute.getIsPattern()) {
+    displayType += ' Pattern'
+  }
+  return {
+    id: getAttributeLexeme(attribute),
+    displayType,
+    displayName: attribute.getValue(),
+  }
+}
 
 export const observableToNode = (
   observable: ObservableNode,
@@ -135,7 +140,10 @@ interface VizData {
   tooltips: Partial<TooltipNode>[]
 }
 
-export const eventsToVizData = (events: Event[]): VizData => {
+export const eventsToVizData = (
+  events: Event[],
+  patternGroups?: AttributePatternGroup[],
+): VizData => {
   // We want a deduped list of all nodes, because they can be repeated. We'll
   // build that up in this object:
   const seenVizNodesById: {
@@ -145,6 +153,16 @@ export const eventsToVizData = (events: Event[]): VizData => {
     }
   } = {}
   const links: GraphVizLink[] = []
+
+  // Since pattern group parameter does not contain information on clusters,
+  // build up that information in this data structure (recording the cluster
+  // ID each time we encounter an attribute with its embedded pattern match
+  // set). Note that currently all links are considered when computing clusters,
+  // so the cluster ID will be the same across all attributes matching any given
+  // pattern.
+  const patternsToClusterId: {
+    [id: string]: number
+  } = {}
 
   events.forEach(event => {
     const eventNode = eventToNode(event)
@@ -175,6 +193,12 @@ export const eventsToVizData = (events: Event[]): VizData => {
         source: eventNode.id!,
         target: attrNode.id!,
       })
+
+      if (ao.getAttribute()!.getMatchingPattern() !== '') {
+        patternsToClusterId[
+          ao.getAttribute()!.getMatchingPattern()
+        ] = event.getClusterId()
+      }
     })
 
     observed.getRelationshipsList().forEach(rel => {
@@ -219,6 +243,33 @@ export const eventsToVizData = (events: Event[]): VizData => {
       })
     })
   })
+
+  if (patternGroups) {
+    patternGroups.forEach(group => {
+      const clusterId = patternsToClusterId[group.getPattern()!.getValue()]
+      const patAttr = group.getPattern()!
+      const patLexeme = getAttributeLexeme(patAttr)
+      seenVizNodesById[patLexeme] = {
+        vizNode: {
+          ...attributeToNode(patAttr),
+          strokeWidth: 0.03,
+          absoluteSize: 5,
+        },
+        tooltipNode: {
+          ...attributeToTooltipNode(group.getPattern()!),
+          clusterId,
+        },
+      }
+
+      group.getMatchesList().forEach(matchAttr =>
+        links.push({
+          source: getAttributeLexeme(matchAttr),
+          target: patLexeme,
+        }),
+      )
+    })
+  }
+  
   const seenNodes = values(seenVizNodesById)
 
   return {
