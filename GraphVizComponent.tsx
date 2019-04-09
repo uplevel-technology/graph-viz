@@ -72,7 +72,7 @@ export interface PartialGraphVizNode
 interface Props extends WithStyles<typeof styles> {
   nodes: PartialGraphVizNode[]
   links: GraphVizLink[]
-  clustersToHighlight: GraphVizCluster[]
+  highlightedClusters: GraphVizCluster[]
   tooltips: Partial<TooltipNode>[]
   onRefresh?: () => any
   config?: ConfigurationOptions
@@ -114,7 +114,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
   static defaultProps: Partial<Props> = {
     tooltips: [],
-    clustersToHighlight: [],
+    highlightedClusters: [],
     onLinkDrawn: noop,
   }
 
@@ -132,7 +132,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.vizData = {
       nodes: this.props.nodes as GraphVizNode[],
       links: this.props.links as GraphVizLink[],
-      highlightedClusters: this.props.clustersToHighlight,
+      highlightedClusters: this.props.highlightedClusters,
     }
     this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
@@ -300,14 +300,14 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       this.vizData = {
         nodes: this.props.nodes as GraphVizNode[],
         links: this.props.links as GraphVizLink[],
-        highlightedClusters: this.props.clustersToHighlight,
+        highlightedClusters: this.props.highlightedClusters,
       }
       this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
       this.initData()
     }
-    if (prevProps.clustersToHighlight !== this.props.clustersToHighlight) {
-      this.visualization.updateClusters(this.props.clustersToHighlight)
+    if (prevProps.highlightedClusters !== this.props.highlightedClusters) {
+      this.visualization.updateClusters(this.props.highlightedClusters)
     }
   }
 
@@ -328,7 +328,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.visualization.update({
       nodes: nodesWithPositions,
       links: this.props.links as GraphVizLink[],
-      highlightedClusters: this.props.clustersToHighlight,
+      highlightedClusters: this.props.highlightedClusters,
     })
   }
 

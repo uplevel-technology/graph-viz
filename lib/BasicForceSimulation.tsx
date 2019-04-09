@@ -1,8 +1,10 @@
 import * as d3 from 'd3'
-import {noop} from 'lodash'
+import {forEach, meanBy, noop} from 'lodash'
 
 export interface ForceSimulationNode extends d3.SimulationNodeDatum {
   id: string
+
+  clusterIds?: string[]
 
   /**
    * d3 forceX seed value
@@ -47,6 +49,64 @@ export interface NodePosition {
   x: number
   y: number
   z?: number
+}
+
+function forceCluster() {
+  const strength = 0.06
+  let nodes: ForceSimulationNode[]
+  let nodesByCluster: {[clusterId: string]: ForceSimulationNode[]}
+  const centroidsById: {[id: string]: {x: number; y: number}} = {}
+
+  function force(alpha: number) {
+    const l = alpha * strength
+
+    forEach(nodesByCluster, (nodesInCluster, clusterId) => {
+      centroidsById[clusterId] = getCentroid(nodesInCluster)
+    })
+
+    for (const node of nodes) {
+      if (node.clusterIds && node.clusterIds.length > 0) {
+        // for now we are only using the first clusterId to determine the force
+        const {x: cx, y: cy} = centroidsById[node.clusterIds[0]]
+        node.vx! -= (node.x! - cx) * l
+        node.vy! -= (node.y! - cy) * l
+      }
+    }
+  }
+
+  // this function is automatically called by d3 on initialize
+  force.initialize = (data: ForceSimulationNode[]) => {
+    nodes = data
+    nodesByCluster = groupNodesByClusters(nodes)
+    return nodes
+  }
+
+  return force
+}
+
+function getCentroid(points: ForceSimulationNode[]): {x: number; y: number} {
+  return {
+    x: meanBy(points, p => p.x),
+    y: meanBy(points, p => p.y),
+  }
+}
+
+function groupNodesByClusters(
+  nodes: ForceSimulationNode[],
+): {[clusterId: string]: ForceSimulationNode[]} {
+  const nodesByClusters: {[clusterId: string]: ForceSimulationNode[]} = {}
+  nodes.forEach((n, i) => {
+    if (n.clusterIds) {
+      n.clusterIds.forEach(clusterId => {
+        if (!nodesByClusters[clusterId]) {
+          nodesByClusters[clusterId] = []
+        }
+
+        nodesByClusters[clusterId].push(n)
+      })
+    }
+  })
+  return nodesByClusters
 }
 
 export class BasicForceSimulation {
@@ -106,6 +166,7 @@ export class BasicForceSimulation {
           )
           .distanceMax(250),
       )
+      .force('cluster', forceCluster())
       .velocityDecay(0.5)
       .on('tick', () => {
         this.registeredEventHandlers.tick(this.getNodePositions())
