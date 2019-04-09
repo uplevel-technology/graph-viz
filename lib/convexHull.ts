@@ -199,7 +199,7 @@ export function getNiceOffsetPolygon(
 
     const curve = new THREE.QuadraticBezierCurve(prevAnchor, v, nextAnchor)
 
-    allVertices.push(...curve.getPoints(5))
+    allVertices.push(...curve.getPoints(10))
   }
 
   return allVertices
