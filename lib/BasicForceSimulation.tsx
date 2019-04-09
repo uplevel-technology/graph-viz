@@ -1,6 +1,5 @@
 import * as d3 from 'd3'
 import {forEach, meanBy, noop} from 'lodash'
-import {GraphVizCluster} from './Clusters'
 
 export interface ForceSimulationNode extends d3.SimulationNodeDatum {
   id: string
@@ -34,7 +33,6 @@ export interface ForceSimulationLink {
 export interface ForceSimulationData {
   nodes: ForceSimulationNode[]
   links: ForceSimulationLink[]
-  clusters: GraphVizCluster[]
 }
 
 type D3Simulation = d3.Simulation<d3.SimulationNodeDatum, ForceSimulationLink>
