@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import {forEach, get, meanBy, noop} from 'lodash'
+import {forEach, meanBy, noop} from 'lodash'
 import {GraphVizCluster} from './Clusters'
 
 export interface ForceSimulationNode extends d3.SimulationNodeDatum {
@@ -68,6 +68,7 @@ function forceCluster() {
 
     for (const node of nodes) {
       if (node.clusterIds && node.clusterIds.length > 0) {
+        // for now we are only using the first clusterId to determine the force
         const {x: cx, y: cy} = centroidsById[node.clusterIds[0]]
         node.vx! -= (node.x! - cx) * l
         node.vy! -= (node.y! - cy) * l
@@ -75,6 +76,7 @@ function forceCluster() {
     }
   }
 
+  // this function is automatically called by d3 on initialize
   force.initialize = (data: ForceSimulationNode[]) => {
     nodes = data
     nodesByCluster = groupNodesByClusters(nodes)
@@ -119,11 +121,9 @@ export class BasicForceSimulation {
   }
 
   public initialize(graph: ForceSimulationData) {
-    const nodesCopy = graph.nodes.map(node => ({
-      ...node,
-      cluster: get(node.clusterIds, 0, 1),
-    }))
+    const nodesCopy = graph.nodes.map(node => ({...node}))
     const linksCopy = graph.links.map(link => ({...link}))
+
     const linkForceDistance = getForceLinkDistance(linksCopy)
 
     // stop any previous simulation before reinitializing to prevent
