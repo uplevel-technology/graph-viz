@@ -72,7 +72,7 @@ export interface PartialGraphVizNode
 interface Props extends WithStyles<typeof styles> {
   nodes: PartialGraphVizNode[]
   links: GraphVizLink[]
-  clusters: GraphVizCluster[]
+  clustersToHighlight: GraphVizCluster[]
   tooltips: Partial<TooltipNode>[]
   onRefresh?: () => any
   config?: ConfigurationOptions
@@ -98,7 +98,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   vizData: GraphVizData = {
     nodes: [],
     links: [],
-    clusters: [],
+    highlightedClusters: [],
   }
 
   tooltipNodes: TooltipNode[]
@@ -114,7 +114,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
   static defaultProps: Partial<Props> = {
     tooltips: [],
-    clusters: [],
+    clustersToHighlight: [],
     onLinkDrawn: noop,
   }
 
@@ -132,7 +132,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.vizData = {
       nodes: this.props.nodes as GraphVizNode[],
       links: this.props.links as GraphVizLink[],
-      clusters: this.props.clusters,
+      highlightedClusters: this.props.clustersToHighlight,
     }
     this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
@@ -300,14 +300,14 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       this.vizData = {
         nodes: this.props.nodes as GraphVizNode[],
         links: this.props.links as GraphVizLink[],
-        clusters: this.props.clusters,
+        highlightedClusters: this.props.clustersToHighlight,
       }
       this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
       this.initData()
     }
-    if (prevProps.clusters !== this.props.clusters) {
-      this.visualization.updateClusters(this.props.clusters)
+    if (prevProps.clustersToHighlight !== this.props.clustersToHighlight) {
+      this.visualization.updateClusters(this.props.clustersToHighlight)
     }
   }
 
@@ -328,7 +328,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.visualization.update({
       nodes: nodesWithPositions,
       links: this.props.links as GraphVizLink[],
-      clusters: this.props.clusters,
+      highlightedClusters: this.props.clustersToHighlight,
     })
   }
 

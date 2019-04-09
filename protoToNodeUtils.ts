@@ -15,8 +15,6 @@ import {TooltipNode} from './NodeTooltips'
 import {NodeFillPalette, NodeOutlinePalette} from './vizUtils'
 import {PartialGraphVizNode} from './GraphVizComponent'
 import * as moment from 'moment'
-import {EventCluster} from '@core/services/persistence_service_pb'
-import {GraphVizCluster} from './lib/Clusters'
 
 export const artifactToNode = (artifact: Artifact): PartialGraphVizNode => ({
   id: artifact.getUid()!.getValue(),
@@ -228,22 +226,6 @@ export const eventsToVizData = (events: Event[]): VizData => {
     links,
     tooltips: seenNodes.map(it => it.tooltipNode),
   }
-}
-
-export const clusterListToVizClusters = (
-  clusterList: EventCluster[],
-): {[clusterId: number]: GraphVizCluster} => {
-  return clusterList
-    .filter(cluster => cluster.getEventsList().length > 2)
-    .reduce((acc: {[clusterId: number]: GraphVizCluster}, cluster) => {
-      acc[cluster.getId()] = {
-        id: cluster.getId().toString(),
-        fill: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(
-          Math.random() * 255,
-        )}, ${Math.floor(Math.random() * 255)})`,
-      }
-      return acc
-    }, {})
 }
 
 export const getLegendData = (events: Event[]): string[] => {
