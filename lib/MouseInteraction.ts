@@ -152,37 +152,7 @@ export class MouseInteraction {
     this.registeredEventHandlers.zoom = callback
   }
 
-  private onMouseDown = (event: MouseEvent) => {
-    event.preventDefault()
-    this.dragging = true
-    this.registerClick = true
-
-    setTimeout(() => {
-      this.registerClick = false
-    }, MAX_CLICK_DURATION)
-
-    this.panStart.set(event.clientX, event.clientY, 0)
-    this.registeredEventHandlers.dragStart(
-      this.getMouseInWorldSpace(0),
-      this.intersectedPointIdx,
-    )
-  }
-
-  private onMouseUp = (event: MouseEvent) => {
-    event.preventDefault()
-    this.dragging = false
-    const worldMouse = this.getMouseInWorldSpace(0)
-    this.registeredEventHandlers.dragEnd(worldMouse, this.intersectedPointIdx)
-
-    if (this.registerClick) {
-      this.registeredEventHandlers.click(worldMouse, this.intersectedPointIdx)
-    }
-  }
-
-  // should we debounced this on requestAnimationFrame?
-  private onMouseMove = (event: MouseEvent) => {
-    event.preventDefault()
-
+  private findNearestNodeIndex = (event: MouseEvent): number | null => {
     const rect = this.canvas.getBoundingClientRect()
 
     this.mouse.x = THREE.Math.mapLinear(
@@ -222,9 +192,43 @@ export class MouseInteraction {
         nearestIndex = validNearestIntersects[0].index
       }
     }
+    return nearestIndex
+  }
 
-    // Maybe we can simplify this highly branched code
-    // for better readability
+  private onMouseDown = (event: MouseEvent) => {
+    event.preventDefault()
+    this.dragging = true
+    this.registerClick = true
+    this.intersectedPointIdx = this.findNearestNodeIndex(event)
+
+    setTimeout(() => {
+      this.registerClick = false
+    }, MAX_CLICK_DURATION)
+
+    this.panStart.set(event.clientX, event.clientY, 0)
+    this.registeredEventHandlers.dragStart(
+      this.getMouseInWorldSpace(0),
+      this.intersectedPointIdx,
+    )
+  }
+
+  private onMouseUp = (event: MouseEvent) => {
+    event.preventDefault()
+    this.dragging = false
+    const worldMouse = this.getMouseInWorldSpace(0)
+
+    this.intersectedPointIdx = this.findNearestNodeIndex(event)
+    this.registeredEventHandlers.dragEnd(worldMouse, this.intersectedPointIdx)
+
+    if (this.registerClick) {
+      this.registeredEventHandlers.click(worldMouse, this.intersectedPointIdx)
+    }
+  }
+
+  // should we debounced this on requestAnimationFrame?
+  private onMouseMove = (event: MouseEvent) => {
+    event.preventDefault()
+    const nearestIndex = this.findNearestNodeIndex(event)
 
     // handle hovers if not dragging
     if (!this.dragging) {
@@ -246,9 +250,6 @@ export class MouseInteraction {
         this.intersectedPointIdx = null
       }
     } else if (this.intersectedPointIdx !== null) {
-      if (nearestIndex !== null) {
-        this.intersectedPointIdx = nearestIndex
-      }
       // handle node drag interaction
       this.registeredEventHandlers.nodeDrag(
         this.getMouseInWorldSpace(0),
