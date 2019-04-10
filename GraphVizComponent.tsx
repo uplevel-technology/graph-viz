@@ -297,39 +297,37 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       prevProps.nodes !== this.props.nodes ||
       prevProps.links !== this.props.links
     ) {
-      this.vizData = {
-        nodes: this.props.nodes as GraphVizNode[],
-        links: this.props.links as GraphVizLink[],
-        highlightedClusters: this.props.highlightedClusters,
-      }
-      this.tooltipNodes = this.props.tooltips as TooltipNode[]
-
       this.initData()
     }
     if (prevProps.highlightedClusters !== this.props.highlightedClusters) {
+      this.vizData.highlightedClusters = this.props.highlightedClusters
       this.visualization.updateClusters(this.props.highlightedClusters)
     }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.onWindowResize)
+    this.simulation.stop()
     this.visualization.dispose()
+    window.removeEventListener('resize', this.onWindowResize)
   }
 
   initData() {
+    this.simulation.stop()
     this.simulation.initialize(this.props as ForceSimulationData)
 
     const nodePositions = this.simulation.getNodePositions()
-    const nodesWithPositions = this.props.nodes.map((node, i) => ({
-      ...nodePositions[i],
-      ...node,
-    }))
 
-    this.visualization.update({
-      nodes: nodesWithPositions,
+    this.vizData = {
+      nodes: this.props.nodes.map((node, i) => {
+        node.x = nodePositions[i].x
+        node.y = nodePositions[i].y
+        return node
+      }) as GraphVizNode[],
       links: this.props.links as GraphVizLink[],
       highlightedClusters: this.props.highlightedClusters,
-    })
+    }
+
+    this.visualization.update(this.vizData)
   }
 
   zoomIn = () => {
