@@ -1,6 +1,6 @@
 import {Artifact} from '@core/artifact_pb'
 import {Attribute} from '@core/attribute_pb'
-import {Event} from '@core/event_pb'
+import {EventFields} from '@core/event_pb'
 import {ObservableNode} from '@core/observable_pb'
 import {camelCase, values} from 'lodash'
 import {
@@ -15,6 +15,7 @@ import {TooltipNode} from './NodeTooltips'
 import {NodeFillPalette, NodeOutlinePalette} from './vizUtils'
 import {PartialGraphVizNode} from './GraphVizComponent'
 import * as moment from 'moment'
+import {EventType} from '../../../core/js/event_pb'
 
 export const artifactToNode = (artifact: Artifact): PartialGraphVizNode => ({
   id: artifact.getUid()!.getValue(),
@@ -88,15 +89,15 @@ export const observableToTooltipNode = (
   )
 }
 
-export const eventToNode = (event: Event): PartialGraphVizNode => ({
+export const eventToNode = (event: EventFields): PartialGraphVizNode => ({
   id: event.getUid()!.getValue(),
   clusterIds: [event.getClusterId().toString()],
   fill:
-    event.getEventType() === Event.Type.ALERT
+    event.getEventType() === EventType.ALERT
       ? NodeFillPalette.alert
       : NodeFillPalette.emailUpload,
   stroke:
-    event.getEventType() === Event.Type.ALERT
+    event.getEventType() === EventType.ALERT
       ? NodeOutlinePalette.alert
       : NodeOutlinePalette.emailUpload,
   strokeWidth: 0.03,
@@ -104,9 +105,11 @@ export const eventToNode = (event: Event): PartialGraphVizNode => ({
   absoluteSize: 30,
 })
 
-export const eventToTooltipNode = (event: Event): Partial<TooltipNode> => {
+export const eventToTooltipNode = (
+  event: EventFields,
+): Partial<TooltipNode> => {
   let displayName =
-    event.getEventType() === Event.Type.ALERT
+    event.getEventType() === EventType.ALERT
       ? `Alert (${event.getUid()})`
       : `Email Upload (${event.getUid()})`
 
@@ -135,7 +138,7 @@ interface VizData {
   tooltips: Partial<TooltipNode>[]
 }
 
-export const eventsToVizData = (events: Event[]): VizData => {
+export const eventsToVizData = (events: EventFields[]): VizData => {
   // We want a deduped list of all nodes, because they can be repeated. We'll
   // build that up in this object:
   const seenVizNodesById: {
@@ -228,7 +231,7 @@ export const eventsToVizData = (events: Event[]): VizData => {
   }
 }
 
-export const getLegendData = (events: Event[]): string[] => {
+export const getLegendData = (events: EventFields[]): string[] => {
   // keep track of event and attribute types separately so that
   // we can make the event types appear first in the legend
 
