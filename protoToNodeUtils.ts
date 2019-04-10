@@ -260,6 +260,7 @@ export const eventsToVizData = (
       seenVizNodesById[patLexeme] = {
         vizNode: {
           ...attributeToNode(patAttr),
+          clusterIds: [clusterId.toString()],
           absoluteSize: 5,
         },
         tooltipNode: {
