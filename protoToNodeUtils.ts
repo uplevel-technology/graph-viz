@@ -193,6 +193,14 @@ export const eventsToVizData = (
         ...attributeToNode(ao.getAttribute()!),
         clusterIds: [event.getClusterId().toString()],
       }
+
+      if (ao.getAttribute()!.getMatchingPattern() !== '') {
+        patternsToClusterId[
+          ao.getAttribute()!.getMatchingPattern()
+        ] = event.getClusterId()
+        attrNode.absoluteSize = 8
+      }
+
       seenVizNodesById[attrNode.id!] = {
         vizNode: attrNode,
         tooltipNode: {
@@ -205,12 +213,6 @@ export const eventsToVizData = (
         source: eventNode.id!,
         target: attrNode.id!,
       })
-
-      if (ao.getAttribute()!.getMatchingPattern() !== '') {
-        patternsToClusterId[
-          ao.getAttribute()!.getMatchingPattern()
-        ] = event.getClusterId()
-      }
     })
 
     observed.getRelationshipsList().forEach(rel => {
@@ -265,7 +267,6 @@ export const eventsToVizData = (
         vizNode: {
           ...attributeToNode(patAttr),
           clusterIds: [clusterId.toString()],
-          absoluteSize: 5,
         },
         tooltipNode: {
           ...attributeToTooltipNode(group.getPattern()!),
@@ -277,6 +278,7 @@ export const eventsToVizData = (
         links.push({
           source: getAttributeLexeme(matchAttr),
           target: patLexeme,
+          dashed: true,
         }),
       )
     })
