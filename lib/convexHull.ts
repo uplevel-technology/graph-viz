@@ -167,7 +167,9 @@ export function getNiceOffsetPolygon(
     // tslint:enable prettier
 
     const offset =
-      (nodes[i].absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) + padding
+      (nodes[i].absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) +
+      padding +
+      nodes.length // add nodes.length to make offset proportional to cluster size
 
     const offMag = (-offset * Math.sqrt(2)) / 2
 
@@ -199,7 +201,7 @@ export function getNiceOffsetPolygon(
 
     const curve = new THREE.QuadraticBezierCurve(prevAnchor, v, nextAnchor)
 
-    allVertices.push(...curve.getPoints(5))
+    allVertices.push(...curve.getPoints(10))
   }
 
   return allVertices

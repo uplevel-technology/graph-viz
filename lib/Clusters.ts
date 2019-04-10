@@ -67,7 +67,7 @@ export class Clusters {
 
       geometry.setFromPoints(vertices)
 
-      const faces: any = []
+      const faces: THREE.Face3[] = []
       for (let i = 0; i < geometry.vertices.length - 2; i++) {
         faces.push(new THREE.Face3(0, i + 1, i + 2))
       }
