@@ -297,6 +297,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       prevProps.nodes !== this.props.nodes ||
       prevProps.links !== this.props.links
     ) {
+      this.tooltipNodes = this.props.tooltips as TooltipNode[]
       this.initData()
     }
     if (prevProps.highlightedClusters !== this.props.highlightedClusters) {
