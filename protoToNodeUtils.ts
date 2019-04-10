@@ -185,6 +185,10 @@ export const eventsToVizData = (
     }
 
     observed.getAttributesList().forEach(ao => {
+      if (ao.getAttribute()!.getIsSupernode()) {
+        return
+      }
+
       const attrNode = {
         ...attributeToNode(ao.getAttribute()!),
         clusterIds: [event.getClusterId().toString()],
