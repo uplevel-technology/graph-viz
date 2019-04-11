@@ -13,7 +13,7 @@ import {
   ZoomEventHandler,
 } from './MouseInteraction'
 import {GraphVizNode, Nodes} from './Nodes'
-import {Clusters, GraphVizCluster} from './Clusters'
+import {DisplayGroups, VizDisplayGroup} from './DisplayGroups'
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
@@ -21,7 +21,7 @@ const PAN_SPEED = 1.0
 export interface GraphVizData {
   nodes: GraphVizNode[]
   links: GraphVizLink[]
-  highlightedClusters: GraphVizCluster[]
+  displayGroups: VizDisplayGroup[]
 }
 
 function constructIdToIdxMap(arr: Array<{id: string}>): {[id: string]: number} {
@@ -52,7 +52,7 @@ const DEFAULT_CONFIG_OPTIONS: ConfigurationOptions = {
 export class GraphVisualization {
   public nodesMesh: Nodes
   public linksMesh: Links
-  public clustersMesh: Clusters
+  public displayGroupsMesh: DisplayGroups
 
   public readonly canvas: HTMLCanvasElement
   public readonly camera: THREE.OrthographicCamera
@@ -124,13 +124,13 @@ export class GraphVisualization {
     this.linksMesh = new Links(
       getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
     )
-    this.clustersMesh = new Clusters(
+    this.displayGroupsMesh = new DisplayGroups(
       graphData.nodes,
-      graphData.highlightedClusters,
+      graphData.displayGroups,
     )
 
-    this.clustersMesh.object.position.z = 0
-    this.scene.add(this.clustersMesh.object)
+    this.displayGroupsMesh.object.position.z = 0
+    this.scene.add(this.displayGroupsMesh.object)
 
     this.linksMesh.object.position.z = 1
     this.scene.add(this.linksMesh.object)
@@ -224,7 +224,7 @@ export class GraphVisualization {
     this.linksMesh.updateAll(
       getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
     )
-    this.clustersMesh.updateAll(graphData.nodes, graphData.highlightedClusters)
+    this.displayGroupsMesh.updateAll(graphData.nodes, graphData.displayGroups)
     this.mouseInteraction.updateData(this.data.nodes)
   }
 
@@ -253,9 +253,9 @@ export class GraphVisualization {
     this.linksMesh.updateAllPositions(
       getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap),
     )
-    this.clustersMesh.updateAll(
+    this.displayGroupsMesh.updateAll(
       updatedGraphData.nodes,
-      updatedGraphData.highlightedClusters,
+      updatedGraphData.displayGroups,
     )
     this.mouseInteraction.updateData(this.data.nodes)
 
@@ -274,20 +274,20 @@ export class GraphVisualization {
     this.data.nodes[index] = updatedNode
     this.nodesMesh.updateOne(index, updatedNode)
     this.mouseInteraction.updateData(this.data.nodes)
-    this.clustersMesh.updateAll(this.data.nodes, this.data.highlightedClusters)
+    this.displayGroupsMesh.updateAll(this.data.nodes, this.data.displayGroups)
     this.render()
   }
 
   /**
-   * updates only the clusters mesh.
-   * Useful in situations that require ONLY clusters to update.
-   * E.g. toggling a cluster on or off when the nodes within a cluster
+   * updates only the display groups mesh.
+   * Useful in situations that require ONLY display groups to update.
+   * E.g. toggling a group on or off when the nodes within a group
    * have NOT changed.
-   * @param clusters
+   * @param displayGroups
    */
-  public updateClusters = (clusters: GraphVizCluster[]) => {
-    this.data.highlightedClusters = clusters
-    this.clustersMesh.updateAll(this.data.nodes, this.data.highlightedClusters)
+  public updateDisplayGroups = (displayGroups: VizDisplayGroup[]) => {
+    this.data.displayGroups = displayGroups
+    this.displayGroupsMesh.updateAll(this.data.nodes, this.data.displayGroups)
     this.render()
   }
 

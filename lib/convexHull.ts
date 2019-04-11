@@ -169,7 +169,7 @@ export function getNiceOffsetPolygon(
     const offset =
       (nodes[i].absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) +
       padding +
-      nodes.length // add nodes.length to make offset proportional to cluster size
+      nodes.length // add nodes.length to make offset proportional to display group size
 
     const offMag = (-offset * Math.sqrt(2)) / 2
 
