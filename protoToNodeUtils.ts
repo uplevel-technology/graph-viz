@@ -128,13 +128,18 @@ export const eventToTooltipNode = (
   const occurred =
     (event.getOccurredAt() && event.getOccurredAt()!.toDate()) || Date.now()
 
-  return {
+  const out: Partial<TooltipNode> = {
     id: event.getUid()!.getValue(),
     displayName,
     displayType: 'Event',
     formattedTime: moment(occurred).format('MMM DD YYYY'),
-    clusterId: event.getClusterId()!,
   }
+
+  if (event.getClusterId() > 0) {
+    out.clusterId = event.getClusterId()
+  }
+
+  return out
 }
 
 interface VizData {
