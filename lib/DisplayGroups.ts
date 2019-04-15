@@ -1,10 +1,21 @@
 import {GraphVizNode} from './Nodes'
 import * as THREE from 'three'
 import {MeshBasicMaterial} from 'three'
-import {get2DConvexHull, getNiceOffsetPolygon} from './convexHull'
+import {
+  get2DConvexHull,
+  getCircularHull,
+  getNiceOffsetPolygon,
+} from './convexHull'
 
 export interface VizDisplayGroup {
   id: string
+
+  /**
+   * type of polygon to draw
+   * default is convexHull
+   */
+  type?: 'convexHull' | 'circle'
+
   /**
    * node fill color hex string or hex number
    * (default is 0x333333)
@@ -44,42 +55,17 @@ export class DisplayGroups {
       if (!nodesInGroup) {
         continue
       }
-      const convexHull = get2DConvexHull(nodesInGroup) as GraphVizNode[]
-      const vertices = getNiceOffsetPolygon(convexHull, group.padding)
 
-      let geometry
-
-      // add new display group
-      if (this.meshes[group.id] === undefined) {
-        // NOTE: we probably don't need a BufferGeometry after r102 amirite?
-        geometry = new THREE.Geometry()
-        const material = new MeshBasicMaterial({
-          color: group.fill || DEFAULT_DISPLAY_GROUP_FILL,
-          opacity: group.fillOpacity || DEFAULT_DISPLAY_GROUP_FILL_OPACITY,
-          transparent: true,
-        })
-        this.meshes[group.id] = new THREE.Mesh(geometry, material)
-        this.object.add(this.meshes[group.id])
+      if (group.type === 'circle') {
+        this.renderCircle(group, nodesInGroup)
       } else {
-        // update existing display group
-        geometry = this.meshes[group.id].geometry as THREE.Geometry
+        this.renderHull(group, nodesInGroup)
       }
-
-      geometry.setFromPoints(vertices)
-
-      const faces: THREE.Face3[] = []
-      for (let i = 0; i < geometry.vertices.length - 2; i++) {
-        faces.push(new THREE.Face3(0, i + 1, i + 2))
-      }
-
-      geometry.faces = faces
-      geometry.computeBoundingSphere()
-      geometry.elementsNeedUpdate = true
 
       renderedGroupIds.add(group.id)
     }
 
-    // remove deleted display group
+    // remove deleted display groups
     for (const groupId in this.meshes) {
       if (!renderedGroupIds.has(groupId)) {
         this.object.remove(this.meshes[groupId])
@@ -104,5 +90,63 @@ export class DisplayGroups {
       }
     })
     return nodesByGroup
+  }
+
+  private renderHull(group: VizDisplayGroup, nodesInGroup: GraphVizNode[]) {
+    const convexHull = get2DConvexHull(nodesInGroup) as GraphVizNode[]
+    const vertices = getNiceOffsetPolygon(convexHull, group.padding)
+    let geometry
+
+    // add new display group
+    if (this.meshes[group.id] === undefined) {
+      // NOTE: we probably don't need a BufferGeometry after r102 amirite?
+      geometry = new THREE.Geometry()
+      const material = new MeshBasicMaterial({
+        color: group.fill || DEFAULT_DISPLAY_GROUP_FILL,
+        opacity: group.fillOpacity || DEFAULT_DISPLAY_GROUP_FILL_OPACITY,
+        transparent: true,
+      })
+      this.meshes[group.id] = new THREE.Mesh(geometry, material)
+      this.object.add(this.meshes[group.id])
+    } else {
+      // update existing display group
+      geometry = this.meshes[group.id].geometry as THREE.Geometry
+    }
+
+    geometry.setFromPoints(vertices)
+
+    const faces: THREE.Face3[] = []
+    for (let i = 0; i < geometry.vertices.length - 2; i++) {
+      faces.push(new THREE.Face3(0, i + 1, i + 2))
+    }
+
+    geometry.faces = faces
+    geometry.computeBoundingSphere()
+    geometry.elementsNeedUpdate = true
+  }
+
+  private renderCircle(group: VizDisplayGroup, nodesInGroup: GraphVizNode[]) {
+    // add new display group
+    if (this.meshes[group.id] === undefined) {
+      // NOTE: This is an expensive way to render circles but this is ok for now
+      // as we don't expect too many groups to be rendered simultaneously.
+      // When the need arises, we can easily switch these over to a custom
+      // circle shader.
+      const geometry = new THREE.CircleGeometry(1.05, 32)
+
+      const material = new MeshBasicMaterial({
+        color: group.fill || DEFAULT_DISPLAY_GROUP_FILL,
+        opacity: group.fillOpacity || DEFAULT_DISPLAY_GROUP_FILL_OPACITY,
+        transparent: true,
+      })
+      this.meshes[group.id] = new THREE.Mesh(geometry, material)
+      this.object.add(this.meshes[group.id])
+    }
+
+    const hull = getCircularHull(nodesInGroup)
+    this.meshes[group.id].scale.x = hull.radius
+    this.meshes[group.id].scale.y = hull.radius
+    this.meshes[group.id].position.x = hull.center.x
+    this.meshes[group.id].position.y = hull.center.y
   }
 }
