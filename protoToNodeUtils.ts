@@ -148,10 +148,7 @@ interface VizData {
   tooltips: Partial<TooltipNode>[]
 }
 
-export const eventsToVizData = (
-  events: EventFields[],
-  patternGroups?: AttributePatternGroup[],
-): VizData => {
+export const eventsToVizData = (events: EventFields[]): VizData => {
   // do not show anything if only pattern data is provided
   if (events.length === 0) {
     return {nodes: [], links: [], tooltips: []}
@@ -166,16 +163,6 @@ export const eventsToVizData = (
     }
   } = {}
   const links: GraphVizLink[] = []
-
-  // Since pattern group parameter does not contain information on clusters,
-  // build up that information in this data structure (recording the cluster
-  // ID each time we encounter an attribute with its embedded pattern match
-  // set). Note that currently all links are considered when computing clusters,
-  // so the cluster ID will be the same across all attributes matching any given
-  // pattern.
-  const patternsToClusterId: {
-    [id: string]: number
-  } = {}
 
   events.forEach(event => {
     const eventNode = eventToNode(event)
@@ -194,6 +181,12 @@ export const eventsToVizData = (
         ...attributeToNode(ao.getAttribute()!),
         displayGroupIds: [event.getClusterId().toString()],
       }
+
+      if (ao.getAttribute()!.getMatchingPattern() !== '') {
+        attrNode.displayGroupIds.push(ao.getAttribute()!.getMatchingPattern())
+        attrNode.absoluteSize = 8
+      }
+
       seenVizNodesById[attrNode.id!] = {
         vizNode: attrNode,
         tooltipNode: {
@@ -206,12 +199,6 @@ export const eventsToVizData = (
         source: eventNode.id!,
         target: attrNode.id!,
       })
-
-      if (ao.getAttribute()!.getMatchingPattern() !== '') {
-        patternsToClusterId[
-          ao.getAttribute()!.getMatchingPattern()
-        ] = event.getClusterId()
-      }
     })
 
     observed.getRelationshipsList().forEach(rel => {
@@ -256,32 +243,6 @@ export const eventsToVizData = (
       })
     })
   })
-
-  if (patternGroups) {
-    patternGroups.forEach(group => {
-      const clusterId = patternsToClusterId[group.getPattern()!.getValue()]
-      const patAttr = group.getPattern()!
-      const patLexeme = getAttributeLexeme(patAttr)
-      seenVizNodesById[patLexeme] = {
-        vizNode: {
-          ...attributeToNode(patAttr),
-          displayGroupIds: [clusterId.toString()],
-          absoluteSize: 5,
-        },
-        tooltipNode: {
-          ...attributeToTooltipNode(group.getPattern()!),
-          clusterId,
-        },
-      }
-
-      group.getMatchesList().forEach(matchAttr =>
-        links.push({
-          source: getAttributeLexeme(matchAttr),
-          target: patLexeme,
-        }),
-      )
-    })
-  }
 
   const seenNodes = values(seenVizNodesById)
 

@@ -30,9 +30,15 @@ export interface ForceSimulationLink {
   target: string
 }
 
+export interface ForceSimulationGroup {
+  id: string
+  strength: number
+}
+
 export interface ForceSimulationData {
   nodes: ForceSimulationNode[]
   links: ForceSimulationLink[]
+  forceGroups: ForceSimulationGroup[]
 }
 
 type D3Simulation = d3.Simulation<d3.SimulationNodeDatum, ForceSimulationLink>
@@ -51,27 +57,27 @@ export interface NodePosition {
   z?: number
 }
 
-function forceGroup() {
-  const strength = 0.06
+function forceGroup(groups: ForceSimulationGroup[]) {
   let nodes: ForceSimulationNode[]
   let nodesByGroup: {[groupId: string]: ForceSimulationNode[]}
-  const centroidsById: {[id: string]: {x: number; y: number}} = {}
 
   function force(alpha: number) {
-    const l = alpha * strength
+    groups.forEach(group => {
+      if (!nodesByGroup[group.id]) {
+        // this will happen for archived clusters
+        return
+      }
 
-    forEach(nodesByGroup, (nodesInGroup, groupId) => {
-      centroidsById[groupId] = getCentroid(nodesInGroup)
-    })
+      const groupNodes = nodesByGroup[group.id]
 
-    for (const node of nodes) {
-      if (node.displayGroupIds && node.displayGroupIds.length > 0) {
-        // for now we are only using the first displayGroupId to determine the force
-        const {x: cx, y: cy} = centroidsById[node.displayGroupIds[0]]
+      const {x: cx, y: cy} = getCentroid(groupNodes)
+      const l = alpha * group.strength
+
+      groupNodes.forEach(node => {
         node.vx! -= (node.x! - cx) * l
         node.vy! -= (node.y! - cy) * l
-      }
-    }
+      })
+    })
   }
 
   // this function is automatically called by d3 on initialize
@@ -121,6 +127,7 @@ export class BasicForceSimulation {
   public initialize(graph: ForceSimulationData) {
     const nodesCopy = graph.nodes.map(node => ({...node}))
     const linksCopy = graph.links.map(link => ({...link}))
+    const groupsCopy = graph.forceGroups.map(group => ({...group}))
 
     const linkForceDistance = getForceLinkDistance(linksCopy)
 
@@ -166,7 +173,7 @@ export class BasicForceSimulation {
           )
           .distanceMax(250),
       )
-      .force('group', forceGroup())
+      .force('group', forceGroup(groupsCopy))
       .velocityDecay(0.5)
       .on('tick', () => {
         this.registeredEventHandlers.tick(this.getNodePositions())

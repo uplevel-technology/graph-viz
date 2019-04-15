@@ -138,7 +138,13 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
     const {width, height} = root.getBoundingClientRect()
     this.visualization = new GraphVisualization(
-      this.vizData,
+      {
+        nodes: this.vizData.nodes,
+        links: this.vizData.links,
+        displayGroups: this.vizData.displayGroups.filter(
+          gp => gp.isHighlighted,
+        ),
+      },
       canvas,
       width,
       height,
@@ -199,7 +205,11 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
       toggleNodeLock(this.vizData.nodes[clickedNodeIdx])
 
-      this.simulation.update(this.vizData)
+      this.simulation.update({
+        nodes: this.vizData.nodes,
+        links: this.vizData.links,
+        forceGroups: this.vizData.displayGroups,
+      })
       this.visualization.updateNode(
         clickedNodeIdx,
         this.vizData.nodes[clickedNodeIdx],
@@ -219,7 +229,11 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       node.y = worldPos.y
       node.fx = worldPos.x
       node.fy = worldPos.y
-      this.simulation.update(this.vizData)
+      this.simulation.update({
+        nodes: this.props.nodes,
+        links: this.props.links,
+        forceGroups: this.props.displayGroups,
+      })
       // ^ the simulation tick handler should handle the position updates after this in our viz
     })
 
@@ -302,7 +316,9 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     }
     if (prevProps.displayGroups !== this.props.displayGroups) {
       this.vizData.displayGroups = this.props.displayGroups
-      this.visualization.updateDisplayGroups(this.props.displayGroups)
+      this.visualization.updateDisplayGroups(
+        this.props.displayGroups.filter(gp => gp.isHighlighted),
+      )
     }
   }
 
@@ -314,7 +330,11 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
   initData() {
     this.simulation.stop()
-    this.simulation.initialize(this.props as ForceSimulationData)
+    this.simulation.initialize({
+      nodes: this.props.nodes,
+      links: this.props.links,
+      forceGroups: this.props.displayGroups,
+    })
 
     const nodePositions = this.simulation.getNodePositions()
 

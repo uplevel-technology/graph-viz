@@ -2,11 +2,13 @@ import {GraphVizNode} from './Nodes'
 import * as THREE from 'three'
 import {MeshBasicMaterial} from 'three'
 import {get2DConvexHull, getNiceOffsetPolygon} from './convexHull'
+import {ForceSimulationGroup} from './BasicForceSimulation'
 
-export interface VizDisplayGroup {
-  id: string
+export interface VizDisplayGroup extends ForceSimulationGroup {
+  isHighlighted: boolean
+
   /**
-   * node fill color hex string or hex number
+   * fill color hex string or hex number
    * (default is 0x333333)
    */
   fill?: number | string
