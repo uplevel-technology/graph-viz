@@ -4,7 +4,7 @@ import {forEach, meanBy, noop} from 'lodash'
 export interface ForceSimulationNode extends d3.SimulationNodeDatum {
   id: string
 
-  clusterIds?: string[]
+  displayGroupIds?: string[]
 
   /**
    * d3 forceX seed value
@@ -51,23 +51,23 @@ export interface NodePosition {
   z?: number
 }
 
-function forceCluster() {
+function forceGroup() {
   const strength = 0.06
   let nodes: ForceSimulationNode[]
-  let nodesByCluster: {[clusterId: string]: ForceSimulationNode[]}
+  let nodesByGroup: {[groupId: string]: ForceSimulationNode[]}
   const centroidsById: {[id: string]: {x: number; y: number}} = {}
 
   function force(alpha: number) {
     const l = alpha * strength
 
-    forEach(nodesByCluster, (nodesInCluster, clusterId) => {
-      centroidsById[clusterId] = getCentroid(nodesInCluster)
+    forEach(nodesByGroup, (nodesInGroup, groupId) => {
+      centroidsById[groupId] = getCentroid(nodesInGroup)
     })
 
     for (const node of nodes) {
-      if (node.clusterIds && node.clusterIds.length > 0) {
-        // for now we are only using the first clusterId to determine the force
-        const {x: cx, y: cy} = centroidsById[node.clusterIds[0]]
+      if (node.displayGroupIds && node.displayGroupIds.length > 0) {
+        // for now we are only using the first displayGroupId to determine the force
+        const {x: cx, y: cy} = centroidsById[node.displayGroupIds[0]]
         node.vx! -= (node.x! - cx) * l
         node.vy! -= (node.y! - cy) * l
       }
@@ -77,7 +77,7 @@ function forceCluster() {
   // this function is automatically called by d3 on initialize
   force.initialize = (data: ForceSimulationNode[]) => {
     nodes = data
-    nodesByCluster = groupNodesByClusters(nodes)
+    nodesByGroup = getGroupedNodes(nodes)
     return nodes
   }
 
@@ -91,22 +91,22 @@ function getCentroid(points: ForceSimulationNode[]): {x: number; y: number} {
   }
 }
 
-function groupNodesByClusters(
+function getGroupedNodes(
   nodes: ForceSimulationNode[],
-): {[clusterId: string]: ForceSimulationNode[]} {
-  const nodesByClusters: {[clusterId: string]: ForceSimulationNode[]} = {}
+): {[groupId: string]: ForceSimulationNode[]} {
+  const nodesByGroup: {[groupId: string]: ForceSimulationNode[]} = {}
   nodes.forEach((n, i) => {
-    if (n.clusterIds) {
-      n.clusterIds.forEach(clusterId => {
-        if (!nodesByClusters[clusterId]) {
-          nodesByClusters[clusterId] = []
+    if (n.displayGroupIds) {
+      n.displayGroupIds.forEach(groupId => {
+        if (!nodesByGroup[groupId]) {
+          nodesByGroup[groupId] = []
         }
 
-        nodesByClusters[clusterId].push(n)
+        nodesByGroup[groupId].push(n)
       })
     }
   })
-  return nodesByClusters
+  return nodesByGroup
 }
 
 export class BasicForceSimulation {
@@ -166,7 +166,7 @@ export class BasicForceSimulation {
           )
           .distanceMax(250),
       )
-      .force('cluster', forceCluster())
+      .force('group', forceGroup())
       .velocityDecay(0.5)
       .on('tick', () => {
         this.registeredEventHandlers.tick(this.getNodePositions())

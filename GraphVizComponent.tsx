@@ -29,7 +29,7 @@ import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
 import {debounce, noop} from 'lodash'
 import {GraphVizNode} from './lib/Nodes'
-import {GraphVizCluster} from './lib/Clusters'
+import {VizDisplayGroup} from './lib/DisplayGroups'
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -72,7 +72,7 @@ export interface PartialGraphVizNode
 interface Props extends WithStyles<typeof styles> {
   nodes: PartialGraphVizNode[]
   links: GraphVizLink[]
-  highlightedClusters: GraphVizCluster[]
+  displayGroups: VizDisplayGroup[]
   tooltips: Partial<TooltipNode>[]
   onRefresh?: () => any
   config?: ConfigurationOptions
@@ -98,7 +98,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   vizData: GraphVizData = {
     nodes: [],
     links: [],
-    highlightedClusters: [],
+    displayGroups: [],
   }
 
   tooltipNodes: TooltipNode[]
@@ -114,7 +114,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
   static defaultProps: Partial<Props> = {
     tooltips: [],
-    highlightedClusters: [],
+    displayGroups: [],
     onLinkDrawn: noop,
   }
 
@@ -132,7 +132,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.vizData = {
       nodes: this.props.nodes as GraphVizNode[],
       links: this.props.links as GraphVizLink[],
-      highlightedClusters: this.props.highlightedClusters,
+      displayGroups: this.props.displayGroups,
     }
     this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
@@ -300,9 +300,9 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       this.tooltipNodes = this.props.tooltips as TooltipNode[]
       this.initData()
     }
-    if (prevProps.highlightedClusters !== this.props.highlightedClusters) {
-      this.vizData.highlightedClusters = this.props.highlightedClusters
-      this.visualization.updateClusters(this.props.highlightedClusters)
+    if (prevProps.displayGroups !== this.props.displayGroups) {
+      this.vizData.displayGroups = this.props.displayGroups
+      this.visualization.updateDisplayGroups(this.props.displayGroups)
     }
   }
 
@@ -325,7 +325,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
         return node
       }) as GraphVizNode[],
       links: this.props.links as GraphVizLink[],
-      highlightedClusters: this.props.highlightedClusters,
+      displayGroups: this.props.displayGroups,
     }
 
     this.visualization.update(this.vizData)

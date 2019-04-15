@@ -96,7 +96,7 @@ export const observableToTooltipNode = (
 
 export const eventToNode = (event: EventFields): PartialGraphVizNode => ({
   id: event.getUid()!.getValue(),
-  clusterIds: [event.getClusterId().toString()],
+  displayGroupIds: [event.getClusterId().toString()],
   fill:
     event.getEventType() === EventType.ALERT
       ? NodeFillPalette.alert
@@ -128,13 +128,18 @@ export const eventToTooltipNode = (
   const occurred =
     (event.getOccurredAt() && event.getOccurredAt()!.toDate()) || Date.now()
 
-  return {
+  const out: Partial<TooltipNode> = {
     id: event.getUid()!.getValue(),
     displayName,
     displayType: 'Event',
     formattedTime: moment(occurred).format('MMM DD YYYY'),
-    clusterId: event.getClusterId()!,
   }
+
+  if (event.getClusterId() > 0) {
+    out.clusterId = event.getClusterId()
+  }
+
+  return out
 }
 
 interface VizData {
@@ -191,7 +196,7 @@ export const eventsToVizData = (
 
       const attrNode = {
         ...attributeToNode(ao.getAttribute()!),
-        clusterIds: [event.getClusterId().toString()],
+        displayGroupIds: [event.getClusterId().toString()],
       }
 
       if (ao.getAttribute()!.getMatchingPattern() !== '') {
@@ -218,7 +223,7 @@ export const eventsToVizData = (
     observed.getRelationshipsList().forEach(rel => {
       const from = {
         ...observableToNode(rel.getFrom()!),
-        clusterIds: [event.getClusterId().toString()],
+        displayGroupIds: [event.getClusterId().toString()],
       }
       seenVizNodesById[from.id!] = {
         vizNode: from,
@@ -230,7 +235,7 @@ export const eventsToVizData = (
 
       const to = {
         ...observableToNode(rel.getTo()!),
-        clusterIds: [event.getClusterId().toString()],
+        displayGroupIds: [event.getClusterId().toString()],
       }
       seenVizNodesById[to.id!] = {
         vizNode: to,
@@ -266,7 +271,8 @@ export const eventsToVizData = (
       seenVizNodesById[patLexeme] = {
         vizNode: {
           ...attributeToNode(patAttr),
-          clusterIds: [clusterId.toString()],
+          displayGroupIds: [clusterId.toString()],
+          absoluteSize: 5,
         },
         tooltipNode: {
           ...attributeToTooltipNode(group.getPattern()!),

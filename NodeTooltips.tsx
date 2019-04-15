@@ -76,7 +76,7 @@ class NodeTooltipsBase extends React.Component<Props> {
             )}
           </Grid>
           <Grid item>
-            {this.props.node.clusterId && (
+            {this.props.node.clusterId !== undefined && (
               <Typography
                 style={{
                   textTransform: 'none',
