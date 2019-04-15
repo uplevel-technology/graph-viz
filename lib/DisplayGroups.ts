@@ -128,10 +128,10 @@ export class DisplayGroups {
   private renderCircle(group: VizDisplayGroup, nodesInGroup: GraphVizNode[]) {
     // add new display group
     if (this.meshes[group.id] === undefined) {
-      // NOTE: This is an expensive way to render circles but this is ok for now
+      // NOTE: This is an expensive way to render circles but it's ok for now
       // as we don't expect too many groups to be rendered simultaneously.
       // When the need arises, we can easily switch these over to a custom
-      // circle shader.
+      // circle shader material.
       const geometry = new THREE.CircleGeometry(1.05, 32)
 
       const material = new MeshBasicMaterial({
