@@ -144,8 +144,8 @@ export class DisplayGroups {
     }
 
     const hull = getCircularHull(nodesInGroup)
-    this.meshes[group.id].scale.x = hull.radius
-    this.meshes[group.id].scale.y = hull.radius
+    this.meshes[group.id].scale.x = hull.radius + (group.padding || 10)
+    this.meshes[group.id].scale.y = hull.radius + (group.padding || 10)
     this.meshes[group.id].position.x = hull.center.x
     this.meshes[group.id].position.y = hull.center.y
   }
