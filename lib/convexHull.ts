@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import {DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE, GraphVizNode} from './Nodes'
+import {meanBy} from 'lodash'
 
 interface Point {
   x: number
@@ -205,6 +206,51 @@ export function getNiceOffsetPolygon(
   }
 
   return allVertices
+}
+
+/**
+ * gets the circular hull of a given list of points
+ * @param points
+ */
+export function getCircularHull(
+  points: Point[],
+): {center: THREE.Vector2; radius: number} {
+  const center = getCentroid(points)
+
+  let maxDistance = 0
+  let distance
+
+  for (const point of points) {
+    distance = getDistance(point, center)
+    if (distance >= maxDistance) {
+      maxDistance = distance
+    }
+  }
+
+  return {
+    center: new THREE.Vector2(center.x, center.y),
+    radius: maxDistance,
+  }
+}
+
+/**
+ * gets the centroid of a given list of points
+ * @param points
+ */
+export function getCentroid(points: Point[]): Point {
+  return {
+    x: meanBy(points, p => p.x),
+    y: meanBy(points, p => p.y),
+  }
+}
+
+/**
+ * gets the distance between two points
+ * @param a
+ * @param b
+ */
+function getDistance(a: Point, b: Point): number {
+  return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2))
 }
 
 /**
