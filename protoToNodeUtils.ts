@@ -1,6 +1,6 @@
 import {Artifact} from '@core/artifact_pb'
 import {Attribute} from '@core/attribute_pb'
-import {EventFields} from '@core/event_pb'
+import {EventFields, EventType} from '@core/event_pb'
 import {ObservableNode} from '@core/observable_pb'
 import {camelCase, values} from 'lodash'
 import {
@@ -15,8 +15,6 @@ import {TooltipNode} from './NodeTooltips'
 import {NodeFillPalette, NodeOutlinePalette} from './vizUtils'
 import {PartialGraphVizNode} from './GraphVizComponent'
 import * as moment from 'moment'
-import {AttributePatternGroup} from '@core/services/persistence_service_pb'
-import {EventType} from '../../../core/js/event_pb'
 
 export const artifactToNode = (artifact: Artifact): PartialGraphVizNode => ({
   id: artifact.getUid()!.getValue(),
@@ -188,6 +186,7 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
 
       if (ao.getAttribute()!.getMatchingPattern() !== '') {
         attrNode.displayGroupIds.push(ao.getAttribute()!.getMatchingPattern())
+        attrNode.charge = -50 // reduce the charge to prevent conflicting forces
         attrNode.absoluteSize = 12
       }
 

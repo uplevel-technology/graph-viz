@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import {forEach, meanBy, noop} from 'lodash'
+import {meanBy, noop} from 'lodash'
 
 export interface ForceSimulationNode extends d3.SimulationNodeDatum {
   id: string
