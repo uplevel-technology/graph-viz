@@ -15,6 +15,7 @@ import {TooltipNode} from './NodeTooltips'
 import {NodeFillPalette, NodeOutlinePalette} from './vizUtils'
 import {PartialGraphVizNode} from './GraphVizComponent'
 import * as moment from 'moment'
+import {ForceSimulationLink} from './lib/BasicForceSimulation'
 
 export const artifactToNode = (artifact: Artifact): PartialGraphVizNode => ({
   id: artifact.getUid()!.getValue(),
@@ -142,7 +143,7 @@ export const eventToTooltipNode = (
 
 interface VizData {
   nodes: PartialGraphVizNode[]
-  links: GraphVizLink[]
+  links: (GraphVizLink & ForceSimulationLink)[]
   tooltips: Partial<TooltipNode>[]
 }
 
@@ -160,7 +161,7 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
       tooltipNode: Partial<TooltipNode>
     }
   } = {}
-  const links: GraphVizLink[] = []
+  const links: (GraphVizLink & ForceSimulationLink)[] = []
 
   events.forEach(event => {
     const eventNode = eventToNode(event)
@@ -184,7 +185,9 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
         displayGroupIds: [event.getClusterId().toString()],
       }
 
+      let isPattern = false
       if (ao.getAttribute()!.getMatchingPattern() !== '') {
+        isPattern = true
         attrNode.displayGroupIds.push(ao.getAttribute()!.getMatchingPattern())
         attrNode.charge = -50 // reduce the charge to prevent conflicting forces
         attrNode.absoluteSize = 12
@@ -198,10 +201,16 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
         },
       }
 
-      links.push({
+      const link: GraphVizLink & ForceSimulationLink = {
         source: eventNode.id!,
         target: attrNode.id!,
-      })
+      }
+
+      if (isPattern) {
+        link.strength = 0.1
+      }
+
+      links.push(link)
     })
 
     observed.getRelationshipsList().forEach(rel => {

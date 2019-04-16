@@ -28,6 +28,7 @@ export interface ForceSimulationNode extends d3.SimulationNodeDatum {
 export interface ForceSimulationLink {
   source: string
   target: string
+  strength?: number
 }
 
 export interface ForceSimulationGroup {
@@ -115,6 +116,34 @@ function getGroupedNodes(
   return nodesByGroup
 }
 
+function getDefaultLinkForceStrengths(links: ForceSimulationLink[]): number[] {
+  const counts: {[id: string]: number} = {}
+
+  links.forEach((l, i) => {
+    if (!counts[l.source]) {
+      counts[l.source] = 0
+    }
+    counts[l.source]++
+
+    if (!counts[l.target]) {
+      counts[l.target] = 0
+    }
+    counts[l.target]++
+  })
+
+  const strengths: number[] = []
+
+  links.forEach((l, i) => {
+    if (counts[l.source] < counts[l.target]) {
+      strengths.push(1.0 / counts[l.source])
+    } else {
+      strengths.push(1.0 / counts[l.target])
+    }
+  })
+
+  return strengths
+}
+
 export class BasicForceSimulation {
   private simulation: D3Simulation | undefined
   private registeredEventHandlers: {
@@ -130,6 +159,7 @@ export class BasicForceSimulation {
     const groupsCopy = graph.forceGroups.map(group => ({...group}))
 
     const linkForceDistance = getForceLinkDistance(linksCopy)
+    const defaultLinkForceStrengths = getDefaultLinkForceStrengths(linksCopy)
 
     // stop any previous simulation before reinitializing to prevent
     // zombie tick events
@@ -161,6 +191,11 @@ export class BasicForceSimulation {
         'links',
         d3
           .forceLink(linksCopy)
+          .strength((link, i) =>
+            link.strength !== undefined
+              ? link.strength
+              : defaultLinkForceStrengths[i],
+          )
           .id((n: ForceSimulationNode) => n.id)
           .distance(linkForceDistance),
       )
