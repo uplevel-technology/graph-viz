@@ -60,7 +60,7 @@ export class DisplayGroups {
       if (group.type === 'circle') {
         this.renderCircle(group, nodesInGroup)
       } else {
-        this.renderHull(group, nodesInGroup)
+        this.renderConvexHull(group, nodesInGroup)
       }
 
       renderedGroupIds.add(group.id)
@@ -93,7 +93,10 @@ export class DisplayGroups {
     return nodesByGroup
   }
 
-  private renderHull(group: VizDisplayGroup, nodesInGroup: GraphVizNode[]) {
+  private renderConvexHull(
+    group: VizDisplayGroup,
+    nodesInGroup: GraphVizNode[],
+  ) {
     const convexHull = get2DConvexHull(nodesInGroup) as GraphVizNode[]
 
     const vertices =
