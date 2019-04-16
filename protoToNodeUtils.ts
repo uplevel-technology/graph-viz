@@ -188,7 +188,7 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
 
       if (ao.getAttribute()!.getMatchingPattern() !== '') {
         attrNode.displayGroupIds.push(ao.getAttribute()!.getMatchingPattern())
-        attrNode.absoluteSize = 8
+        attrNode.absoluteSize = 12
       }
 
       seenVizNodesById[attrNode.id!] = {
