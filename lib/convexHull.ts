@@ -210,9 +210,10 @@ export function getRoundedOffsetPolygon(
 }
 
 /**
- * gets a bounding box in the shape of a capsule. 💊
+ * gets a bounding polygon in the shape of a capsule enclosing two nodes. 💊
  * @param nodeA
  * @param nodeB
+ * @param padding
  */
 export function getCapsulePolygon(
   nodeA: GraphVizNode,

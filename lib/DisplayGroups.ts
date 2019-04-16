@@ -98,7 +98,8 @@ export class DisplayGroups {
 
     const vertices =
       nodesInGroup.length === 2
-        ? getCapsulePolygon(nodesInGroup[0], nodesInGroup[1], group.padding)
+        ? // a capsule polygon is an offset polygon convex hull for 2 nodes
+          getCapsulePolygon(nodesInGroup[0], nodesInGroup[1], group.padding)
         : getRoundedOffsetPolygon(convexHull, group.padding)
 
     let geometry
