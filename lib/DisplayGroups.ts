@@ -7,7 +7,7 @@ import {
   getCapsulePolygon,
   getCircularHull,
   getRoundedOffsetPolygon,
-} from './convexHull'
+} from './hullGeometryUtils'
 
 export interface VizDisplayGroup extends ForceSimulationGroup {
   isHighlighted: boolean
@@ -61,7 +61,7 @@ export class DisplayGroups {
       if (group.type === 'circle') {
         this.renderCircle(group, nodesInGroup)
       } else {
-        this.renderHull(group, nodesInGroup)
+        this.renderConvexHull(group, nodesInGroup)
       }
 
       renderedGroupIds.add(group.id)
@@ -94,7 +94,10 @@ export class DisplayGroups {
     return nodesByGroup
   }
 
-  private renderHull(group: VizDisplayGroup, nodesInGroup: GraphVizNode[]) {
+  private renderConvexHull(
+    group: VizDisplayGroup,
+    nodesInGroup: GraphVizNode[],
+  ) {
     const convexHull = get2DConvexHull(nodesInGroup) as GraphVizNode[]
 
     const vertices =
@@ -134,13 +137,20 @@ export class DisplayGroups {
   }
 
   private renderCircle(group: VizDisplayGroup, nodesInGroup: GraphVizNode[]) {
+    const hull = getCircularHull(nodesInGroup)
+
     // add new display group
     if (this.meshes[group.id] === undefined) {
       // NOTE: This is an expensive way to render circles but it's ok for now
       // as we don't expect too many groups to be rendered simultaneously.
       // When the need arises, we can easily switch these over to a custom
       // circle shader material.
-      const geometry = new THREE.CircleGeometry(1.05, 32)
+
+      // NOTE: Heuristically (hull.radius / 7) is  the smallest number I found
+      // proportional to radius that prevents us from noticing a rough boundary.
+      const segments = hull.radius / 7 + 32
+      const evenSegments = Math.floor(segments / 2) * 2
+      const geometry = new THREE.CircleGeometry(1.05, evenSegments)
 
       const material = new MeshBasicMaterial({
         color: group.fill || DEFAULT_DISPLAY_GROUP_FILL,
@@ -151,7 +161,6 @@ export class DisplayGroups {
       this.object.add(this.meshes[group.id])
     }
 
-    const hull = getCircularHull(nodesInGroup)
     this.meshes[group.id].scale.x = hull.radius + (group.padding || 10)
     this.meshes[group.id].scale.y = hull.radius + (group.padding || 10)
     this.meshes[group.id].position.x = hull.center.x
