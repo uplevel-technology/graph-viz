@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import {DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE, GraphVizNode} from './Nodes'
+import {meanBy} from 'lodash'
 
 interface Point {
   x: number
@@ -35,9 +36,10 @@ export function get2DConvexHull(points: Point[]): Point[] {
   }
 
   // 1. Sort points first by x-coordinate, and in case of a tie, by y-coordinate
+  //    This will be the rate determining step assuming it's O(n.log(n))
   const sortedPoints = [...points].sort(byPosition)
 
-  // 2. Compute the upper hull
+  // 2. Compute the upper hull. O(n)
   const upperHull: Point[] = []
   for (const p of sortedPoints) {
     while (upperHull.length >= 2) {
@@ -54,7 +56,7 @@ export function get2DConvexHull(points: Point[]): Point[] {
     upperHull.push(p)
   }
 
-  // 3. Compute the lower hull
+  // 3. Compute the lower hull. O(n)
   const lowerHull: Point[] = []
   for (let i = sortedPoints.length - 1; i >= 0; i--) {
     const p = sortedPoints[i]
@@ -120,7 +122,7 @@ function cross(o: Point, p: Point, q: Point): number {
  * @param nodes
  * @param padding
  */
-export function getNiceOffsetPolygon(
+export function getRoundedOffsetPolygon(
   nodes: GraphVizNode[],
   padding: number = 0,
 ): THREE.Vector2[] {
@@ -205,6 +207,100 @@ export function getNiceOffsetPolygon(
   }
 
   return allVertices
+}
+
+/**
+ * gets a bounding polygon in the shape of a capsule enclosing two nodes. 💊
+ * @param nodeA
+ * @param nodeB
+ * @param padding
+ */
+export function getCapsulePolygon(
+  nodeA: GraphVizNode,
+  nodeB: GraphVizNode,
+  padding: number = 0,
+): THREE.Vector2[] {
+  const a = new THREE.Vector2(nodeA.x, nodeA.y)
+  const b = new THREE.Vector2(nodeB.x, nodeB.y)
+
+  const tangent = new THREE.Vector2().copy(b).sub(a) // B - A
+  const normal = new THREE.Vector2(-tangent.y, tangent.x) // rotate 90 degrees to make it normal to the B - A
+
+  const radiusA =
+    (nodeA.absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) + padding
+  const curveA = new THREE.EllipseCurve(
+    a.x,
+    a.y,
+    radiusA,
+    radiusA,
+    normal.angle(),
+    normal.angle() + Math.PI,
+    false,
+    0,
+  )
+
+  const radiusB =
+    (nodeB.absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) + padding
+  const curveB = new THREE.EllipseCurve(
+    b.x,
+    b.y,
+    radiusB,
+    radiusB,
+    normal.angle() + Math.PI,
+    normal.angle(),
+    false,
+    0,
+  )
+
+  const pointsA = curveA.getPoints(5 + radiusA)
+  const pointsB = curveB.getPoints(5 + radiusB)
+
+  return [...pointsA, ...pointsB]
+}
+
+/**
+ * gets the circular hull of a given list of points
+ * @param points
+ */
+export function getCircularHull(
+  points: Point[],
+): {center: THREE.Vector2; radius: number} {
+  const center = getCentroid(points)
+
+  let maxDistance = 0
+  let distance
+
+  for (const point of points) {
+    distance = getDistance(point, center)
+    if (distance >= maxDistance) {
+      maxDistance = distance
+    }
+  }
+
+  return {
+    center: new THREE.Vector2(center.x, center.y),
+    radius: maxDistance,
+  }
+}
+
+/**
+ * gets the centroid of a given list of points
+ * @param points
+ */
+export function getCentroid(points: Point[]): Point {
+  return {
+    x: meanBy(points, p => p.x),
+    y: meanBy(points, p => p.y),
+  }
+}
+
+/**
+ * gets the distance between two points
+ * @param a
+ * @param b
+ */
+function getDistance(a: Point, b: Point): number {
+  return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2))
 }
 
 /**
