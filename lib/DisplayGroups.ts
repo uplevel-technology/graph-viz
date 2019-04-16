@@ -15,7 +15,7 @@ export interface VizDisplayGroup {
    * type of polygon to draw
    * default is convexHull
    */
-  type?: 'convexHull' | 'circle'
+  shape?: 'convexHull' | 'circle'
 
   /**
    * node fill color hex string or hex number
@@ -57,7 +57,7 @@ export class DisplayGroups {
         continue
       }
 
-      if (group.type === 'circle') {
+      if (group.shape === 'circle') {
         this.renderCircle(group, nodesInGroup)
       } else {
         this.renderConvexHull(group, nodesInGroup)
