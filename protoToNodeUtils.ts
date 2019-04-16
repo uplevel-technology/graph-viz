@@ -8,7 +8,7 @@ import {
   getAttributeDisplayType,
   getAttributeNodeLabel,
   getEventNodeDisplayType,
-  ObservableRelationshipDisplayTypes,
+  relationshipTypes,
 } from '../displayTypes'
 import {GraphVizLink} from './lib/Links'
 import {TooltipNode} from './NodeTooltips'
@@ -240,7 +240,7 @@ export const eventsToVizData = (
       }
 
       links.push({
-        label: ObservableRelationshipDisplayTypes[rel.getType()],
+        label: relationshipTypes[rel.getType()],
         source: from.id!,
         target: to.id!,
       })
