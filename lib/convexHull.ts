@@ -36,9 +36,10 @@ export function get2DConvexHull(points: Point[]): Point[] {
   }
 
   // 1. Sort points first by x-coordinate, and in case of a tie, by y-coordinate
+  //    This will be the rate determining step assuming it's O(n.log(n))
   const sortedPoints = [...points].sort(byPosition)
 
-  // 2. Compute the upper hull
+  // 2. Compute the upper hull. O(n)
   const upperHull: Point[] = []
   for (const p of sortedPoints) {
     while (upperHull.length >= 2) {
@@ -55,7 +56,7 @@ export function get2DConvexHull(points: Point[]): Point[] {
     upperHull.push(p)
   }
 
-  // 3. Compute the lower hull
+  // 3. Compute the lower hull. O(n)
   const lowerHull: Point[] = []
   for (let i = sortedPoints.length - 1; i >= 0; i--) {
     const p = sortedPoints[i]
@@ -121,7 +122,7 @@ function cross(o: Point, p: Point, q: Point): number {
  * @param nodes
  * @param padding
  */
-export function getNiceOffsetPolygon(
+export function getRoundedOffsetPolygon(
   nodes: GraphVizNode[],
   padding: number = 0,
 ): THREE.Vector2[] {
@@ -206,6 +207,54 @@ export function getNiceOffsetPolygon(
   }
 
   return allVertices
+}
+
+/**
+ * gets a bounding box in the shape of a capsule. 💊
+ * @param nodeA
+ * @param nodeB
+ */
+export function getCapsulePolygon(
+  nodeA: GraphVizNode,
+  nodeB: GraphVizNode,
+  padding: number = 0,
+): THREE.Vector2[] {
+  const a = new THREE.Vector2(nodeA.x, nodeA.y)
+  const b = new THREE.Vector2(nodeB.x, nodeB.y)
+
+  const tangent = new THREE.Vector2().copy(b).sub(a) // B - A
+  const normal = new THREE.Vector2(-tangent.y, tangent.x) // rotate 90 degrees to make it normal to the B - A
+
+  const radiusA =
+    (nodeA.absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) + padding
+  const curveA = new THREE.EllipseCurve(
+    a.x,
+    a.y,
+    radiusA,
+    radiusA,
+    normal.angle(),
+    normal.angle() + Math.PI,
+    false,
+    0,
+  )
+
+  const radiusB =
+    (nodeB.absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) + padding
+  const curveB = new THREE.EllipseCurve(
+    b.x,
+    b.y,
+    radiusB,
+    radiusB,
+    normal.angle() + Math.PI,
+    normal.angle(),
+    false,
+    0,
+  )
+
+  const pointsA = curveA.getPoints(5 + radiusA)
+  const pointsB = curveB.getPoints(5 + radiusB)
+
+  return [...pointsA, ...pointsB]
 }
 
 /**
