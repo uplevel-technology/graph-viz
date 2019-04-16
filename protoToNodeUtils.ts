@@ -8,7 +8,7 @@ import {
   getAttributeDisplayType,
   getAttributeNodeLabel,
   getEventNodeDisplayType,
-  ObservableRelationshipDisplayTypes,
+  relationshipTypes,
 } from '../displayTypes'
 import {GraphVizLink} from './lib/Links'
 import {TooltipNode} from './NodeTooltips'
@@ -177,6 +177,10 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
     }
 
     observed.getAttributesList().forEach(ao => {
+      if (ao.getAttribute()!.getIsSupernode()) {
+        return
+      }
+
       const attrNode = {
         ...attributeToNode(ao.getAttribute()!),
         displayGroupIds: [event.getClusterId().toString()],
@@ -227,7 +231,7 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
       }
 
       links.push({
-        label: ObservableRelationshipDisplayTypes[rel.getType()],
+        label: relationshipTypes[rel.getType()],
         source: from.id!,
         target: to.id!,
       })
