@@ -3,8 +3,9 @@ import * as THREE from 'three'
 import {MeshBasicMaterial} from 'three'
 import {
   get2DConvexHull,
+  getCapsulePolygon,
   getCircularHull,
-  getNiceOffsetPolygon,
+  getRoundedOffsetPolygon,
 } from './convexHull'
 
 export interface VizDisplayGroup {
@@ -52,7 +53,7 @@ export class DisplayGroups {
 
     for (const group of groups) {
       const nodesInGroup = nodesByGroup[group.id]
-      if (!nodesInGroup) {
+      if (!nodesInGroup || nodesInGroup.length < 2) {
         continue
       }
 
@@ -94,7 +95,12 @@ export class DisplayGroups {
 
   private renderHull(group: VizDisplayGroup, nodesInGroup: GraphVizNode[]) {
     const convexHull = get2DConvexHull(nodesInGroup) as GraphVizNode[]
-    const vertices = getNiceOffsetPolygon(convexHull, group.padding)
+
+    const vertices =
+      nodesInGroup.length === 2
+        ? getCapsulePolygon(nodesInGroup[0], nodesInGroup[1], group.padding)
+        : getRoundedOffsetPolygon(convexHull, group.padding)
+
     let geometry
 
     // add new display group
