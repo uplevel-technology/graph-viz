@@ -209,7 +209,6 @@ export class BasicForceSimulation {
           .distanceMax(250),
       )
       .force('group', forceGroup(groupsCopy))
-      .velocityDecay(0.5)
       .on('tick', () => {
         this.registeredEventHandlers.tick(this.getNodePositions())
       })
