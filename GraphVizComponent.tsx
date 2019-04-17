@@ -28,7 +28,7 @@ import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
 import {debounce, noop} from 'lodash'
 import {StyledNode} from './lib/Nodes'
-import {VizDisplayGroup} from './lib/DisplayGroups'
+import {DisplayGroup} from './lib/DisplayGroups'
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -71,7 +71,7 @@ export interface PartialGraphVizNode
 interface Props extends WithStyles<typeof styles> {
   nodes: PartialGraphVizNode[]
   links: StyledLink[]
-  displayGroups: VizDisplayGroup[]
+  displayGroups: DisplayGroup[]
   tooltips: Partial<TooltipNode>[]
   onRefresh?: () => any
   config?: ConfigurationOptions

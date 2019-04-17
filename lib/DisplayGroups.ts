@@ -9,7 +9,7 @@ import {
   getRoundedOffsetPolygon,
 } from './hullGeometryUtils'
 
-export interface VizDisplayGroup extends SimulationGroup {
+export interface DisplayGroup extends SimulationGroup {
   isHighlighted: boolean
 
   /**
@@ -43,11 +43,11 @@ export class DisplayGroups {
   public object = new THREE.Group()
   private meshes: {[groupId: string]: THREE.Mesh} = {}
 
-  constructor(nodes: StyledNode[], groups: VizDisplayGroup[]) {
+  constructor(nodes: StyledNode[], groups: DisplayGroup[]) {
     this.updateAll(nodes, groups)
   }
 
-  public updateAll(nodes: StyledNode[], groups: VizDisplayGroup[]) {
+  public updateAll(nodes: StyledNode[], groups: DisplayGroup[]) {
     const nodesByGroup = this.getGroupedNodes(nodes)
 
     const renderedGroupIds = new Set()
@@ -94,7 +94,7 @@ export class DisplayGroups {
     return nodesByGroup
   }
 
-  private renderConvexHull(group: VizDisplayGroup, nodesInGroup: StyledNode[]) {
+  private renderConvexHull(group: DisplayGroup, nodesInGroup: StyledNode[]) {
     const convexHull = get2DConvexHull(nodesInGroup) as StyledNode[]
 
     const vertices =
@@ -133,7 +133,7 @@ export class DisplayGroups {
     geometry.elementsNeedUpdate = true
   }
 
-  private renderCircle(group: VizDisplayGroup, nodesInGroup: StyledNode[]) {
+  private renderCircle(group: DisplayGroup, nodesInGroup: StyledNode[]) {
     const hull = getCircularHull(nodesInGroup)
 
     // add new display group

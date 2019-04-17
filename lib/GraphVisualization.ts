@@ -13,7 +13,7 @@ import {
   ZoomEventHandler,
 } from './MouseInteraction'
 import {Nodes, StyledNode} from './Nodes'
-import {DisplayGroups, VizDisplayGroup} from './DisplayGroups'
+import {DisplayGroup, DisplayGroups} from './DisplayGroups'
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
@@ -21,7 +21,7 @@ const PAN_SPEED = 1.0
 export interface GraphVizData {
   nodes: StyledNode[]
   links: StyledLink[]
-  displayGroups: VizDisplayGroup[]
+  displayGroups: DisplayGroup[]
 }
 
 function constructIdToIdxMap(arr: Array<{id: string}>): {[id: string]: number} {
@@ -285,7 +285,7 @@ export class GraphVisualization {
    * have NOT changed.
    * @param displayGroups
    */
-  public updateDisplayGroups = (displayGroups: VizDisplayGroup[]) => {
+  public updateDisplayGroups = (displayGroups: DisplayGroup[]) => {
     this.data.displayGroups = displayGroups
     this.displayGroupsMesh.updateAll(this.data.nodes, this.data.displayGroups)
     this.render()
