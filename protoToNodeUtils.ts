@@ -214,7 +214,7 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
 
       if (matchingPattern !== '') {
         // reduce the attractive force between an event and an attribute node that belongs to a pattern group
-        link.strengthMultiplier = 0.1
+        link.strengthMultiplier = 0.5
       }
 
       links.push(link)
