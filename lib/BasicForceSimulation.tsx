@@ -204,7 +204,7 @@ export class BasicForceSimulation {
         d3
           .forceManyBody()
           .strength((n: ForceSimulationNode) =>
-            n.charge !== undefined ? n.charge : -100,
+            n.charge !== undefined ? n.charge : -250,
           )
           .distanceMax(250),
       )
