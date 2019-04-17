@@ -25,7 +25,7 @@ import {
   GraphVisualization,
   VisualizationInputData,
 } from './lib/GraphVisualization'
-import {StyledLink} from './lib/Links'
+import {DisplayLink} from './lib/Links'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
 import {debounce, noop} from 'lodash'
@@ -38,7 +38,7 @@ import {DisplayGroup} from './lib/DisplayGroups'
 export type GraphVizNode = Partial<DisplayNode & SimulationNode> &
   Pick<DisplayNode, 'id'>
 
-export type GraphVizLink = StyledLink & SimulationLink
+export type GraphVizLink = DisplayLink & SimulationLink
 
 export type GraphVizGroup = DisplayGroup & SimulationGroup
 
@@ -135,7 +135,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
     this.vizData = {
       nodes: this.props.nodes as DisplayNode[],
-      links: this.props.links as StyledLink[],
+      links: this.props.links as DisplayLink[],
       displayGroups: this.props.displayGroups,
     }
     this.tooltipNodes = this.props.tooltips as TooltipNode[]
@@ -348,7 +348,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
         node.y = nodePositions[i].y
         return node
       }) as DisplayNode[],
-      links: this.props.links as StyledLink[],
+      links: this.props.links as DisplayLink[],
       displayGroups: this.props.displayGroups,
     }
 

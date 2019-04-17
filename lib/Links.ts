@@ -55,20 +55,20 @@ interface LinkStyleAttributes {
   labelScale?: number
 }
 
-export interface StyledLink extends LinkStyleAttributes {
+export interface DisplayLink extends LinkStyleAttributes {
   source: string
   target: string
 }
 
-export interface PopulatedStyledLink extends LinkStyleAttributes {
+export interface PopulatedDisplayLink extends LinkStyleAttributes {
   source: DisplayNode
   target: DisplayNode
 }
 
-export function getPopulatedGraphLinks(
+export function populateLinks(
   graphData: VisualizationInputData,
   nodeIdToIdxMap: {[id: string]: number},
-): PopulatedStyledLink[] {
+): PopulatedDisplayLink[] {
   return graphData.links.map(link => ({
     ...link,
     source: graphData.nodes[nodeIdToIdxMap[link.source]],
@@ -76,7 +76,7 @@ export function getPopulatedGraphLinks(
   }))
 }
 
-const calculateAbsoluteArrowOffset = (link: PopulatedStyledLink): number => {
+const calculateAbsoluteArrowOffset = (link: PopulatedDisplayLink): number => {
   const relativePadding = 0.05 // space between arrow tip and edge of node border
   const outerRadius =
     defaultTo(link.target.innerRadius, DEFAULT_NODE_INNER_RADIUS) +
@@ -95,7 +95,7 @@ export class Links {
 
   private readonly labels: Labels
 
-  constructor(links: PopulatedStyledLink[]) {
+  constructor(links: PopulatedDisplayLink[]) {
     const numLinks = links.length
     const numVertices = numLinks * VERTICES_PER_QUAD
 
@@ -164,7 +164,7 @@ export class Links {
    * update all attributes for all links
    * @param links
    */
-  public updateAll = (links: PopulatedStyledLink[]) => {
+  public updateAll = (links: PopulatedDisplayLink[]) => {
     this.updateAllPositions(links)
     this.updateAllColors(links)
     this.updateAllLabels(links)
@@ -174,7 +174,7 @@ export class Links {
    * update position, uv, quadLength, linkOffset, arrowHeight and dashGap attributes for all links
    * @param links
    */
-  public updateAllPositions = (links: PopulatedStyledLink[]) => {
+  public updateAllPositions = (links: PopulatedDisplayLink[]) => {
     const position = this.geometry.getAttribute(
       'position',
     ) as THREE.BufferAttribute
@@ -320,7 +320,7 @@ export class Links {
    * update color attributes for all links
    * @param links
    */
-  public updateAllColors = (links: PopulatedStyledLink[]) => {
+  public updateAllColors = (links: PopulatedDisplayLink[]) => {
     const color = this.geometry.getAttribute('color') as THREE.BufferAttribute
 
     const numLinks = links.length
@@ -351,7 +351,7 @@ export class Links {
   // updateAllLabels must be called directly when the _text_ of the labels
   // change. Calling updateAllPositions will do this automatically, because the
   // labels always need updating if the links move.
-  public updateAllLabels = (links: PopulatedStyledLink[]) => {
+  public updateAllLabels = (links: PopulatedDisplayLink[]) => {
     this.labels.updateAll(links)
   }
 }

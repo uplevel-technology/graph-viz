@@ -1,7 +1,7 @@
 import {size} from 'lodash'
 import * as THREE from 'three'
 import {Vector3} from 'three'
-import {getPopulatedGraphLinks, Links, StyledLink} from './Links'
+import {populateLinks, Links, DisplayLink} from './Links'
 import {
   ClickEventHandler,
   DragEndEventHandler,
@@ -20,7 +20,7 @@ const PAN_SPEED = 1.0
 
 export interface VisualizationInputData {
   nodes: DisplayNode[]
-  links: StyledLink[]
+  links: DisplayLink[]
   displayGroups: DisplayGroup[]
 }
 
@@ -121,9 +121,7 @@ export class GraphVisualization {
     this.renderer.setSize(width, height)
 
     this.nodesMesh = new Nodes(graphData.nodes)
-    this.linksMesh = new Links(
-      getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
-    )
+    this.linksMesh = new Links(populateLinks(graphData, this.nodeIdToIndexMap))
     this.displayGroupsMesh = new DisplayGroups(
       graphData.nodes,
       graphData.displayGroups,
@@ -221,9 +219,7 @@ export class GraphVisualization {
     this.data = graphData
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
     this.nodesMesh.updateAll(graphData.nodes)
-    this.linksMesh.updateAll(
-      getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
-    )
+    this.linksMesh.updateAll(populateLinks(graphData, this.nodeIdToIndexMap))
     this.displayGroupsMesh.updateAll(graphData.nodes, graphData.displayGroups)
     this.mouseInteraction.updateData(this.data.nodes)
   }
@@ -251,7 +247,7 @@ export class GraphVisualization {
 
     this.nodesMesh.updateAllPositions(updatedGraphData.nodes)
     this.linksMesh.updateAllPositions(
-      getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap),
+      populateLinks(updatedGraphData, this.nodeIdToIndexMap),
     )
     this.displayGroupsMesh.updateAll(
       updatedGraphData.nodes,
