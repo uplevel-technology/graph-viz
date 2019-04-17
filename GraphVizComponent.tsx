@@ -76,7 +76,7 @@ interface State {
 interface Props extends WithStyles<typeof styles> {
   nodes: GraphVizNode[]
   links: GraphVizLink[]
-  displayGroups: GraphVizGroup[]
+  groups: GraphVizGroup[]
   tooltips: Partial<TooltipNode>[]
   onRefresh?: () => any
   config?: ConfigurationOptions
@@ -118,7 +118,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
   static defaultProps: Partial<Props> = {
     tooltips: [],
-    displayGroups: [],
+    groups: [],
     onLinkDrawn: noop,
   }
 
@@ -136,7 +136,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.vizData = {
       nodes: this.props.nodes as DisplayNode[],
       links: this.props.links as DisplayLink[],
-      displayGroups: this.props.displayGroups,
+      displayGroups: this.props.groups,
     }
     this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
@@ -234,7 +234,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       this.simulation.update({
         nodes: this.props.nodes,
         links: this.props.links,
-        forceGroups: this.props.displayGroups,
+        forceGroups: this.props.groups,
       })
       // ^ the simulation tick handler should handle the position updates after this in our viz
     })
@@ -316,8 +316,8 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       this.tooltipNodes = this.props.tooltips as TooltipNode[]
       this.initData()
     }
-    if (prevProps.displayGroups !== this.props.displayGroups) {
-      this.vizData.displayGroups = this.props.displayGroups
+    if (prevProps.groups !== this.props.groups) {
+      this.vizData.displayGroups = this.props.groups
       this.visualization.updateDisplayGroups(this.vizData.displayGroups)
     }
   }
@@ -333,7 +333,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.simulation.initialize({
       nodes: this.props.nodes,
       links: this.props.links,
-      forceGroups: this.props.displayGroups,
+      forceGroups: this.props.groups,
     })
 
     const nodePositions = this.simulation.getNodePositions()
@@ -345,7 +345,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
         return node
       }) as DisplayNode[],
       links: this.props.links as DisplayLink[],
-      displayGroups: this.props.displayGroups,
+      displayGroups: this.props.groups,
     }
 
     this.visualization.update(this.vizData)
