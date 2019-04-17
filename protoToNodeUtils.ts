@@ -185,20 +185,26 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
         displayGroupIds: [event.getClusterId().toString()],
       }
 
-      let isPattern = false
+      let matchingPattern = ''
       if (ao.getAttribute()!.getMatchingPattern() !== '') {
-        isPattern = true
+        matchingPattern = ao.getAttribute()!.getMatchingPattern()
         attrNode.displayGroupIds.push(ao.getAttribute()!.getMatchingPattern())
         attrNode.charge = -50 // reduce the charge to prevent conflicting forces
         attrNode.absoluteSize = 12
       }
 
+      const tooltipNode = {
+        ...attributeToTooltipNode(ao.getAttribute()!),
+        clusterId: event.getClusterId(),
+      }
+
+      if (matchingPattern !== '') {
+        tooltipNode.pattern = matchingPattern
+      }
+
       seenVizNodesById[attrNode.id!] = {
         vizNode: attrNode,
-        tooltipNode: {
-          ...attributeToTooltipNode(ao.getAttribute()!),
-          clusterId: event.getClusterId(),
-        },
+        tooltipNode,
       }
 
       const link: GraphVizLink & ForceSimulationLink = {
@@ -206,7 +212,7 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
         target: attrNode.id!,
       }
 
-      if (isPattern) {
+      if (matchingPattern !== '') {
         link.strength = 0.1
       }
 

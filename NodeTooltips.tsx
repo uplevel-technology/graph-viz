@@ -16,6 +16,7 @@ export interface TooltipNode {
   displayType?: string
   formattedTime?: string
   clusterId?: number
+  pattern?: string
   screenX: number
   screenY: number
 }
@@ -95,9 +96,16 @@ class NodeTooltipsBase extends React.Component<Props> {
         >
           {this.props.node.displayName}
         </Typography>
-        {this.props.node.formattedTime && (
+        {this.props.node.formattedTime !== undefined && (
           <Typography style={{fontSize: 10, color: '#555555'}}>
             {this.props.node.formattedTime}
+          </Typography>
+        )}
+        {this.props.node.pattern !== undefined && (
+          <Typography
+            style={{fontSize: 10, color: '#555555', textTransform: 'none'}}
+          >
+            {`Matches '${this.props.node.pattern}'`}
           </Typography>
         )}
       </Grid>
