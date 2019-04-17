@@ -32,8 +32,11 @@ import {debounce, noop} from 'lodash'
 import {StyledNode} from './lib/Nodes'
 import {DisplayGroup} from './lib/DisplayGroups'
 
-export type GraphVizNode = Pick<StyledNode, 'id'> &
-  Partial<StyledNode & SimulationNode>
+/**
+ * Primary GraphVizData type definitions
+ */
+export type GraphVizNode = Partial<StyledNode & SimulationNode> &
+  Pick<StyledNode, 'id'>
 
 export type GraphVizLink = StyledLink & SimulationLink
 
