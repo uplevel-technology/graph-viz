@@ -36,7 +36,7 @@ import {DisplayGroup} from './lib/DisplayGroups'
  * Primary GraphVizData type definitions
  */
 export type GraphVizNode = Partial<DisplayNode & SimulationNode> &
-  Pick<DisplayNode, 'id'>
+  Pick<DisplayNode, 'id'> // id is a required field
 
 export type GraphVizLink = DisplayLink & SimulationLink
 
