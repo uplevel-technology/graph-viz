@@ -5,7 +5,7 @@ import * as THREE from 'three'
 import fragmentShader from './shaders/nodes.fragment.glsl'
 import vertexShader from './shaders/nodes.vertex.glsl'
 
-export interface GraphVizNode {
+export interface StyledNode {
   /**
    * Unique node id
    */
@@ -102,7 +102,7 @@ export class Nodes {
   private readonly material: THREE.ShaderMaterial
   private lockedIds: {[id: string]: boolean} = {}
 
-  constructor(nodes: GraphVizNode[]) {
+  constructor(nodes: StyledNode[]) {
     const numNodes = size(nodes)
     this.geometry = new THREE.BufferGeometry()
     this.geometry.addAttribute(
@@ -177,7 +177,7 @@ export class Nodes {
    * @param index
    * @param node
    */
-  public updateOne = (index: number, node: GraphVizNode) => {
+  public updateOne = (index: number, node: StyledNode) => {
     const position = this.geometry.getAttribute(
       'position',
     ) as THREE.BufferAttribute
@@ -251,7 +251,7 @@ export class Nodes {
    * update all attributes of all nodes
    * @param nodes
    */
-  public updateAll = (nodes: GraphVizNode[]) => {
+  public updateAll = (nodes: StyledNode[]) => {
     this.updateAllPositions(nodes)
     this.updateAllAbsoluteSizes(nodes)
     this.updateAllScales(nodes)
@@ -266,7 +266,7 @@ export class Nodes {
    * udpate position attributes of all nodes
    * @param nodes
    */
-  public updateAllPositions = (nodes: GraphVizNode[]) => {
+  public updateAllPositions = (nodes: StyledNode[]) => {
     const position = this.geometry.getAttribute(
       'position',
     ) as THREE.BufferAttribute
@@ -289,7 +289,7 @@ export class Nodes {
    * update absoluteSize attributes of all nodes
    * @param nodes
    */
-  public updateAllAbsoluteSizes = (nodes: GraphVizNode[]) => {
+  public updateAllAbsoluteSizes = (nodes: StyledNode[]) => {
     const absoluteSize = this.geometry.getAttribute(
       'absoluteSize',
     ) as THREE.BufferAttribute
@@ -313,7 +313,7 @@ export class Nodes {
    * update scale attributes of all nodes
    * @param nodes
    */
-  public updateAllScales = (nodes: GraphVizNode[]) => {
+  public updateAllScales = (nodes: StyledNode[]) => {
     const scale = this.geometry.getAttribute('scale') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -332,7 +332,7 @@ export class Nodes {
    * update innerRadius attributes of all nodes
    * @param nodes
    */
-  public updateAllInnerRadii = (nodes: GraphVizNode[]) => {
+  public updateAllInnerRadii = (nodes: StyledNode[]) => {
     const innerRadius = this.geometry.getAttribute(
       'innerRadius',
     ) as THREE.BufferAttribute
@@ -353,7 +353,7 @@ export class Nodes {
    * update fill and fillOpacity attributes of all nodes
    * @param nodes
    */
-  public updateAllFills = (nodes: GraphVizNode[]) => {
+  public updateAllFills = (nodes: StyledNode[]) => {
     const fill = this.geometry.getAttribute('fill') as THREE.BufferAttribute
     const fillOpacity = this.geometry.getAttribute(
       'fillOpacity',
@@ -383,7 +383,7 @@ export class Nodes {
    * update stroke color attributes of all nodes
    * @param nodes
    */
-  public updateAllStrokes = (nodes: GraphVizNode[]) => {
+  public updateAllStrokes = (nodes: StyledNode[]) => {
     const stroke = this.geometry.getAttribute('stroke') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
@@ -404,7 +404,7 @@ export class Nodes {
    * update stroke width attributes of all nodes
    * @param nodes
    */
-  public updateAllStrokeWidths = (nodes: GraphVizNode[]) => {
+  public updateAllStrokeWidths = (nodes: StyledNode[]) => {
     const strokeWidth = this.geometry.getAttribute(
       'strokeWidth',
     ) as THREE.BufferAttribute
@@ -431,7 +431,7 @@ export class Nodes {
    * update stroke opacity attributes of all nodes
    * @param nodes
    */
-  public updateAllStrokeOpacities = (nodes: GraphVizNode[]) => {
+  public updateAllStrokeOpacities = (nodes: StyledNode[]) => {
     const strokeOpacity = this.geometry.getAttribute(
       'strokeOpacity',
     ) as THREE.BufferAttribute

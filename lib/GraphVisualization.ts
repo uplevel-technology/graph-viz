@@ -12,14 +12,14 @@ import {
   PanEventHandler,
   ZoomEventHandler,
 } from './MouseInteraction'
-import {GraphVizNode, Nodes} from './Nodes'
+import {Nodes, StyledNode} from './Nodes'
 import {DisplayGroups, VizDisplayGroup} from './DisplayGroups'
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
 
 export interface GraphVizData {
-  nodes: GraphVizNode[]
+  nodes: StyledNode[]
   links: GraphVizLink[]
   displayGroups: VizDisplayGroup[]
 }
@@ -270,7 +270,7 @@ export class GraphVisualization {
    * @param index
    * @param updatedNode
    */
-  public updateNode = (index: number, updatedNode: GraphVizNode) => {
+  public updateNode = (index: number, updatedNode: StyledNode) => {
     this.data.nodes[index] = updatedNode
     this.nodesMesh.updateOne(index, updatedNode)
     this.mouseInteraction.updateData(this.data.nodes)

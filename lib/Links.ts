@@ -4,7 +4,7 @@ import {
   DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE,
   DEFAULT_NODE_INNER_RADIUS,
   DEFAULT_NODE_SCALE,
-  GraphVizNode,
+  StyledNode,
 } from './Nodes'
 import fragmentShader from './shaders/links.fragment.glsl'
 import vertexShader from './shaders/links.vertex.glsl'
@@ -61,8 +61,8 @@ export interface GraphVizLink extends LinkStyleAttributes {
 }
 
 export interface PopulatedGraphVizLink extends LinkStyleAttributes {
-  source: GraphVizNode
-  target: GraphVizNode
+  source: StyledNode
+  target: StyledNode
 }
 
 export function getPopulatedGraphLinks(

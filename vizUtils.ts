@@ -15,10 +15,10 @@ import {
   DEFAULT_NODE_SCALE,
   DEFAULT_NODE_STROKE_OPACITY,
   DEFAULT_NODE_STROKE_WIDTH,
-  GraphVizNode,
   HOVERED_NODE_SCALE,
   LOCKED_NODE_STROKE_OPACITY,
   LOCKED_NODE_STROKE_WIDTH,
+  StyledNode,
 } from './lib/Nodes'
 
 export const NodeFillPalette: {[key: string]: string} = {
@@ -84,7 +84,7 @@ export const NodeOutlinePalette: {[key: string]: string} = {
 }
 
 export const toggleNodeLock = (
-  node: Partial<ForceSimulationNode & GraphVizNode>,
+  node: Partial<ForceSimulationNode & StyledNode>,
   newPos?: THREE.Vector3,
 ): void => {
   if (node.fx) {
@@ -95,7 +95,7 @@ export const toggleNodeLock = (
 }
 
 export const lockNode = (
-  node: Partial<ForceSimulationNode & GraphVizNode>,
+  node: Partial<ForceSimulationNode & StyledNode>,
   newPos?: THREE.Vector3,
 ): void => {
   if (newPos) {
@@ -111,7 +111,7 @@ export const lockNode = (
 }
 
 export const unlockNode = (
-  node: Partial<ForceSimulationNode & GraphVizNode>,
+  node: Partial<ForceSimulationNode & StyledNode>,
 ): void => {
   node.fx = null
   node.fy = null
@@ -120,10 +120,10 @@ export const unlockNode = (
   node.strokeOpacity = DEFAULT_NODE_STROKE_OPACITY
 }
 
-export const magnifyNode = (node: Partial<GraphVizNode>): void => {
+export const magnifyNode = (node: Partial<StyledNode>): void => {
   node.scale = HOVERED_NODE_SCALE
 }
 
-export const resetNodeScale = (node: Partial<GraphVizNode>): void => {
+export const resetNodeScale = (node: Partial<StyledNode>): void => {
   node.scale = DEFAULT_NODE_SCALE
 }

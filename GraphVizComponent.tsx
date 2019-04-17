@@ -15,7 +15,6 @@ import * as React from 'react'
 import {PERSISTENCE_SERVICE_ADDRESS} from '../App'
 import {
   BasicForceSimulation,
-  ForceSimulationData,
   ForceSimulationNode,
   NodePosition,
 } from './lib/BasicForceSimulation'
@@ -28,7 +27,7 @@ import {GraphVizLink} from './lib/Links'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
 import {debounce, noop} from 'lodash'
-import {GraphVizNode} from './lib/Nodes'
+import {StyledNode} from './lib/Nodes'
 import {VizDisplayGroup} from './lib/DisplayGroups'
 
 const styles = (theme: Theme) =>
@@ -65,7 +64,7 @@ interface State {
 // A partial GraphVizNode with a required id parameter
 // Better naming suggestions welcome
 export interface PartialGraphVizNode
-  extends Partial<GraphVizNode & ForceSimulationNode> {
+  extends Partial<StyledNode & ForceSimulationNode> {
   id: string
 }
 
@@ -130,7 +129,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     const root = this.rootRef.current!
 
     this.vizData = {
-      nodes: this.props.nodes as GraphVizNode[],
+      nodes: this.props.nodes as StyledNode[],
       links: this.props.links as GraphVizLink[],
       displayGroups: this.props.displayGroups,
     }
@@ -343,7 +342,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
         node.x = nodePositions[i].x
         node.y = nodePositions[i].y
         return node
-      }) as GraphVizNode[],
+      }) as StyledNode[],
       links: this.props.links as GraphVizLink[],
       displayGroups: this.props.displayGroups,
     }

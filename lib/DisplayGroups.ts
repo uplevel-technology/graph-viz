@@ -1,4 +1,4 @@
-import {GraphVizNode} from './Nodes'
+import {StyledNode} from './Nodes'
 import * as THREE from 'three'
 import {MeshBasicMaterial} from 'three'
 import {ForceSimulationGroup} from './BasicForceSimulation'
@@ -43,11 +43,11 @@ export class DisplayGroups {
   public object = new THREE.Group()
   private meshes: {[groupId: string]: THREE.Mesh} = {}
 
-  constructor(nodes: GraphVizNode[], groups: VizDisplayGroup[]) {
+  constructor(nodes: StyledNode[], groups: VizDisplayGroup[]) {
     this.updateAll(nodes, groups)
   }
 
-  public updateAll(nodes: GraphVizNode[], groups: VizDisplayGroup[]) {
+  public updateAll(nodes: StyledNode[], groups: VizDisplayGroup[]) {
     const nodesByGroup = this.getGroupedNodes(nodes)
 
     const renderedGroupIds = new Set()
@@ -77,9 +77,9 @@ export class DisplayGroups {
   }
 
   public getGroupedNodes(
-    nodes: GraphVizNode[],
-  ): {[groupId: string]: GraphVizNode[]} {
-    const nodesByGroup: {[groupId: string]: GraphVizNode[]} = {}
+    nodes: StyledNode[],
+  ): {[groupId: string]: StyledNode[]} {
+    const nodesByGroup: {[groupId: string]: StyledNode[]} = {}
     nodes.forEach(n => {
       if (n.displayGroupIds) {
         n.displayGroupIds.forEach(groupId => {
@@ -94,11 +94,8 @@ export class DisplayGroups {
     return nodesByGroup
   }
 
-  private renderConvexHull(
-    group: VizDisplayGroup,
-    nodesInGroup: GraphVizNode[],
-  ) {
-    const convexHull = get2DConvexHull(nodesInGroup) as GraphVizNode[]
+  private renderConvexHull(group: VizDisplayGroup, nodesInGroup: StyledNode[]) {
+    const convexHull = get2DConvexHull(nodesInGroup) as StyledNode[]
 
     const vertices =
       nodesInGroup.length === 2
@@ -136,7 +133,7 @@ export class DisplayGroups {
     geometry.elementsNeedUpdate = true
   }
 
-  private renderCircle(group: VizDisplayGroup, nodesInGroup: GraphVizNode[]) {
+  private renderCircle(group: VizDisplayGroup, nodesInGroup: StyledNode[]) {
     const hull = getCircularHull(nodesInGroup)
 
     // add new display group
