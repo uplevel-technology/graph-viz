@@ -1,7 +1,7 @@
 import {size} from 'lodash'
 import * as THREE from 'three'
 import {Vector3} from 'three'
-import {getPopulatedGraphLinks, GraphVizLink, Links} from './Links'
+import {getPopulatedGraphLinks, Links, StyledLink} from './Links'
 import {
   ClickEventHandler,
   DragEndEventHandler,
@@ -20,7 +20,7 @@ const PAN_SPEED = 1.0
 
 export interface GraphVizData {
   nodes: StyledNode[]
-  links: GraphVizLink[]
+  links: StyledLink[]
   displayGroups: VizDisplayGroup[]
 }
 

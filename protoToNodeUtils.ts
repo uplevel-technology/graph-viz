@@ -10,7 +10,7 @@ import {
   getEventNodeDisplayType,
   relationshipTypes,
 } from '../displayTypes'
-import {GraphVizLink} from './lib/Links'
+import {StyledLink} from './lib/Links'
 import {TooltipNode} from './NodeTooltips'
 import {NodeFillPalette, NodeOutlinePalette} from './vizUtils'
 import {PartialGraphVizNode} from './GraphVizComponent'
@@ -143,7 +143,7 @@ export const eventToTooltipNode = (
 
 interface VizData {
   nodes: PartialGraphVizNode[]
-  links: (GraphVizLink & ForceSimulationLink)[]
+  links: (StyledLink & ForceSimulationLink)[]
   tooltips: Partial<TooltipNode>[]
 }
 
@@ -161,7 +161,7 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
       tooltipNode: Partial<TooltipNode>
     }
   } = {}
-  const links: (GraphVizLink & ForceSimulationLink)[] = []
+  const links: (StyledLink & ForceSimulationLink)[] = []
 
   events.forEach(event => {
     const eventNode = eventToNode(event)
@@ -207,7 +207,7 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
         tooltipNode,
       }
 
-      const link: GraphVizLink & ForceSimulationLink = {
+      const link: StyledLink & ForceSimulationLink = {
         source: eventNode.id!,
         target: attrNode.id!,
       }

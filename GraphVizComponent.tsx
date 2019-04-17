@@ -23,7 +23,7 @@ import {
   GraphVisualization,
   GraphVizData,
 } from './lib/GraphVisualization'
-import {GraphVizLink} from './lib/Links'
+import {StyledLink} from './lib/Links'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
 import {debounce, noop} from 'lodash'
@@ -70,7 +70,7 @@ export interface PartialGraphVizNode
 
 interface Props extends WithStyles<typeof styles> {
   nodes: PartialGraphVizNode[]
-  links: GraphVizLink[]
+  links: StyledLink[]
   displayGroups: VizDisplayGroup[]
   tooltips: Partial<TooltipNode>[]
   onRefresh?: () => any
@@ -130,7 +130,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
     this.vizData = {
       nodes: this.props.nodes as StyledNode[],
-      links: this.props.links as GraphVizLink[],
+      links: this.props.links as StyledLink[],
       displayGroups: this.props.displayGroups,
     }
     this.tooltipNodes = this.props.tooltips as TooltipNode[]
@@ -343,7 +343,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
         node.y = nodePositions[i].y
         return node
       }) as StyledNode[],
-      links: this.props.links as GraphVizLink[],
+      links: this.props.links as StyledLink[],
       displayGroups: this.props.displayGroups,
     }
 
