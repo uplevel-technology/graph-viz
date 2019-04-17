@@ -15,8 +15,8 @@ import * as React from 'react'
 import {PERSISTENCE_SERVICE_ADDRESS} from '../App'
 import {
   BasicForceSimulation,
-  SimulationNode,
   NodePosition,
+  SimulationNode,
 } from './lib/BasicForceSimulation'
 import {
   ConfigurationOptions,
@@ -67,10 +67,6 @@ export interface PartialGraphVizNode
   extends Partial<StyledNode & SimulationNode> {
   id: string
 }
-
-export interface GraphVizNode {}
-
-export interface GraphVizLink {}
 
 interface Props extends WithStyles<typeof styles> {
   nodes: PartialGraphVizNode[]
