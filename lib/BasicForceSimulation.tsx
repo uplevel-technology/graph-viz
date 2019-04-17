@@ -28,7 +28,15 @@ export interface ForceSimulationNode extends d3.SimulationNodeDatum {
 export interface ForceSimulationLink {
   source: string
   target: string
-  strength?: number
+
+  /**
+   * Multiplicative factor applied to default d3 link force,
+   * which serves as an attractive force between the endpoints.
+   * A value between 0 and 1 will reduce the attractive force,
+   * tending to increase the length of the link.
+   * @see https://github.com/d3/d3-force#link_strength
+   */
+  strengthMultiplier?: number
 }
 
 export interface ForceSimulationGroup {
@@ -184,8 +192,8 @@ export class BasicForceSimulation {
         d3
           .forceLink(linksCopy)
           .strength((link, i) =>
-            link.strength !== undefined
-              ? link.strength
+            link.strengthMultiplier !== undefined
+              ? defaultLinkForceStrengths[i] * link.strengthMultiplier
               : defaultLinkForceStrengths[i],
           )
           .id((n: ForceSimulationNode) => n.id)
