@@ -1,4 +1,4 @@
-import {StyledNode} from './Nodes'
+import {DisplayNode} from './Nodes'
 import * as THREE from 'three'
 import {MeshBasicMaterial} from 'three'
 import {
@@ -44,11 +44,11 @@ export class DisplayGroups {
   public object = new THREE.Group()
   private meshes: {[groupId: string]: THREE.Mesh} = {}
 
-  constructor(nodes: StyledNode[], groups: DisplayGroup[]) {
+  constructor(nodes: DisplayNode[], groups: DisplayGroup[]) {
     this.updateAll(nodes, groups)
   }
 
-  public updateAll(nodes: StyledNode[], groups: DisplayGroup[]) {
+  public updateAll(nodes: DisplayNode[], groups: DisplayGroup[]) {
     const nodesByGroup = this.getGroupedNodes(nodes)
 
     const renderedGroupIds = new Set()
@@ -78,9 +78,9 @@ export class DisplayGroups {
   }
 
   public getGroupedNodes(
-    nodes: StyledNode[],
-  ): {[groupId: string]: StyledNode[]} {
-    const nodesByGroup: {[groupId: string]: StyledNode[]} = {}
+    nodes: DisplayNode[],
+  ): {[groupId: string]: DisplayNode[]} {
+    const nodesByGroup: {[groupId: string]: DisplayNode[]} = {}
     nodes.forEach(n => {
       if (n.displayGroupIds) {
         n.displayGroupIds.forEach(groupId => {
@@ -95,8 +95,8 @@ export class DisplayGroups {
     return nodesByGroup
   }
 
-  private renderConvexHull(group: DisplayGroup, nodesInGroup: StyledNode[]) {
-    const convexHull = get2DConvexHull(nodesInGroup) as StyledNode[]
+  private renderConvexHull(group: DisplayGroup, nodesInGroup: DisplayNode[]) {
+    const convexHull = get2DConvexHull(nodesInGroup) as DisplayNode[]
 
     const vertices =
       nodesInGroup.length === 2
@@ -134,7 +134,7 @@ export class DisplayGroups {
     geometry.elementsNeedUpdate = true
   }
 
-  private renderCircle(group: DisplayGroup, nodesInGroup: StyledNode[]) {
+  private renderCircle(group: DisplayGroup, nodesInGroup: DisplayNode[]) {
     const hull = getCircularHull(nodesInGroup)
 
     // add new display group

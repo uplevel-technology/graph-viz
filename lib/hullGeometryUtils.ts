@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import {DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE, StyledNode} from './Nodes'
+import {DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE, DisplayNode} from './Nodes'
 import {meanBy} from 'lodash'
 
 interface Point {
@@ -123,7 +123,7 @@ function cross(o: Point, p: Point, q: Point): number {
  * @param padding
  */
 export function getRoundedOffsetPolygon(
-  nodes: StyledNode[],
+  nodes: DisplayNode[],
   padding: number = 0,
 ): THREE.Vector2[] {
   const vertices = nodes.map(n => new THREE.Vector2(n.x, n.y))
@@ -216,8 +216,8 @@ export function getRoundedOffsetPolygon(
  * @param padding
  */
 export function getCapsulePolygon(
-  nodeA: StyledNode,
-  nodeB: StyledNode,
+  nodeA: DisplayNode,
+  nodeB: DisplayNode,
   padding: number = 0,
 ): THREE.Vector2[] {
   const a = new THREE.Vector2(nodeA.x, nodeA.y)

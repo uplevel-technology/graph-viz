@@ -29,14 +29,14 @@ import {StyledLink} from './lib/Links'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
 import {debounce, noop} from 'lodash'
-import {StyledNode} from './lib/Nodes'
+import {DisplayNode} from './lib/Nodes'
 import {DisplayGroup} from './lib/DisplayGroups'
 
 /**
  * Primary GraphVizData type definitions
  */
-export type GraphVizNode = Partial<StyledNode & SimulationNode> &
-  Pick<StyledNode, 'id'>
+export type GraphVizNode = Partial<DisplayNode & SimulationNode> &
+  Pick<DisplayNode, 'id'>
 
 export type GraphVizLink = StyledLink & SimulationLink
 
@@ -134,7 +134,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     const root = this.rootRef.current!
 
     this.vizData = {
-      nodes: this.props.nodes as StyledNode[],
+      nodes: this.props.nodes as DisplayNode[],
       links: this.props.links as StyledLink[],
       displayGroups: this.props.displayGroups,
     }
@@ -347,7 +347,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
         node.x = nodePositions[i].x
         node.y = nodePositions[i].y
         return node
-      }) as StyledNode[],
+      }) as DisplayNode[],
       links: this.props.links as StyledLink[],
       displayGroups: this.props.displayGroups,
     }
