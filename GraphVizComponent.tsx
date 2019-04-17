@@ -16,6 +16,7 @@ import {PERSISTENCE_SERVICE_ADDRESS} from '../App'
 import {
   ForceSimulation,
   NodePosition,
+  SimulationLink,
   SimulationNode,
 } from './lib/ForceSimulation'
 import {
@@ -29,6 +30,11 @@ import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
 import {debounce, noop} from 'lodash'
 import {StyledNode} from './lib/Nodes'
 import {DisplayGroup} from './lib/DisplayGroups'
+
+export type GraphVizNode = Pick<StyledNode, 'id'> &
+  Partial<StyledNode & SimulationNode>
+
+export type GraphVizLink = StyledLink & SimulationLink
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -58,18 +64,11 @@ interface State {
   readonly currentTooltipNode: TooltipNode | null
   readonly currentlyHoveredIdx: number | null
   readonly errorMessage?: string
-  readonly draftLinkSourceNode?: PartialGraphVizNode
-}
-
-// A partial GraphVizNode with a required id parameter
-// Better naming suggestions welcome
-export interface PartialGraphVizNode
-  extends Partial<StyledNode & SimulationNode> {
-  id: string
+  readonly draftLinkSourceNode?: GraphVizNode
 }
 
 interface Props extends WithStyles<typeof styles> {
-  nodes: PartialGraphVizNode[]
+  nodes: GraphVizNode[]
   links: StyledLink[]
   displayGroups: DisplayGroup[]
   tooltips: Partial<TooltipNode>[]
@@ -85,7 +84,7 @@ interface Props extends WithStyles<typeof styles> {
   /**
    * callback that will be called when a valid link is drawn
    */
-  onLinkDrawn: (source: PartialGraphVizNode, target: PartialGraphVizNode) => any
+  onLinkDrawn: (source: GraphVizNode, target: GraphVizNode) => any
 }
 
 class GraphVizComponentBase extends React.Component<Props, State> {
