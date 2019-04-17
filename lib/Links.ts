@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import {GraphVizData} from './GraphVisualization'
+import {VisualizationInputData} from './GraphVisualization'
 import {
   DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE,
   DEFAULT_NODE_INNER_RADIUS,
@@ -66,7 +66,7 @@ export interface PopulatedStyledLink extends LinkStyleAttributes {
 }
 
 export function getPopulatedGraphLinks(
-  graphData: GraphVizData,
+  graphData: VisualizationInputData,
   nodeIdToIdxMap: {[id: string]: number},
 ): PopulatedStyledLink[] {
   return graphData.links.map(link => ({

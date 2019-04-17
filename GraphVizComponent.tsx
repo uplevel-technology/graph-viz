@@ -22,7 +22,7 @@ import {
 import {
   ConfigurationOptions,
   GraphVisualization,
-  GraphVizData,
+  VisualizationInputData,
 } from './lib/GraphVisualization'
 import {StyledLink} from './lib/Links'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
@@ -69,7 +69,7 @@ interface State {
 
 interface Props extends WithStyles<typeof styles> {
   nodes: GraphVizNode[]
-  links: StyledLink[]
+  links: GraphVizLink[]
   displayGroups: DisplayGroup[]
   tooltips: Partial<TooltipNode>[]
   onRefresh?: () => any
@@ -93,7 +93,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
   // There is no need for vizData to be in state as this data is used by the
   // GraphVisualization class' render cycle and not React.
-  vizData: GraphVizData = {
+  vizData: VisualizationInputData = {
     nodes: [],
     links: [],
     displayGroups: [],

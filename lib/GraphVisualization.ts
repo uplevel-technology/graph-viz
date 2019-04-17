@@ -18,7 +18,7 @@ import {DisplayGroup, DisplayGroups} from './DisplayGroups'
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
 
-export interface GraphVizData {
+export interface VisualizationInputData {
   nodes: StyledNode[]
   links: StyledLink[]
   displayGroups: DisplayGroup[]
@@ -57,7 +57,7 @@ export class GraphVisualization {
   public readonly canvas: HTMLCanvasElement
   public readonly camera: THREE.OrthographicCamera
 
-  private data: GraphVizData
+  private data: VisualizationInputData
   private nodeIdToIndexMap: {[key: string]: number} = {}
   private userHasAdjustedViewport: boolean
 
@@ -80,7 +80,7 @@ export class GraphVisualization {
   private readonly mouseInteraction: MouseInteraction
 
   constructor(
-    graphData: GraphVizData,
+    graphData: VisualizationInputData,
     canvas: HTMLCanvasElement,
     width: number,
     height: number,
@@ -217,7 +217,7 @@ export class GraphVisualization {
    * adds/removes new/deleted nodes
    * @param graphData
    */
-  public update = (graphData: GraphVizData) => {
+  public update = (graphData: VisualizationInputData) => {
     this.data = graphData
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
     this.nodesMesh.updateAll(graphData.nodes)
@@ -237,7 +237,7 @@ export class GraphVisualization {
    *
    * @param updatedGraphData
    */
-  public updatePositions = (updatedGraphData: GraphVizData) => {
+  public updatePositions = (updatedGraphData: VisualizationInputData) => {
     if (updatedGraphData.nodes.length !== this.data.nodes.length) {
       throw new Error(
         `GraphVisualization.updatePositions should only be used 
@@ -353,7 +353,7 @@ export class GraphVisualization {
     this.renderer.dispose()
   }
 
-  private zoomToFit = (graphData: GraphVizData) => {
+  private zoomToFit = (graphData: VisualizationInputData) => {
     if (size(graphData.nodes) === 0) {
       // Don't try to do this if there are no nodes.
       return
