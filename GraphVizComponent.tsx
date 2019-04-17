@@ -16,6 +16,7 @@ import {PERSISTENCE_SERVICE_ADDRESS} from '../App'
 import {
   ForceSimulation,
   NodePosition,
+  SimulationGroup,
   SimulationLink,
   SimulationNode,
 } from './lib/ForceSimulation'
@@ -35,6 +36,8 @@ export type GraphVizNode = Pick<StyledNode, 'id'> &
   Partial<StyledNode & SimulationNode>
 
 export type GraphVizLink = StyledLink & SimulationLink
+
+export type GraphVizGroup = DisplayGroup & SimulationGroup
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -70,7 +73,7 @@ interface State {
 interface Props extends WithStyles<typeof styles> {
   nodes: GraphVizNode[]
   links: GraphVizLink[]
-  displayGroups: DisplayGroup[]
+  displayGroups: GraphVizGroup[]
   tooltips: Partial<TooltipNode>[]
   onRefresh?: () => any
   config?: ConfigurationOptions
