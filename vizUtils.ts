@@ -10,7 +10,7 @@
  * neo4j (for the microsoft data, that's snake_case)
  */
 import * as THREE from 'three'
-import {ForceSimulationNode} from './lib/BasicForceSimulation'
+import {SimulationNode} from './lib/BasicForceSimulation'
 import {
   DEFAULT_NODE_SCALE,
   DEFAULT_NODE_STROKE_OPACITY,
@@ -84,7 +84,7 @@ export const NodeOutlinePalette: {[key: string]: string} = {
 }
 
 export const toggleNodeLock = (
-  node: Partial<ForceSimulationNode & StyledNode>,
+  node: Partial<SimulationNode & StyledNode>,
   newPos?: THREE.Vector3,
 ): void => {
   if (node.fx) {
@@ -95,7 +95,7 @@ export const toggleNodeLock = (
 }
 
 export const lockNode = (
-  node: Partial<ForceSimulationNode & StyledNode>,
+  node: Partial<SimulationNode & StyledNode>,
   newPos?: THREE.Vector3,
 ): void => {
   if (newPos) {
@@ -111,7 +111,7 @@ export const lockNode = (
 }
 
 export const unlockNode = (
-  node: Partial<ForceSimulationNode & StyledNode>,
+  node: Partial<SimulationNode & StyledNode>,
 ): void => {
   node.fx = null
   node.fy = null

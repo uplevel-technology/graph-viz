@@ -15,7 +15,7 @@ import * as React from 'react'
 import {PERSISTENCE_SERVICE_ADDRESS} from '../App'
 import {
   BasicForceSimulation,
-  ForceSimulationNode,
+  SimulationNode,
   NodePosition,
 } from './lib/BasicForceSimulation'
 import {
@@ -64,9 +64,13 @@ interface State {
 // A partial GraphVizNode with a required id parameter
 // Better naming suggestions welcome
 export interface PartialGraphVizNode
-  extends Partial<StyledNode & ForceSimulationNode> {
+  extends Partial<StyledNode & SimulationNode> {
   id: string
 }
+
+export interface GraphVizNode {}
+
+export interface GraphVizLink {}
 
 interface Props extends WithStyles<typeof styles> {
   nodes: PartialGraphVizNode[]
@@ -220,9 +224,9 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       if (this.props.editMode) {
         node = this.vizData.nodes[
           this.vizData.nodes.length - 1
-        ] as ForceSimulationNode
+        ] as SimulationNode
       } else {
-        node = this.vizData.nodes[draggedNodeIdx] as ForceSimulationNode
+        node = this.vizData.nodes[draggedNodeIdx] as SimulationNode
       }
       node.x = worldPos.x
       node.y = worldPos.y

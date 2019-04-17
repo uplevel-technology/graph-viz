@@ -15,7 +15,7 @@ import {TooltipNode} from './NodeTooltips'
 import {NodeFillPalette, NodeOutlinePalette} from './vizUtils'
 import {PartialGraphVizNode} from './GraphVizComponent'
 import * as moment from 'moment'
-import {ForceSimulationLink} from './lib/BasicForceSimulation'
+import {SimulationLink} from './lib/BasicForceSimulation'
 
 export const artifactToNode = (artifact: Artifact): PartialGraphVizNode => ({
   id: artifact.getUid()!.getValue(),
@@ -143,7 +143,7 @@ export const eventToTooltipNode = (
 
 interface VizData {
   nodes: PartialGraphVizNode[]
-  links: (StyledLink & ForceSimulationLink)[]
+  links: (StyledLink & SimulationLink)[]
   tooltips: Partial<TooltipNode>[]
 }
 
@@ -161,7 +161,7 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
       tooltipNode: Partial<TooltipNode>
     }
   } = {}
-  const links: (StyledLink & ForceSimulationLink)[] = []
+  const links: (StyledLink & SimulationLink)[] = []
 
   events.forEach(event => {
     const eventNode = eventToNode(event)
@@ -207,7 +207,7 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
         tooltipNode,
       }
 
-      const link: StyledLink & ForceSimulationLink = {
+      const link: StyledLink & SimulationLink = {
         source: eventNode.id!,
         target: attrNode.id!,
       }

@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
 import {meanBy, noop} from 'lodash'
 
-export interface ForceSimulationNode extends d3.SimulationNodeDatum {
+export interface SimulationNode extends d3.SimulationNodeDatum {
   id: string
 
   displayGroupIds?: string[]
@@ -25,7 +25,7 @@ export interface ForceSimulationNode extends d3.SimulationNodeDatum {
   charge?: number
 }
 
-export interface ForceSimulationLink {
+export interface SimulationLink {
   source: string
   target: string
 
@@ -39,18 +39,18 @@ export interface ForceSimulationLink {
   strengthMultiplier?: number
 }
 
-export interface ForceSimulationGroup {
+export interface SimulationGroup {
   id: string
   strength: number
 }
 
-export interface ForceSimulationData {
-  nodes: ForceSimulationNode[]
-  links: ForceSimulationLink[]
-  forceGroups: ForceSimulationGroup[]
+export interface SimulationData {
+  nodes: SimulationNode[]
+  links: SimulationLink[]
+  forceGroups: SimulationGroup[]
 }
 
-type D3Simulation = d3.Simulation<d3.SimulationNodeDatum, ForceSimulationLink>
+type D3Simulation = d3.Simulation<d3.SimulationNodeDatum, SimulationLink>
 
 function getForceLinkDistance(links: {source: string; target: string}[]) {
   // NOTE: For now this is set heuristically on visual appearance/performance of large graphs.
@@ -66,9 +66,9 @@ export interface NodePosition {
   z?: number
 }
 
-function forceGroup(groups: ForceSimulationGroup[]) {
-  let nodes: ForceSimulationNode[]
-  let nodesByGroup: {[groupId: string]: ForceSimulationNode[]}
+function forceGroup(groups: SimulationGroup[]) {
+  let nodes: SimulationNode[]
+  let nodesByGroup: {[groupId: string]: SimulationNode[]}
 
   function force(alpha: number) {
     groups.forEach(group => {
@@ -90,7 +90,7 @@ function forceGroup(groups: ForceSimulationGroup[]) {
   }
 
   // this function is automatically called by d3 on initialize
-  force.initialize = (data: ForceSimulationNode[]) => {
+  force.initialize = (data: SimulationNode[]) => {
     nodes = data
     nodesByGroup = getGroupedNodes(nodes)
     return nodes
@@ -99,7 +99,7 @@ function forceGroup(groups: ForceSimulationGroup[]) {
   return force
 }
 
-function getCentroid(points: ForceSimulationNode[]): {x: number; y: number} {
+function getCentroid(points: SimulationNode[]): {x: number; y: number} {
   return {
     x: meanBy(points, p => p.x),
     y: meanBy(points, p => p.y),
@@ -107,9 +107,9 @@ function getCentroid(points: ForceSimulationNode[]): {x: number; y: number} {
 }
 
 function getGroupedNodes(
-  nodes: ForceSimulationNode[],
-): {[groupId: string]: ForceSimulationNode[]} {
-  const nodesByGroup: {[groupId: string]: ForceSimulationNode[]} = {}
+  nodes: SimulationNode[],
+): {[groupId: string]: SimulationNode[]} {
+  const nodesByGroup: {[groupId: string]: SimulationNode[]} = {}
   nodes.forEach((n, i) => {
     if (n.displayGroupIds) {
       n.displayGroupIds.forEach(groupId => {
@@ -124,7 +124,7 @@ function getGroupedNodes(
   return nodesByGroup
 }
 
-function getDefaultLinkForceStrengths(links: ForceSimulationLink[]): number[] {
+function getDefaultLinkForceStrengths(links: SimulationLink[]): number[] {
   const counts: {[id: string]: number} = {}
 
   links.forEach((l, i) => {
@@ -153,7 +153,7 @@ export class BasicForceSimulation {
     tick: noop,
   }
 
-  public initialize(graph: ForceSimulationData) {
+  public initialize(graph: SimulationData) {
     const nodesCopy = graph.nodes.map(node => ({...node}))
     const linksCopy = graph.links.map(link => ({...link}))
     const groupsCopy = graph.forceGroups.map(group => ({...group}))
@@ -173,19 +173,19 @@ export class BasicForceSimulation {
         'x',
         d3
           .forceX()
-          .strength((node: ForceSimulationNode) =>
+          .strength((node: SimulationNode) =>
             node.forceX !== undefined ? 0.1 : 0,
           )
-          .x((node: ForceSimulationNode) => node.forceX || 0),
+          .x((node: SimulationNode) => node.forceX || 0),
       )
       .force(
         'y',
         d3
           .forceY()
-          .strength((node: ForceSimulationNode) =>
+          .strength((node: SimulationNode) =>
             node.forceY !== undefined ? 0.1 : 0,
           )
-          .y((node: ForceSimulationNode) => node.forceY || 0),
+          .y((node: SimulationNode) => node.forceY || 0),
       )
       .force(
         'links',
@@ -196,14 +196,14 @@ export class BasicForceSimulation {
               ? defaultLinkForceStrengths[i] * link.strengthMultiplier
               : defaultLinkForceStrengths[i],
           )
-          .id((n: ForceSimulationNode) => n.id)
+          .id((n: SimulationNode) => n.id)
           .distance(linkForceDistance),
       )
       .force(
         'charge',
         d3
           .forceManyBody()
-          .strength((n: ForceSimulationNode) =>
+          .strength((n: SimulationNode) =>
             n.charge !== undefined ? n.charge : -250,
           )
           .distanceMax(250),
@@ -218,7 +218,7 @@ export class BasicForceSimulation {
     if (!this.simulation) {
       return []
     }
-    const nodes = this.simulation.nodes() as ForceSimulationNode[]
+    const nodes = this.simulation.nodes() as SimulationNode[]
 
     return nodes.map(node => ({
       id: node.id,
@@ -231,7 +231,7 @@ export class BasicForceSimulation {
     this.registeredEventHandlers.tick = callback
   }
 
-  public update(graph: ForceSimulationData) {
+  public update(graph: SimulationData) {
     if (!this.simulation) {
       return
     }
@@ -244,7 +244,7 @@ export class BasicForceSimulation {
       'links',
       d3
         .forceLink(linksCopy)
-        .id((n: ForceSimulationNode) => n.id)
+        .id((n: SimulationNode) => n.id)
         .distance(linkForceDistance),
     )
   }

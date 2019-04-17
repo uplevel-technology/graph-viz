@@ -1,7 +1,7 @@
 import {StyledNode} from './Nodes'
 import * as THREE from 'three'
 import {MeshBasicMaterial} from 'three'
-import {ForceSimulationGroup} from './BasicForceSimulation'
+import {SimulationGroup} from './BasicForceSimulation'
 import {
   get2DConvexHull,
   getCapsulePolygon,
@@ -9,7 +9,7 @@ import {
   getRoundedOffsetPolygon,
 } from './hullGeometryUtils'
 
-export interface VizDisplayGroup extends ForceSimulationGroup {
+export interface VizDisplayGroup extends SimulationGroup {
   isHighlighted: boolean
 
   /**
