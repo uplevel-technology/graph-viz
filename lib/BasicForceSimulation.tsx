@@ -131,17 +131,9 @@ function getDefaultLinkForceStrengths(links: ForceSimulationLink[]): number[] {
     counts[l.target]++
   })
 
-  const strengths: number[] = []
-
-  links.forEach((l, i) => {
-    if (counts[l.source] < counts[l.target]) {
-      strengths.push(1.0 / counts[l.source])
-    } else {
-      strengths.push(1.0 / counts[l.target])
-    }
+  return links.map(link => {
+    return 1.0 / Math.min(counts[link.source], counts[link.target])
   })
-
-  return strengths
 }
 
 export class BasicForceSimulation {
