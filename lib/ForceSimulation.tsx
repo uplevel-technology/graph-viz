@@ -41,7 +41,7 @@ export interface SimulationLink {
 
 export interface SimulationGroup {
   id: string
-  strength: number
+  strength?: number
 }
 
 export interface SimulationData {
@@ -80,7 +80,7 @@ function forceGroup(groups: SimulationGroup[]) {
       const groupNodes = nodesByGroup[group.id]
 
       const {x: cx, y: cy} = getCentroid(groupNodes)
-      const l = alpha * group.strength
+      const l = alpha * (group.strength || 0)
 
       groupNodes.forEach(node => {
         node.vx! -= (node.x! - cx) * l
