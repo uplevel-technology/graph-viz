@@ -145,9 +145,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       {
         nodes: this.vizData.nodes,
         links: this.vizData.links,
-        displayGroups: this.vizData.displayGroups.filter(
-          gp => gp.isHighlighted,
-        ),
+        displayGroups: this.vizData.displayGroups,
       },
       canvas,
       width,
@@ -320,9 +318,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     }
     if (prevProps.displayGroups !== this.props.displayGroups) {
       this.vizData.displayGroups = this.props.displayGroups
-      this.visualization.updateDisplayGroups(
-        this.props.displayGroups.filter(gp => gp.isHighlighted),
-      )
+      this.visualization.updateDisplayGroups(this.vizData.displayGroups)
     }
   }
 

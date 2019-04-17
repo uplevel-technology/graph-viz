@@ -11,7 +11,10 @@ import {
 export interface DisplayGroup {
   id: string
 
-  isHighlighted: boolean
+  /**
+   * boolean to toggle the visibility of a display group on or off
+   */
+  visible?: boolean
 
   /**
    * type of polygon to draw
@@ -50,10 +53,11 @@ export class DisplayGroups {
 
   public updateAll(nodes: DisplayNode[], groups: DisplayGroup[]) {
     const nodesByGroup = this.getGroupedNodes(nodes)
+    const visibleGroups = groups.filter(g => g.visible)
 
     const renderedGroupIds = new Set()
 
-    for (const group of groups) {
+    for (const group of visibleGroups) {
       const nodesInGroup = nodesByGroup[group.id]
       if (!nodesInGroup || nodesInGroup.length < 2) {
         continue
