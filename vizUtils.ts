@@ -17,7 +17,6 @@ import {
   HOVERED_NODE_SCALE,
   LOCKED_NODE_STROKE_OPACITY,
   LOCKED_NODE_STROKE_WIDTH,
-  StyledNode,
 } from './lib/Nodes'
 import {GraphVizNode} from './GraphVizComponent'
 
@@ -115,10 +114,10 @@ export const unlockNode = (node: GraphVizNode): void => {
   node.strokeOpacity = DEFAULT_NODE_STROKE_OPACITY
 }
 
-export const magnifyNode = (node: Partial<StyledNode>): void => {
+export const magnifyNode = (node: GraphVizNode): void => {
   node.scale = HOVERED_NODE_SCALE
 }
 
-export const resetNodeScale = (node: Partial<StyledNode>): void => {
+export const resetNodeScale = (node: GraphVizNode): void => {
   node.scale = DEFAULT_NODE_SCALE
 }
