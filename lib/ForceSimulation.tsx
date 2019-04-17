@@ -144,7 +144,7 @@ function getDefaultLinkForceStrengths(links: SimulationLink[]): number[] {
   })
 }
 
-export class BasicForceSimulation {
+export class ForceSimulation {
   private simulation: D3Simulation | undefined
   private registeredEventHandlers: {
     tick: (nodePositions: NodePosition[]) => void

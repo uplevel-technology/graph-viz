@@ -15,7 +15,7 @@ import {TooltipNode} from './NodeTooltips'
 import {NodeFillPalette, NodeOutlinePalette} from './vizUtils'
 import {PartialGraphVizNode} from './GraphVizComponent'
 import * as moment from 'moment'
-import {SimulationLink} from './lib/BasicForceSimulation'
+import {SimulationLink} from './lib/ForceSimulation'
 
 export const artifactToNode = (artifact: Artifact): PartialGraphVizNode => ({
   id: artifact.getUid()!.getValue(),

@@ -14,10 +14,10 @@ import ZoomOutIcon from '@material-ui/icons/ZoomOut'
 import * as React from 'react'
 import {PERSISTENCE_SERVICE_ADDRESS} from '../App'
 import {
-  BasicForceSimulation,
+  ForceSimulation,
   NodePosition,
   SimulationNode,
-} from './lib/BasicForceSimulation'
+} from './lib/ForceSimulation'
 import {
   ConfigurationOptions,
   GraphVisualization,
@@ -101,7 +101,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   }
 
   tooltipNodes: TooltipNode[]
-  simulation: BasicForceSimulation
+  simulation: ForceSimulation
 
   rootRef: React.RefObject<HTMLDivElement> = React.createRef()
   canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef()
@@ -152,7 +152,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
     window.addEventListener('resize', this.onWindowResize)
 
-    this.simulation = new BasicForceSimulation()
+    this.simulation = new ForceSimulation()
     this.visualization.onNodeHoverIn((hoveredNodeIdx: number) => {
       const vizNode = this.vizData.nodes[hoveredNodeIdx]
       const screenCoords = this.visualization.toScreenSpacePoint(

@@ -1,7 +1,7 @@
 import {StyledNode} from './Nodes'
 import * as THREE from 'three'
 import {MeshBasicMaterial} from 'three'
-import {SimulationGroup} from './BasicForceSimulation'
+import {SimulationGroup} from './ForceSimulation'
 import {
   get2DConvexHull,
   getCapsulePolygon,

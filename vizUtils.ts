@@ -10,7 +10,7 @@
  * neo4j (for the microsoft data, that's snake_case)
  */
 import * as THREE from 'three'
-import {SimulationNode} from './lib/BasicForceSimulation'
+import {SimulationNode} from './lib/ForceSimulation'
 import {
   DEFAULT_NODE_SCALE,
   DEFAULT_NODE_STROKE_OPACITY,
