@@ -189,7 +189,7 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
       if (ao.getAttribute()!.getMatchingPattern() !== '') {
         matchingPattern = ao.getAttribute()!.getMatchingPattern()
         attrNode.displayGroupIds.push(ao.getAttribute()!.getMatchingPattern())
-        attrNode.charge = -50 // reduce the charge to prevent conflicting forces
+        attrNode.charge = 0 // remove the repulsive charge on pattern nodes to prevent conflicting forces
         attrNode.absoluteSize = 12
       }
 
