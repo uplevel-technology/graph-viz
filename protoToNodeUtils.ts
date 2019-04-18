@@ -1,5 +1,5 @@
-import {Artifact} from '@core/artifact_pb'
-import {Attribute} from '@core/attribute_pb'
+import {Artifact} from '@core/artifacts_pb'
+import {Attribute} from '@core/attributes_pb'
 import {EventFields, EventType} from '@core/event_pb'
 import {ObservableNode} from '@core/observable_pb'
 import {camelCase, values} from 'lodash'
