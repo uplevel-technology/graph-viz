@@ -17,10 +17,12 @@ export const getAttributeLexeme = (attribute: Attribute): string => {
   )}::${attribute.getValue()}`
 }
 
-const toGraphVizNodes = (nodes: someNode[]): GraphVizNode[] => {
+const toGraphVizNodes = (
+  nodes: (EventFields | AttributeWithClusterId)[],
+): GraphVizNode[] => {
   const vizNodes: GraphVizNode[] = []
 
-  nodes.forEach((n: someNode) => {
+  nodes.forEach((n: EventFields | AttributeWithClusterId) => {
     if (n instanceof EventFields) {
       vizNodes.push(eventToGraphVizNode(n))
     }
@@ -84,10 +86,12 @@ export const eventToGraphVizNode = (event: EventFields): GraphVizNode => ({
   absoluteSize: 30,
 })
 
-const toTooltipNodes = (nodes: someNode[]): TooltipFields[] => {
+const toTooltipNodes = (
+  nodes: (EventFields | AttributeWithClusterId)[],
+): TooltipFields[] => {
   const tooltips: TooltipFields[] = []
 
-  nodes.forEach((n: someNode) => {
+  nodes.forEach((n: EventFields | AttributeWithClusterId) => {
     if (n instanceof EventFields) {
       tooltips.push(eventToTooltipNode(n))
     }
@@ -159,13 +163,12 @@ interface AttributeWithClusterId extends Attribute {
   clusterId: number
 }
 
-type someNode = EventFields | AttributeWithClusterId
 interface SomeLink {
-  source: someNode
-  target: someNode
+  source: EventFields | AttributeWithClusterId
+  target: EventFields | AttributeWithClusterId
 }
 interface NodesAndLinks {
-  nodes: someNode[]
+  nodes: (EventFields | AttributeWithClusterId)[]
   links: SomeLink[]
 }
 
@@ -180,7 +183,7 @@ export interface VizData {
 // TODO inspect and extract data from observable relationships
 const eventsToNodesAndLinks = (events: EventFields[]): NodesAndLinks => {
   // use maps for deduping
-  const nodes: {[id: string]: someNode} = {}
+  const nodes: {[id: string]: EventFields | AttributeWithClusterId} = {}
   const links: {[id: string]: SomeLink} = {} // only allow one link between node pair [in each direction]
 
   events.forEach(event => {
@@ -213,7 +216,7 @@ const eventsToNodesAndLinks = (events: EventFields[]): NodesAndLinks => {
   }
 }
 
-const getIdForSomeNode = (n: someNode): string => {
+const getIdForSomeNode = (n: EventFields | AttributeWithClusterId): string => {
   if (n instanceof EventFields) {
     return n.getUid()!.getValue()
   }
@@ -247,14 +250,16 @@ const toVizLinks = (links: SomeLink[]): GraphVizLink[] => {
   })
 }
 
-const toLegendData = (nodes: someNode[]): string[] => {
+const toLegendData = (
+  nodes: (EventFields | AttributeWithClusterId)[],
+): string[] => {
   // keep track of event and attribute types separately so that
   // we can make the event types appear first in the legend
 
   const eventTypes: Set<string> = new Set()
   const attrTypes: Set<string> = new Set([])
 
-  nodes.forEach((n: someNode) => {
+  nodes.forEach((n: EventFields | AttributeWithClusterId) => {
     if (n instanceof EventFields) {
       eventTypes.add(getEventNodeDisplayType(n.getEventType()))
     }
