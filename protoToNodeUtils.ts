@@ -183,21 +183,21 @@ interface AttributeWithClusterId extends Attribute {
 }
 
 type someNode = EventFields | AttributeWithClusterId
-interface someLink {
+interface SomeLink {
   source: someNode
   target: someNode
 }
-interface nodesAndLinks {
+interface NodesAndLinks {
   nodes: someNode[]
-  links: someLink[]
+  links: SomeLink[]
 }
 
 // TODO figure out where supernode check should be
 // TODO inspect and extract data from observable relationships
-const eventsToNodesAndLinks = (events: EventFields[]): nodesAndLinks => {
+const eventsToNodesAndLinks = (events: EventFields[]): NodesAndLinks => {
   // use maps for deduping
   const nodes: {[id: string]: someNode} = {}
-  const links: {[id: string]: someLink} = {} // only allow one link between node pair [in each direction]
+  const links: {[id: string]: SomeLink} = {} // only allow one link between node pair [in each direction]
 
   events.forEach(event => {
     const eventId = event.getUid()!.getValue()
@@ -251,7 +251,7 @@ const getIdForSomeNode = (n: someNode): string => {
   return getAttributeLexeme(n)
 }
 
-const toVizLinks = (links: someLink[]): GraphVizLink[] => {
+const toVizLinks = (links: SomeLink[]): GraphVizLink[] => {
   return links.map(link => {
     const newLink: GraphVizLink = {
       source: getIdForSomeNode(link.source),
