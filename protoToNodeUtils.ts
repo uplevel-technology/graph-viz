@@ -14,21 +14,28 @@ import {NodeFillPalette, NodeOutlinePalette} from './vizUtils'
 import {GraphVizLink, GraphVizNode} from './GraphVizComponent'
 import * as moment from 'moment'
 
-export const artifactToNode = (artifact: Artifact): GraphVizNode => ({
-  id: artifact.getUid()!.getValue(),
-  fill: NodeFillPalette.artifact,
-  stroke: NodeOutlinePalette.artifact,
-  strokeWidth: 0.03,
-  strokeOpacity: 1.0,
-})
+export const getAttributeLexeme = (attribute: Attribute): string => {
+  return `${getAttributeNodeLabel(
+    attribute.getType(),
+  )}::${attribute.getValue()}`
+}
 
-export const artifactToTooltipNode = (
-  artifact: Artifact,
-): Partial<TooltipNode> => ({
-  displayName: getArtifactDisplayType(artifact.getType()),
-})
+const toGraphVizNodes = (nodes: someNode[]): GraphVizNode[] => {
+  const vizNodes: GraphVizNode[] = []
 
-export const attributeToNode = (
+  nodes.forEach((n: someNode) => {
+    if (n instanceof EventFields) {
+      vizNodes.push(eventToGraphVizNode(n))
+    }
+    if (n instanceof Attribute) {
+      vizNodes.push(attributeToGraphVizNode(n, n.clusterId))
+    }
+  })
+
+  return vizNodes
+}
+
+export const attributeToGraphVizNode = (
   attribute: Attribute,
   clusterId?: number,
 ): GraphVizNode => {
@@ -64,10 +71,35 @@ export const attributeToNode = (
   return out
 }
 
-export const getAttributeLexeme = (attribute: Attribute): string => {
-  return `${getAttributeNodeLabel(
-    attribute.getType(),
-  )}::${attribute.getValue()}`
+export const eventToGraphVizNode = (event: EventFields): GraphVizNode => ({
+  id: event.getUid()!.getValue(),
+  displayGroupIds: [event.getClusterId().toString()],
+  fill:
+    event.getEventType() === EventType.ALERT
+      ? NodeFillPalette.alert
+      : NodeFillPalette.emailUpload,
+  stroke:
+    event.getEventType() === EventType.ALERT
+      ? NodeOutlinePalette.alert
+      : NodeOutlinePalette.emailUpload,
+  strokeWidth: 0.03,
+  strokeOpacity: 1.0,
+  absoluteSize: 30,
+})
+
+const toTooltipNodes = (nodes: someNode[]): Partial<TooltipNode>[] => {
+  const tooltips: Partial<TooltipNode>[] = []
+
+  nodes.forEach((n: someNode) => {
+    if (n instanceof EventFields) {
+      tooltips.push(eventToTooltipNode(n))
+    }
+    if (n instanceof Attribute) {
+      tooltips.push(attributeToTooltipNode(n, n.clusterId))
+    }
+  })
+
+  return tooltips
 }
 
 export const attributeToTooltipNode = (
@@ -95,48 +127,6 @@ export const attributeToTooltipNode = (
 
   return out
 }
-
-export const observableToNode = (observable: ObservableNode): GraphVizNode => {
-  switch (observable.getValueCase()) {
-    case ObservableNode.ValueCase.ARTIFACT:
-      return artifactToNode(observable.getArtifact()!)
-    case ObservableNode.ValueCase.ATTRIBUTE:
-      return attributeToNode(observable.getAttribute()!)
-  }
-  throw new Error(
-    'unexpected observable node type: ' + observable.getValueCase(),
-  )
-}
-
-export const observableToTooltipNode = (
-  observable: ObservableNode,
-): Partial<TooltipNode> => {
-  switch (observable.getValueCase()) {
-    case ObservableNode.ValueCase.ARTIFACT:
-      return artifactToTooltipNode(observable.getArtifact()!)
-    case ObservableNode.ValueCase.ATTRIBUTE:
-      return attributeToTooltipNode(observable.getAttribute()!)
-  }
-  throw new Error(
-    'unexpected observable node type: ' + observable.getValueCase(),
-  )
-}
-
-export const eventToNode = (event: EventFields): GraphVizNode => ({
-  id: event.getUid()!.getValue(),
-  displayGroupIds: [event.getClusterId().toString()],
-  fill:
-    event.getEventType() === EventType.ALERT
-      ? NodeFillPalette.alert
-      : NodeFillPalette.emailUpload,
-  stroke:
-    event.getEventType() === EventType.ALERT
-      ? NodeOutlinePalette.alert
-      : NodeOutlinePalette.emailUpload,
-  strokeWidth: 0.03,
-  strokeOpacity: 1.0,
-  absoluteSize: 30,
-})
 
 export const eventToTooltipNode = (
   event: EventFields,
@@ -228,21 +218,6 @@ const eventsToNodesAndLinks = (events: EventFields[]): NodesAndLinks => {
   }
 }
 
-const toVizNodes = (nodes: someNode[]): GraphVizNode[] => {
-  const vizNodes: GraphVizNode[] = []
-
-  nodes.forEach((n: someNode) => {
-    if (n instanceof EventFields) {
-      vizNodes.push(eventToNode(n))
-    }
-    if (n instanceof Attribute) {
-      vizNodes.push(attributeToNode(n, n.clusterId))
-    }
-  })
-
-  return vizNodes
-}
-
 const getIdForSomeNode = (n: someNode): string => {
   if (n instanceof EventFields) {
     return n.getUid()!.getValue()
@@ -277,21 +252,6 @@ const toVizLinks = (links: SomeLink[]): GraphVizLink[] => {
   })
 }
 
-const toTooltips = (nodes: someNode[]): Partial<TooltipNode>[] => {
-  const tooltips: Partial<TooltipNode>[] = []
-
-  nodes.forEach((n: someNode) => {
-    if (n instanceof EventFields) {
-      tooltips.push(eventToTooltipNode(n))
-    }
-    if (n instanceof Attribute) {
-      tooltips.push(attributeToTooltipNode(n, n.clusterId))
-    }
-  })
-
-  return tooltips
-}
-
 const toLegendData = (nodes: someNode[]): string[] => {
   // keep track of event and attribute types separately so that
   // we can make the event types appear first in the legend
@@ -315,45 +275,9 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
   const data = eventsToNodesAndLinks(events)
 
   return {
-    nodes: toVizNodes(data.nodes),
+    nodes: toGraphVizNodes(data.nodes),
     links: toVizLinks(data.links),
-    tooltips: toTooltips(data.nodes),
+    tooltips: toTooltipNodes(data.nodes),
     legendLabels: toLegendData(data.nodes),
   }
-}
-
-export const getLegendData = (events: EventFields[]): string[] => {
-  // keep track of event and attribute types separately so that
-  // we can make the event types appear first in the legend
-
-  const eventTypes: Set<string> = new Set()
-  const attrTypes: Set<string> = new Set([])
-
-  const getObsLabel = (t: ObservableNode) => {
-    if (t.getValueCase() === ObservableNode.ValueCase.ARTIFACT) {
-      return 'Artifact'
-    } else {
-      return getAttributeDisplayType(t.getAttribute()!.getType())
-    }
-  }
-
-  events.forEach(event => {
-    const observed = event.getObserved()
-    if (!observed) {
-      return
-    }
-
-    eventTypes.add(getEventNodeDisplayType(event.getEventType()))
-
-    observed.getAttributesList().forEach(ao => {
-      attrTypes.add(getAttributeDisplayType(ao.getAttribute()!.getType()))
-    })
-
-    observed.getRelationshipsList().forEach(rel => {
-      attrTypes.add(getObsLabel(rel.getFrom()!))
-      attrTypes.add(getObsLabel(rel.getTo()!))
-    })
-  })
-
-  return Array.from(eventTypes).concat(Array.from(attrTypes))
 }
