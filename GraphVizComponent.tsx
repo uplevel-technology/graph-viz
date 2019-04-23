@@ -28,7 +28,7 @@ import {
 import {DisplayLink} from './lib/Links'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
-import {debounce, noop} from 'lodash'
+import {debounce, noop, remove} from 'lodash'
 import {DisplayNode} from './lib/Nodes'
 import {DisplayGroup} from './lib/DisplayGroups'
 
@@ -92,6 +92,8 @@ interface Props extends WithStyles<typeof styles> {
    */
   onLinkDrawn: (source: GraphVizNode, target: GraphVizNode) => any
 }
+
+const DRAFT_NODE_ID = 'draft-node'
 
 class GraphVizComponentBase extends React.Component<Props, State> {
   client = new PersistenceServiceClient(PERSISTENCE_SERVICE_ADDRESS)
@@ -244,7 +246,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       if (this.props.editMode) {
         this.setState({draftLinkSourceNode: draggedNode})
         const draftNode = {
-          id: 'draft-node',
+          id: DRAFT_NODE_ID,
           x: mouse.x,
           y: mouse.y,
           absoluteSize: 1,
@@ -277,12 +279,8 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       if (this.props.editMode) {
         if (this.state.draftLinkSourceNode) {
           // this means a draft link was being drawn.
-          // Remove the placeholder (draftNode, draftLink) pair
-          // which is logically guaranteed to be
-          // the last element of the array
-          // because dragEnd will ALWAYS execute after dragStart
-          this.vizData.nodes.pop()
-          this.vizData.links.pop()
+          remove(this.vizData.links, n => n.target === DRAFT_NODE_ID)
+          remove(this.vizData.nodes, n => n.id === DRAFT_NODE_ID)
           this.visualization.update(this.vizData)
 
           if (targetNodeIdx !== null) {
