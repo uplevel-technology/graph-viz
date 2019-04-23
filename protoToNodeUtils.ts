@@ -1,15 +1,12 @@
-import {Artifact} from '@core/artifact_pb'
 import {Attribute} from '@core/attribute_pb'
 import {EventFields, EventType} from '@core/event_pb'
-import {ObservableNode} from '@core/observable_pb'
 import {camelCase, values} from 'lodash'
 import {
-  getArtifactDisplayType,
   getAttributeDisplayType,
   getAttributeNodeLabel,
   getEventNodeDisplayType,
 } from '../displayTypes'
-import {TooltipNode} from './NodeTooltips'
+import {TooltipNode, TooltipFields} from './NodeTooltips'
 import {NodeFillPalette, NodeOutlinePalette} from './vizUtils'
 import {GraphVizLink, GraphVizNode} from './GraphVizComponent'
 import * as moment from 'moment'
@@ -87,8 +84,8 @@ export const eventToGraphVizNode = (event: EventFields): GraphVizNode => ({
   absoluteSize: 30,
 })
 
-const toTooltipNodes = (nodes: someNode[]): Partial<TooltipNode>[] => {
-  const tooltips: Partial<TooltipNode>[] = []
+const toTooltipNodes = (nodes: someNode[]): TooltipFields[] => {
+  const tooltips: TooltipFields[] = []
 
   nodes.forEach((n: someNode) => {
     if (n instanceof EventFields) {
@@ -105,13 +102,13 @@ const toTooltipNodes = (nodes: someNode[]): Partial<TooltipNode>[] => {
 export const attributeToTooltipNode = (
   attribute: Attribute,
   clusterId?: number,
-): Partial<TooltipNode> => {
+): TooltipFields => {
   let displayType = getAttributeDisplayType(attribute.getType())
   if (attribute.getIsPattern()) {
     displayType += ' Pattern'
   }
 
-  const out: Partial<TooltipNode> = {
+  const out: TooltipFields = {
     id: getAttributeLexeme(attribute),
     displayType,
     displayName: attribute.getValue(),
@@ -128,9 +125,7 @@ export const attributeToTooltipNode = (
   return out
 }
 
-export const eventToTooltipNode = (
-  event: EventFields,
-): Partial<TooltipNode> => {
+export const eventToTooltipNode = (event: EventFields): TooltipFields => {
   let displayName =
     event.getEventType() === EventType.ALERT
       ? `Alert (${event.getUid()})`
@@ -146,7 +141,7 @@ export const eventToTooltipNode = (
   const occurred =
     (event.getOccurredAt() && event.getOccurredAt()!.toDate()) || Date.now()
 
-  const out: Partial<TooltipNode> = {
+  const out: TooltipFields = {
     id: event.getUid()!.getValue(),
     displayName,
     displayType: 'Event',
@@ -177,7 +172,7 @@ interface NodesAndLinks {
 export interface VizData {
   nodes: GraphVizNode[]
   links: GraphVizLink[]
-  tooltips: Partial<TooltipNode>[]
+  tooltips: TooltipFields[]
   legendLabels: string[]
 }
 
