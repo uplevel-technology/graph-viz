@@ -11,6 +11,13 @@ import {NodeFillPalette, NodeOutlinePalette} from './vizUtils'
 import {GraphVizLink, GraphVizNode} from './GraphVizComponent'
 import * as moment from 'moment'
 
+export interface VizData {
+  nodes: GraphVizNode[]
+  links: GraphVizLink[]
+  tooltips: TooltipFields[]
+  legendLabels: string[]
+}
+
 export const getAttributeLexeme = (attribute: Attribute): string => {
   return `${getAttributeNodeLabel(
     attribute.getType(),
@@ -172,13 +179,6 @@ interface NodesAndLinks {
   links: SomeLink[]
 }
 
-export interface VizData {
-  nodes: GraphVizNode[]
-  links: GraphVizLink[]
-  tooltips: TooltipFields[]
-  legendLabels: string[]
-}
-
 // TODO figure out where supernode check should be
 // TODO inspect and extract data from observable relationships
 const eventsToNodesAndLinks = (events: EventFields[]): NodesAndLinks => {
@@ -216,18 +216,18 @@ const eventsToNodesAndLinks = (events: EventFields[]): NodesAndLinks => {
   }
 }
 
-const getIdForSomeNode = (n: EventFields | AttributeWithClusterId): string => {
-  if (n instanceof EventFields) {
-    return n.getUid()!.getValue()
-  }
-  return getAttributeLexeme(n)
-}
-
 const toVizLinks = (links: SomeLink[]): GraphVizLink[] => {
+  const getId = (n: EventFields | AttributeWithClusterId): string => {
+    if (n instanceof EventFields) {
+      return n.getUid()!.getValue()
+    }
+    return getAttributeLexeme(n)
+  }
+
   return links.map(link => {
     const newLink: GraphVizLink = {
-      source: getIdForSomeNode(link.source),
-      target: getIdForSomeNode(link.target),
+      source: getId(link.source),
+      target: getId(link.target),
     }
 
     if (
@@ -250,7 +250,7 @@ const toVizLinks = (links: SomeLink[]): GraphVizLink[] => {
   })
 }
 
-const toLegendData = (
+const toLegendLabels = (
   nodes: (EventFields | AttributeWithClusterId)[],
 ): string[] => {
   // keep track of event and attribute types separately so that
@@ -278,6 +278,6 @@ export const eventsToVizData = (events: EventFields[]): VizData => {
     nodes: toGraphVizNodes(data.nodes),
     links: toVizLinks(data.links),
     tooltips: toTooltipNodes(data.nodes),
-    legendLabels: toLegendData(data.nodes),
+    legendLabels: toLegendLabels(data.nodes),
   }
 }
