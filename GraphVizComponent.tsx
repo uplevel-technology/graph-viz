@@ -228,8 +228,8 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       node.fx = worldPos.x
       node.fy = worldPos.y
       this.simulation.update({
-        nodes: this.props.nodes,
-        links: this.props.links,
+        nodes: this.vizData.nodes,
+        links: this.vizData.links,
         forceGroups: this.props.groups,
       })
       // ^ the simulation tick handler should handle the position updates after this in our viz
