@@ -30,22 +30,9 @@ export const artifactToTooltipNode = (
   displayName: getArtifactDisplayType(artifact.getType()),
 })
 
-export const attributeToNode = (attribute: Attribute): GraphVizNode => {
-  const attributeType = getAttributeNodeLabel(attribute.getType())
-  return {
-    id: getAttributeLexeme(attribute),
-    fill:
-      NodeFillPalette[camelCase(attributeType)] || NodeFillPalette.attribute,
-    stroke:
-      NodeOutlinePalette[camelCase(attributeType)] ||
-      NodeOutlinePalette.attribute,
-    strokeWidth: 0.03,
-    strokeOpacity: 1.0,
-  }
-}
-
-export const attributeWithClusterIdToNode = (
-  attribute: AttributeWithClusterId,
+export const attributeToNode = (
+  attribute: Attribute,
+  clusterId?: number,
 ): GraphVizNode => {
   const attributeType = getAttributeNodeLabel(attribute.getType())
 
@@ -58,17 +45,22 @@ export const attributeWithClusterIdToNode = (
       NodeOutlinePalette.attribute,
     strokeWidth: 0.03,
     strokeOpacity: 1.0,
-    displayGroupIds: [attribute.clusterId.toString()],
+  }
+
+  const groupIds: string[] = []
+
+  if (clusterId !== undefined) {
+    groupIds.push(clusterId.toString())
   }
 
   if (attribute.getMatchingPattern() !== '') {
-    if (out.displayGroupIds) {
-      out.displayGroupIds.push(attribute.getMatchingPattern())
-    } else {
-      out.displayGroupIds = [attribute.getMatchingPattern()]
-    }
+    groupIds.push(attribute.getMatchingPattern())
     out.charge = 0 // remove the repulsive charge on pattern nodes to prevent conflicting forces
     out.absoluteSize = 12
+  }
+
+  if (groupIds.length > 0) {
+    out.displayGroupIds = groupIds
   }
 
   return out
@@ -82,20 +74,7 @@ export const getAttributeLexeme = (attribute: Attribute): string => {
 
 export const attributeToTooltipNode = (
   attribute: Attribute,
-): Partial<TooltipNode> => {
-  let displayType = getAttributeDisplayType(attribute.getType())
-  if (attribute.getIsPattern()) {
-    displayType += ' Pattern'
-  }
-  return {
-    id: getAttributeLexeme(attribute),
-    displayType,
-    displayName: attribute.getValue(),
-  }
-}
-
-export const attributeWithClusterIdToTooltipNode = (
-  attribute: AttributeWithClusterId,
+  clusterId?: number,
 ): Partial<TooltipNode> => {
   let displayType = getAttributeDisplayType(attribute.getType())
   if (attribute.getIsPattern()) {
@@ -106,7 +85,10 @@ export const attributeWithClusterIdToTooltipNode = (
     id: getAttributeLexeme(attribute),
     displayType,
     displayName: attribute.getValue(),
-    clusterId: attribute.clusterId,
+  }
+
+  if (clusterId !== undefined) {
+    out.clusterId = clusterId
   }
 
   if (attribute.getMatchingPattern() !== '') {
@@ -255,7 +237,7 @@ const toVizNodes = (nodes: someNode[]): GraphVizNode[] => {
       vizNodes.push(eventToNode(n))
     }
     if (n instanceof Attribute) {
-      vizNodes.push(attributeWithClusterIdToNode(n))
+      vizNodes.push(attributeToNode(n, n.clusterId))
     }
   })
 
@@ -304,7 +286,7 @@ const toTooltips = (nodes: someNode[]): Partial<TooltipNode>[] => {
       tooltips.push(eventToTooltipNode(n))
     }
     if (n instanceof Attribute) {
-      tooltips.push(attributeWithClusterIdToTooltipNode(n))
+      tooltips.push(attributeToTooltipNode(n, n.clusterId))
     }
   })
 
