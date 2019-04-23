@@ -26,6 +26,11 @@ const groups = [
     strength: 0.06,
     shape: 'convexHull' as const,
   },
+  {
+    id: 'c2',
+    visible: true,
+    shape: 'circle' as const,
+  },
 ]
 
 storiesOf('GraphVizComponent', module)
