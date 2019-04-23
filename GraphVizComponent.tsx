@@ -135,18 +135,14 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
     this.vizData = {
       nodes: this.props.nodes as DisplayNode[],
-      links: this.props.links as DisplayLink[],
+      links: this.props.links,
       displayGroups: this.props.groups,
     }
     this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
     const {width, height} = root.getBoundingClientRect()
     this.visualization = new GraphVisualization(
-      {
-        nodes: this.vizData.nodes,
-        links: this.vizData.links,
-        displayGroups: this.vizData.displayGroups,
-      },
+      this.vizData,
       canvas,
       width,
       height,

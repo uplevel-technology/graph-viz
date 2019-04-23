@@ -53,9 +53,8 @@ export class DisplayGroups {
 
   public updateAll(nodes: DisplayNode[], groups: DisplayGroup[]) {
     const nodesByGroup = this.getGroupedNodes(nodes)
-    const visibleGroups = groups.filter(g => g.visible)
 
-    const renderedGroupIds = new Set()
+    const visibleGroups = groups.filter(g => g.visible)
 
     for (const group of visibleGroups) {
       const nodesInGroup = nodesByGroup[group.id]
@@ -68,15 +67,15 @@ export class DisplayGroups {
       } else {
         this.renderConvexHull(group, nodesInGroup)
       }
-
-      renderedGroupIds.add(group.id)
     }
 
-    // remove deleted display groups
-    for (const groupId in this.meshes) {
-      if (!renderedGroupIds.has(groupId)) {
-        this.object.remove(this.meshes[groupId])
-        delete this.meshes[groupId]
+    const invisibleGroups = groups.filter(g => !g.visible)
+
+    // remove invisible groups that were previously visible
+    for (const group of invisibleGroups) {
+      if (this.meshes[group.id] !== undefined) {
+        this.object.remove(this.meshes[group.id])
+        delete this.meshes[group.id]
       }
     }
   }
