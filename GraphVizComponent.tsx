@@ -278,7 +278,8 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.visualization.onDragEnd((mouse, targetNodeIdx: number | null) => {
       if (this.props.editMode) {
         if (this.state.draftLinkSourceNode) {
-          // this means a draft link was being drawn.
+          // This means a draft link was being drawn.
+          // Remove the placeholder (draftNode, draftLink) pair
           remove(this.vizData.links, n => n.target === DRAFT_NODE_ID)
           remove(this.vizData.nodes, n => n.id === DRAFT_NODE_ID)
           this.visualization.update(this.vizData)
