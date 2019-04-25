@@ -1,7 +1,7 @@
 import {size} from 'lodash'
 import * as THREE from 'three'
 import {Vector3} from 'three'
-import {getPopulatedGraphLinks, GraphVizLink, Links} from './Links'
+import {populateLinks, Links, DisplayLink} from './Links'
 import {
   ClickEventHandler,
   DragEndEventHandler,
@@ -12,16 +12,16 @@ import {
   PanEventHandler,
   ZoomEventHandler,
 } from './MouseInteraction'
-import {GraphVizNode, Nodes} from './Nodes'
-import {DisplayGroups, VizDisplayGroup} from './DisplayGroups'
+import {DisplayNode, Nodes} from './Nodes'
+import {DisplayGroup, DisplayGroups} from './DisplayGroups'
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
 
-export interface GraphVizData {
-  nodes: GraphVizNode[]
-  links: GraphVizLink[]
-  displayGroups: VizDisplayGroup[]
+export interface VisualizationInputData {
+  nodes: DisplayNode[]
+  links: DisplayLink[]
+  displayGroups: DisplayGroup[]
 }
 
 function constructIdToIdxMap(arr: Array<{id: string}>): {[id: string]: number} {
@@ -57,7 +57,7 @@ export class GraphVisualization {
   public readonly canvas: HTMLCanvasElement
   public readonly camera: THREE.OrthographicCamera
 
-  private data: GraphVizData
+  private data: VisualizationInputData
   private nodeIdToIndexMap: {[key: string]: number} = {}
   private userHasAdjustedViewport: boolean
 
@@ -80,7 +80,7 @@ export class GraphVisualization {
   private readonly mouseInteraction: MouseInteraction
 
   constructor(
-    graphData: GraphVizData,
+    graphData: VisualizationInputData,
     canvas: HTMLCanvasElement,
     width: number,
     height: number,
@@ -121,9 +121,7 @@ export class GraphVisualization {
     this.renderer.setSize(width, height)
 
     this.nodesMesh = new Nodes(graphData.nodes)
-    this.linksMesh = new Links(
-      getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
-    )
+    this.linksMesh = new Links(populateLinks(graphData, this.nodeIdToIndexMap))
     this.displayGroupsMesh = new DisplayGroups(
       graphData.nodes,
       graphData.displayGroups,
@@ -217,13 +215,11 @@ export class GraphVisualization {
    * adds/removes new/deleted nodes
    * @param graphData
    */
-  public update = (graphData: GraphVizData) => {
+  public update = (graphData: VisualizationInputData) => {
     this.data = graphData
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
     this.nodesMesh.updateAll(graphData.nodes)
-    this.linksMesh.updateAll(
-      getPopulatedGraphLinks(graphData, this.nodeIdToIndexMap),
-    )
+    this.linksMesh.updateAll(populateLinks(graphData, this.nodeIdToIndexMap))
     this.displayGroupsMesh.updateAll(graphData.nodes, graphData.displayGroups)
     this.mouseInteraction.updateData(this.data.nodes)
   }
@@ -237,7 +233,7 @@ export class GraphVisualization {
    *
    * @param updatedGraphData
    */
-  public updatePositions = (updatedGraphData: GraphVizData) => {
+  public updatePositions = (updatedGraphData: VisualizationInputData) => {
     if (updatedGraphData.nodes.length !== this.data.nodes.length) {
       throw new Error(
         `GraphVisualization.updatePositions should only be used 
@@ -251,7 +247,7 @@ export class GraphVisualization {
 
     this.nodesMesh.updateAllPositions(updatedGraphData.nodes)
     this.linksMesh.updateAllPositions(
-      getPopulatedGraphLinks(updatedGraphData, this.nodeIdToIndexMap),
+      populateLinks(updatedGraphData, this.nodeIdToIndexMap),
     )
     this.displayGroupsMesh.updateAll(
       updatedGraphData.nodes,
@@ -270,7 +266,7 @@ export class GraphVisualization {
    * @param index
    * @param updatedNode
    */
-  public updateNode = (index: number, updatedNode: GraphVizNode) => {
+  public updateNode = (index: number, updatedNode: DisplayNode) => {
     this.data.nodes[index] = updatedNode
     this.nodesMesh.updateOne(index, updatedNode)
     this.mouseInteraction.updateData(this.data.nodes)
@@ -285,7 +281,7 @@ export class GraphVisualization {
    * have NOT changed.
    * @param displayGroups
    */
-  public updateDisplayGroups = (displayGroups: VizDisplayGroup[]) => {
+  public updateDisplayGroups = (displayGroups: DisplayGroup[]) => {
     this.data.displayGroups = displayGroups
     this.displayGroupsMesh.updateAll(this.data.nodes, this.data.displayGroups)
     this.render()
@@ -353,7 +349,7 @@ export class GraphVisualization {
     this.renderer.dispose()
   }
 
-  private zoomToFit = (graphData: GraphVizData) => {
+  private zoomToFit = (graphData: VisualizationInputData) => {
     if (size(graphData.nodes) === 0) {
       // Don't try to do this if there are no nodes.
       return

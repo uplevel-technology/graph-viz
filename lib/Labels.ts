@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import {PopulatedGraphVizLink} from './Links'
+import {PopulatedDisplayLink} from './Links'
 import {UPLEVEL_BASE_THEME} from '../../theme'
 import {DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE} from './Nodes'
 import {values} from 'lodash'
@@ -144,7 +144,7 @@ export class Labels {
     return texture
   }
 
-  public updateAll(links: PopulatedGraphVizLink[]) {
+  public updateAll(links: PopulatedDisplayLink[]) {
     // remove all labels to reset
     this.object.remove(...this.object.children)
 

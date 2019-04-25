@@ -1,6 +1,6 @@
 import {get, noop, orderBy} from 'lodash'
 import * as THREE from 'three'
-import {GraphVizNode, Nodes} from './Nodes'
+import {DisplayNode, Nodes} from './Nodes'
 
 const MAX_CLICK_DURATION = 300
 
@@ -54,7 +54,7 @@ export type PanEventHandler = (panDelta: THREE.Vector3) => any
 export type ZoomEventHandler = (event: MouseWheelEvent) => any
 
 export class MouseInteraction {
-  private nodesData: GraphVizNode[]
+  private nodesData: DisplayNode[]
   private intersectedPointIdx: number | null
   private dragging: boolean
   private registerClick: boolean
@@ -91,7 +91,7 @@ export class MouseInteraction {
     canvas: HTMLCanvasElement,
     camera: THREE.OrthographicCamera,
     nodesMesh: Nodes,
-    nodesData: GraphVizNode[],
+    nodesData: DisplayNode[],
   ) {
     this.canvas = canvas
     this.camera = camera
@@ -116,7 +116,7 @@ export class MouseInteraction {
     this.canvas.addEventListener('wheel', this.onMouseWheel)
   }
 
-  public updateData(nodesData: GraphVizNode[]) {
+  public updateData(nodesData: DisplayNode[]) {
     this.nodesData = nodesData
   }
 

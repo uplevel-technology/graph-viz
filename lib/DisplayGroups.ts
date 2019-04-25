@@ -1,7 +1,6 @@
-import {GraphVizNode} from './Nodes'
+import {DisplayNode} from './Nodes'
 import * as THREE from 'three'
 import {MeshBasicMaterial} from 'three'
-import {ForceSimulationGroup} from './BasicForceSimulation'
 import {
   get2DConvexHull,
   getCapsulePolygon,
@@ -9,8 +8,13 @@ import {
   getRoundedOffsetPolygon,
 } from './hullGeometryUtils'
 
-export interface VizDisplayGroup extends ForceSimulationGroup {
-  isHighlighted: boolean
+export interface DisplayGroup {
+  id: string
+
+  /**
+   * boolean to toggle the visibility of a display group on or off
+   */
+  visible?: boolean
 
   /**
    * type of polygon to draw
@@ -43,16 +47,16 @@ export class DisplayGroups {
   public object = new THREE.Group()
   private meshes: {[groupId: string]: THREE.Mesh} = {}
 
-  constructor(nodes: GraphVizNode[], groups: VizDisplayGroup[]) {
+  constructor(nodes: DisplayNode[], groups: DisplayGroup[]) {
     this.updateAll(nodes, groups)
   }
 
-  public updateAll(nodes: GraphVizNode[], groups: VizDisplayGroup[]) {
+  public updateAll(nodes: DisplayNode[], groups: DisplayGroup[]) {
     const nodesByGroup = this.getGroupedNodes(nodes)
 
-    const renderedGroupIds = new Set()
+    const visibleGroups = groups.filter(g => g.visible)
 
-    for (const group of groups) {
+    for (const group of visibleGroups) {
       const nodesInGroup = nodesByGroup[group.id]
       if (!nodesInGroup || nodesInGroup.length < 2) {
         continue
@@ -63,23 +67,23 @@ export class DisplayGroups {
       } else {
         this.renderConvexHull(group, nodesInGroup)
       }
-
-      renderedGroupIds.add(group.id)
     }
 
-    // remove deleted display groups
-    for (const groupId in this.meshes) {
-      if (!renderedGroupIds.has(groupId)) {
-        this.object.remove(this.meshes[groupId])
-        delete this.meshes[groupId]
+    const invisibleGroups = groups.filter(g => !g.visible)
+
+    // remove invisible groups that were previously visible
+    for (const group of invisibleGroups) {
+      if (this.meshes[group.id] !== undefined) {
+        this.object.remove(this.meshes[group.id])
+        delete this.meshes[group.id]
       }
     }
   }
 
   public getGroupedNodes(
-    nodes: GraphVizNode[],
-  ): {[groupId: string]: GraphVizNode[]} {
-    const nodesByGroup: {[groupId: string]: GraphVizNode[]} = {}
+    nodes: DisplayNode[],
+  ): {[groupId: string]: DisplayNode[]} {
+    const nodesByGroup: {[groupId: string]: DisplayNode[]} = {}
     nodes.forEach(n => {
       if (n.displayGroupIds) {
         n.displayGroupIds.forEach(groupId => {
@@ -94,11 +98,8 @@ export class DisplayGroups {
     return nodesByGroup
   }
 
-  private renderConvexHull(
-    group: VizDisplayGroup,
-    nodesInGroup: GraphVizNode[],
-  ) {
-    const convexHull = get2DConvexHull(nodesInGroup) as GraphVizNode[]
+  private renderConvexHull(group: DisplayGroup, nodesInGroup: DisplayNode[]) {
+    const convexHull = get2DConvexHull(nodesInGroup) as DisplayNode[]
 
     const vertices =
       nodesInGroup.length === 2
@@ -136,7 +137,7 @@ export class DisplayGroups {
     geometry.elementsNeedUpdate = true
   }
 
-  private renderCircle(group: VizDisplayGroup, nodesInGroup: GraphVizNode[]) {
+  private renderCircle(group: DisplayGroup, nodesInGroup: DisplayNode[]) {
     const hull = getCircularHull(nodesInGroup)
 
     // add new display group

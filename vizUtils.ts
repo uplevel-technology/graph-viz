@@ -10,16 +10,15 @@
  * neo4j (for the microsoft data, that's snake_case)
  */
 import * as THREE from 'three'
-import {ForceSimulationNode} from './lib/BasicForceSimulation'
 import {
   DEFAULT_NODE_SCALE,
   DEFAULT_NODE_STROKE_OPACITY,
   DEFAULT_NODE_STROKE_WIDTH,
-  GraphVizNode,
   HOVERED_NODE_SCALE,
   LOCKED_NODE_STROKE_OPACITY,
   LOCKED_NODE_STROKE_WIDTH,
 } from './lib/Nodes'
+import {GraphVizNode} from './GraphVizComponent'
 
 export const NodeFillPalette: {[key: string]: string} = {
   artifact: '#00478D',
@@ -84,7 +83,7 @@ export const NodeOutlinePalette: {[key: string]: string} = {
 }
 
 export const toggleNodeLock = (
-  node: Partial<ForceSimulationNode & GraphVizNode>,
+  node: GraphVizNode,
   newPos?: THREE.Vector3,
 ): void => {
   if (node.fx) {
@@ -94,10 +93,7 @@ export const toggleNodeLock = (
   }
 }
 
-export const lockNode = (
-  node: Partial<ForceSimulationNode & GraphVizNode>,
-  newPos?: THREE.Vector3,
-): void => {
+export const lockNode = (node: GraphVizNode, newPos?: THREE.Vector3): void => {
   if (newPos) {
     node.fx = newPos.x
     node.fy = newPos.y
@@ -110,9 +106,7 @@ export const lockNode = (
   node.strokeOpacity = LOCKED_NODE_STROKE_OPACITY
 }
 
-export const unlockNode = (
-  node: Partial<ForceSimulationNode & GraphVizNode>,
-): void => {
+export const unlockNode = (node: GraphVizNode): void => {
   node.fx = null
   node.fy = null
 
@@ -120,10 +114,10 @@ export const unlockNode = (
   node.strokeOpacity = DEFAULT_NODE_STROKE_OPACITY
 }
 
-export const magnifyNode = (node: Partial<GraphVizNode>): void => {
+export const magnifyNode = (node: GraphVizNode): void => {
   node.scale = HOVERED_NODE_SCALE
 }
 
-export const resetNodeScale = (node: Partial<GraphVizNode>): void => {
+export const resetNodeScale = (node: GraphVizNode): void => {
   node.scale = DEFAULT_NODE_SCALE
 }

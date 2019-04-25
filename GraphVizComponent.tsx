@@ -14,22 +14,33 @@ import ZoomOutIcon from '@material-ui/icons/ZoomOut'
 import * as React from 'react'
 import {PERSISTENCE_SERVICE_ADDRESS} from '../App'
 import {
-  BasicForceSimulation,
-  ForceSimulationData,
-  ForceSimulationNode,
+  ForceSimulation,
   NodePosition,
-} from './lib/BasicForceSimulation'
+  SimulationGroup,
+  SimulationLink,
+  SimulationNode,
+} from './lib/ForceSimulation'
 import {
   ConfigurationOptions,
   GraphVisualization,
-  GraphVizData,
+  VisualizationInputData,
 } from './lib/GraphVisualization'
-import {GraphVizLink} from './lib/Links'
+import {DisplayLink} from './lib/Links'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
-import {debounce, noop} from 'lodash'
-import {GraphVizNode} from './lib/Nodes'
-import {VizDisplayGroup} from './lib/DisplayGroups'
+import {debounce, noop, remove} from 'lodash'
+import {DisplayNode} from './lib/Nodes'
+import {DisplayGroup} from './lib/DisplayGroups'
+
+/**
+ * Primary GraphVizData type definitions
+ */
+export type GraphVizNode = Partial<DisplayNode & SimulationNode> &
+  Pick<DisplayNode, 'id'> // id is a required field
+
+export type GraphVizLink = DisplayLink & SimulationLink
+
+export type GraphVizGroup = DisplayGroup & SimulationGroup
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -59,20 +70,13 @@ interface State {
   readonly currentTooltipNode: TooltipNode | null
   readonly currentlyHoveredIdx: number | null
   readonly errorMessage?: string
-  readonly draftLinkSourceNode?: PartialGraphVizNode
-}
-
-// A partial GraphVizNode with a required id parameter
-// Better naming suggestions welcome
-export interface PartialGraphVizNode
-  extends Partial<GraphVizNode & ForceSimulationNode> {
-  id: string
+  readonly draftLinkSourceNode?: GraphVizNode
 }
 
 interface Props extends WithStyles<typeof styles> {
-  nodes: PartialGraphVizNode[]
+  nodes: GraphVizNode[]
   links: GraphVizLink[]
-  displayGroups: VizDisplayGroup[]
+  groups: GraphVizGroup[]
   tooltips: Partial<TooltipNode>[]
   onRefresh?: () => any
   config?: ConfigurationOptions
@@ -86,8 +90,10 @@ interface Props extends WithStyles<typeof styles> {
   /**
    * callback that will be called when a valid link is drawn
    */
-  onLinkDrawn: (source: PartialGraphVizNode, target: PartialGraphVizNode) => any
+  onLinkDrawn: (source: GraphVizNode, target: GraphVizNode) => any
 }
+
+const DRAFT_NODE_ID = 'draft-node'
 
 class GraphVizComponentBase extends React.Component<Props, State> {
   client = new PersistenceServiceClient(PERSISTENCE_SERVICE_ADDRESS)
@@ -95,14 +101,14 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
   // There is no need for vizData to be in state as this data is used by the
   // GraphVisualization class' render cycle and not React.
-  vizData: GraphVizData = {
+  vizData: VisualizationInputData = {
     nodes: [],
     links: [],
     displayGroups: [],
   }
 
   tooltipNodes: TooltipNode[]
-  simulation: BasicForceSimulation
+  simulation: ForceSimulation
 
   rootRef: React.RefObject<HTMLDivElement> = React.createRef()
   canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef()
@@ -114,7 +120,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
   static defaultProps: Partial<Props> = {
     tooltips: [],
-    displayGroups: [],
+    groups: [],
     onLinkDrawn: noop,
   }
 
@@ -130,21 +136,15 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     const root = this.rootRef.current!
 
     this.vizData = {
-      nodes: this.props.nodes as GraphVizNode[],
-      links: this.props.links as GraphVizLink[],
-      displayGroups: this.props.displayGroups,
+      nodes: this.props.nodes as DisplayNode[],
+      links: this.props.links,
+      displayGroups: this.props.groups,
     }
     this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
     const {width, height} = root.getBoundingClientRect()
     this.visualization = new GraphVisualization(
-      {
-        nodes: this.vizData.nodes,
-        links: this.vizData.links,
-        displayGroups: this.vizData.displayGroups.filter(
-          gp => gp.isHighlighted,
-        ),
-      },
+      this.vizData,
       canvas,
       width,
       height,
@@ -153,7 +153,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
 
     window.addEventListener('resize', this.onWindowResize)
 
-    this.simulation = new BasicForceSimulation()
+    this.simulation = new ForceSimulation()
     this.visualization.onNodeHoverIn((hoveredNodeIdx: number) => {
       const vizNode = this.vizData.nodes[hoveredNodeIdx]
       const screenCoords = this.visualization.toScreenSpacePoint(
@@ -221,18 +221,18 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       if (this.props.editMode) {
         node = this.vizData.nodes[
           this.vizData.nodes.length - 1
-        ] as ForceSimulationNode
+        ] as SimulationNode
       } else {
-        node = this.vizData.nodes[draggedNodeIdx] as ForceSimulationNode
+        node = this.vizData.nodes[draggedNodeIdx] as SimulationNode
       }
       node.x = worldPos.x
       node.y = worldPos.y
       node.fx = worldPos.x
       node.fy = worldPos.y
       this.simulation.update({
-        nodes: this.props.nodes,
-        links: this.props.links,
-        forceGroups: this.props.displayGroups,
+        nodes: this.vizData.nodes,
+        links: this.vizData.links,
+        forceGroups: this.props.groups,
       })
       // ^ the simulation tick handler should handle the position updates after this in our viz
     })
@@ -246,7 +246,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       if (this.props.editMode) {
         this.setState({draftLinkSourceNode: draggedNode})
         const draftNode = {
-          id: 'draft-node',
+          id: DRAFT_NODE_ID,
           x: mouse.x,
           y: mouse.y,
           absoluteSize: 1,
@@ -278,13 +278,10 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.visualization.onDragEnd((mouse, targetNodeIdx: number | null) => {
       if (this.props.editMode) {
         if (this.state.draftLinkSourceNode) {
-          // this means a draft link was being drawn.
+          // This means a draft link was being drawn.
           // Remove the placeholder (draftNode, draftLink) pair
-          // which is logically guaranteed to be
-          // the last element of the array
-          // because dragEnd will ALWAYS execute after dragStart
-          this.vizData.nodes.pop()
-          this.vizData.links.pop()
+          remove(this.vizData.links, n => n.target === DRAFT_NODE_ID)
+          remove(this.vizData.nodes, n => n.id === DRAFT_NODE_ID)
           this.visualization.update(this.vizData)
 
           if (targetNodeIdx !== null) {
@@ -314,11 +311,9 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       this.tooltipNodes = this.props.tooltips as TooltipNode[]
       this.initData()
     }
-    if (prevProps.displayGroups !== this.props.displayGroups) {
-      this.vizData.displayGroups = this.props.displayGroups
-      this.visualization.updateDisplayGroups(
-        this.props.displayGroups.filter(gp => gp.isHighlighted),
-      )
+    if (prevProps.groups !== this.props.groups) {
+      this.vizData.displayGroups = this.props.groups
+      this.visualization.updateDisplayGroups(this.vizData.displayGroups)
     }
   }
 
@@ -333,7 +328,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.simulation.initialize({
       nodes: this.props.nodes,
       links: this.props.links,
-      forceGroups: this.props.displayGroups,
+      forceGroups: this.props.groups,
     })
 
     const nodePositions = this.simulation.getNodePositions()
@@ -343,9 +338,9 @@ class GraphVizComponentBase extends React.Component<Props, State> {
         node.x = nodePositions[i].x
         node.y = nodePositions[i].y
         return node
-      }) as GraphVizNode[],
-      links: this.props.links as GraphVizLink[],
-      displayGroups: this.props.displayGroups,
+      }) as DisplayNode[],
+      links: this.props.links as DisplayLink[],
+      displayGroups: this.props.groups,
     }
 
     this.visualization.update(this.vizData)
