@@ -32,8 +32,7 @@ const toGraphVizNodes = (
   nodes.forEach((n: EventFields | AttributeWithClusterId) => {
     if (n instanceof EventFields) {
       vizNodes.push(eventToGraphVizNode(n))
-    }
-    else if (n instanceof Attribute) {
+    } else if (n instanceof Attribute) {
       vizNodes.push(attributeToGraphVizNode(n, n.clusterId))
     }
   })
