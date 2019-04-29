@@ -1,4 +1,4 @@
-import {Attribute} from '@core/attribute_pb'
+import {Attribute} from '@core/observable_pb'
 import {EventFields, EventType} from '@core/event_pb'
 import {camelCase, values} from 'lodash'
 import {
