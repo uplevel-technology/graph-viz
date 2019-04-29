@@ -1,36 +1,52 @@
-import {Attribute, Artifact} from '@core/observable_pb'
+import {Attribute} from '@core/attribute_pb'
 import {EventFields, EventType} from '@core/event_pb'
-import {ObservableNode} from '@core/observable_pb'
 import {camelCase, values} from 'lodash'
 import {
-  getArtifactDisplayType,
   getAttributeDisplayType,
   getAttributeNodeLabel,
   getEventNodeDisplayType,
-  relationshipTypes,
 } from '../displayTypes'
-import {TooltipNode} from './NodeTooltips'
+import {TooltipNode, TooltipFields} from './NodeTooltips'
 import {NodeFillPalette, NodeOutlinePalette} from './vizUtils'
 import {GraphVizLink, GraphVizNode} from './GraphVizComponent'
 import * as moment from 'moment'
 
-export const artifactToNode = (artifact: Artifact): GraphVizNode => ({
-  id: artifact.getUid()!.getValue(),
-  fill: NodeFillPalette.artifact,
-  stroke: NodeOutlinePalette.artifact,
-  strokeWidth: 0.03,
-  strokeOpacity: 1.0,
-})
+export interface VizData {
+  nodes: GraphVizNode[]
+  links: GraphVizLink[]
+  tooltips: TooltipFields[]
+  legendLabels: string[]
+}
 
-export const artifactToTooltipNode = (
-  artifact: Artifact,
-): Partial<TooltipNode> => ({
-  displayName: getArtifactDisplayType(artifact.getType()),
-})
+export const getAttributeLexeme = (attribute: Attribute): string => {
+  return `${getAttributeNodeLabel(
+    attribute.getType(),
+  )}::${attribute.getValue()}`
+}
 
-export const attributeToNode = (attribute: Attribute): GraphVizNode => {
+const toGraphVizNodes = (
+  nodes: (EventFields | AttributeWithClusterId)[],
+): GraphVizNode[] => {
+  const vizNodes: GraphVizNode[] = []
+
+  nodes.forEach((n: EventFields | AttributeWithClusterId) => {
+    if (n instanceof EventFields) {
+      vizNodes.push(eventToGraphVizNode(n))
+    } else if (n instanceof Attribute) {
+      vizNodes.push(attributeToGraphVizNode(n, n.clusterId))
+    }
+  })
+
+  return vizNodes
+}
+
+export const attributeToGraphVizNode = (
+  attribute: Attribute,
+  clusterId?: number,
+): GraphVizNode => {
   const attributeType = getAttributeNodeLabel(attribute.getType())
-  return {
+
+  const out: GraphVizNode = {
     id: getAttributeLexeme(attribute),
     fill:
       NodeFillPalette[camelCase(attributeType)] || NodeFillPalette.attribute,
@@ -40,55 +56,27 @@ export const attributeToNode = (attribute: Attribute): GraphVizNode => {
     strokeWidth: 0.03,
     strokeOpacity: 1.0,
   }
-}
 
-export const getAttributeLexeme = (attribute: Attribute): string => {
-  return `${getAttributeNodeLabel(
-    attribute.getType(),
-  )}::${attribute.getValue()}`
-}
+  const groupIds: string[] = []
 
-export const attributeToTooltipNode = (
-  attribute: Attribute,
-): Partial<TooltipNode> => {
-  let displayType = getAttributeDisplayType(attribute.getType())
-  if (attribute.getIsPattern()) {
-    displayType += ' Pattern'
+  if (clusterId !== undefined) {
+    groupIds.push(clusterId.toString())
   }
-  return {
-    id: getAttributeLexeme(attribute),
-    displayType,
-    displayName: attribute.getValue(),
+
+  if (attribute.getMatchingPattern() !== '') {
+    groupIds.push(attribute.getMatchingPattern())
+    out.charge = 0 // remove the repulsive charge on pattern nodes to prevent conflicting forces
+    out.absoluteSize = 12
   }
+
+  if (groupIds.length > 0) {
+    out.displayGroupIds = groupIds
+  }
+
+  return out
 }
 
-export const observableToNode = (observable: ObservableNode): GraphVizNode => {
-  switch (observable.getValueCase()) {
-    case ObservableNode.ValueCase.ARTIFACT:
-      return artifactToNode(observable.getArtifact()!)
-    case ObservableNode.ValueCase.ATTRIBUTE:
-      return attributeToNode(observable.getAttribute()!)
-  }
-  throw new Error(
-    'unexpected observable node type: ' + observable.getValueCase(),
-  )
-}
-
-export const observableToTooltipNode = (
-  observable: ObservableNode,
-): Partial<TooltipNode> => {
-  switch (observable.getValueCase()) {
-    case ObservableNode.ValueCase.ARTIFACT:
-      return artifactToTooltipNode(observable.getArtifact()!)
-    case ObservableNode.ValueCase.ATTRIBUTE:
-      return attributeToTooltipNode(observable.getAttribute()!)
-  }
-  throw new Error(
-    'unexpected observable node type: ' + observable.getValueCase(),
-  )
-}
-
-export const eventToNode = (event: EventFields): GraphVizNode => ({
+export const eventToGraphVizNode = (event: EventFields): GraphVizNode => ({
   id: event.getUid()!.getValue(),
   displayGroupIds: [event.getClusterId().toString()],
   fill:
@@ -104,9 +92,50 @@ export const eventToNode = (event: EventFields): GraphVizNode => ({
   absoluteSize: 30,
 })
 
-export const eventToTooltipNode = (
-  event: EventFields,
-): Partial<TooltipNode> => {
+const toTooltipNodes = (
+  nodes: (EventFields | AttributeWithClusterId)[],
+): TooltipFields[] => {
+  const tooltips: TooltipFields[] = []
+
+  nodes.forEach((n: EventFields | AttributeWithClusterId) => {
+    if (n instanceof EventFields) {
+      tooltips.push(eventToTooltipNode(n))
+    }
+    if (n instanceof Attribute) {
+      tooltips.push(attributeToTooltipNode(n, n.clusterId))
+    }
+  })
+
+  return tooltips
+}
+
+export const attributeToTooltipNode = (
+  attribute: Attribute,
+  clusterId?: number,
+): TooltipFields => {
+  let displayType = getAttributeDisplayType(attribute.getType())
+  if (attribute.getIsPattern()) {
+    displayType += ' Pattern'
+  }
+
+  const out: TooltipFields = {
+    id: getAttributeLexeme(attribute),
+    displayType,
+    displayName: attribute.getValue(),
+  }
+
+  if (clusterId !== undefined) {
+    out.clusterId = clusterId
+  }
+
+  if (attribute.getMatchingPattern() !== '') {
+    out.pattern = attribute.getMatchingPattern()
+  }
+
+  return out
+}
+
+export const eventToTooltipNode = (event: EventFields): TooltipFields => {
   let displayName =
     event.getEventType() === EventType.ALERT
       ? `Alert (${event.getUid()})`
@@ -122,7 +151,7 @@ export const eventToTooltipNode = (
   const occurred =
     (event.getOccurredAt() && event.getOccurredAt()!.toDate()) || Date.now()
 
-  const out: Partial<TooltipNode> = {
+  const out: TooltipFields = {
     id: event.getUid()!.getValue(),
     displayName,
     displayType: 'Event',
@@ -136,169 +165,118 @@ export const eventToTooltipNode = (
   return out
 }
 
-interface VizData {
-  nodes: GraphVizNode[]
-  links: GraphVizLink[]
-  tooltips: Partial<TooltipNode>[]
+interface AttributeWithClusterId extends Attribute {
+  clusterId: number
 }
 
-export const eventsToVizData = (events: EventFields[]): VizData => {
-  // do not show anything if only pattern data is provided
-  if (events.length === 0) {
-    return {nodes: [], links: [], tooltips: []}
-  }
+interface SomeLink {
+  source: EventFields | AttributeWithClusterId
+  target: EventFields | AttributeWithClusterId
+}
+interface NodesAndLinks {
+  nodes: (EventFields | AttributeWithClusterId)[]
+  links: SomeLink[]
+}
 
-  // We want a deduped list of all nodes, because they can be repeated. We'll
-  // build that up in this object:
-  const seenVizNodesById: {
-    [id: string]: {
-      vizNode: GraphVizNode
-      tooltipNode: Partial<TooltipNode>
-    }
-  } = {}
-  const links: GraphVizLink[] = []
+// TODO figure out where supernode check should be
+// TODO inspect and extract data from observable relationships
+const eventsToNodesAndLinks = (events: EventFields[]): NodesAndLinks => {
+  // use maps for deduping
+  const nodes: {[id: string]: EventFields | AttributeWithClusterId} = {}
+  const links: {[id: string]: SomeLink} = {} // only allow one link between node pair [in each direction]
 
   events.forEach(event => {
-    const eventNode = eventToNode(event)
-    seenVizNodesById[eventNode.id!] = {
-      vizNode: eventNode,
-      tooltipNode: eventToTooltipNode(event),
-    }
+    const eventId = event.getUid()!.getValue()
+    nodes[eventId] = event
 
     const observed = event.getObserved()
-    if (!observed) {
-      return
+    if (observed) {
+      observed.getAttributesList().forEach(ao => {
+        if (ao.getAttribute() !== undefined) {
+          if (!ao.getAttribute()!.getIsSupernode()) {
+            const attrPlus: AttributeWithClusterId = Object.assign(
+              ao.getAttribute(),
+              {
+                clusterId: event.getClusterId(),
+              },
+            )
+            const attributeId = getAttributeLexeme(attrPlus)
+            nodes[attributeId] = attrPlus
+            links[eventId + attributeId] = {source: event, target: attrPlus}
+          }
+        }
+      })
     }
-
-    observed.getAttributesList().forEach(ao => {
-      if (ao.getAttribute()!.getIsSupernode()) {
-        return
-      }
-
-      const attrNode = {
-        ...attributeToNode(ao.getAttribute()!),
-        displayGroupIds: [event.getClusterId().toString()],
-      }
-
-      let matchingPattern = ''
-      if (ao.getAttribute()!.getMatchingPattern() !== '') {
-        matchingPattern = ao.getAttribute()!.getMatchingPattern()
-        attrNode.displayGroupIds.push(ao.getAttribute()!.getMatchingPattern())
-        attrNode.charge = 0 // remove the repulsive charge on pattern nodes to prevent conflicting forces
-        attrNode.absoluteSize = 12
-      }
-
-      const tooltipNode = {
-        ...attributeToTooltipNode(ao.getAttribute()!),
-        clusterId: event.getClusterId(),
-      }
-
-      if (matchingPattern !== '') {
-        tooltipNode.pattern = matchingPattern
-      }
-
-      seenVizNodesById[attrNode.id!] = {
-        vizNode: attrNode,
-        tooltipNode,
-      }
-
-      const link: GraphVizLink = {
-        source: eventNode.id!,
-        target: attrNode.id!,
-      }
-
-      if (matchingPattern !== '') {
-        // reduce the attractive force between an event and an attribute node that belongs to a pattern group
-        link.strengthMultiplier = 0.5
-      }
-
-      links.push(link)
-    })
-
-    observed.getRelationshipsList().forEach(rel => {
-      const from = {
-        ...observableToNode(rel.getFrom()!),
-        displayGroupIds: [event.getClusterId().toString()],
-      }
-      seenVizNodesById[from.id!] = {
-        vizNode: from,
-        tooltipNode: {
-          ...observableToTooltipNode(rel.getFrom()!),
-          clusterId: event.getClusterId(),
-        },
-      }
-
-      const to = {
-        ...observableToNode(rel.getTo()!),
-        displayGroupIds: [event.getClusterId().toString()],
-      }
-      seenVizNodesById[to.id!] = {
-        vizNode: to,
-        tooltipNode: {
-          ...observableToTooltipNode(rel.getTo()!),
-          clusterId: event.getClusterId(),
-        },
-      }
-
-      links.push({
-        label: relationshipTypes[rel.getType()],
-        source: from.id!,
-        target: to.id!,
-      })
-
-      // We also add links from the eventNode, to approximate having hyperedges:
-      links.push({
-        source: eventNode.id!,
-        target: from.id!,
-      })
-      links.push({
-        source: eventNode.id!,
-        target: to.id!,
-      })
-    })
   })
 
-  const seenNodes = values(seenVizNodesById)
-
   return {
-    nodes: seenNodes.map(it => it.vizNode),
-    links,
-    tooltips: seenNodes.map(it => it.tooltipNode),
+    nodes: values(nodes),
+    links: values(links),
   }
 }
 
-export const getLegendData = (events: EventFields[]): string[] => {
+const toVizLinks = (links: SomeLink[]): GraphVizLink[] => {
+  const getId = (n: EventFields | AttributeWithClusterId): string => {
+    if (n instanceof EventFields) {
+      return n.getUid()!.getValue()
+    }
+    return getAttributeLexeme(n)
+  }
+
+  return links.map(link => {
+    const newLink: GraphVizLink = {
+      source: getId(link.source),
+      target: getId(link.target),
+    }
+
+    if (
+      link.source instanceof Attribute &&
+      link.source.getMatchingPattern() !== ''
+    ) {
+      // reduce the attractive force between an event and an attribute node that belongs to a pattern group
+      newLink.strengthMultiplier = 0.5
+    }
+
+    if (
+      link.target instanceof Attribute &&
+      link.target.getMatchingPattern() !== ''
+    ) {
+      // reduce the attractive force between an event and an attribute node that belongs to a pattern group
+      newLink.strengthMultiplier = 0.5
+    }
+
+    return newLink
+  })
+}
+
+const toLegendLabels = (
+  nodes: (EventFields | AttributeWithClusterId)[],
+): string[] => {
   // keep track of event and attribute types separately so that
   // we can make the event types appear first in the legend
 
   const eventTypes: Set<string> = new Set()
   const attrTypes: Set<string> = new Set([])
 
-  const getObsLabel = (t: ObservableNode) => {
-    if (t.getValueCase() === ObservableNode.ValueCase.ARTIFACT) {
-      return 'Artifact'
-    } else {
-      return getAttributeDisplayType(t.getAttribute()!.getType())
+  nodes.forEach((n: EventFields | AttributeWithClusterId) => {
+    if (n instanceof EventFields) {
+      eventTypes.add(getEventNodeDisplayType(n.getEventType()))
     }
-  }
-
-  events.forEach(event => {
-    const observed = event.getObserved()
-    if (!observed) {
-      return
+    if (n instanceof Attribute) {
+      attrTypes.add(getAttributeDisplayType(n.getType()))
     }
-
-    eventTypes.add(getEventNodeDisplayType(event.getEventType()))
-
-    observed.getAttributesList().forEach(ao => {
-      attrTypes.add(getAttributeDisplayType(ao.getAttribute()!.getType()))
-    })
-
-    observed.getRelationshipsList().forEach(rel => {
-      attrTypes.add(getObsLabel(rel.getFrom()!))
-      attrTypes.add(getObsLabel(rel.getTo()!))
-    })
   })
 
   return Array.from(eventTypes).concat(Array.from(attrTypes))
+}
+
+export const eventsToVizData = (events: EventFields[]): VizData => {
+  const data = eventsToNodesAndLinks(events)
+
+  return {
+    nodes: toGraphVizNodes(data.nodes),
+    links: toVizLinks(data.links),
+    tooltips: toTooltipNodes(data.nodes),
+    legendLabels: toLegendLabels(data.nodes),
+  }
 }
