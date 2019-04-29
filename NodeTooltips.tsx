@@ -10,13 +10,16 @@ import * as React from 'react'
 import {CSSProperties} from 'react'
 import cx from 'classnames'
 
-export interface TooltipNode {
+export interface TooltipFields {
   id: string
   displayName: string
   displayType?: string
   formattedTime?: string
   clusterId?: number
   pattern?: string
+}
+
+export interface TooltipNode extends TooltipFields {
   screenX: number
   screenY: number
 }
