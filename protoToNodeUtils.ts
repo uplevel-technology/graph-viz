@@ -1,4 +1,4 @@
-import {Attribute} from '@core/observable_pb'
+import {AttributeNode} from '@core/observable_pb'
 import {EventFields, EventType} from '@core/event_pb'
 import {camelCase, values} from 'lodash'
 import {
@@ -18,7 +18,7 @@ export interface VizData {
   legendLabels: string[]
 }
 
-export const getAttributeLexeme = (attribute: Attribute): string => {
+export const getAttributeLexeme = (attribute: AttributeNode): string => {
   return `${getAttributeNodeLabel(
     attribute.getType(),
   )}::${attribute.getValue()}`
@@ -32,7 +32,7 @@ const toGraphVizNodes = (
   nodes.forEach((n: EventFields | AttributeWithClusterId) => {
     if (n instanceof EventFields) {
       vizNodes.push(eventToGraphVizNode(n))
-    } else if (n instanceof Attribute) {
+    } else if (n instanceof AttributeNode) {
       vizNodes.push(attributeToGraphVizNode(n, n.clusterId))
     }
   })
@@ -41,7 +41,7 @@ const toGraphVizNodes = (
 }
 
 export const attributeToGraphVizNode = (
-  attribute: Attribute,
+  attribute: AttributeNode,
   clusterId?: number,
 ): GraphVizNode => {
   const attributeType = getAttributeNodeLabel(attribute.getType())
@@ -101,7 +101,7 @@ const toTooltipNodes = (
     if (n instanceof EventFields) {
       tooltips.push(eventToTooltipNode(n))
     }
-    if (n instanceof Attribute) {
+    if (n instanceof AttributeNode) {
       tooltips.push(attributeToTooltipNode(n, n.clusterId))
     }
   })
@@ -110,7 +110,7 @@ const toTooltipNodes = (
 }
 
 export const attributeToTooltipNode = (
-  attribute: Attribute,
+  attribute: AttributeNode,
   clusterId?: number,
 ): TooltipFields => {
   let displayType = getAttributeDisplayType(attribute.getType())
@@ -165,7 +165,7 @@ export const eventToTooltipNode = (event: EventFields): TooltipFields => {
   return out
 }
 
-interface AttributeWithClusterId extends Attribute {
+interface AttributeWithClusterId extends AttributeNode {
   clusterId: number
 }
 
@@ -230,7 +230,7 @@ const toVizLinks = (links: SomeLink[]): GraphVizLink[] => {
     }
 
     if (
-      link.source instanceof Attribute &&
+      link.source instanceof AttributeNode &&
       link.source.getMatchingPattern() !== ''
     ) {
       // reduce the attractive force between an event and an attribute node that belongs to a pattern group
@@ -238,7 +238,7 @@ const toVizLinks = (links: SomeLink[]): GraphVizLink[] => {
     }
 
     if (
-      link.target instanceof Attribute &&
+      link.target instanceof AttributeNode &&
       link.target.getMatchingPattern() !== ''
     ) {
       // reduce the attractive force between an event and an attribute node that belongs to a pattern group
@@ -262,7 +262,7 @@ const toLegendLabels = (
     if (n instanceof EventFields) {
       eventTypes.add(getEventNodeDisplayType(n.getEventType()))
     }
-    if (n instanceof Attribute) {
+    if (n instanceof AttributeNode) {
       attrTypes.add(getAttributeDisplayType(n.getType()))
     }
   })
