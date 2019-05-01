@@ -1,7 +1,7 @@
 import {size} from 'lodash'
 import * as THREE from 'three'
 import {Vector3} from 'three'
-import {populateLinks, Links, DisplayLink} from './Links'
+import {DisplayLink, Links, populateLinks} from './Links'
 import {
   ClickEventHandler,
   DragEndEventHandler,
@@ -33,21 +33,16 @@ function constructIdToIdxMap(arr: Array<{id: string}>): {[id: string]: number} {
   return map
 }
 
-export interface ConfigurationOptions {
-  disableClick?: boolean
-  disableHover?: boolean
-  disablePan?: boolean
-  disableZoom?: boolean
-  disableDrag?: boolean
-}
-
-const DEFAULT_CONFIG_OPTIONS: ConfigurationOptions = {
+const DEFAULT_CONFIG_OPTIONS = {
   disableClick: false,
   disableHover: false,
   disablePan: false,
   disableZoom: false,
   disableDrag: false,
+  disableContextMenu: false,
 }
+
+export type ConfigurationOptions = Partial<typeof DEFAULT_CONFIG_OPTIONS>
 
 export class GraphVisualization {
   public nodesMesh: Nodes
