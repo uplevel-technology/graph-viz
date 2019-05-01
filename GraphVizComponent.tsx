@@ -3,10 +3,11 @@ import {
   Button,
   createStyles,
   Grid,
+  Popover,
   Theme,
   Typography,
-  withStyles,
   WithStyles,
+  withStyles,
 } from '@material-ui/core'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import ZoomInIcon from '@material-ui/icons/ZoomIn'
@@ -71,6 +72,11 @@ interface State {
   readonly currentlyHoveredIdx: number | null
   readonly errorMessage?: string
   readonly draftLinkSourceNode?: GraphVizNode
+  readonly contextMenuOpen: boolean
+  readonly contextMenuAnchor: {
+    top: number
+    left: number
+  }
 }
 
 interface Props extends WithStyles<typeof styles> {
@@ -116,6 +122,11 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   readonly state: State = {
     currentTooltipNode: null,
     currentlyHoveredIdx: null,
+    contextMenuOpen: false,
+    contextMenuAnchor: {
+      top: 0,
+      left: 0,
+    },
   }
 
   static defaultProps: Partial<Props> = {
@@ -297,6 +308,16 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       this.simulation.settle()
     })
 
+    this.visualization.onSecondaryClick((event, targetNodeIdx) => {
+      this.setState({
+        contextMenuOpen: true,
+        contextMenuAnchor: {
+          top: event.clientY,
+          left: event.clientX,
+        },
+      })
+    })
+
     // Initialize data
     if (this.props.nodes.length > 0) {
       this.initData()
@@ -354,12 +375,27 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.visualization.zoom(-0.2)
   }
 
+  closeContextMenu = () => {
+    this.setState({
+      contextMenuOpen: false,
+    })
+  }
+
   render() {
     const {classes, onRefresh, showControls} = this.props
 
     return (
       <div ref={this.rootRef} className={classes.root}>
         <canvas ref={this.canvasRef} className={classes.canvas} />
+
+        <Popover
+          open={this.state.contextMenuOpen}
+          onBackdropClick={this.closeContextMenu}
+          anchorReference={'anchorPosition'}
+          anchorPosition={this.state.contextMenuAnchor}
+        >
+          Hello World
+        </Popover>
 
         <NodeTooltips node={this.state.currentTooltipNode} />
 
