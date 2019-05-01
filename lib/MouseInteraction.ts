@@ -4,6 +4,11 @@ import {DisplayNode, Nodes} from './Nodes'
 
 const MAX_CLICK_DURATION = 300
 
+type GenericMouseEventHandler = (
+  worldSpacePosition: THREE.Vector3,
+  nodeIdx: number | null,
+) => any
+
 /**
  * dispatched when a node is hovered in or out
  */
@@ -12,26 +17,17 @@ export type HoverEventHandler = (hoveredIdx: number) => any
 /**
  * dispatched when the canvas is clicked. if a node click is detected the clickedNodeIdx will be non-null
  */
-export type ClickEventHandler = (
-  worldSpaceMousePosition: THREE.Vector3,
-  clickedNodeIdx: number | null,
-) => any
+export type ClickEventHandler = GenericMouseEventHandler
 
 /**
  * dispatched when a mouse drag start is detected anywhere on the canvas
  */
-export type DragStartEventHandler = (
-  worldSpaceMousePosition: THREE.Vector3,
-  draggedNodeIdx: number | null,
-) => any
+export type DragStartEventHandler = GenericMouseEventHandler
 
 /**
  * dispatched when a mouse drag end is detected anywhere on the canvas
  */
-export type DragEndEventHandler = (
-  worldSpaceMousePosition: THREE.Vector3,
-  draggedNodeIdx: number | null,
-) => any
+export type DragEndEventHandler = GenericMouseEventHandler
 
 /**
  * dispatched when a mouse dragging event is detected after dragStart was dispatched with a non-null node
@@ -51,7 +47,13 @@ export type PanEventHandler = (panDelta: THREE.Vector3) => any
 /**
  * dispatched on mouse wheel change
  */
-export type ZoomEventHandler = (event: MouseWheelEvent) => any
+export type ZoomEventHandler = (event: WheelEvent) => any
+
+/**
+ * dispatched on context menu
+ * (usually right click or (Cmd/Ctrl)+click in most browsers)
+ */
+export type ContextMenuEventHandler = GenericMouseEventHandler
 
 export class MouseInteraction {
   private nodesData: DisplayNode[]
@@ -67,6 +69,7 @@ export class MouseInteraction {
     nodeDrag: NodeDragEventHandler
     pan: PanEventHandler
     zoom: ZoomEventHandler
+    contextMenu: ContextMenuEventHandler
   } = {
     click: noop,
     nodeHoverIn: noop,
@@ -76,6 +79,7 @@ export class MouseInteraction {
     nodeDrag: noop,
     pan: noop,
     zoom: noop,
+    contextMenu: noop,
   }
 
   private readonly nodesMesh: Nodes
@@ -114,6 +118,7 @@ export class MouseInteraction {
     this.canvas.addEventListener('mousemove', this.onMouseMove)
     this.canvas.addEventListener('mouseup', this.onMouseUp)
     this.canvas.addEventListener('wheel', this.onMouseWheel)
+    this.canvas.addEventListener('contextmenu', this.onContextMenu)
   }
 
   public updateData(nodesData: DisplayNode[]) {
@@ -276,5 +281,10 @@ export class MouseInteraction {
     const worldSpaceMouse = new THREE.Vector3(this.mouse.x, this.mouse.y, z)
     worldSpaceMouse.unproject(this.camera)
     return worldSpaceMouse
+  }
+
+  private onContextMenu = (event: MouseEvent) => {
+    event.preventDefault()
+    this.dragging = false
   }
 }
