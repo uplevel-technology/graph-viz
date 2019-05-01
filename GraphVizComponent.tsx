@@ -3,6 +3,8 @@ import {
   Button,
   createStyles,
   Grid,
+  List,
+  MenuItem,
   Popover,
   Theme,
   Typography,
@@ -394,7 +396,10 @@ class GraphVizComponentBase extends React.Component<Props, State> {
           anchorReference={'anchorPosition'}
           anchorPosition={this.state.contextMenuAnchor}
         >
-          Hello World
+          <List>
+            <MenuItem>Select Cluster</MenuItem>
+            <MenuItem>Highlight Cluster</MenuItem>
+          </List>
         </Popover>
 
         <NodeTooltips node={this.state.currentTooltipNode} />
