@@ -25,8 +25,8 @@ export interface TooltipNode extends TooltipFields {
 }
 
 const getTooltipStyle = (node: TooltipNode): CSSProperties => {
-  const offsetTop = -10
-  const offsetLeft = 10
+  const offsetTop = 30
+  const offsetLeft = 0
   return {
     left: node.screenX + offsetLeft,
     top: node.screenY + offsetTop,
@@ -45,6 +45,8 @@ const styles = (theme: Theme) =>
       padding: 6,
       borderRadius: 3,
       textTransform: 'capitalize',
+      // Disable pointer events on tooltip node
+      pointerEvents: 'none',
     },
     origCase: {
       textTransform: 'none',
