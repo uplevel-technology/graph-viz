@@ -50,10 +50,13 @@ export type PanEventHandler = (panDelta: THREE.Vector3) => any
 export type ZoomEventHandler = (event: WheelEvent) => any
 
 /**
- * dispatched on context menu
- * (usually right click or (Cmd/Ctrl)+click in most browsers)
+ * dispatched on event: 'contextmenu'
+ * (usually right click or Ctrl+click in most browsers)
  */
-export type ContextMenuEventHandler = GenericMouseEventHandler
+export type SecondaryClickEventHandler = (
+  event: MouseEvent,
+  nodeIdx: number | null,
+) => any
 
 export class MouseInteraction {
   private nodesData: DisplayNode[]
@@ -69,7 +72,7 @@ export class MouseInteraction {
     nodeDrag: NodeDragEventHandler
     pan: PanEventHandler
     zoom: ZoomEventHandler
-    contextMenu: ContextMenuEventHandler
+    secondaryClick: SecondaryClickEventHandler
   } = {
     click: noop,
     nodeHoverIn: noop,
@@ -79,7 +82,7 @@ export class MouseInteraction {
     nodeDrag: noop,
     pan: noop,
     zoom: noop,
-    contextMenu: noop,
+    secondaryClick: noop,
   }
 
   private readonly nodesMesh: Nodes
@@ -155,6 +158,10 @@ export class MouseInteraction {
 
   public onZoom(callback: ZoomEventHandler) {
     this.registeredEventHandlers.zoom = callback
+  }
+
+  public onSecondaryClick(callback: SecondaryClickEventHandler) {
+    this.registeredEventHandlers.secondaryClick = callback
   }
 
   private findNearestNodeIndex = (event: MouseEvent): number | null => {
@@ -271,7 +278,7 @@ export class MouseInteraction {
     }
   }
 
-  private onMouseWheel = (event: MouseWheelEvent) => {
+  private onMouseWheel = (event: WheelEvent) => {
     event.preventDefault()
     event.stopPropagation()
     this.registeredEventHandlers.zoom(event)
@@ -286,5 +293,8 @@ export class MouseInteraction {
   private onContextMenu = (event: MouseEvent) => {
     event.preventDefault()
     this.dragging = false
+    this.intersectedPointIdx = this.findNearestNodeIndex(event)
+
+    this.registeredEventHandlers.secondaryClick(event, this.intersectedPointIdx)
   }
 }

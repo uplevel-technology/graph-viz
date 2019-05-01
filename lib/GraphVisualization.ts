@@ -10,6 +10,7 @@ import {
   MouseInteraction,
   NodeDragEventHandler,
   PanEventHandler,
+  SecondaryClickEventHandler,
   ZoomEventHandler,
 } from './MouseInteraction'
 import {DisplayNode, Nodes} from './Nodes'
@@ -39,7 +40,7 @@ const DEFAULT_CONFIG_OPTIONS = {
   disablePan: false,
   disableZoom: false,
   disableDrag: false,
-  disableContextMenu: false,
+  disableSecondaryClick: false,
 }
 
 export type ConfigurationOptions = Partial<typeof DEFAULT_CONFIG_OPTIONS>
@@ -65,6 +66,7 @@ export class GraphVisualization {
     nodeDrag?: NodeDragEventHandler
     pan?: PanEventHandler
     zoom?: ZoomEventHandler
+    secondaryClick?: SecondaryClickEventHandler
   } = {}
 
   private width: number
@@ -167,6 +169,10 @@ export class GraphVisualization {
     if (!configWithDefault.disableZoom) {
       this.mouseInteraction.onZoom(this.handleZoomOnWheel)
     }
+
+    if (!configWithDefault.disableSecondaryClick) {
+      this.mouseInteraction.onSecondaryClick(this.handleSecondaryClick)
+    }
   }
 
   public onNodeHoverIn(callback: HoverEventHandler) {
@@ -191,6 +197,10 @@ export class GraphVisualization {
 
   public onNodeDrag(callback: NodeDragEventHandler) {
     this.registeredEventHandlers.nodeDrag = callback
+  }
+
+  public onSecondaryClick(callback: SecondaryClickEventHandler) {
+    this.registeredEventHandlers.secondaryClick = callback
   }
 
   public onPan(callback: PanEventHandler) {
@@ -481,5 +491,15 @@ export class GraphVisualization {
 
     this.registeredEventHandlers.click(worldSpaceMouse, clickedNodeIdx)
     this.render()
+  }
+
+  private handleSecondaryClick = (
+    event: MouseEvent,
+    clickedNodeIdx: number | null,
+  ) => {
+    if (!this.registeredEventHandlers.secondaryClick) {
+      return
+    }
+    this.registeredEventHandlers.secondaryClick(event, clickedNodeIdx)
   }
 }
