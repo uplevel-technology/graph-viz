@@ -215,6 +215,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       if (clickedNodeIdx === null) {
         return
       }
+      console.log('clicking node...')
 
       toggleNodeLock(this.vizData.nodes[clickedNodeIdx])
 
@@ -230,6 +231,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     })
 
     this.visualization.onNodeDrag((worldPos, draggedNodeIdx) => {
+      console.log('dragging node...')
       let node
       if (this.props.editMode) {
         node = this.vizData.nodes[
@@ -251,6 +253,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     })
 
     this.visualization.onDragStart((mouse, draggedNodeIdx: number | null) => {
+      console.log('drag start node...')
       if (draggedNodeIdx === null) {
         return
       }
@@ -289,6 +292,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     })
 
     this.visualization.onDragEnd((mouse, targetNodeIdx: number | null) => {
+      console.log('drag end node...')
       if (this.props.editMode) {
         if (this.state.draftLinkSourceNode) {
           // This means a draft link was being drawn.
