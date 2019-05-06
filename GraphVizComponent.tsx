@@ -315,6 +315,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     })
 
     this.visualization.onSecondaryClick((event, targetNodeIdx) => {
+      this.simulation.stop()
       this.setState({
         contextMenuOpen: true,
         contextMenuAnchor: {
