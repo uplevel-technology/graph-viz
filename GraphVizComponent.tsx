@@ -3,9 +3,6 @@ import {
   Button,
   createStyles,
   Grid,
-  List,
-  MenuItem,
-  Popover,
   Theme,
   Typography,
   WithStyles,
@@ -74,11 +71,6 @@ interface State {
   readonly currentlyHoveredIdx: number | null
   readonly errorMessage?: string
   readonly draftLinkSourceNode?: GraphVizNode
-  readonly contextMenuOpen: boolean
-  readonly contextMenuAnchor: {
-    top: number
-    left: number
-  }
 }
 
 interface Props extends WithStyles<typeof styles> {
@@ -96,9 +88,15 @@ interface Props extends WithStyles<typeof styles> {
   editMode?: boolean
 
   /**
-   * callback that will be called when a valid link is drawn
+   * callback dispatched when a valid link is drawn.
+   * requires editMode to be true
    */
   onLinkDrawn: (source: GraphVizNode, target: GraphVizNode) => any
+
+  /**
+   * callback dispatched on secondary click
+   */
+  onSecondaryClick: (event: MouseEvent, clickedNodeIdx: number | null) => any
 }
 
 const DRAFT_NODE_ID = 'draft-node'
@@ -124,17 +122,13 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   readonly state: State = {
     currentTooltipNode: null,
     currentlyHoveredIdx: null,
-    contextMenuOpen: false,
-    contextMenuAnchor: {
-      top: 0,
-      left: 0,
-    },
   }
 
   static defaultProps: Partial<Props> = {
     tooltips: [],
     groups: [],
     onLinkDrawn: noop,
+    onSecondaryClick: noop,
   }
 
   onWindowResize = debounce(() => {
@@ -215,7 +209,6 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       if (clickedNodeIdx === null) {
         return
       }
-      console.log('clicking node...')
 
       toggleNodeLock(this.vizData.nodes[clickedNodeIdx])
 
@@ -231,7 +224,6 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     })
 
     this.visualization.onNodeDrag((worldPos, draggedNodeIdx) => {
-      console.log('dragging node...')
       let node
       if (this.props.editMode) {
         node = this.vizData.nodes[
@@ -253,7 +245,6 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     })
 
     this.visualization.onDragStart((mouse, draggedNodeIdx: number | null) => {
-      console.log('drag start node...')
       if (draggedNodeIdx === null) {
         return
       }
@@ -292,7 +283,6 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     })
 
     this.visualization.onDragEnd((mouse, targetNodeIdx: number | null) => {
-      console.log('drag end node...')
       if (this.props.editMode) {
         if (this.state.draftLinkSourceNode) {
           // This means a draft link was being drawn.
@@ -314,15 +304,9 @@ class GraphVizComponentBase extends React.Component<Props, State> {
       this.simulation.settle()
     })
 
-    this.visualization.onSecondaryClick((event, targetNodeIdx) => {
+    this.visualization.onSecondaryClick((...args) => {
       this.simulation.stop()
-      this.setState({
-        contextMenuOpen: true,
-        contextMenuAnchor: {
-          top: event.clientY,
-          left: event.clientX,
-        },
-      })
+      this.props.onSecondaryClick(...args)
     })
 
     // Initialize data
@@ -382,30 +366,12 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     this.visualization.zoom(-0.2)
   }
 
-  closeContextMenu = () => {
-    this.setState({
-      contextMenuOpen: false,
-    })
-  }
-
   render() {
     const {classes, onRefresh, showControls} = this.props
 
     return (
       <div ref={this.rootRef} className={classes.root}>
         <canvas ref={this.canvasRef} className={classes.canvas} />
-
-        <Popover
-          open={this.state.contextMenuOpen}
-          onBackdropClick={this.closeContextMenu}
-          anchorReference={'anchorPosition'}
-          anchorPosition={this.state.contextMenuAnchor}
-        >
-          <List>
-            <MenuItem>Select Cluster</MenuItem>
-            <MenuItem>Highlight Cluster</MenuItem>
-          </List>
-        </Popover>
 
         <NodeTooltips node={this.state.currentTooltipNode} />
 
