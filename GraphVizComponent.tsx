@@ -61,7 +61,7 @@ const styles = (theme: Theme) =>
     errorMessage: {
       position: 'absolute',
       top: 0,
-      left: theme.spacing.unit,
+      left: theme.spacing(1),
       color: 'red',
     },
   })
