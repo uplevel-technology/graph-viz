@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "compile": "tsc",
+    "compile": "tsc && cp -r ./src/shaders ./lib",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
