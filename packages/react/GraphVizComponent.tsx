@@ -19,18 +19,18 @@ import {
   SimulationGroup,
   SimulationLink,
   SimulationNode,
-} from './lib/ForceSimulation'
+} from '../core/src/ForceSimulation'
 import {
   ConfigurationOptions,
   GraphVisualization,
   VisualizationInputData,
-} from './lib/GraphVisualization'
-import {DisplayLink} from './lib/Links'
+} from '../core/src/GraphVisualization'
+import {DisplayLink} from '../core/src/Links'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
 import {debounce, noop, remove} from 'lodash'
-import {DisplayNode} from './lib/Nodes'
-import {DisplayGroup} from './lib/DisplayGroups'
+import {DisplayNode} from '../core/src/Nodes'
+import {DisplayGroup} from '../core/src/DisplayGroups'
 
 /**
  * Primary GraphVizData type definitions
