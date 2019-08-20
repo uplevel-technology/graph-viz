@@ -1,0 +1,32 @@
+{
+  defaultSeverity: "error",
+  extends: [
+    "tslint:recommended",
+    "tslint-react",
+    "tslint-config-prettier",
+  ],
+  jsRules: {},
+  rules: {
+    # Prettier rules
+    prettier: [true, {
+      singleQuote: true,
+      semi: false,
+      trailingComma: "all",
+      bracketSpacing: false,
+    }],
+
+    # TSLint Rules
+    interface-name: [true, "never-prefix"],
+    array-type: false,
+    ordered-imports: false,
+    jsx-boolean-value: false,
+    jsx-no-multiline-js: false,
+    object-literal-sort-keys: false,
+    arrow-parens: false,
+    member-ordering: false,
+    member-access: false,
+  },
+  rulesDirectory: [
+    "tslint-plugin-prettier",
+  ],
+}

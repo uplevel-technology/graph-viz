@@ -1,11 +1,11 @@
-# `core`
+# `layouts`
 
 > TODO: description
 
 ## Usage
 
 ```
-const core = require('core');
+const layouts = require('layouts');
 
 // TODO: DEMONSTRATE API
 ```

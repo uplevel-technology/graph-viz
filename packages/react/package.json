@@ -3,5 +3,37 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "description": "> TODO: description",
+  "author": "sagar-sm <sagar.mohite@live.com>",
+  "homepage": "https://github.com/uplevel-technology/graph-viz#readme",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uplevel-technology/graph-viz.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/uplevel-technology/graph-viz/issues"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.3.2",
+    "@material-ui/icons": "^4.2.1",
+    "classnames": "^2.2.6",
+    "lodash": "^4.17.15",
+    "react": "^16.9.0"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.9",
+    "@types/lodash": "^4.14.137",
+    "@types/react": "^16.9.2"
+  }
 }

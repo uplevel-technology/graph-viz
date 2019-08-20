@@ -13,7 +13,7 @@ lerna-debug.log*
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
+packages/*/lib
 
 # Dependency directories
 node_modules/

@@ -1,11 +1,11 @@
-# `core`
+# `react`
 
 > TODO: description
 
 ## Usage
 
 ```
-const core = require('core');
+const react = require('react');
 
 // TODO: DEMONSTRATE API
 ```

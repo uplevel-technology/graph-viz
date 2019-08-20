@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "declaration": true,
+    "jsx": "react",
+    "lib": ["esnext", "dom"],
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@graph-viz/core": ["./packages/core/src"],
+      "@graph-viz/core/*": ["./packages/core/src/*"],
+      "@graph-viz/layouts": ["./packages/layouts/src"],
+      "@graph-viz/layouts/*": ["./packages/layouts/src/*"],
+      "@graph-viz/react": ["./packages/react/src"],
+      "@graph-viz/react/*": ["./packages/react/src/*"]
+    }
+  }
+}

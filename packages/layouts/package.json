@@ -7,5 +7,26 @@
   "dependencies": {
     "d3": "^5.10.0",
     "lodash": "^4.17.15"
+  },
+  "description": "> TODO: description",
+  "author": "sagar-sm <sagar.mohite@live.com>",
+  "homepage": "https://github.com/uplevel-technology/graph-viz#readme",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uplevel-technology/graph-viz.git"
+  },
+  "scripts": {
+    "compile": "tsc",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/uplevel-technology/graph-viz/issues"
   }
 }
