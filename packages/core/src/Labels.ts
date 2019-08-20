@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import {PopulatedDisplayLink} from './Links'
-import {UPLEVEL_BASE_THEME} from '../../theme'
+
 import {DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE} from './Nodes'
 import {values} from 'lodash'
 
@@ -20,7 +20,8 @@ function buildTexture(text: string, labelScale: number = 1): TextTexture {
   const xPadding = 2
 
   const fontSize = 4 * extraScale
-  const fontString = `${fontSize}px ${UPLEVEL_BASE_THEME.typography.fontFamily}`
+  const fontString =
+    `${fontSize}px -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, serif`
 
   // Measure the text we're about to write, then set the size of the canvas to fit:
   context.font = fontString
