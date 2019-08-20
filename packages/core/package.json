@@ -28,5 +28,9 @@
   },
   "bugs": {
     "url": "https://github.com/uplevel-technology/graph-viz/issues"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.137",
+    "@types/three": "^0.103.2"
   }
 }
