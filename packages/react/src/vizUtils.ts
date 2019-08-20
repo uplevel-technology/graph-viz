@@ -17,7 +17,7 @@ import {
   HOVERED_NODE_SCALE,
   LOCKED_NODE_STROKE_OPACITY,
   LOCKED_NODE_STROKE_WIDTH,
-} from '../core/src/Nodes'
+} from '../../core/src/Nodes'
 import {GraphVizNode} from './GraphVizComponent'
 
 export const NodeFillPalette: {[key: string]: string} = {
