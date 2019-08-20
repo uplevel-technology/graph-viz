@@ -1,0 +1,9 @@
+{
+  "name": "graph-viz",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/uplevel-technology/graph-viz.git",
+  "author": "sagar-sm <sagar.mohite@live.com>",
+  "license": "MIT",
+  "private": true
+}
