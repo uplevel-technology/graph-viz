@@ -1,0 +1,11 @@
+{
+  "name": "@graph-viz/layouts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "d3": "^5.10.0",
+    "lodash": "^4.17.15"
+  }
+}

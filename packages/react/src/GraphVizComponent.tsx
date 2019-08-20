@@ -19,7 +19,7 @@ import {
   SimulationGroup,
   SimulationLink,
   SimulationNode,
-} from '../../core/src/ForceSimulation'
+} from '../../layouts/src/ForceSimulation'
 import {
   ConfigurationOptions,
   GraphVisualization,
