@@ -1,14 +1,5 @@
-import {
-  createStyles,
-  Grid,
-  Theme,
-  Typography,
-  withStyles,
-  WithStyles,
-} from '@material-ui/core'
 import * as React from 'react'
 import {CSSProperties} from 'react'
-import cx from 'classnames'
 
 export interface TooltipFields {
   id: string
@@ -34,44 +25,33 @@ const getTooltipStyle = (node: TooltipNode): CSSProperties => {
   }
 }
 
-const styles = (theme: Theme) =>
-  createStyles({
-    root: {
-      maxWidth: 250,
-      overflow: 'hidden',
-      position: 'absolute',
-      fontSize: 12,
-      backgroundColor: 'rgb(200,207,214, 0.7)',
-      padding: 6,
-      borderRadius: 3,
-      textTransform: 'capitalize',
-      // Disable pointer events on tooltip node
-      pointerEvents: 'none',
-    },
-    origCase: {
-      textTransform: 'none',
-    },
-    breakLongWord: {
-      wordBreak: 'break-word',
-    },
-  })
-
-interface Props extends WithStyles<typeof styles> {
-  node: TooltipNode | null
+const styles = {
+  root: {
+    maxWidth: 250,
+    overflow: 'hidden' as const,
+    position: 'absolute' as const,
+    fontSize: 12,
+    backgroundColor: 'rgb(200,207,214, 0.7)',
+    padding: 6,
+    borderRadius: 3,
+    textTransform: 'capitalize' as const,
+    // Disable pointer events on tooltip node
+    pointerEvents: 'none' as const,
+  },
 }
 
-class NodeTooltipsBase extends React.Component<Props> {
+interface Props {
+  node: TooltipNode | null
+  renderTooltip?: Element | (props) = n
+}
+
+export class NodeTooltips extends React.Component<Props> {
   render() {
-    const {classes} = this.props
     if (!this.props.node) {
       return null
     }
     return (
-      <Grid
-        container
-        direction={'column'}
-        className={classes.root}
-        style={getTooltipStyle(this.props.node)}
+      <div style={{...styles.root, ...getTooltipStyle(this.props.node)}}
       >
         <Grid container direction={'row'} justify={'space-between'}>
           <Grid item>
@@ -97,7 +77,7 @@ class NodeTooltipsBase extends React.Component<Props> {
         </Grid>
         <Typography
           variant={'body2'}
-          className={cx(classes.breakLongWord, classes.origCase)}
+          style={{...styles.breakLongWord, ...styles.origCase}}
         >
           {this.props.node.displayName}
         </Typography>
@@ -117,5 +97,3 @@ class NodeTooltipsBase extends React.Component<Props> {
     )
   }
 }
-
-export const NodeTooltips = withStyles(styles)(NodeTooltipsBase)

@@ -1,18 +1,4 @@
-import {PersistenceServiceClient} from '@core/services/persistence_service_pb_service'
-import {
-  Button,
-  createStyles,
-  Grid,
-  Theme,
-  Typography,
-  WithStyles,
-  withStyles,
-} from '@material-ui/core'
-import RefreshIcon from '@material-ui/icons/Refresh'
-import ZoomInIcon from '@material-ui/icons/ZoomIn'
-import ZoomOutIcon from '@material-ui/icons/ZoomOut'
 import * as React from 'react'
-import {PERSISTENCE_SERVICE_ADDRESS} from '../App'
 import {
   ForceSimulation,
   NodePosition,
@@ -24,13 +10,13 @@ import {
   ConfigurationOptions,
   GraphVisualization,
   VisualizationInputData,
-} from '../../core/src/GraphVisualization'
-import {DisplayLink} from '../../core/src/Links'
+} from '@graph-viz/core/lib/GraphVisualization'
+import {DisplayLink} from '@graph-viz/core/lib/Links'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
 import {debounce, noop, remove} from 'lodash'
-import {DisplayNode} from '../../core/src/Nodes'
-import {DisplayGroup} from '../../core/src/DisplayGroups'
+import {DisplayNode} from '@graph-viz/core/lib/Nodes'
+import {DisplayGroup} from '@graph-viz/core/lib/DisplayGroups'
 
 /**
  * Primary GraphVizData type definitions
@@ -42,38 +28,30 @@ export type GraphVizLink = DisplayLink & SimulationLink
 
 export type GraphVizGroup = DisplayGroup & SimulationGroup
 
-const styles = (theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-      position: 'relative',
-      width: '100%',
-      height: '100%', // FIXME: fix hardcoded height
-    },
-    canvas: {
-      background: 'white',
-    },
-    actionButtons: {
-      position: 'absolute',
-      top: 0,
-      right: 0,
-    },
-    errorMessage: {
-      position: 'absolute',
-      top: 0,
-      left: theme.spacing(1),
-      color: 'red',
-    },
-  })
+const styles = {
+  root: {
+    display: 'flex',
+    position: 'relative' as const,
+    width: '100%',
+    height: '100%',
+  },
+  canvas: {
+    backgroundColor: 'white',
+  },
+  actionButtons: {
+    position: 'absolute' as const,
+    top: 0,
+    right: 0,
+  },
+}
 
 interface State {
   readonly currentTooltipNode: TooltipNode | null
   readonly currentlyHoveredIdx: number | null
-  readonly errorMessage?: string
   readonly draftLinkSourceNode?: GraphVizNode
 }
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   nodes: GraphVizNode[]
   links: GraphVizLink[]
   groups: GraphVizGroup[]
@@ -101,8 +79,7 @@ interface Props extends WithStyles<typeof styles> {
 
 const DRAFT_NODE_ID = 'draft-node'
 
-class GraphVizComponentBase extends React.Component<Props, State> {
-  client = new PersistenceServiceClient(PERSISTENCE_SERVICE_ADDRESS)
+export class GraphVizComponent extends React.Component<Props, State> {
   visualization: GraphVisualization
 
   // There is no need for vizData to be in state as this data is used by the
@@ -131,7 +108,7 @@ class GraphVizComponentBase extends React.Component<Props, State> {
     onSecondaryClick: noop,
   }
 
-  onWindowResize = debounce(() => {
+  onWindowResize: () => void = debounce(() => {
     const root = this.rootRef.current!
     const {width, height} = root.getBoundingClientRect()
 
@@ -367,38 +344,22 @@ class GraphVizComponentBase extends React.Component<Props, State> {
   }
 
   render() {
-    const {classes, onRefresh, showControls} = this.props
+    const {onRefresh, showControls} = this.props
 
     return (
-      <div ref={this.rootRef} className={classes.root}>
-        <canvas ref={this.canvasRef} className={classes.canvas} />
+      <div ref={this.rootRef} style={styles.root}>
+        <canvas ref={this.canvasRef} style={styles.canvas} />
 
         <NodeTooltips node={this.state.currentTooltipNode} />
 
         {showControls && (
-          <div className={classes.actionButtons}>
-            <Grid container direction={'column'}>
-              <Button size={'small'} onClick={onRefresh}>
-                <RefreshIcon />
-              </Button>
-              <Button size={'small'} onClick={this.zoomIn}>
-                <ZoomInIcon />
-              </Button>
-              <Button size={'small'} onClick={this.zoomOut}>
-                <ZoomOutIcon />
-              </Button>
-            </Grid>
+          <div style={styles.actionButtons}>
+            <button onClick={onRefresh}>Refresh</button>
+            <button onClick={this.zoomIn}>Zoom in</button>
+            <button onClick={this.zoomOut}>Zoom out</button>
           </div>
-        )}
-
-        {this.state.errorMessage && (
-          <Typography className={classes.errorMessage}>
-            {this.state.errorMessage}
-          </Typography>
         )}
       </div>
     )
   }
 }
-
-export const GraphVizComponent = withStyles(styles)(GraphVizComponentBase)
