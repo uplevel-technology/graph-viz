@@ -6,10 +6,12 @@ import {
   DEFAULT_NODE_SCALE,
   DisplayNode,
 } from './Nodes'
-import fragmentShader from './shaders/links.fragment.glsl'
-import vertexShader from './shaders/links.vertex.glsl'
 import {defaultTo} from 'lodash'
 import {Labels} from './Labels'
+import {
+  linksFragmentShader,
+  linksVertexShader,
+} from '@graph-viz/core/shaders/asText'
 
 const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
 
@@ -130,8 +132,8 @@ export class Links {
     )
 
     this.material = new THREE.ShaderMaterial({
-      vertexShader,
-      fragmentShader,
+      vertexShader: linksVertexShader,
+      fragmentShader: linksFragmentShader,
       transparent: true,
       uniforms: {
         lineWidth: {value: DEFAULT_LINK_WIDTH},

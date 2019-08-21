@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc && cp -r ./src/shaders ./lib",
+    "build": "tsc",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {

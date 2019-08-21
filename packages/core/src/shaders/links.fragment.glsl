@@ -50,5 +50,5 @@ void main() {
 
   float mask = lineMask + arrowMask;
 
-	gl_FragColor = vec4(vColor, mask);
+  gl_FragColor = vec4(vColor, mask);
 }

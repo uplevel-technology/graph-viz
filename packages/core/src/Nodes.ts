@@ -2,8 +2,10 @@
 
 import {defaultTo, size} from 'lodash'
 import * as THREE from 'three'
-import fragmentShader from './shaders/nodes.fragment.glsl'
-import vertexShader from './shaders/nodes.vertex.glsl'
+import {
+  nodesFragmentShader,
+  nodesVertexShader,
+} from '@graph-viz/core/shaders/asText'
 
 export interface DisplayNode {
   /**
@@ -145,13 +147,13 @@ export class Nodes {
     this.updateAll(nodes)
 
     this.material = new THREE.ShaderMaterial({
-      fragmentShader,
+      fragmentShader: nodesFragmentShader,
       transparent: true,
       uniforms: {
         globalScale: {value: window.devicePixelRatio},
         defaultColor: {value: new THREE.Color(0xffffff)},
       },
-      vertexShader,
+      vertexShader: nodesVertexShader,
     })
 
     this.object = new THREE.Points(this.geometry, this.material)
