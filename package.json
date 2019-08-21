@@ -6,6 +6,10 @@
   "author": "sagar-sm <sagar.mohite@live.com>",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "build": "lerna run build",
+    "publish": "lerna run build && lerna run publish"
+  },
   "devDependencies": {
     "@types/node": "^12.7.2",
     "lerna": "^3.16.4",

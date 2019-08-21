@@ -23,7 +23,7 @@
     "url": "git+https://github.com/uplevel-technology/graph-viz.git"
   },
   "scripts": {
-    "compile": "tsc",
+    "build": "tsc",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {
