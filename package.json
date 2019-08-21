@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "build": "lerna run build",
-    "publish": "lerna run build && lerna run publish"
+    "publish": "lerna run build && lerna publish"
   },
   "devDependencies": {
     "@types/node": "^12.7.2",

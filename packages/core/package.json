@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "private": true,
   "scripts": {
     "build": "tsc && cp -r ./src/shaders ./lib",
     "test": "echo \"Error: run tests from root\" && exit 1"
