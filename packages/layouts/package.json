@@ -7,6 +7,9 @@
     "d3": "^5.10.0",
     "lodash": "^4.17.15"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "> TODO: description",
   "author": "sagar-sm <sagar.mohite@live.com>",
   "homepage": "https://github.com/uplevel-technology/graph-viz#readme",
@@ -31,5 +34,6 @@
   "devDependencies": {
     "@types/d3": "^5.7.2",
     "@types/lodash": "^4.14.137"
-  }
+  },
+  "gitHead": "9b1f7f3a243595c014f30cdf441bc57ffa1be5c1"
 }
