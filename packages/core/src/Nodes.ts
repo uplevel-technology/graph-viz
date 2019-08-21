@@ -5,7 +5,7 @@ import * as THREE from 'three'
 import {
   nodesFragmentShader,
   nodesVertexShader,
-} from '@graph-viz/core/shaders/asText'
+} from './shaders/asText'
 
 export interface DisplayNode {
   /**
