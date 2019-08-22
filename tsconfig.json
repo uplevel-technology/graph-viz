@@ -11,9 +11,6 @@
     "lib": ["esnext", "dom"],
     "experimentalDecorators": true,
     "moduleResolution": "node",
-    "baseUrl": ".",
-    "paths": {
-      "@graph-viz/*": ["packages/*/src"]
-    }
+    "baseUrl": "."
   }
 }
