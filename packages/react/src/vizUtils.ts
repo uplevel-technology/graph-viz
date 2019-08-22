@@ -5,7 +5,7 @@ import {
   HOVERED_NODE_SCALE,
   LOCKED_NODE_STROKE_OPACITY,
   LOCKED_NODE_STROKE_WIDTH,
-} from '../../core/src/Nodes'
+} from '@graph-viz/core/lib/Nodes'
 import {GraphVizNode} from './GraphVizComponent'
 
 interface Vec2 {
@@ -13,10 +13,7 @@ interface Vec2 {
   y: number
 }
 
-export const toggleNodeLock = (
-  node: GraphVizNode,
-  newPos?: Vec2,
-): void => {
+export const toggleNodeLock = (node: GraphVizNode, newPos?: Vec2): void => {
   if (node.fx) {
     unlockNode(node)
   } else {

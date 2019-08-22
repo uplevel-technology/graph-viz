@@ -1,6 +1,10 @@
-export {GraphVisualization} from './GraphVisualization'
-export {Nodes} from './Nodes'
-export {Links} from './Links'
+export {
+  GraphVisualization,
+  VisualizationInputData,
+  ConfigurationOptions,
+} from './GraphVisualization'
+export {Nodes, DisplayNode} from './Nodes'
+export {Links, DisplayLink} from './Links'
 export {MouseInteraction} from './MouseInteraction'
 export {Labels} from './Labels'
-export {DisplayGroups} from './DisplayGroups'
+export {DisplayGroups, DisplayGroup} from './DisplayGroups'

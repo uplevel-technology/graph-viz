@@ -7,6 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "bootstrap": "lerna bootstrap --use-workspaces",
     "build": "lerna run build",
     "publish": "lerna run build && lerna publish"
   },
