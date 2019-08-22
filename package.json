@@ -10,6 +10,9 @@
     "build": "lerna run build",
     "publish": "lerna run build && lerna publish"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
     "@types/node": "^12.7.2",
     "lerna": "^3.16.4",
