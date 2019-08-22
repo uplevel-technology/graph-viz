@@ -1,6 +1,6 @@
 {
   "name": "@graph-viz/react",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "main": "index.js",
   "license": "MIT",
   "description": "> TODO: description",
