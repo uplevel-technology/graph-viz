@@ -22,6 +22,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "docs": "typedoc --mode file --out docs",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {

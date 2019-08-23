@@ -8,6 +8,7 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap --use-workspaces",
+    "docs": "lerna run docs",
     "build": "lerna run build",
     "publish": "lerna run build && lerna publish"
   },

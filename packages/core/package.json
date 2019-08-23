@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "docs": "typedoc --mode file --out docs src",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
