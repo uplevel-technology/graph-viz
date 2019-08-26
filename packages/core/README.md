@@ -1,4 +1,9 @@
-# `@graph-viz/core`
+GraphViz library is a high-performance WebGL based library for drawing graph visualizations.
+
+------------------------------------------------------------------------
+
+
+# @graph-viz/core
 
 > WebGL based core drawing utility for graph visualizations
 
@@ -24,4 +29,58 @@ const visualization = new GraphVisualization(
 );
 ```
 
-See docs for all available methods.
+-----------------------------------------------------------------
+
+# @graph-viz/layouts
+
+> Layout algorithms for graphs.
+
+Implemented:
+* Force Simulation (uses d3-force)
+
+In Progress:
+* Temporal Graph Layout
+
+This packages exposes stateful (force simulations) as well as stateless plug-n-play 
+layout generation functions that can be used to seed nodes and links data with positions 
+on the canvas. 
+
+## Installation
+`npm install @graph-viz/layouts --save`
+
+## Usage
+
+```typescript
+import {ForceSimulation} from '@graph-viz/layouts'
+
+const simulation = new ForceSimulation();
+
+simulation.init(data);
+
+simulation.onTick(callback);
+```
+
+-----------------------------------------------------------------
+
+# @graph-viz/react
+
+
+A zero-config plug and play React component to draw a force directed graph visualization.
+Depends on `@graph-viz/core` and `@graph-viz/layouts`
+
+## Installation
+`npm install @graph-viz/react --save`
+
+## Usage
+
+```typescript
+import {GraphVizComponent} from '@graph-viz/react'
+
+...
+  <GraphVizComponent
+    editMode
+    nodes={[]}
+    links={[]]}
+    tooltips={[]}
+  />
+```

@@ -1,0 +1,7 @@
+{
+  "name": "@graph-viz",
+  "mode": "modules",
+  "out": "docs",
+  "preserveConstEnums": "true",
+  "external-modulemap": ".*packages\/([^\/]+)\/.*"
+}

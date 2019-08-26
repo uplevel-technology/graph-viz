@@ -1,6 +1,4 @@
-# `@graph-viz` Library
-
-The GraphViz library is a high-performance WebGL based library for drawing graph visualizations.
+GraphViz library is a high-performance WebGL based library for drawing graph visualizations.
 
 # `@graph-viz/core`
 
@@ -27,8 +25,6 @@ const visualization = new GraphVisualization(
   config,  // config
 );
 ```
-
-See docs for all available methods.
 
 
 # `@graph-viz/layouts`
@@ -59,7 +55,6 @@ simulation.init(data);
 
 simulation.onTick(callback);
 ```
-See docs for detailed API
 
 # `react`
 
@@ -82,5 +77,3 @@ import {GraphVizComponent} from '@graph-viz/react'
     tooltips={[]}
   />
 ```
-
-See docs for full reference.
