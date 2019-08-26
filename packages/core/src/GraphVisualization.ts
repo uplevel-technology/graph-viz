@@ -43,7 +43,14 @@ const DEFAULT_CONFIG_OPTIONS = {
   disableSecondaryClick: false,
 }
 
-export type ConfigurationOptions = Partial<typeof DEFAULT_CONFIG_OPTIONS>
+export interface ConfigurationOptions {
+  disableClick?: boolean
+  disableHover?: boolean
+  disablePan?: boolean
+  disableZoom?: boolean
+  disableDrag?: boolean
+  disableSecondaryClick?: boolean
+}
 
 export class GraphVisualization {
   public nodesMesh: Nodes
