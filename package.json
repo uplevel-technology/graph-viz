@@ -8,7 +8,8 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap --use-workspaces",
-    "docs": "typedoc packages",
+    "generate-docs": "typedoc packages",
+    "deploy-docs": "typedoc packages && gh-pages -d docs",
     "build": "lerna run build",
     "publish": "lerna run build && lerna publish"
   },
@@ -17,6 +18,7 @@
   ],
   "devDependencies": {
     "@types/node": "^12.7.2",
+    "gh-pages": "^2.1.1",
     "lerna": "^3.16.4",
     "npm": "^6.11.2",
     "prettier": "^1.18.2",
