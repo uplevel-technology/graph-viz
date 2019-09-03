@@ -1,11 +1,23 @@
 # `react`
 
-> TODO: description
+A zero-config plug and play React component to draw a force directed graph visualization.
+Depends on `@graph-viz/core` and `@graph-viz/layouts`
+
+## Installation
+`npm install @graph-viz/react --save`
 
 ## Usage
 
-```
-const react = require('react');
+```typescript
+import {GraphVizComponent} from '@graph-viz/react'
 
-// TODO: DEMONSTRATE API
+...
+  <GraphVizComponent
+    editMode
+    nodes={[]}
+    links={[]]}
+    tooltips={[]}
+  />
 ```
+
+See docs for full reference.

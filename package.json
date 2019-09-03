@@ -8,6 +8,8 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap --use-workspaces",
+    "generate-docs": "typedoc packages",
+    "deploy-docs": "typedoc packages && gh-pages -d docs",
     "build": "lerna run build",
     "publish": "lerna run build && lerna publish"
   },
@@ -16,13 +18,19 @@
   ],
   "devDependencies": {
     "@types/node": "^12.7.2",
+    "gh-pages": "^2.1.1",
     "lerna": "^3.16.4",
+    "npm": "^6.11.2",
     "prettier": "^1.18.2",
     "ts-loader": "^6.0.4",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.0.1",
     "tslint-react": "^4.0.0",
-    "typescript": "^3.5.3"
+    "typedoc-plugin-external-module-map": "^1.0.0",
+    "typescript": "^3.5.3",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7",
+    "typedoc": "^0.15.0"
   }
 }
