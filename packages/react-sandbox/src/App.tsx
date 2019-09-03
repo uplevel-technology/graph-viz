@@ -3,6 +3,7 @@ import logo from './logo.svg'
 import './App.css'
 import {GraphVizComponent} from '@graph-viz/react'
 import {DisplayGroups} from '@graph-viz/core'
+import {GraphVisualization} from '@graph-viz/core'
 
 const DATA = {
   nodes: [
