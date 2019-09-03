@@ -15,6 +15,7 @@ import {
 } from './MouseInteraction'
 import {DisplayNode, Nodes} from './Nodes'
 import {DisplayGroup, DisplayGroups} from './DisplayGroups'
+import {validate, required, validateClassConstructor} from './validators'
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
@@ -52,6 +53,7 @@ export interface ConfigurationOptions {
   disableSecondaryClick?: boolean
 }
 
+@validateClassConstructor
 export class GraphVisualization {
   public nodesMesh: Nodes
   public linksMesh: Links
@@ -84,10 +86,10 @@ export class GraphVisualization {
   private readonly mouseInteraction: MouseInteraction
 
   constructor(
-    graphData: VisualizationInputData,
-    canvas: HTMLCanvasElement,
-    width: number,
-    height: number,
+    @required graphData: VisualizationInputData,
+    @required canvas: HTMLCanvasElement,
+    @required width: number,
+    @required height: number,
     config: ConfigurationOptions = {},
   ) {
     this.data = graphData
@@ -182,7 +184,8 @@ export class GraphVisualization {
     }
   }
 
-  public onNodeHoverIn(callback: HoverEventHandler) {
+  @validate
+  public onNodeHoverIn(@required callback: HoverEventHandler) {
     this.registeredEventHandlers.nodeHoverIn = callback
   }
 

@@ -10,6 +10,7 @@
     "bootstrap": "lerna bootstrap --use-workspaces",
     "generate-docs": "typedoc packages",
     "deploy-docs": "typedoc packages && gh-pages -d docs",
+    "test": "lerna run testx",
     "build": "lerna run build",
     "publish": "lerna run build && lerna publish"
   },
@@ -32,6 +33,6 @@
     "tslint-react": "^4.0.0",
     "typedoc": "^0.15.0",
     "typedoc-plugin-external-module-map": "^1.0.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.2"
   }
 }
