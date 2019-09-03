@@ -1,0 +1,25 @@
+.App {
+  text-align: left;
+}
+
+.App-logo {
+  width: 50px;
+}
+
+.App-header {
+  background: rgb(60, 60, 60);
+  height: 60px;
+  display: flex;
+  padding-left: 20px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15), 0 5px 5px rgba(0,0,0,0.02);
+}
+
+.App-graph-viz-container {
+  width: 100%;
+  height: calc(100vh - 60px);
+}
