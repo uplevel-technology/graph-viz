@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "docs": "typedoc --mode file --out docs src",
-    "testx": "jest"
+    "test": "jest"
   },
   "dependencies": {
     "lodash": "^4.17.15",

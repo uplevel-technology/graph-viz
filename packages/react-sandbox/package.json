@@ -13,9 +13,9 @@
     "typescript": "3.6.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "startsandbox": "react-scripts start",
+    "testsandbox": "react-scripts test",
+    "ejectsandbox": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
