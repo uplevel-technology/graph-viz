@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "docs": "typedoc --mode file --out docs src",
-    "test": "jest"
+    "test": "jest --colors"
   },
   "dependencies": {
     "lodash": "^4.17.15",
@@ -20,8 +20,7 @@
   "author": "sagar-sm <sagar.mohite@live.com>",
   "homepage": "https://github.com/uplevel-technology/graph-viz#readme",
   "directories": {
-    "lib": "lib",
-    "test": "__tests__"
+    "lib": "lib"
   },
   "files": [
     "lib"
@@ -35,7 +34,9 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.137",
-    "@types/three": "^0.103.2"
+    "@types/three": "^0.103.2",
+    "canvas": "^2.6.0",
+    "jest-canvas-mock": "^2.1.1"
   },
   "gitHead": "9b1f7f3a243595c014f30cdf441bc57ffa1be5c1"
 }

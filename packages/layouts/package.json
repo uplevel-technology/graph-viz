@@ -14,8 +14,7 @@
   "author": "sagar-sm <sagar.mohite@live.com>",
   "homepage": "https://github.com/uplevel-technology/graph-viz#readme",
   "directories": {
-    "lib": "lib",
-    "test": "__tests__"
+    "lib": "lib"
   },
   "files": [
     "lib"
@@ -27,7 +26,7 @@
   "scripts": {
     "build": "tsc",
     "docs": "typedoc --mode file --out docs src",
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "jest --colors"
   },
   "bugs": {
     "url": "https://github.com/uplevel-technology/graph-viz/issues"
