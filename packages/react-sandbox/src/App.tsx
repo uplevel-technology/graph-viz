@@ -1,9 +1,9 @@
-import React from 'react'
+import React, {useEffect, useRef} from 'react'
 import logo from './logo.svg'
 import './App.css'
 import {GraphVizComponent} from '@graph-viz/react'
-import {DisplayGroups} from '@graph-viz/core'
-import {GraphVisualization} from '@graph-viz/core'
+import {DisplayGroup, DisplayNode, DisplayLink} from '@graph-viz/core'
+import {GraphVisualization, VisualizationInputData} from '@graph-viz/core'
 
 const DATA = {
   nodes: [
@@ -30,11 +30,30 @@ const DATA = {
 }
 
 const App: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+
+  // useEffect(() => {
+  //   const viz = new GraphVisualization(
+  //     {
+  //       nodes: (DATA.nodes as unknown) as DisplayNode[],
+  //       links: DATA.links,
+  //       groups: (DATA.groups as unknown) as DisplayGroup[],
+  //     },
+  //     canvasRef.current!,
+  //     500,
+  //     500,
+  //   )
+  //
+  //   // @ts-ignore
+  //   // viz.onNodeHoverIn()
+  // }, [])
+
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
       </header>
+      {/*<canvas ref={canvasRef} />*/}
       <div className="App-content">
         <div className="App-graph-viz-container">
           <GraphVizComponent

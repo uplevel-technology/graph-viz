@@ -87,7 +87,7 @@ export class GraphVizComponent extends React.Component<Props, State> {
   vizData: VisualizationInputData = {
     nodes: [],
     links: [],
-    displayGroups: [],
+    groups: [],
   }
 
   tooltipNodes: TooltipNode[]
@@ -122,7 +122,7 @@ export class GraphVizComponent extends React.Component<Props, State> {
     this.vizData = {
       nodes: this.props.nodes as DisplayNode[],
       links: this.props.links,
-      displayGroups: this.props.groups,
+      groups: this.props.groups,
     }
     this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
@@ -192,7 +192,7 @@ export class GraphVizComponent extends React.Component<Props, State> {
       this.simulation.update({
         nodes: this.vizData.nodes,
         links: this.vizData.links,
-        forceGroups: this.vizData.displayGroups,
+        forceGroups: this.vizData.groups,
       })
       this.visualization.updateNode(
         clickedNodeIdx,
@@ -301,8 +301,8 @@ export class GraphVizComponent extends React.Component<Props, State> {
       this.initData()
     }
     if (prevProps.groups !== this.props.groups) {
-      this.vizData.displayGroups = this.props.groups
-      this.visualization.updateDisplayGroups(this.vizData.displayGroups)
+      this.vizData.groups = this.props.groups
+      this.visualization.updateGroups(this.vizData.groups)
     }
   }
 
@@ -329,7 +329,7 @@ export class GraphVizComponent extends React.Component<Props, State> {
         return node
       }) as DisplayNode[],
       links: this.props.links as DisplayLink[],
-      displayGroups: this.props.groups,
+      groups: this.props.groups,
     }
 
     this.visualization.update(this.vizData)

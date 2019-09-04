@@ -23,7 +23,7 @@ const PAN_SPEED = 1.0
 export interface VisualizationInputData {
   nodes: DisplayNode[]
   links: DisplayLink[]
-  displayGroups: DisplayGroup[]
+  groups: DisplayGroup[]
 }
 
 function constructIdToIdxMap(arr: Array<{id: string}>): {[id: string]: number} {
@@ -57,7 +57,7 @@ export interface ConfigurationOptions {
 export class GraphVisualization {
   public nodesMesh: Nodes
   public linksMesh: Links
-  public displayGroupsMesh: DisplayGroups
+  public groupsMesh: DisplayGroups
 
   public readonly canvas: HTMLCanvasElement
   public readonly camera: THREE.OrthographicCamera
@@ -128,13 +128,10 @@ export class GraphVisualization {
 
     this.nodesMesh = new Nodes(graphData.nodes)
     this.linksMesh = new Links(populateLinks(graphData, this.nodeIdToIndexMap))
-    this.displayGroupsMesh = new DisplayGroups(
-      graphData.nodes,
-      graphData.displayGroups,
-    )
+    this.groupsMesh = new DisplayGroups(graphData.nodes, graphData.groups)
 
-    this.displayGroupsMesh.object.position.z = 0
-    this.scene.add(this.displayGroupsMesh.object)
+    this.groupsMesh.object.position.z = 0
+    this.scene.add(this.groupsMesh.object)
 
     this.linksMesh.object.position.z = 1
     this.scene.add(this.linksMesh.object)
@@ -244,7 +241,7 @@ export class GraphVisualization {
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
     this.nodesMesh.updateAll(graphData.nodes)
     this.linksMesh.updateAll(populateLinks(graphData, this.nodeIdToIndexMap))
-    this.displayGroupsMesh.updateAll(graphData.nodes, graphData.displayGroups)
+    this.groupsMesh.updateAll(graphData.nodes, graphData.groups)
     this.mouseInteraction.updateData(this.data.nodes)
   }
 
@@ -274,10 +271,7 @@ export class GraphVisualization {
     this.linksMesh.updateAllPositions(
       populateLinks(updatedGraphData, this.nodeIdToIndexMap),
     )
-    this.displayGroupsMesh.updateAll(
-      updatedGraphData.nodes,
-      updatedGraphData.displayGroups,
-    )
+    this.groupsMesh.updateAll(updatedGraphData.nodes, updatedGraphData.groups)
     this.mouseInteraction.updateData(this.data.nodes)
 
     if (!this.userHasAdjustedViewport) {
@@ -299,21 +293,21 @@ export class GraphVisualization {
     this.data.nodes[index] = updatedNode
     this.nodesMesh.updateOne(index, updatedNode)
     this.mouseInteraction.updateData(this.data.nodes)
-    this.displayGroupsMesh.updateAll(this.data.nodes, this.data.displayGroups)
+    this.groupsMesh.updateAll(this.data.nodes, this.data.groups)
     this.render()
   }
 
   /**
-   * updates only the display groups mesh.
+   * updates only the groups mesh.
    * Useful in situations that require ONLY display groups to update.
    * E.g. toggling a group on or off when the nodes within a group
    * have NOT changed.
-   * @param displayGroups
+   * @param groups
    */
   @validate
-  public updateDisplayGroups(@required displayGroups: DisplayGroup[]) {
-    this.data.displayGroups = displayGroups
-    this.displayGroupsMesh.updateAll(this.data.nodes, this.data.displayGroups)
+  public updateGroups(@required groups: DisplayGroup[]) {
+    this.data.groups = groups
+    this.groupsMesh.updateAll(this.data.nodes, this.data.groups)
     this.render()
   }
 
