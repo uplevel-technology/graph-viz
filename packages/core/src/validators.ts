@@ -32,13 +32,16 @@ export function validate(
       target,
       propertyName,
     )
+
     if (requiredParameters) {
       for (const parameterIndex of requiredParameters) {
         if (
           parameterIndex >= arguments.length ||
           arguments[parameterIndex] === undefined
         ) {
-          throw new Error('Missing required argument.')
+          throw new Error(
+            `Call to ${target.constructor.name}.${propertyName}() missing required argument(s). Please refer to the docs for correct usage.`,
+          )
         }
       }
     }
@@ -63,7 +66,9 @@ export function validateClassConstructor<T extends new (...args: any[]) => {}>(
             parameterIndex >= arguments.length ||
             arguments[parameterIndex] === undefined
           ) {
-            throw new Error(`Missing required argument.`)
+            throw new Error(
+              `${target.constructor.name} initialized with missing argument(s). Please refer to the docs for correct usage.`,
+            )
           }
         }
       }
