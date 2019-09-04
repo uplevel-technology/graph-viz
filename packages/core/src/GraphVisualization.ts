@@ -189,35 +189,43 @@ export class GraphVisualization {
     this.registeredEventHandlers.nodeHoverIn = callback
   }
 
-  public onNodeHoverOut(callback: HoverEventHandler) {
+  @validate
+  public onNodeHoverOut(@required callback: HoverEventHandler) {
     this.registeredEventHandlers.nodeHoverOut = callback
   }
 
-  public onClick(callback: ClickEventHandler) {
+  @validate
+  public onClick(@required callback: ClickEventHandler) {
     this.registeredEventHandlers.click = callback
   }
 
-  public onDragStart(callback: DragStartEventHandler) {
+  @validate
+  public onDragStart(@required callback: DragStartEventHandler) {
     this.registeredEventHandlers.dragStart = callback
   }
 
-  public onDragEnd(callback: DragEndEventHandler) {
+  @validate
+  public onDragEnd(@required callback: DragEndEventHandler) {
     this.registeredEventHandlers.dragEnd = callback
   }
 
-  public onNodeDrag(callback: NodeDragEventHandler) {
+  @validate
+  public onNodeDrag(@required callback: NodeDragEventHandler) {
     this.registeredEventHandlers.nodeDrag = callback
   }
 
-  public onSecondaryClick(callback: SecondaryClickEventHandler) {
+  @validate
+  public onSecondaryClick(@required callback: SecondaryClickEventHandler) {
     this.registeredEventHandlers.secondaryClick = callback
   }
 
-  public onPan(callback: PanEventHandler) {
+  @validate
+  public onPan(@required callback: PanEventHandler) {
     this.registeredEventHandlers.pan = callback
   }
 
-  public onZoom(callback: ZoomEventHandler) {
+  @validate
+  public onZoom(@required callback: ZoomEventHandler) {
     this.registeredEventHandlers.zoom = callback
   }
 
@@ -230,7 +238,8 @@ export class GraphVisualization {
    * adds/removes new/deleted nodes
    * @param graphData
    */
-  public update = (graphData: VisualizationInputData) => {
+  @validate
+  public update(@required graphData: VisualizationInputData) {
     this.data = graphData
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
     this.nodesMesh.updateAll(graphData.nodes)
@@ -248,7 +257,8 @@ export class GraphVisualization {
    *
    * @param updatedGraphData
    */
-  public updatePositions = (updatedGraphData: VisualizationInputData) => {
+  @validate
+  public updatePositions(@required updatedGraphData: VisualizationInputData) {
     if (updatedGraphData.nodes.length !== this.data.nodes.length) {
       throw new Error(
         `GraphVisualization.updatePositions should only be used 
@@ -281,7 +291,11 @@ export class GraphVisualization {
    * @param index
    * @param updatedNode
    */
-  public updateNode = (index: number, updatedNode: DisplayNode) => {
+  @validate
+  public updateNode(
+    @required index: number,
+    @required updatedNode: DisplayNode,
+  ) {
     this.data.nodes[index] = updatedNode
     this.nodesMesh.updateOne(index, updatedNode)
     this.mouseInteraction.updateData(this.data.nodes)
@@ -296,7 +310,8 @@ export class GraphVisualization {
    * have NOT changed.
    * @param displayGroups
    */
-  public updateDisplayGroups = (displayGroups: DisplayGroup[]) => {
+  @validate
+  public updateDisplayGroups(@required displayGroups: DisplayGroup[]) {
     this.data.displayGroups = displayGroups
     this.displayGroupsMesh.updateAll(this.data.nodes, this.data.displayGroups)
     this.render()
@@ -307,7 +322,8 @@ export class GraphVisualization {
    * @param width
    * @param height
    */
-  public resize(width: number, height: number) {
+  @validate
+  public resize(@required width: number, @required height: number) {
     if (width === this.width && height === this.height) {
       return
     }
@@ -328,10 +344,10 @@ export class GraphVisualization {
    * @param worldX
    * @param worldY
    */
-  public toScreenSpacePoint = (
+  public toScreenSpacePoint(
     worldX: number = 0,
     worldY: number = 0,
-  ): THREE.Vector3 => {
+  ): THREE.Vector3 {
     const pos = new THREE.Vector3(worldX, worldY, 0)
     pos.project(this.camera)
 
@@ -346,7 +362,7 @@ export class GraphVisualization {
    * public method to zoom the graph
    * @param factor
    */
-  public zoom = (factor: number = 0) => {
+  public zoom(factor: number = 0) {
     this.userHasAdjustedViewport = true
     this.camera.zoom += factor * this.camera.zoom
     this.camera.updateProjectionMatrix()
