@@ -45,7 +45,7 @@ export function NodeTooltips(props: NodeTooltipsProps) {
     return null
   }
   return (
-    <div style={{...styles.root, ...getTooltipStyle(this.props.node)}}>
+    <div style={{...styles.root, ...getTooltipStyle(props.node)}}>
       {props.node.displayName}
     </div>
   )
