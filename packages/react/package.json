@@ -1,6 +1,6 @@
 {
   "name": "@graph-viz/react",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "main": "./lib/index.js",
   "license": "MIT",
   "description": "> TODO: description",
@@ -28,8 +28,8 @@
     "url": "https://github.com/uplevel-technology/graph-viz/issues"
   },
   "dependencies": {
-    "@graph-viz/core": "^0.1.4",
-    "@graph-viz/layouts": "^0.1.2",
+    "@graph-viz/core": "^0.2.0",
+    "@graph-viz/layouts": "^0.2.0",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
