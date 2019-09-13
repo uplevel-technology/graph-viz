@@ -72,6 +72,11 @@ interface Props {
   onLinkDrawn: (source: GraphVizNode, target: GraphVizNode) => any
 
   /**
+   * callback dispatched on primary click
+   */
+  onClick: (event: MouseEvent, clickedNodeIdx: number | null) => any
+
+  /**
    * callback dispatched on secondary click
    */
   onSecondaryClick: (event: MouseEvent, clickedNodeIdx: number | null) => any
@@ -105,6 +110,7 @@ export class GraphVizComponent extends React.Component<Props, State> {
     tooltips: [],
     groups: [],
     onLinkDrawn: noop,
+    onClick: noop,
     onSecondaryClick: noop,
   }
 
@@ -182,23 +188,27 @@ export class GraphVizComponent extends React.Component<Props, State> {
       }
     })
 
-    this.visualization.onClick((worldPos, clickedNodeIdx) => {
-      if (clickedNodeIdx === null) {
-        return
-      }
+    this.visualization.onClick(
+      (worldPos, clickedNodeIdx, event: MouseEvent) => {
+        this.props.onClick(event, clickedNodeIdx)
 
-      toggleNodeLock(this.vizData.nodes[clickedNodeIdx])
+        if (clickedNodeIdx === null) {
+          return
+        }
 
-      this.simulation.update({
-        nodes: this.vizData.nodes,
-        links: this.vizData.links,
-        forceGroups: this.vizData.groups,
-      })
-      this.visualization.updateNode(
-        clickedNodeIdx,
-        this.vizData.nodes[clickedNodeIdx],
-      )
-    })
+        toggleNodeLock(this.vizData.nodes[clickedNodeIdx])
+
+        this.simulation.update({
+          nodes: this.vizData.nodes,
+          links: this.vizData.links,
+          forceGroups: this.vizData.groups,
+        })
+        this.visualization.updateNode(
+          clickedNodeIdx,
+          this.vizData.nodes[clickedNodeIdx],
+        )
+      },
+    )
 
     this.visualization.onNodeDrag((worldPos, draggedNodeIdx) => {
       let node

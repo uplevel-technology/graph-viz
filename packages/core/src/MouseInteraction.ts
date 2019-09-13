@@ -7,6 +7,7 @@ const MAX_CLICK_DURATION = 300
 type GenericMouseEventHandler = (
   worldSpacePosition: THREE.Vector3,
   nodeIdx: number | null,
+  event: MouseEvent,
 ) => any
 
 /**
@@ -221,6 +222,7 @@ export class MouseInteraction {
     this.registeredEventHandlers.dragStart(
       this.getMouseInWorldSpace(0),
       this.intersectedPointIdx,
+      event,
     )
   }
 
@@ -230,10 +232,18 @@ export class MouseInteraction {
     const worldMouse = this.getMouseInWorldSpace(0)
 
     this.intersectedPointIdx = this.findNearestNodeIndex(event)
-    this.registeredEventHandlers.dragEnd(worldMouse, this.intersectedPointIdx)
+    this.registeredEventHandlers.dragEnd(
+      worldMouse,
+      this.intersectedPointIdx,
+      event,
+    )
 
     if (this.registerClick) {
-      this.registeredEventHandlers.click(worldMouse, this.intersectedPointIdx)
+      this.registeredEventHandlers.click(
+        worldMouse,
+        this.intersectedPointIdx,
+        event,
+      )
     }
   }
 

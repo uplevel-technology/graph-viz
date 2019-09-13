@@ -439,10 +439,15 @@ export class GraphVisualization {
   private handleDragStart = (
     worldSpaceMouse: THREE.Vector3,
     draggedNodeIdx: number | null,
+    event: MouseEvent,
   ) => {
     this.userHasAdjustedViewport = true
     if (this.registeredEventHandlers.dragStart) {
-      this.registeredEventHandlers.dragStart(worldSpaceMouse, draggedNodeIdx)
+      this.registeredEventHandlers.dragStart(
+        worldSpaceMouse,
+        draggedNodeIdx,
+        event,
+      )
     }
     this.render() // <- this is probably not needed
   }
@@ -457,9 +462,13 @@ export class GraphVisualization {
     this.render()
   }
 
-  private handleDragEnd = (worldSpaceMouse: THREE.Vector3, nodeIdx: number) => {
+  private handleDragEnd = (
+    worldSpaceMouse: THREE.Vector3,
+    nodeIdx: number,
+    event: MouseEvent,
+  ) => {
     if (this.registeredEventHandlers.dragEnd) {
-      this.registeredEventHandlers.dragEnd(worldSpaceMouse, nodeIdx)
+      this.registeredEventHandlers.dragEnd(worldSpaceMouse, nodeIdx, event)
     }
   }
 
@@ -504,12 +513,13 @@ export class GraphVisualization {
   private handleClick = (
     worldSpaceMouse: THREE.Vector3,
     clickedNodeIdx: number | null,
+    event: MouseEvent,
   ) => {
     if (clickedNodeIdx === null || !this.registeredEventHandlers.click) {
       return
     }
 
-    this.registeredEventHandlers.click(worldSpaceMouse, clickedNodeIdx)
+    this.registeredEventHandlers.click(worldSpaceMouse, clickedNodeIdx, event)
     this.render()
   }
 
