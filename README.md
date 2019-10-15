@@ -1,4 +1,16 @@
 GraphViz library is a high-performance WebGL based library for drawing graph visualizations.
+It ships in multiple packages, each having a specific purpose.
+
+#### TL;DR
+* The `@graph-viz/core` package exposes a data-driven WebGL-based graph renderer.
+* The `@graph-viz/layouts` package exposes a force directed layout built with d3.js.
+* The `@graph-viz/react` packages depends on the above two packages and exposes a 
+zero-config plug-and-play React component. This component is built with the most common
+use cases in mind and focuses more on ease-of-use and less on configurability. 
+
+If your application has advanced requirements such as custom layouts, 
+complex interactions or drilldown of data, please use the `core` and/or `layouts` packages directly.
+ 
 
 # `@graph-viz/core`
 
