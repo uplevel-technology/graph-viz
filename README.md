@@ -12,7 +12,7 @@ If your application has advanced requirements such as custom layouts,
 complex interactions or drilldown of data, please use the `core` and/or `layouts` packages directly.
  
 
-# `@graph-viz/core`
+# @graph-viz/core
 
 > WebGL based core drawing utility for graph visualizations
 
@@ -41,7 +41,7 @@ const visualization = new GraphVisualization(
 ```
 
 
-# `@graph-viz/layouts`
+# @graph-viz/layouts
 
 > Layout algorithms for graphs.
 
@@ -72,7 +72,7 @@ simulation.init(data);
 simulation.onTick(callback);
 ```
 
-# `react`
+# @graph-viz/react
 
 A zero-config plug and play React component to draw a force directed graph visualization.
 Depends on `@graph-viz/core` and `@graph-viz/layouts`
