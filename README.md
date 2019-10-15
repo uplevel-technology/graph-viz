@@ -25,6 +25,8 @@ can be used by callers to update the data and re-render the visualization.
 
 ## Usage
 
+See docs for class [GraphVisualization](https://uplevel-technology.github.io/graph-viz/classes/core.graphvisualization.html).
+
 ```typescript
 import {GraphVisualization} from '@graph-viz/core'
 
@@ -58,6 +60,8 @@ on the canvas.
 
 ## Usage
 
+See docs for [ForceSimulation](https://uplevel-technology.github.io/graph-viz/classes/layouts.forcesimulation.html).
+
 ```typescript
 import {ForceSimulation} from '@graph-viz/layouts'
 
@@ -77,6 +81,8 @@ Depends on `@graph-viz/core` and `@graph-viz/layouts`
 `npm install @graph-viz/react --save`
 
 ## Usage
+
+See docs for [GraphVizComponent](https://uplevel-technology.github.io/graph-viz/classes/react.graphvizcomponent.html).
 
 ```typescript
 import {GraphVizComponent} from '@graph-viz/react'

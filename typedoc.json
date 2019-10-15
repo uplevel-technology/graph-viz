@@ -3,6 +3,7 @@
   "mode": "modules",
   "out": "docs",
   "preserveConstEnums": "true",
+  "readme": "./README.md",
   "external-modulemap": ".*packages\/([^\/]+)\/.*",
   "exclude": ["packages/react-sandbox"]
 }

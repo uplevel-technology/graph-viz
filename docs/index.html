@@ -64,10 +64,22 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<p>GraphViz library is a high-performance WebGL based library for drawing graph visualizations.</p>
-				<hr>
-				<a href="#graph-vizcore" id="graph-vizcore" style="color: inherit; text-decoration: none;">
-					<h1>@graph-viz/core</h1>
+				<p>GraphViz library is a high-performance WebGL based library for drawing graph visualizations.
+				It ships in multiple packages, each having a specific purpose.</p>
+				<a href="#tldr" id="tldr" style="color: inherit; text-decoration: none;">
+					<h4>TL;DR</h4>
+				</a>
+				<ul>
+					<li>The <code>@graph-viz/core</code> package exposes a data-driven WebGL-based graph renderer.</li>
+					<li>The <code>@graph-viz/layouts</code> package exposes a force directed layout built with d3.js.</li>
+					<li>The <code>@graph-viz/react</code> packages depends on the above two packages and exposes a
+						zero-config plug-and-play React component. This component is built with the most common
+					use cases in mind and focuses more on ease-of-use and less on configurability. </li>
+				</ul>
+				<p>If your application has advanced requirements such as custom layouts,
+				complex interactions or drilldown of data, please use the <code>core</code> and/or <code>layouts</code> packages directly.</p>
+				<a href="#codegraph-vizcorecode" id="codegraph-vizcorecode" style="color: inherit; text-decoration: none;">
+					<h1><code>@graph-viz/core</code></h1>
 				</a>
 				<blockquote>
 					<p>WebGL based core drawing utility for graph visualizations</p>
@@ -82,6 +94,7 @@
 				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
 					<h2>Usage</h2>
 				</a>
+				<p>See docs for class <a href="https://uplevel-technology.github.io/graph-viz/classes/core.graphvisualization.html">GraphVisualization</a>.</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {GraphVisualization} <span class="hljs-keyword">from</span> <span class="hljs-string">'@graph-viz/core'</span>
 
 <span class="hljs-comment">// See docs for argument structures</span>
@@ -92,9 +105,8 @@
   height,  <span class="hljs-comment">// number</span>
   config,  <span class="hljs-comment">// config</span>
 );</code></pre>
-				<hr>
-				<a href="#graph-vizlayouts" id="graph-vizlayouts" style="color: inherit; text-decoration: none;">
-					<h1>@graph-viz/layouts</h1>
+				<a href="#codegraph-vizlayoutscode" id="codegraph-vizlayoutscode" style="color: inherit; text-decoration: none;">
+					<h1><code>@graph-viz/layouts</code></h1>
 				</a>
 				<blockquote>
 					<p>Layout algorithms for graphs.</p>
@@ -117,6 +129,7 @@
 				<a href="#usage-1" id="usage-1" style="color: inherit; text-decoration: none;">
 					<h2>Usage</h2>
 				</a>
+				<p>See docs for <a href="https://uplevel-technology.github.io/graph-viz/classes/layouts.forcesimulation.html">ForceSimulation</a>.</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {ForceSimulation} <span class="hljs-keyword">from</span> <span class="hljs-string">'@graph-viz/layouts'</span>
 
 <span class="hljs-keyword">const</span> simulation = <span class="hljs-keyword">new</span> ForceSimulation();
@@ -124,9 +137,8 @@
 simulation.init(data);
 
 simulation.onTick(callback);</code></pre>
-				<hr>
-				<a href="#graph-vizreact" id="graph-vizreact" style="color: inherit; text-decoration: none;">
-					<h1>@graph-viz/react</h1>
+				<a href="#codereactcode" id="codereactcode" style="color: inherit; text-decoration: none;">
+					<h1><code>react</code></h1>
 				</a>
 				<p>A zero-config plug and play React component to draw a force directed graph visualization.
 				Depends on <code>@graph-viz/core</code> and <code>@graph-viz/layouts</code></p>
@@ -137,6 +149,7 @@ simulation.onTick(callback);</code></pre>
 				<a href="#usage-2" id="usage-2" style="color: inherit; text-decoration: none;">
 					<h2>Usage</h2>
 				</a>
+				<p>See docs for <a href="https://uplevel-technology.github.io/graph-viz/classes/react.graphvizcomponent.html">GraphVizComponent</a>.</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {GraphVizComponent} <span class="hljs-keyword">from</span> <span class="hljs-string">'@graph-viz/react'</span>
 
 ...
