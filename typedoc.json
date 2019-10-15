@@ -3,5 +3,6 @@
   "mode": "modules",
   "out": "docs",
   "preserveConstEnums": "true",
-  "external-modulemap": ".*packages\/([^\/]+)\/.*"
+  "external-modulemap": ".*packages\/([^\/]+)\/.*",
+  "exclude": ["packages/react-sandbox"]
 }
