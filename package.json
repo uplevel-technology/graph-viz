@@ -10,6 +10,7 @@
     "bootstrap": "lerna bootstrap --use-workspaces",
     "generate-docs": "typedoc packages",
     "deploy-docs": "typedoc packages && gh-pages -d docs-legacy",
+    "start-docs": "cd website && yarn run start",
     "test": "lerna run test",
     "build": "lerna run build",
     "publish": "lerna run build && lerna publish"
