@@ -5,11 +5,27 @@
     "previous": "Previous",
     "tagline": "A modular library for drawing graphs",
     "docs": {
+      "adding-interactions": {
+        "title": "Adding interactions",
+        "sidebar_label": "Adding Interactions"
+      },
+      "creating-custom-layouts": {
+        "title": "Creating custom layouts",
+        "sidebar_label": "Creating custom layouts"
+      },
+      "creating-first-viz": {
+        "title": "Creating your first graph viz",
+        "sidebar_label": "Creating your first graph viz"
+      },
       "doc2": {
         "title": "document number 2"
       },
       "doc3": {
         "title": "This is document number 3"
+      },
+      "drawing-custom-shapes": {
+        "title": "Drawing custom shapes",
+        "sidebar_label": "Drawing custom shapes"
       },
       "doc4": {
         "title": "Other Document"

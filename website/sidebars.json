@@ -1,7 +1,7 @@
 {
   "docs": {
     "Getting Started": ["introduction", "quick-start"],
-    "Guides": ["doc2"]
+    "Guides": ["creating-first-viz", "adding-interactions", "drawing-custom-shapes", "creating-custom-layouts"]
   },
   "docs-other": {
     "First Category": ["doc4", "doc5"]
