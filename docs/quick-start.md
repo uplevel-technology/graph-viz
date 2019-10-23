@@ -41,7 +41,7 @@ simulation.onTick(callback);
 
 See docs for [GraphVizComponent](https://uplevel-technology.github.io/graph-viz/classes/react.graphvizcomponent.html).
 
-```typescript
+```tsx
 import {GraphVizComponent} from '@graph-viz/react'
 
 ...

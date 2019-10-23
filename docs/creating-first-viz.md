@@ -167,8 +167,7 @@ within the callback as shown in [Updating doc TODO]().
 
 The last step is to pass our formatted data with all the styles and positions to our renderer.
 
-The `@graph-viz/core` package ships with a renderer that uses WebGL to render 
-nodes and links and shapes to the canvas.
+We'll use the WebGL renderer that is available under `@graph-viz/core`.
 
 Here we create an instance of the renderer and assign it to the variable `visualization`.
 
