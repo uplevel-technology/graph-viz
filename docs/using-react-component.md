@@ -1,7 +1,7 @@
 ---
 id: using-react-component
 title: Using the React component
-sidebar_label: Using the React component
+sidebar_label: React
 ---
 
 ## About

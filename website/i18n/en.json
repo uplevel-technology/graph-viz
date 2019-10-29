@@ -40,6 +40,10 @@
       "quick-start": {
         "title": "Quick Start",
         "sidebar_label": "Quick Start"
+      },
+      "using-react-component": {
+        "title": "Using the React component",
+        "sidebar_label": "React"
       }
     },
     "links": {
@@ -50,6 +54,7 @@
     "categories": {
       "Getting Started": "Getting Started",
       "Guides": "Guides",
+      "Components": "Components",
       "First Category": "First Category"
     }
   },
