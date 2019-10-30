@@ -23,9 +23,9 @@
       "doc3": {
         "title": "This is document number 3"
       },
-      "drawing-custom-shapes": {
-        "title": "Drawing custom shapes",
-        "sidebar_label": "Drawing custom shapes"
+      "drawing-hulls": {
+        "title": "Drawing hulls (groups)",
+        "sidebar_label": "Drawing hulls (Groups)"
       },
       "doc4": {
         "title": "Other Document"

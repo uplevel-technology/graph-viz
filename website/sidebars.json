@@ -1,7 +1,7 @@
 {
   "docs": {
     "Getting Started": ["introduction", "quick-start"],
-    "Guides": ["creating-first-viz", "adding-interactions", "drawing-custom-shapes", "creating-custom-layouts"],
+    "Guides": ["creating-first-viz", "adding-interactions", "drawing-hulls", "creating-custom-layouts"],
     "Components": ["using-react-component"]
   },
   "docs-other": {
