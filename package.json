@@ -8,8 +8,8 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap --use-workspaces",
-    "generate-docs": "typedoc packages",
-    "deploy-docs": "typedoc packages && gh-pages -d docs-legacy",
+    "generate-api-docs": "typedoc packages",
+    "deploy-docs": "cd website && yarn run build && GIT_USER=sagar-sm CURRENT_BRANCH=master yarn run publish-gh-pages",
     "start-docs": "cd website && yarn run start",
     "test": "lerna run test",
     "build": "lerna run build",
