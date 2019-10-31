@@ -1,0 +1,605 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>GraphVisualization · @graph-viz</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="[@graph-viz](/graph-viz/docs/api-docs/) › [Globals](/graph-viz/docs/api-docs/globals) › [core](/graph-viz/docs/api-docs/modules/core) › [GraphVisualization](/graph-viz/docs/api-docs/classes/core.graphvisualization)"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="GraphVisualization · @graph-viz"/><meta property="og:type" content="website"/><meta property="og:url" content="https://uplevel-technology.github.io/graph-viz/"/><meta property="og:description" content="[@graph-viz](/graph-viz/docs/api-docs/) › [Globals](/graph-viz/docs/api-docs/globals) › [core](/graph-viz/docs/api-docs/modules/core) › [GraphVisualization](/graph-viz/docs/api-docs/classes/core.graphvisualization)"/><meta property="og:image" content="https://uplevel-technology.github.io/graph-viz/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://uplevel-technology.github.io/graph-viz/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/graph-viz/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/graph-viz/js/scrollSpy.js"></script><link rel="stylesheet" href="/graph-viz/css/prism.css"/><link rel="stylesheet" href="/graph-viz/css/main.css"/><script src="/graph-viz/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/graph-viz/"><img class="logo" src="/graph-viz/img/graph-viz-logo.png" alt="@graph-viz"/><h2 class="headerTitleWithLogo">@graph-viz</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/graph-viz/docs/introduction" target="_self">Docs</a></li><li class="siteNavGroupActive"><a href="/graph-viz/docs/api-docs/" target="_self">API</a></li><li class=""><a href="/graph-viz/help" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Classes</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Introduction</h3><ul class=""><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/">README</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/globals">Globals</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">External Modules</h3><ul class=""><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/modules/core">core</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/modules/layouts">layouts</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/modules/react">react</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Classes</h3><ul class=""><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/classes/core.displaygroups">DisplayGroups</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/graph-viz/docs/api-docs/classes/core.graphvisualization">GraphVisualization</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/classes/core.labels">Labels</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/classes/core.links">Links</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/classes/core.mouseinteraction">MouseInteraction</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/classes/core.nodes">Nodes</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/classes/layouts.forcesimulation">ForceSimulation</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent">GraphVizComponent</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Interfaces</h3><ul class=""><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.configurationoptions">ConfigurationOptions</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.displaygroup">DisplayGroup</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.displaylink">DisplayLink</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.displaynode">DisplayNode</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.linkstyleattributes">LinkStyleAttributes</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.point">Point</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.populateddisplaylink">PopulatedDisplayLink</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.texttexture">TextTexture</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.uniforms">Uniforms</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.visualizationinputdata">VisualizationInputData</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/layouts.nodeposition">NodePosition</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/layouts.simulationdata">SimulationData</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/layouts.simulationgroup">SimulationGroup</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/layouts.simulationlink">SimulationLink</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/layouts.simulationnode">SimulationNode</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/react.nodetooltipsprops">NodeTooltipsProps</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/react.state">State</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/react.tooltipfields">TooltipFields</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/react.tooltipnode">TooltipNode</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/react.vec2">Vec2</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">GraphVisualization</h1></header><article><div><span><p><a href="/graph-viz/docs/api-docs/">@graph-viz</a> › <a href="/graph-viz/docs/api-docs/globals">Globals</a> › <a href="/graph-viz/docs/api-docs/modules/core">core</a> › <a href="/graph-viz/docs/api-docs/classes/core.graphvisualization">GraphVisualization</a></p>
+<h2><a class="anchor" aria-hidden="true" id="hierarchy"></a><a href="#hierarchy" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Hierarchy</h2>
+<ul>
+<li><strong>GraphVisualization</strong></li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="index"></a><a href="#index" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Index</h2>
+<h3><a class="anchor" aria-hidden="true" id="constructors"></a><a href="#constructors" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Constructors</h3>
+<ul>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#constructor">constructor</a></li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="properties"></a><a href="#properties" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Properties</h3>
+<ul>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#camera">camera</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#canvas">canvas</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-data">data</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#groupsmesh">groupsMesh</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-height">height</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#linksmesh">linksMesh</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-mouseinteraction">mouseInteraction</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-nodeidtoindexmap">nodeIdToIndexMap</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#nodesmesh">nodesMesh</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-registeredeventhandlers">registeredEventHandlers</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-renderer">renderer</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-scene">scene</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-userhasadjustedviewport">userHasAdjustedViewport</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-width">width</a></li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="methods"></a><a href="#methods" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Methods</h3>
+<ul>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#dispose">dispose</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-handleclick">handleClick</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-handledragend">handleDragEnd</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-handledragstart">handleDragStart</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-handlehoverin">handleHoverIn</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-handlehoverout">handleHoverOut</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-handlenodedrag">handleNodeDrag</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-handlepan">handlePan</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-handlesecondaryclick">handleSecondaryClick</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-handlezoomonwheel">handleZoomOnWheel</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#onclick">onClick</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#ondragend">onDragEnd</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#ondragstart">onDragStart</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#onnodedrag">onNodeDrag</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#onnodehoverin">onNodeHoverIn</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#onnodehoverout">onNodeHoverOut</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#onpan">onPan</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#onsecondaryclick">onSecondaryClick</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#onzoom">onZoom</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#render">render</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#resize">resize</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#toscreenspacepoint">toScreenSpacePoint</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#update">update</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#updategroups">updateGroups</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#updatenode">updateNode</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#updatepositions">updatePositions</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#zoom">zoom</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization#private-zoomtofit">zoomToFit</a></li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="constructors-1"></a><a href="#constructors-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Constructors</h2>
+<h3><a class="anchor" aria-hidden="true" id="constructor"></a><a href="#constructor" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>constructor</h3>
+<p>+ <strong>new GraphVisualization</strong>(<code>graphData</code>: <a href="/graph-viz/docs/api-docs/interfaces/core.visualizationinputdata">VisualizationInputData</a>, <code>canvas</code>: HTMLCanvasElement, <code>width</code>: number, <code>height</code>: number, <code>config</code>: <a href="/graph-viz/docs/api-docs/interfaces/core.configurationoptions">ConfigurationOptions</a>): <em><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization">GraphVisualization</a></em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L86">core/src/GraphVisualization.ts:86</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th><th>Default</th></tr>
+</thead>
+<tbody>
+<tr><td><code>graphData</code></td><td><a href="/graph-viz/docs/api-docs/interfaces/core.visualizationinputdata">VisualizationInputData</a></td><td>-</td></tr>
+<tr><td><code>canvas</code></td><td>HTMLCanvasElement</td><td>-</td></tr>
+<tr><td><code>width</code></td><td>number</td><td>-</td></tr>
+<tr><td><code>height</code></td><td>number</td><td>-</td></tr>
+<tr><td><code>config</code></td><td><a href="/graph-viz/docs/api-docs/interfaces/core.configurationoptions">ConfigurationOptions</a></td><td>{}</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em><a href="/graph-viz/docs/api-docs/classes/core.graphvisualization">GraphVisualization</a></em></p>
+<h2><a class="anchor" aria-hidden="true" id="properties-1"></a><a href="#properties-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Properties</h2>
+<h3><a class="anchor" aria-hidden="true" id="camera"></a><a href="#camera" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>camera</h3>
+<p>• <strong>camera</strong>: <em>OrthographicCamera</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L63">core/src/GraphVisualization.ts:63</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="canvas"></a><a href="#canvas" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>canvas</h3>
+<p>• <strong>canvas</strong>: <em>HTMLCanvasElement</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L62">core/src/GraphVisualization.ts:62</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-data"></a><a href="#private-data" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> data</h3>
+<p>• <strong>data</strong>: <em><a href="/graph-viz/docs/api-docs/interfaces/core.visualizationinputdata">VisualizationInputData</a></em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L65">core/src/GraphVisualization.ts:65</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="groupsmesh"></a><a href="#groupsmesh" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>groupsMesh</h3>
+<p>• <strong>groupsMesh</strong>: <em><a href="/graph-viz/docs/api-docs/classes/core.displaygroups">DisplayGroups</a></em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L60">core/src/GraphVisualization.ts:60</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-height"></a><a href="#private-height" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> height</h3>
+<p>• <strong>height</strong>: <em>number</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L82">core/src/GraphVisualization.ts:82</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="linksmesh"></a><a href="#linksmesh" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>linksMesh</h3>
+<p>• <strong>linksMesh</strong>: <em><a href="/graph-viz/docs/api-docs/classes/core.links">Links</a></em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L59">core/src/GraphVisualization.ts:59</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-mouseinteraction"></a><a href="#private-mouseinteraction" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> mouseInteraction</h3>
+<p>• <strong>mouseInteraction</strong>: <em><a href="/graph-viz/docs/api-docs/classes/core.mouseinteraction">MouseInteraction</a></em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L86">core/src/GraphVisualization.ts:86</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-nodeidtoindexmap"></a><a href="#private-nodeidtoindexmap" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> nodeIdToIndexMap</h3>
+<p>• <strong>nodeIdToIndexMap</strong>: <em>object</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L66">core/src/GraphVisualization.ts:66</a></em></p>
+<h4><a class="anchor" aria-hidden="true" id="type-declaration"></a><a href="#type-declaration" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Type declaration:</h4>
+<ul>
+<li>[ <strong>key</strong>: <em>string</em>]: number</li>
+</ul>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="nodesmesh"></a><a href="#nodesmesh" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>nodesMesh</h3>
+<p>• <strong>nodesMesh</strong>: <em><a href="/graph-viz/docs/api-docs/classes/core.nodes">Nodes</a></em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L58">core/src/GraphVisualization.ts:58</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-registeredeventhandlers"></a><a href="#private-registeredeventhandlers" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> registeredEventHandlers</h3>
+<p>• <strong>registeredEventHandlers</strong>: <em>object</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L69">core/src/GraphVisualization.ts:69</a></em></p>
+<h4><a class="anchor" aria-hidden="true" id="type-declaration-1"></a><a href="#type-declaration-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Type declaration:</h4>
+<ul>
+<li><p><strong>click</strong>? : <em><a href="/graph-viz/docs/api-docs/modules/core#clickeventhandler">ClickEventHandler</a></em></p></li>
+<li><p><strong>dragEnd</strong>? : <em><a href="/graph-viz/docs/api-docs/modules/core#dragendeventhandler">DragEndEventHandler</a></em></p></li>
+<li><p><strong>dragStart</strong>? : <em><a href="/graph-viz/docs/api-docs/modules/core#dragstarteventhandler">DragStartEventHandler</a></em></p></li>
+<li><p><strong>nodeDrag</strong>? : <em><a href="/graph-viz/docs/api-docs/modules/core#nodedrageventhandler">NodeDragEventHandler</a></em></p></li>
+<li><p><strong>nodeHoverIn</strong>? : <em><a href="/graph-viz/docs/api-docs/modules/core#hovereventhandler">HoverEventHandler</a></em></p></li>
+<li><p><strong>nodeHoverOut</strong>? : <em><a href="/graph-viz/docs/api-docs/modules/core#hovereventhandler">HoverEventHandler</a></em></p></li>
+<li><p><strong>pan</strong>? : <em><a href="/graph-viz/docs/api-docs/modules/core#paneventhandler">PanEventHandler</a></em></p></li>
+<li><p><strong>secondaryClick</strong>? : <em><a href="/graph-viz/docs/api-docs/modules/core#secondaryclickeventhandler">SecondaryClickEventHandler</a></em></p></li>
+<li><p><strong>zoom</strong>? : <em><a href="/graph-viz/docs/api-docs/modules/core#zoomeventhandler">ZoomEventHandler</a></em></p></li>
+</ul>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-renderer"></a><a href="#private-renderer" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> renderer</h3>
+<p>• <strong>renderer</strong>: <em>WebGLRenderer</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L85">core/src/GraphVisualization.ts:85</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-scene"></a><a href="#private-scene" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> scene</h3>
+<p>• <strong>scene</strong>: <em>Scene</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L84">core/src/GraphVisualization.ts:84</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-userhasadjustedviewport"></a><a href="#private-userhasadjustedviewport" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> userHasAdjustedViewport</h3>
+<p>• <strong>userHasAdjustedViewport</strong>: <em>boolean</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L67">core/src/GraphVisualization.ts:67</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-width"></a><a href="#private-width" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> width</h3>
+<p>• <strong>width</strong>: <em>number</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L81">core/src/GraphVisualization.ts:81</a></em></p>
+<h2><a class="anchor" aria-hidden="true" id="methods-1"></a><a href="#methods-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Methods</h2>
+<h3><a class="anchor" aria-hidden="true" id="dispose"></a><a href="#dispose" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>dispose</h3>
+<p>▸ <strong>dispose</strong>(): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L371">core/src/GraphVisualization.ts:371</a></em></p>
+<p>disposes the graph viz context</p>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-handleclick"></a><a href="#private-handleclick" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> handleClick</h3>
+<p>▸ <strong>handleClick</strong>(<code>worldSpaceMouse</code>: Vector3, <code>clickedNodeIdx</code>: number | null, <code>event</code>: MouseEvent): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L513">core/src/GraphVisualization.ts:513</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>worldSpaceMouse</code></td><td>Vector3</td></tr>
+<tr><td><code>clickedNodeIdx</code></td><td>number | null</td></tr>
+<tr><td><code>event</code></td><td>MouseEvent</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-handledragend"></a><a href="#private-handledragend" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> handleDragEnd</h3>
+<p>▸ <strong>handleDragEnd</strong>(<code>worldSpaceMouse</code>: Vector3, <code>nodeIdx</code>: number, <code>event</code>: MouseEvent): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L465">core/src/GraphVisualization.ts:465</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>worldSpaceMouse</code></td><td>Vector3</td></tr>
+<tr><td><code>nodeIdx</code></td><td>number</td></tr>
+<tr><td><code>event</code></td><td>MouseEvent</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-handledragstart"></a><a href="#private-handledragstart" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> handleDragStart</h3>
+<p>▸ <strong>handleDragStart</strong>(<code>worldSpaceMouse</code>: Vector3, <code>draggedNodeIdx</code>: number | null, <code>event</code>: MouseEvent): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L439">core/src/GraphVisualization.ts:439</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>worldSpaceMouse</code></td><td>Vector3</td></tr>
+<tr><td><code>draggedNodeIdx</code></td><td>number | null</td></tr>
+<tr><td><code>event</code></td><td>MouseEvent</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-handlehoverin"></a><a href="#private-handlehoverin" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> handleHoverIn</h3>
+<p>▸ <strong>handleHoverIn</strong>(<code>hoveredToNodeIdx</code>: number): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L423">core/src/GraphVisualization.ts:423</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>hoveredToNodeIdx</code></td><td>number</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-handlehoverout"></a><a href="#private-handlehoverout" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> handleHoverOut</h3>
+<p>▸ <strong>handleHoverOut</strong>(<code>hoveredFromNodeIdx</code>: number): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L431">core/src/GraphVisualization.ts:431</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>hoveredFromNodeIdx</code></td><td>number</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-handlenodedrag"></a><a href="#private-handlenodedrag" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> handleNodeDrag</h3>
+<p>▸ <strong>handleNodeDrag</strong>(<code>worldSpaceMouse</code>: Vector3, <code>draggedNodeIdx</code>: number): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L455">core/src/GraphVisualization.ts:455</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>worldSpaceMouse</code></td><td>Vector3</td></tr>
+<tr><td><code>draggedNodeIdx</code></td><td>number</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-handlepan"></a><a href="#private-handlepan" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> handlePan</h3>
+<p>▸ <strong>handlePan</strong>(<code>panDelta</code>: Vector3): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L475">core/src/GraphVisualization.ts:475</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>panDelta</code></td><td>Vector3</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-handlesecondaryclick"></a><a href="#private-handlesecondaryclick" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> handleSecondaryClick</h3>
+<p>▸ <strong>handleSecondaryClick</strong>(<code>event</code>: MouseEvent, <code>clickedNodeIdx</code>: number | null): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L526">core/src/GraphVisualization.ts:526</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>event</code></td><td>MouseEvent</td></tr>
+<tr><td><code>clickedNodeIdx</code></td><td>number | null</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-handlezoomonwheel"></a><a href="#private-handlezoomonwheel" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> handleZoomOnWheel</h3>
+<p>▸ <strong>handleZoomOnWheel</strong>(<code>event</code>: MouseWheelEvent): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L497">core/src/GraphVisualization.ts:497</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>event</code></td><td>MouseWheelEvent</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="onclick"></a><a href="#onclick" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>onClick</h3>
+<p>▸ <strong>onClick</strong>(<code>callback</code>: <a href="/graph-viz/docs/api-docs/modules/core#clickeventhandler">ClickEventHandler</a>): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L195">core/src/GraphVisualization.ts:195</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>callback</code></td><td><a href="/graph-viz/docs/api-docs/modules/core#clickeventhandler">ClickEventHandler</a></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="ondragend"></a><a href="#ondragend" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>onDragEnd</h3>
+<p>▸ <strong>onDragEnd</strong>(<code>callback</code>: <a href="/graph-viz/docs/api-docs/modules/core#dragendeventhandler">DragEndEventHandler</a>): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L205">core/src/GraphVisualization.ts:205</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>callback</code></td><td><a href="/graph-viz/docs/api-docs/modules/core#dragendeventhandler">DragEndEventHandler</a></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="ondragstart"></a><a href="#ondragstart" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>onDragStart</h3>
+<p>▸ <strong>onDragStart</strong>(<code>callback</code>: <a href="/graph-viz/docs/api-docs/modules/core#dragstarteventhandler">DragStartEventHandler</a>): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L200">core/src/GraphVisualization.ts:200</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>callback</code></td><td><a href="/graph-viz/docs/api-docs/modules/core#dragstarteventhandler">DragStartEventHandler</a></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="onnodedrag"></a><a href="#onnodedrag" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>onNodeDrag</h3>
+<p>▸ <strong>onNodeDrag</strong>(<code>callback</code>: <a href="/graph-viz/docs/api-docs/modules/core#nodedrageventhandler">NodeDragEventHandler</a>): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L210">core/src/GraphVisualization.ts:210</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>callback</code></td><td><a href="/graph-viz/docs/api-docs/modules/core#nodedrageventhandler">NodeDragEventHandler</a></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="onnodehoverin"></a><a href="#onnodehoverin" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>onNodeHoverIn</h3>
+<p>▸ <strong>onNodeHoverIn</strong>(<code>callback</code>: <a href="/graph-viz/docs/api-docs/modules/core#hovereventhandler">HoverEventHandler</a>): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L185">core/src/GraphVisualization.ts:185</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>callback</code></td><td><a href="/graph-viz/docs/api-docs/modules/core#hovereventhandler">HoverEventHandler</a></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="onnodehoverout"></a><a href="#onnodehoverout" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>onNodeHoverOut</h3>
+<p>▸ <strong>onNodeHoverOut</strong>(<code>callback</code>: <a href="/graph-viz/docs/api-docs/modules/core#hovereventhandler">HoverEventHandler</a>): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L190">core/src/GraphVisualization.ts:190</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>callback</code></td><td><a href="/graph-viz/docs/api-docs/modules/core#hovereventhandler">HoverEventHandler</a></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="onpan"></a><a href="#onpan" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>onPan</h3>
+<p>▸ <strong>onPan</strong>(<code>callback</code>: <a href="/graph-viz/docs/api-docs/modules/core#paneventhandler">PanEventHandler</a>): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L220">core/src/GraphVisualization.ts:220</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>callback</code></td><td><a href="/graph-viz/docs/api-docs/modules/core#paneventhandler">PanEventHandler</a></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="onsecondaryclick"></a><a href="#onsecondaryclick" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>onSecondaryClick</h3>
+<p>▸ <strong>onSecondaryClick</strong>(<code>callback</code>: <a href="/graph-viz/docs/api-docs/modules/core#secondaryclickeventhandler">SecondaryClickEventHandler</a>): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L215">core/src/GraphVisualization.ts:215</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>callback</code></td><td><a href="/graph-viz/docs/api-docs/modules/core#secondaryclickeventhandler">SecondaryClickEventHandler</a></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="onzoom"></a><a href="#onzoom" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>onZoom</h3>
+<p>▸ <strong>onZoom</strong>(<code>callback</code>: <a href="/graph-viz/docs/api-docs/modules/core#zoomeventhandler">ZoomEventHandler</a>): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L225">core/src/GraphVisualization.ts:225</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>callback</code></td><td><a href="/graph-viz/docs/api-docs/modules/core#zoomeventhandler">ZoomEventHandler</a></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="render"></a><a href="#render" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>render</h3>
+<p>▸ <strong>render</strong>(): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L229">core/src/GraphVisualization.ts:229</a></em></p>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="resize"></a><a href="#resize" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>resize</h3>
+<p>▸ <strong>resize</strong>(<code>width</code>: number, <code>height</code>: number): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L320">core/src/GraphVisualization.ts:320</a></em></p>
+<p>resize the canvas</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>width</code></td><td>number</td><td>-</td></tr>
+<tr><td><code>height</code></td><td>number</td><td></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="toscreenspacepoint"></a><a href="#toscreenspacepoint" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>toScreenSpacePoint</h3>
+<p>▸ <strong>toScreenSpacePoint</strong>(<code>worldX</code>: number, <code>worldY</code>: number): <em>Vector3</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L341">core/src/GraphVisualization.ts:341</a></em></p>
+<p>converts a world space coordinate to screen space</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>worldX</code></td><td>number</td><td>0</td><td>-</td></tr>
+<tr><td><code>worldY</code></td><td>number</td><td>0</td><td></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>Vector3</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="update"></a><a href="#update" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>update</h3>
+<p>▸ <strong>update</strong>(<code>graphData</code>: <a href="/graph-viz/docs/api-docs/interfaces/core.visualizationinputdata">VisualizationInputData</a>): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L239">core/src/GraphVisualization.ts:239</a></em></p>
+<p>update or redraw all attributes of nodes and links
+adds/removes new/deleted nodes</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>graphData</code></td><td><a href="/graph-viz/docs/api-docs/interfaces/core.visualizationinputdata">VisualizationInputData</a></td><td></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="updategroups"></a><a href="#updategroups" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>updateGroups</h3>
+<p>▸ <strong>updateGroups</strong>(<code>groups</code>: <a href="/graph-viz/docs/api-docs/interfaces/core.displaygroup">DisplayGroup</a>[]): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L308">core/src/GraphVisualization.ts:308</a></em></p>
+<p>updates only the groups mesh.
+Useful in situations that require ONLY display groups to update.
+E.g. toggling a group on or off when the nodes within a group
+have NOT changed.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>groups</code></td><td><a href="/graph-viz/docs/api-docs/interfaces/core.displaygroup">DisplayGroup</a>[]</td><td></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="updatenode"></a><a href="#updatenode" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>updateNode</h3>
+<p>▸ <strong>updateNode</strong>(<code>index</code>: number, <code>updatedNode</code>: <a href="/graph-viz/docs/api-docs/interfaces/core.displaynode">DisplayNode</a>): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L289">core/src/GraphVisualization.ts:289</a></em></p>
+<p>update all the attributes of a single node at a given index</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>index</code></td><td>number</td><td>-</td></tr>
+<tr><td><code>updatedNode</code></td><td><a href="/graph-viz/docs/api-docs/interfaces/core.displaynode">DisplayNode</a></td><td></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="updatepositions"></a><a href="#updatepositions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>updatePositions</h3>
+<p>▸ <strong>updatePositions</strong>(<code>updatedGraphData</code>: <a href="/graph-viz/docs/api-docs/interfaces/core.visualizationinputdata">VisualizationInputData</a>): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L258">core/src/GraphVisualization.ts:258</a></em></p>
+<p>update only the position attributes of existing nodes and links.</p>
+<p>This function assumes that the nodeIdToIndexMap is up to date and
+that the updatedGraphData hasn't changed in size or order
+and only the position attributes have changed within each node datum.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>updatedGraphData</code></td><td><a href="/graph-viz/docs/api-docs/interfaces/core.visualizationinputdata">VisualizationInputData</a></td><td></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="zoom"></a><a href="#zoom" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>zoom</h3>
+<p>▸ <strong>zoom</strong>(<code>factor</code>: number): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L359">core/src/GraphVisualization.ts:359</a></em></p>
+<p>public method to zoom the graph</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>factor</code></td><td>number</td><td>0</td><td></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="private-zoomtofit"></a><a href="#private-zoomtofit" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Private</code> zoomToFit</h3>
+<p>▸ <strong>zoomToFit</strong>(<code>graphData</code>: <a href="/graph-viz/docs/api-docs/interfaces/core.visualizationinputdata">VisualizationInputData</a>): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L377">core/src/GraphVisualization.ts:377</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>graphData</code></td><td><a href="/graph-viz/docs/api-docs/interfaces/core.visualizationinputdata">VisualizationInputData</a></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/graph-viz/docs/api-docs/classes/core.displaygroups"><span class="arrow-prev">← </span><span class="function-name-prevnext">DisplayGroups</span></a><a class="docs-next button" href="/graph-viz/docs/api-docs/classes/core.labels"><span>Labels</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#hierarchy">Hierarchy</a></li><li><a href="#index">Index</a><ul class="toc-headings"><li><a href="#constructors">Constructors</a></li><li><a href="#properties">Properties</a></li><li><a href="#methods">Methods</a></li></ul></li><li><a href="#constructors-1">Constructors</a><ul class="toc-headings"><li><a href="#constructor">constructor</a></li></ul></li><li><a href="#properties-1">Properties</a><ul class="toc-headings"><li><a href="#camera">camera</a></li><li><a href="#canvas">canvas</a></li><li><a href="#private-data"><code>Private</code> data</a></li><li><a href="#groupsmesh">groupsMesh</a></li><li><a href="#private-height"><code>Private</code> height</a></li><li><a href="#linksmesh">linksMesh</a></li><li><a href="#private-mouseinteraction"><code>Private</code> mouseInteraction</a></li><li><a href="#private-nodeidtoindexmap"><code>Private</code> nodeIdToIndexMap</a></li><li><a href="#nodesmesh">nodesMesh</a></li><li><a href="#private-registeredeventhandlers"><code>Private</code> registeredEventHandlers</a></li><li><a href="#private-renderer"><code>Private</code> renderer</a></li><li><a href="#private-scene"><code>Private</code> scene</a></li><li><a href="#private-userhasadjustedviewport"><code>Private</code> userHasAdjustedViewport</a></li><li><a href="#private-width"><code>Private</code> width</a></li></ul></li><li><a href="#methods-1">Methods</a><ul class="toc-headings"><li><a href="#dispose">dispose</a></li><li><a href="#private-handleclick"><code>Private</code> handleClick</a></li><li><a href="#private-handledragend"><code>Private</code> handleDragEnd</a></li><li><a href="#private-handledragstart"><code>Private</code> handleDragStart</a></li><li><a href="#private-handlehoverin"><code>Private</code> handleHoverIn</a></li><li><a href="#private-handlehoverout"><code>Private</code> handleHoverOut</a></li><li><a href="#private-handlenodedrag"><code>Private</code> handleNodeDrag</a></li><li><a href="#private-handlepan"><code>Private</code> handlePan</a></li><li><a href="#private-handlesecondaryclick"><code>Private</code> handleSecondaryClick</a></li><li><a href="#private-handlezoomonwheel"><code>Private</code> handleZoomOnWheel</a></li><li><a href="#onclick">onClick</a></li><li><a href="#ondragend">onDragEnd</a></li><li><a href="#ondragstart">onDragStart</a></li><li><a href="#onnodedrag">onNodeDrag</a></li><li><a href="#onnodehoverin">onNodeHoverIn</a></li><li><a href="#onnodehoverout">onNodeHoverOut</a></li><li><a href="#onpan">onPan</a></li><li><a href="#onsecondaryclick">onSecondaryClick</a></li><li><a href="#onzoom">onZoom</a></li><li><a href="#render">render</a></li><li><a href="#resize">resize</a></li><li><a href="#toscreenspacepoint">toScreenSpacePoint</a></li><li><a href="#update">update</a></li><li><a href="#updategroups">updateGroups</a></li><li><a href="#updatenode">updateNode</a></li><li><a href="#updatepositions">updatePositions</a></li><li><a href="#zoom">zoom</a></li><li><a href="#private-zoomtofit"><code>Private</code> zoomToFit</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/graph-viz/" class="nav-home"><img src="/graph-viz/img/graph-viz-logo.png" alt="@graph-viz" width="66" height="58"/></a><div><h5>Docs</h5><a href="/graph-viz/docs/en/doc1.html">Getting Started (or other categories)</a><a href="/graph-viz/docs/en/doc2.html">Guides (or other categories)</a><a href="/graph-viz/docs/en/doc3.html">API Reference (or other categories)</a></div><div><h5>Community</h5><a href="/graph-viz/en/users.html">User Showcase</a><a href="https://stackoverflow.com/questions/tagged/" target="_blank" rel="noreferrer noopener">Stack Overflow</a><a href="https://discordapp.com/">Project Chat</a><a href="https://twitter.com/" target="_blank" rel="noreferrer noopener">Twitter</a></div><div><h5>More</h5><a href="/graph-viz/blog">Blog</a><a href="https://github.com/">GitHub</a><a class="github-button" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/graph-viz/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019, Uplevel Technology</section></footer></div></body></html>

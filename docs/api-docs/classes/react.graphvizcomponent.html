@@ -1,0 +1,532 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>GraphVizComponent · @graph-viz</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="[@graph-viz](/graph-viz/docs/api-docs/) › [Globals](/graph-viz/docs/api-docs/globals) › [react](/graph-viz/docs/api-docs/modules/react) › [GraphVizComponent](/graph-viz/docs/api-docs/classes/react.graphvizcomponent)"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="GraphVizComponent · @graph-viz"/><meta property="og:type" content="website"/><meta property="og:url" content="https://uplevel-technology.github.io/graph-viz/"/><meta property="og:description" content="[@graph-viz](/graph-viz/docs/api-docs/) › [Globals](/graph-viz/docs/api-docs/globals) › [react](/graph-viz/docs/api-docs/modules/react) › [GraphVizComponent](/graph-viz/docs/api-docs/classes/react.graphvizcomponent)"/><meta property="og:image" content="https://uplevel-technology.github.io/graph-viz/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://uplevel-technology.github.io/graph-viz/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/graph-viz/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/graph-viz/js/scrollSpy.js"></script><link rel="stylesheet" href="/graph-viz/css/prism.css"/><link rel="stylesheet" href="/graph-viz/css/main.css"/><script src="/graph-viz/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/graph-viz/"><img class="logo" src="/graph-viz/img/graph-viz-logo.png" alt="@graph-viz"/><h2 class="headerTitleWithLogo">@graph-viz</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/graph-viz/docs/introduction" target="_self">Docs</a></li><li class="siteNavGroupActive"><a href="/graph-viz/docs/api-docs/" target="_self">API</a></li><li class=""><a href="/graph-viz/help" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Classes</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Introduction</h3><ul class=""><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/">README</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/globals">Globals</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">External Modules</h3><ul class=""><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/modules/core">core</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/modules/layouts">layouts</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/modules/react">react</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Classes</h3><ul class=""><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/classes/core.displaygroups">DisplayGroups</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/classes/core.graphvisualization">GraphVisualization</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/classes/core.labels">Labels</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/classes/core.links">Links</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/classes/core.mouseinteraction">MouseInteraction</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/classes/core.nodes">Nodes</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/classes/layouts.forcesimulation">ForceSimulation</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent">GraphVizComponent</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Interfaces</h3><ul class=""><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.configurationoptions">ConfigurationOptions</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.displaygroup">DisplayGroup</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.displaylink">DisplayLink</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.displaynode">DisplayNode</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.linkstyleattributes">LinkStyleAttributes</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.point">Point</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.populateddisplaylink">PopulatedDisplayLink</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.texttexture">TextTexture</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.uniforms">Uniforms</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/core.visualizationinputdata">VisualizationInputData</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/layouts.nodeposition">NodePosition</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/layouts.simulationdata">SimulationData</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/layouts.simulationgroup">SimulationGroup</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/layouts.simulationlink">SimulationLink</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/layouts.simulationnode">SimulationNode</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/react.nodetooltipsprops">NodeTooltipsProps</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/react.state">State</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/react.tooltipfields">TooltipFields</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/react.tooltipnode">TooltipNode</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/api-docs/interfaces/react.vec2">Vec2</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">GraphVizComponent</h1></header><article><div><span><p><a href="/graph-viz/docs/api-docs/">@graph-viz</a> › <a href="/graph-viz/docs/api-docs/globals">Globals</a> › <a href="/graph-viz/docs/api-docs/modules/react">react</a> › <a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent">GraphVizComponent</a></p>
+<h2><a class="anchor" aria-hidden="true" id="type-parameters"></a><a href="#type-parameters" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Type parameters</h2>
+<p>▪ <strong>SS</strong></p>
+<h2><a class="anchor" aria-hidden="true" id="hierarchy"></a><a href="#hierarchy" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Hierarchy</h2>
+<ul>
+<li><p>Component‹<a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>, <a href="/graph-viz/docs/api-docs/interfaces/react.state">State</a>›</p>
+<p>↳ <strong>GraphVizComponent</strong></p></li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="index"></a><a href="#index" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Index</h2>
+<h3><a class="anchor" aria-hidden="true" id="constructors"></a><a href="#constructors" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Constructors</h3>
+<ul>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#constructor">constructor</a></li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="properties"></a><a href="#properties" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Properties</h3>
+<ul>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#canvasref">canvasRef</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#context">context</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#onwindowresize">onWindowResize</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#props">props</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#refs">refs</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#rootref">rootRef</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#simulation">simulation</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#tooltipnodes">tooltipNodes</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#visualization">visualization</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#static-optional-contexttype">contextType</a></li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="methods"></a><a href="#methods" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Methods</h3>
+<ul>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#optional-unsafe_componentwillmount">UNSAFE_componentWillMount</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#optional-unsafe_componentwillreceiveprops">UNSAFE_componentWillReceiveProps</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#optional-unsafe_componentwillupdate">UNSAFE_componentWillUpdate</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#optional-componentdidcatch">componentDidCatch</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#componentdidmount">componentDidMount</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#componentdidupdate">componentDidUpdate</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#optional-componentwillmount">componentWillMount</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#optional-componentwillreceiveprops">componentWillReceiveProps</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#componentwillunmount">componentWillUnmount</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#optional-componentwillupdate">componentWillUpdate</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#forceupdate">forceUpdate</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#optional-getsnapshotbeforeupdate">getSnapshotBeforeUpdate</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#initdata">initData</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#render">render</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#setstate">setState</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#optional-shouldcomponentupdate">shouldComponentUpdate</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#zoomin">zoomIn</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#zoomout">zoomOut</a></li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="object-literals"></a><a href="#object-literals" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Object literals</h3>
+<ul>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#state">state</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#vizdata">vizData</a></li>
+<li><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent#static-defaultprops">defaultProps</a></li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="constructors-1"></a><a href="#constructors-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Constructors</h2>
+<h3><a class="anchor" aria-hidden="true" id="constructor"></a><a href="#constructor" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>constructor</h3>
+<p>+ <strong>new GraphVizComponent</strong>(<code>props</code>: Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>›): <em><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent">GraphVizComponent</a></em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:425</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>props</code></td><td>Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>›</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent">GraphVizComponent</a></em></p>
+<p>+ <strong>new GraphVizComponent</strong>(<code>props</code>: <a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>, <code>context?</code>: any): <em><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent">GraphVizComponent</a></em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:427</p>
+<p><strong><code>deprecated</code></strong></p>
+<p><strong><code>see</code></strong> <a href="https://reactjs.org/docs/legacy-context.html">https://reactjs.org/docs/legacy-context.html</a></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>props</code></td><td><a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a></td></tr>
+<tr><td><code>context?</code></td><td>any</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em><a href="/graph-viz/docs/api-docs/classes/react.graphvizcomponent">GraphVizComponent</a></em></p>
+<h2><a class="anchor" aria-hidden="true" id="properties-1"></a><a href="#properties-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Properties</h2>
+<h3><a class="anchor" aria-hidden="true" id="canvasref"></a><a href="#canvasref" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>canvasRef</h3>
+<p>• <strong>canvasRef</strong>: <em>RefObject‹HTMLCanvasElement›</em> =  React.createRef()</p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L102">react/src/GraphVizComponent.tsx:102</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="context"></a><a href="#context" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>context</h3>
+<p>• <strong>context</strong>: <em>any</em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:425</p>
+<p>If using the new style context, re-declare this in your class to be the
+<code>React.ContextType</code> of your <code>static contextType</code>.</p>
+<pre><code class="hljs css language-ts"><span class="hljs-keyword">static</span> contextType = MyContext
+context!: React.ContextType&lt;<span class="hljs-keyword">typeof</span> MyContext&gt;
+</code></pre>
+<p><strong><code>deprecated</code></strong> if used without a type annotation, or without static contextType</p>
+<p><strong><code>see</code></strong> <a href="https://reactjs.org/docs/legacy-context.html">https://reactjs.org/docs/legacy-context.html</a></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="onwindowresize"></a><a href="#onwindowresize" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>onWindowResize</h3>
+<p>• <strong>onWindowResize</strong>: <em>function</em> =  debounce(() =&gt; {
+const root = this.rootRef.current!
+const {width, height} = root.getBoundingClientRect()</p>
+<pre><code class="hljs">this.visualization.resize(width, height)
+</code></pre>
+<p>}, 500)</p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L117">react/src/GraphVizComponent.tsx:117</a></em></p>
+<h4><a class="anchor" aria-hidden="true" id="type-declaration"></a><a href="#type-declaration" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Type declaration:</h4>
+<p>▸ (): <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="props"></a><a href="#props" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>props</h3>
+<p>• <strong>props</strong>: <em>Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>› &amp; Readonly‹object›</em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:450</p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="refs"></a><a href="#refs" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>refs</h3>
+<p>• <strong>refs</strong>: <em>object</em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:456</p>
+<p><strong><code>deprecated</code></strong>
+<a href="https://reactjs.org/docs/refs-and-the-dom.html#legacy-api-string-refs">https://reactjs.org/docs/refs-and-the-dom.html#legacy-api-string-refs</a></p>
+<h4><a class="anchor" aria-hidden="true" id="type-declaration-1"></a><a href="#type-declaration-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Type declaration:</h4>
+<ul>
+<li>[ <strong>key</strong>: <em>string</em>]: ReactInstance</li>
+</ul>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="rootref"></a><a href="#rootref" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>rootRef</h3>
+<p>• <strong>rootRef</strong>: <em>RefObject‹HTMLDivElement›</em> =  React.createRef()</p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L101">react/src/GraphVizComponent.tsx:101</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="simulation"></a><a href="#simulation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>simulation</h3>
+<p>• <strong>simulation</strong>: <em>ForceSimulation</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L99">react/src/GraphVizComponent.tsx:99</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="tooltipnodes"></a><a href="#tooltipnodes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>tooltipNodes</h3>
+<p>• <strong>tooltipNodes</strong>: <em><a href="/graph-viz/docs/api-docs/interfaces/react.tooltipnode">TooltipNode</a>[]</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L98">react/src/GraphVizComponent.tsx:98</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="visualization"></a><a href="#visualization" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>visualization</h3>
+<p>• <strong>visualization</strong>: <em>GraphVisualization</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L88">react/src/GraphVizComponent.tsx:88</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="static-optional-contexttype"></a><a href="#static-optional-contexttype" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Static</code> <code>Optional</code> contextType</h3>
+<p>▪ <strong>contextType</strong>? : <em>Context‹any›</em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:410</p>
+<p>If set, <code>this.context</code> will be set at runtime to the current value of the given Context.</p>
+<p>Usage:</p>
+<pre><code class="hljs css language-ts">type MyContext = number
+const Ctx = React.createContext&lt;MyContext&gt;(0)
+
+class Foo extends React.Component {
+  static contextType = Ctx
+  context!: React.ContextType&lt;typeof Ctx&gt;
+  render () {
+    return &lt;&gt;My context's value: {this.context}&lt;/&gt;;
+  }
+}
+</code></pre>
+<p><strong><code>see</code></strong> <a href="https://reactjs.org/docs/context.html#classcontexttype">https://reactjs.org/docs/context.html#classcontexttype</a></p>
+<h2><a class="anchor" aria-hidden="true" id="methods-1"></a><a href="#methods-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Methods</h2>
+<h3><a class="anchor" aria-hidden="true" id="optional-unsafe_componentwillmount"></a><a href="#optional-unsafe_componentwillmount" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Optional</code> UNSAFE_componentWillMount</h3>
+<p>▸ <strong>UNSAFE_componentWillMount</strong>(): <em>void</em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:638</p>
+<p>Called immediately before mounting occurs, and before <code>Component#render</code>.
+Avoid introducing any side-effects or subscriptions in this method.</p>
+<p>This method will not stop working in React 17.</p>
+<p>Note: the presence of getSnapshotBeforeUpdate or getDerivedStateFromProps
+prevents this from being invoked.</p>
+<p><strong><code>deprecated</code></strong> 16.3, use componentDidMount or the constructor instead</p>
+<p><strong><code>see</code></strong> <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#initializing-state">https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#initializing-state</a></p>
+<p><strong><code>see</code></strong> <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path">https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path</a></p>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="optional-unsafe_componentwillreceiveprops"></a><a href="#optional-unsafe_componentwillreceiveprops" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Optional</code> UNSAFE_componentWillReceiveProps</h3>
+<p>▸ <strong>UNSAFE_componentWillReceiveProps</strong>(<code>nextProps</code>: Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>›, <code>nextContext</code>: any): <em>void</em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:670</p>
+<p>Called when the component may be receiving new props.
+React may call this even if props have not changed, so be sure to compare new and existing
+props if you only want to handle changes.</p>
+<p>Calling <code>Component#setState</code> generally does not trigger this method.</p>
+<p>This method will not stop working in React 17.</p>
+<p>Note: the presence of getSnapshotBeforeUpdate or getDerivedStateFromProps
+prevents this from being invoked.</p>
+<p><strong><code>deprecated</code></strong> 16.3, use static getDerivedStateFromProps instead</p>
+<p><strong><code>see</code></strong> <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#updating-state-based-on-props">https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#updating-state-based-on-props</a></p>
+<p><strong><code>see</code></strong> <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path">https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path</a></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>nextProps</code></td><td>Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>›</td></tr>
+<tr><td><code>nextContext</code></td><td>any</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="optional-unsafe_componentwillupdate"></a><a href="#optional-unsafe_componentwillupdate" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Optional</code> UNSAFE_componentWillUpdate</h3>
+<p>▸ <strong>UNSAFE_componentWillUpdate</strong>(<code>nextProps</code>: Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>›, <code>nextState</code>: Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.state">State</a>›, <code>nextContext</code>: any): <em>void</em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:698</p>
+<p>Called immediately before rendering when new props or state is received. Not called for the initial render.</p>
+<p>Note: You cannot call <code>Component#setState</code> here.</p>
+<p>This method will not stop working in React 17.</p>
+<p>Note: the presence of getSnapshotBeforeUpdate or getDerivedStateFromProps
+prevents this from being invoked.</p>
+<p><strong><code>deprecated</code></strong> 16.3, use getSnapshotBeforeUpdate instead</p>
+<p><strong><code>see</code></strong> <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#reading-dom-properties-before-an-update">https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#reading-dom-properties-before-an-update</a></p>
+<p><strong><code>see</code></strong> <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path">https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path</a></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>nextProps</code></td><td>Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>›</td></tr>
+<tr><td><code>nextState</code></td><td>Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.state">State</a>›</td></tr>
+<tr><td><code>nextContext</code></td><td>any</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="optional-componentdidcatch"></a><a href="#optional-componentdidcatch" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Optional</code> componentDidCatch</h3>
+<p>▸ <strong>componentDidCatch</strong>(<code>error</code>: Error, <code>errorInfo</code>: ErrorInfo): <em>void</em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:567</p>
+<p>Catches exceptions generated in descendant components. Unhandled exceptions will cause
+the entire component tree to unmount.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>error</code></td><td>Error</td></tr>
+<tr><td><code>errorInfo</code></td><td>ErrorInfo</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="componentdidmount"></a><a href="#componentdidmount" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>componentDidMount</h3>
+<p>▸ <strong>componentDidMount</strong>(): <em>void</em></p>
+<p><em>Overrides void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L124">react/src/GraphVizComponent.tsx:124</a></em></p>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="componentdidupdate"></a><a href="#componentdidupdate" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>componentDidUpdate</h3>
+<p>▸ <strong>componentDidUpdate</strong>(<code>prevProps</code>: <a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>): <em>void</em></p>
+<p><em>Overrides void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L305">react/src/GraphVizComponent.tsx:305</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>prevProps</code></td><td><a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a></td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="optional-componentwillmount"></a><a href="#optional-componentwillmount" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Optional</code> componentWillMount</h3>
+<p>▸ <strong>componentWillMount</strong>(): <em>void</em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:624</p>
+<p>Called immediately before mounting occurs, and before <code>Component#render</code>.
+Avoid introducing any side-effects or subscriptions in this method.</p>
+<p>Note: the presence of getSnapshotBeforeUpdate or getDerivedStateFromProps
+prevents this from being invoked.</p>
+<p><strong><code>deprecated</code></strong> 16.3, use componentDidMount or the constructor instead; will stop working in React 17</p>
+<p><strong><code>see</code></strong> <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#initializing-state">https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#initializing-state</a></p>
+<p><strong><code>see</code></strong> <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path">https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path</a></p>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="optional-componentwillreceiveprops"></a><a href="#optional-componentwillreceiveprops" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Optional</code> componentWillReceiveProps</h3>
+<p>▸ <strong>componentWillReceiveProps</strong>(<code>nextProps</code>: Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>›, <code>nextContext</code>: any): <em>void</em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:653</p>
+<p>Called when the component may be receiving new props.
+React may call this even if props have not changed, so be sure to compare new and existing
+props if you only want to handle changes.</p>
+<p>Calling <code>Component#setState</code> generally does not trigger this method.</p>
+<p>Note: the presence of getSnapshotBeforeUpdate or getDerivedStateFromProps
+prevents this from being invoked.</p>
+<p><strong><code>deprecated</code></strong> 16.3, use static getDerivedStateFromProps instead; will stop working in React 17</p>
+<p><strong><code>see</code></strong> <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#updating-state-based-on-props">https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#updating-state-based-on-props</a></p>
+<p><strong><code>see</code></strong> <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path">https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path</a></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>nextProps</code></td><td>Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>›</td></tr>
+<tr><td><code>nextContext</code></td><td>any</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="componentwillunmount"></a><a href="#componentwillunmount" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>componentWillUnmount</h3>
+<p>▸ <strong>componentWillUnmount</strong>(): <em>void</em></p>
+<p><em>Overrides void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L319">react/src/GraphVizComponent.tsx:319</a></em></p>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="optional-componentwillupdate"></a><a href="#optional-componentwillupdate" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Optional</code> componentWillUpdate</h3>
+<p>▸ <strong>componentWillUpdate</strong>(<code>nextProps</code>: Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>›, <code>nextState</code>: Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.state">State</a>›, <code>nextContext</code>: any): <em>void</em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:683</p>
+<p>Called immediately before rendering when new props or state is received. Not called for the initial render.</p>
+<p>Note: You cannot call <code>Component#setState</code> here.</p>
+<p>Note: the presence of getSnapshotBeforeUpdate or getDerivedStateFromProps
+prevents this from being invoked.</p>
+<p><strong><code>deprecated</code></strong> 16.3, use getSnapshotBeforeUpdate instead; will stop working in React 17</p>
+<p><strong><code>see</code></strong> <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#reading-dom-properties-before-an-update">https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#reading-dom-properties-before-an-update</a></p>
+<p><strong><code>see</code></strong> <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path">https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#gradual-migration-path</a></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>nextProps</code></td><td>Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>›</td></tr>
+<tr><td><code>nextState</code></td><td>Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.state">State</a>›</td></tr>
+<tr><td><code>nextContext</code></td><td>any</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="forceupdate"></a><a href="#forceupdate" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>forceUpdate</h3>
+<p>▸ <strong>forceUpdate</strong>(<code>callback?</code>: undefined | function): <em>void</em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:442</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>callback?</code></td><td>undefined | function</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="optional-getsnapshotbeforeupdate"></a><a href="#optional-getsnapshotbeforeupdate" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Optional</code> getSnapshotBeforeUpdate</h3>
+<p>▸ <strong>getSnapshotBeforeUpdate</strong>(<code>prevProps</code>: Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>›, <code>prevState</code>: Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.state">State</a>›): <em>SS | null</em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:603</p>
+<p>Runs before React applies the result of <code>render</code> to the document, and
+returns an object to be given to componentDidUpdate. Useful for saving
+things such as scroll position before <code>render</code> causes changes to it.</p>
+<p>Note: the presence of getSnapshotBeforeUpdate prevents any of the deprecated
+lifecycle events from running.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>prevProps</code></td><td>Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>›</td></tr>
+<tr><td><code>prevState</code></td><td>Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.state">State</a>›</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>SS | null</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="initdata"></a><a href="#initdata" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>initData</h3>
+<p>▸ <strong>initData</strong>(): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L325">react/src/GraphVizComponent.tsx:325</a></em></p>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="render"></a><a href="#render" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>render</h3>
+<p>▸ <strong>render</strong>(): <em>Element</em></p>
+<p><em>Overrides void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L356">react/src/GraphVizComponent.tsx:356</a></em></p>
+<p><strong>Returns:</strong> <em>Element</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="setstate"></a><a href="#setstate" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>setState</h3>
+<p>▸ <strong>setState</strong>&lt;<strong>K</strong>&gt;(<code>state</code>: function | null | S | object, <code>callback?</code>: undefined | function): <em>void</em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:437</p>
+<p><strong>Type parameters:</strong></p>
+<p>▪ <strong>K</strong>: <em>keyof State</em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>state</code></td><td>function | null | S | object</td></tr>
+<tr><td><code>callback?</code></td><td>undefined | function</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="optional-shouldcomponentupdate"></a><a href="#optional-shouldcomponentupdate" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Optional</code> shouldComponentUpdate</h3>
+<p>▸ <strong>shouldComponentUpdate</strong>(<code>nextProps</code>: Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>›, <code>nextState</code>: Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.state">State</a>›, <code>nextContext</code>: any): <em>boolean</em></p>
+<p><em>Inherited from void</em></p>
+<p>Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:557</p>
+<p>Called to determine whether the change in props and state should trigger a re-render.</p>
+<p><code>Component</code> always returns true.
+<code>PureComponent</code> implements a shallow comparison on props and state and returns true if any
+props or states have changed.</p>
+<p>If false is returned, <code>Component#render</code>, <code>componentWillUpdate</code>
+and <code>componentDidUpdate</code> will not be called.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th></tr>
+</thead>
+<tbody>
+<tr><td><code>nextProps</code></td><td>Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.props">Props</a>›</td></tr>
+<tr><td><code>nextState</code></td><td>Readonly‹<a href="/graph-viz/docs/api-docs/interfaces/react.state">State</a>›</td></tr>
+<tr><td><code>nextContext</code></td><td>any</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <em>boolean</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="zoomin"></a><a href="#zoomin" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>zoomIn</h3>
+<p>▸ <strong>zoomIn</strong>(): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L348">react/src/GraphVizComponent.tsx:348</a></em></p>
+<p><strong>Returns:</strong> <em>void</em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="zoomout"></a><a href="#zoomout" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>zoomOut</h3>
+<p>▸ <strong>zoomOut</strong>(): <em>void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L352">react/src/GraphVizComponent.tsx:352</a></em></p>
+<p><strong>Returns:</strong> <em>void</em></p>
+<h2><a class="anchor" aria-hidden="true" id="object-literals-1"></a><a href="#object-literals-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Object literals</h2>
+<h3><a class="anchor" aria-hidden="true" id="state"></a><a href="#state" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>state</h3>
+<h3><a class="anchor" aria-hidden="true" id="state-object"></a><a href="#state-object" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>▪ <strong>state</strong>: <em>object</em></h3>
+<p><em>Overrides void</em></p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L104">react/src/GraphVizComponent.tsx:104</a></em></p>
+<h3><a class="anchor" aria-hidden="true" id="currenttooltipnode"></a><a href="#currenttooltipnode" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>currentTooltipNode</h3>
+<p>• <strong>currentTooltipNode</strong>: <em>null</em> =  null</p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L105">react/src/GraphVizComponent.tsx:105</a></em></p>
+<h3><a class="anchor" aria-hidden="true" id="currentlyhoveredidx"></a><a href="#currentlyhoveredidx" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>currentlyHoveredIdx</h3>
+<p>• <strong>currentlyHoveredIdx</strong>: <em>null</em> =  null</p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L106">react/src/GraphVizComponent.tsx:106</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="vizdata"></a><a href="#vizdata" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>vizData</h3>
+<h3><a class="anchor" aria-hidden="true" id="vizdata-object"></a><a href="#vizdata-object" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>▪ <strong>vizData</strong>: <em>object</em></h3>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L92">react/src/GraphVizComponent.tsx:92</a></em></p>
+<h3><a class="anchor" aria-hidden="true" id="groups"></a><a href="#groups" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>groups</h3>
+<p>• <strong>groups</strong>: <em>never[]</em> =  []</p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L95">react/src/GraphVizComponent.tsx:95</a></em></p>
+<h3><a class="anchor" aria-hidden="true" id="links"></a><a href="#links" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>links</h3>
+<p>• <strong>links</strong>: <em>never[]</em> =  []</p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L94">react/src/GraphVizComponent.tsx:94</a></em></p>
+<h3><a class="anchor" aria-hidden="true" id="nodes"></a><a href="#nodes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>nodes</h3>
+<p>• <strong>nodes</strong>: <em>never[]</em> =  []</p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L93">react/src/GraphVizComponent.tsx:93</a></em></p>
+<hr>
+<h3><a class="anchor" aria-hidden="true" id="static-defaultprops"></a><a href="#static-defaultprops" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Static</code> defaultProps</h3>
+<h3><a class="anchor" aria-hidden="true" id="defaultprops-object"></a><a href="#defaultprops-object" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>▪ <strong>defaultProps</strong>: <em>object</em></h3>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L109">react/src/GraphVizComponent.tsx:109</a></em></p>
+<h3><a class="anchor" aria-hidden="true" id="groups-1"></a><a href="#groups-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>groups</h3>
+<p>• <strong>groups</strong>: <em>never[]</em> =  []</p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L111">react/src/GraphVizComponent.tsx:111</a></em></p>
+<h3><a class="anchor" aria-hidden="true" id="onclick"></a><a href="#onclick" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>onClick</h3>
+<p>• <strong>onClick</strong>: <em>noop</em> =  noop</p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L113">react/src/GraphVizComponent.tsx:113</a></em></p>
+<h3><a class="anchor" aria-hidden="true" id="onlinkdrawn"></a><a href="#onlinkdrawn" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>onLinkDrawn</h3>
+<p>• <strong>onLinkDrawn</strong>: <em>noop</em> =  noop</p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L112">react/src/GraphVizComponent.tsx:112</a></em></p>
+<h3><a class="anchor" aria-hidden="true" id="onsecondaryclick"></a><a href="#onsecondaryclick" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>onSecondaryClick</h3>
+<p>• <strong>onSecondaryClick</strong>: <em>noop</em> =  noop</p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L114">react/src/GraphVizComponent.tsx:114</a></em></p>
+<h3><a class="anchor" aria-hidden="true" id="tooltips"></a><a href="#tooltips" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>tooltips</h3>
+<p>• <strong>tooltips</strong>: <em>never[]</em> =  []</p>
+<p><em>Defined in <a href="https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L110">react/src/GraphVizComponent.tsx:110</a></em></p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/graph-viz/docs/api-docs/classes/layouts.forcesimulation"><span class="arrow-prev">← </span><span class="function-name-prevnext">ForceSimulation</span></a><a class="docs-next button" href="/graph-viz/docs/api-docs/interfaces/core.configurationoptions"><span class="function-name-prevnext">ConfigurationOptions</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#type-parameters">Type parameters</a></li><li><a href="#hierarchy">Hierarchy</a></li><li><a href="#index">Index</a><ul class="toc-headings"><li><a href="#constructors">Constructors</a></li><li><a href="#properties">Properties</a></li><li><a href="#methods">Methods</a></li><li><a href="#object-literals">Object literals</a></li></ul></li><li><a href="#constructors-1">Constructors</a><ul class="toc-headings"><li><a href="#constructor">constructor</a></li></ul></li><li><a href="#properties-1">Properties</a><ul class="toc-headings"><li><a href="#canvasref">canvasRef</a></li><li><a href="#context">context</a></li><li><a href="#onwindowresize">onWindowResize</a></li><li><a href="#props">props</a></li><li><a href="#refs">refs</a></li><li><a href="#rootref">rootRef</a></li><li><a href="#simulation">simulation</a></li><li><a href="#tooltipnodes">tooltipNodes</a></li><li><a href="#visualization">visualization</a></li><li><a href="#static-optional-contexttype"><code>Static</code> <code>Optional</code> contextType</a></li></ul></li><li><a href="#methods-1">Methods</a><ul class="toc-headings"><li><a href="#optional-unsafe_componentwillmount"><code>Optional</code> UNSAFE_componentWillMount</a></li><li><a href="#optional-unsafe_componentwillreceiveprops"><code>Optional</code> UNSAFE_componentWillReceiveProps</a></li><li><a href="#optional-unsafe_componentwillupdate"><code>Optional</code> UNSAFE_componentWillUpdate</a></li><li><a href="#optional-componentdidcatch"><code>Optional</code> componentDidCatch</a></li><li><a href="#componentdidmount">componentDidMount</a></li><li><a href="#componentdidupdate">componentDidUpdate</a></li><li><a href="#optional-componentwillmount"><code>Optional</code> componentWillMount</a></li><li><a href="#optional-componentwillreceiveprops"><code>Optional</code> componentWillReceiveProps</a></li><li><a href="#componentwillunmount">componentWillUnmount</a></li><li><a href="#optional-componentwillupdate"><code>Optional</code> componentWillUpdate</a></li><li><a href="#forceupdate">forceUpdate</a></li><li><a href="#optional-getsnapshotbeforeupdate"><code>Optional</code> getSnapshotBeforeUpdate</a></li><li><a href="#initdata">initData</a></li><li><a href="#render">render</a></li><li><a href="#setstate">setState</a></li><li><a href="#optional-shouldcomponentupdate"><code>Optional</code> shouldComponentUpdate</a></li><li><a href="#zoomin">zoomIn</a></li><li><a href="#zoomout">zoomOut</a></li></ul></li><li><a href="#object-literals-1">Object literals</a><ul class="toc-headings"><li><a href="#state">state</a></li><li><a href="#state-object">▪ <strong>state</strong>: <em>object</em></a></li><li><a href="#currenttooltipnode">currentTooltipNode</a></li><li><a href="#currentlyhoveredidx">currentlyHoveredIdx</a></li><li><a href="#vizdata">vizData</a></li><li><a href="#vizdata-object">▪ <strong>vizData</strong>: <em>object</em></a></li><li><a href="#groups">groups</a></li><li><a href="#links">links</a></li><li><a href="#nodes">nodes</a></li><li><a href="#static-defaultprops"><code>Static</code> defaultProps</a></li><li><a href="#defaultprops-object">▪ <strong>defaultProps</strong>: <em>object</em></a></li><li><a href="#groups-1">groups</a></li><li><a href="#onclick">onClick</a></li><li><a href="#onlinkdrawn">onLinkDrawn</a></li><li><a href="#onsecondaryclick">onSecondaryClick</a></li><li><a href="#tooltips">tooltips</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/graph-viz/" class="nav-home"><img src="/graph-viz/img/graph-viz-logo.png" alt="@graph-viz" width="66" height="58"/></a><div><h5>Docs</h5><a href="/graph-viz/docs/en/doc1.html">Getting Started (or other categories)</a><a href="/graph-viz/docs/en/doc2.html">Guides (or other categories)</a><a href="/graph-viz/docs/en/doc3.html">API Reference (or other categories)</a></div><div><h5>Community</h5><a href="/graph-viz/en/users.html">User Showcase</a><a href="https://stackoverflow.com/questions/tagged/" target="_blank" rel="noreferrer noopener">Stack Overflow</a><a href="https://discordapp.com/">Project Chat</a><a href="https://twitter.com/" target="_blank" rel="noreferrer noopener">Twitter</a></div><div><h5>More</h5><a href="/graph-viz/blog">Blog</a><a href="https://github.com/">GitHub</a><a class="github-button" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/graph-viz/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019, Uplevel Technology</section></footer></div></body></html>

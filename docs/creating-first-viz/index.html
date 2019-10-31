@@ -1,0 +1,201 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Creating your first graph viz · @graph-viz</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="To create your first graph visualization with this library you need - "/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Creating your first graph viz · @graph-viz"/><meta property="og:type" content="website"/><meta property="og:url" content="https://uplevel-technology.github.io/graph-viz/"/><meta property="og:description" content="To create your first graph visualization with this library you need - "/><meta property="og:image" content="https://uplevel-technology.github.io/graph-viz/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://uplevel-technology.github.io/graph-viz/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/graph-viz/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/graph-viz/js/scrollSpy.js"></script><link rel="stylesheet" href="/graph-viz/css/prism.css"/><link rel="stylesheet" href="/graph-viz/css/main.css"/><script src="/graph-viz/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/graph-viz/"><img class="logo" src="/graph-viz/img/graph-viz-logo.png" alt="@graph-viz"/><h2 class="headerTitleWithLogo">@graph-viz</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/graph-viz/docs/introduction" target="_self">Docs</a></li><li class=""><a href="/graph-viz/docs/api-docs/" target="_self">API</a></li><li class=""><a href="/graph-viz/help" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Guides</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/graph-viz/docs/introduction">Installation</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/quick-start">Quick Start</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Guides</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/graph-viz/docs/creating-first-viz">Creating your first graph viz</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/adding-interactions">Adding interactions</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/drawing-hulls">Drawing hulls (Groups)</a></li><li class="navListItem"><a class="navItem" href="/graph-viz/docs/creating-custom-layouts">Creating custom layouts</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Components</h3><ul class=""><li class="navListItem"><a class="navItem" href="/graph-viz/docs/using-react-component">React</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Creating your first graph viz</h1></header><article><div><span><p>To create your first graph visualization with this library you need -</p>
+<ol>
+<li>Your graph data -  a list of nodes and links.</li>
+<li>Layout for your graph, i.e. positions for each node.
+You can add your own positions or use a layout from the <code>@graph-viz/layouts</code> package.</li>
+<li>The renderer from <code>@graph-viz/core</code>. This will paint your graph to the HTML canvas.</li>
+</ol>
+<h2><a class="anchor" aria-hidden="true" id="preparing-the-data"></a><a href="#preparing-the-data" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Preparing the data</h2>
+<p>For the purposes of this tutorial we will visualize the following graph data:</p>
+<pre><code class="hljs css language-typescript"><span class="token keyword">const</span> data <span class="token operator">=</span> <span class="token punctuation">{</span>
+  nodes<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'1'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'2'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'3'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'4'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'5'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'6'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  links<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>source<span class="token punctuation">:</span> <span class="token string">'1'</span><span class="token punctuation">,</span> target<span class="token punctuation">:</span> <span class="token string">'2'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>source<span class="token punctuation">:</span> <span class="token string">'3'</span><span class="token punctuation">,</span> target<span class="token punctuation">:</span> <span class="token string">'4'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>source<span class="token punctuation">:</span> <span class="token string">'3'</span><span class="token punctuation">,</span> target<span class="token punctuation">:</span> <span class="token string">'5'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>source<span class="token punctuation">:</span> <span class="token string">'3'</span><span class="token punctuation">,</span> target<span class="token punctuation">:</span> <span class="token string">'6'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>The renderer treats data as an immutable entity and simply draws what is provided to it.
+If you want to change what is drawn, you need to update the data.</p>
+<p><strong>Input Data Structure:</strong></p>
+<p>The full structure of the expected input data can be found <a href="">here TODO</a>. This
+structure should contain all the information that is required by the renderer to
+draw a graph.</p>
+<pre><code class="hljs css language-typescript"><span class="token keyword">interface</span> <span class="token class-name">VisualizationInputData</span> <span class="token punctuation">{</span>
+  nodes<span class="token punctuation">:</span> Node<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+  links<span class="token punctuation">:</span> Link<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+  groups<span class="token punctuation">:</span> Group<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>The individual structures of <code>Node</code>, <code>Link</code> and <code>Group</code> elements can
+be found <a href="">here TODO</a>.</p>
+<h2><a class="anchor" aria-hidden="true" id="adding-style-attributes"></a><a href="#adding-style-attributes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Adding style attributes</h2>
+<p>Let's add some style attributes to our nodes and links. In this case we only add a fill
+color. Let's also make one of the links red.</p>
+<pre><code class="hljs css language-typescript"><span class="token keyword">const</span> data <span class="token operator">=</span> <span class="token punctuation">{</span>
+   nodes<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+     <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'1'</span><span class="token punctuation">,</span> fill<span class="token punctuation">:</span> <span class="token string">'coral'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'2'</span><span class="token punctuation">,</span> fill<span class="token punctuation">:</span> <span class="token string">'orange'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'3'</span><span class="token punctuation">,</span> fill<span class="token punctuation">:</span> <span class="token string">'blue'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'4'</span><span class="token punctuation">,</span> fill<span class="token punctuation">:</span> <span class="token string">'lightblue'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'5'</span><span class="token punctuation">,</span> fill<span class="token punctuation">:</span> <span class="token string">'orange'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'6'</span><span class="token punctuation">,</span> fill<span class="token punctuation">:</span> <span class="token string">'green'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+   <span class="token punctuation">]</span><span class="token punctuation">,</span>
+   links<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+     <span class="token punctuation">{</span>source<span class="token punctuation">:</span> <span class="token string">'1'</span><span class="token punctuation">,</span> target<span class="token punctuation">:</span> <span class="token string">'2'</span><span class="token punctuation">,</span> color<span class="token punctuation">:</span> <span class="token string">'red'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token punctuation">{</span>source<span class="token punctuation">:</span> <span class="token string">'3'</span><span class="token punctuation">,</span> target<span class="token punctuation">:</span> <span class="token string">'4'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token punctuation">{</span>source<span class="token punctuation">:</span> <span class="token string">'3'</span><span class="token punctuation">,</span> target<span class="token punctuation">:</span> <span class="token string">'5'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token punctuation">{</span>source<span class="token punctuation">:</span> <span class="token string">'3'</span><span class="token punctuation">,</span> target<span class="token punctuation">:</span> <span class="token string">'6'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+   <span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="adding-position-attributes-creating-a-layout"></a><a href="#adding-position-attributes-creating-a-layout" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Adding position attributes / Creating a layout</h2>
+<p>The renderer is incognizant of the position and the layouts of the graph, so we need
+to tell it about the positions of the nodes via the position attributes</p>
+<p>As mentioned in the <a href="">docs TODO</a>, a node expected by the <code>GraphVisualization</code> renderer
+requires position attributes <code>x</code> &amp; <code>y</code>. This is the coordinate of the center of the circle
+that the the renderer will draw to represent the node.</p>
+<p>The <code>@graph-viz</code> library allows you to use any third-party solution or your own
+layout algorithms to create layouts by allowing you to manually initialize
+nodes with positions.</p>
+<p>Additionally, we also provide our own solution to create layouts with the
+<code>@graph-viz/layouts</code> package.</p>
+<p>For the purposes of this walk-through, we will use the <code>@graph-viz/layouts</code> package to
+initialize nodes with positions in a force-directed layout before sending them to
+the renderer.</p>
+<pre><code class="hljs css language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span>ForceSimulation<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@graph-viz/layouts'</span>
+
+<span class="token keyword">const</span> data <span class="token operator">=</span> <span class="token punctuation">{</span>
+   nodes<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+     <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'1'</span><span class="token punctuation">,</span> fill<span class="token punctuation">:</span> <span class="token string">'coral'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'2'</span><span class="token punctuation">,</span> fill<span class="token punctuation">:</span> <span class="token string">'orange'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'3'</span><span class="token punctuation">,</span> fill<span class="token punctuation">:</span> <span class="token string">'blue'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'4'</span><span class="token punctuation">,</span> fill<span class="token punctuation">:</span> <span class="token string">'lightblue'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'5'</span><span class="token punctuation">,</span> fill<span class="token punctuation">:</span> <span class="token string">'orange'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token punctuation">{</span>id<span class="token punctuation">:</span> <span class="token string">'6'</span><span class="token punctuation">,</span> fill<span class="token punctuation">:</span> <span class="token string">'green'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+   <span class="token punctuation">]</span><span class="token punctuation">,</span>
+   links<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+     <span class="token punctuation">{</span>source<span class="token punctuation">:</span> <span class="token string">'1'</span><span class="token punctuation">,</span> target<span class="token punctuation">:</span> <span class="token string">'2'</span><span class="token punctuation">,</span> color<span class="token punctuation">:</span> <span class="token string">'red'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token punctuation">{</span>source<span class="token punctuation">:</span> <span class="token string">'3'</span><span class="token punctuation">,</span> target<span class="token punctuation">:</span> <span class="token string">'4'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token punctuation">{</span>source<span class="token punctuation">:</span> <span class="token string">'3'</span><span class="token punctuation">,</span> target<span class="token punctuation">:</span> <span class="token string">'5'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token punctuation">{</span>source<span class="token punctuation">:</span> <span class="token string">'3'</span><span class="token punctuation">,</span> target<span class="token punctuation">:</span> <span class="token string">'6'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+   <span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> simulation <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ForceSimulation</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+simulation<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+</code></pre>
+<p>The <code>simulation.init</code> method internally initializes a real-time force layout simulation
+based on <a href=""><code>d3-force</code>TODO</a>.</p>
+<p>You can fetch all the node positions at a given point in time using the <code>getNodePositions</code>
+method.</p>
+<pre><code class="hljs css language-typescript"><span class="token comment">// get node positions from the simulation</span>
+<span class="token keyword">const</span> nodePositions <span class="token operator">=</span> simulation<span class="token punctuation">.</span><span class="token function">getNodePositions</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment">// seeding data with positions</span>
+data<span class="token punctuation">.</span>nodes<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">node<span class="token punctuation">,</span> i</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  node<span class="token punctuation">.</span>x <span class="token operator">=</span> nodePositions<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>x
+  node<span class="token punctuation">.</span>y <span class="token operator">=</span> nodePositions<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>y
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+</code></pre>
+<p>See docs for <a href="https://uplevel-technology.github.io/graph-viz/classes/layouts.forcesimulation.html">ForceSimulation</a>.</p>
+<p><strong>NOTE:</strong></p>
+<p>The <code>getNodePositions()</code> method gets the positions of all the nodes at a given
+point in time. Because the <code>ForceSimulation</code> is actually a live simulation, you
+may or may not have the most <em>settled</em> positions depending on when you call <code>getNodePositions</code>.
+To ensure that a force directed layout simulation has settled, we recommend that
+you update the node positions periodically with the <code>simulation.onTick</code> callback.</p>
+<pre><code class="hljs css language-typescript">simulation<span class="token punctuation">.</span><span class="token function">onTick</span><span class="token punctuation">(</span><span class="token parameter">nodePositions</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  data<span class="token punctuation">.</span>nodes<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">node<span class="token punctuation">,</span> i</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    node<span class="token punctuation">.</span>x <span class="token operator">=</span> nodePositions<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>x
+    node<span class="token punctuation">.</span>y <span class="token operator">=</span> nodePositions<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>y
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>The <code>simulation.onTick</code> can also be used to animate the force simulation by rerendering
+within the callback as shown in <a href="">Updating doc TODO</a>.</p>
+<h2><a class="anchor" aria-hidden="true" id="initializing-the-renderer"></a><a href="#initializing-the-renderer" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Initializing the renderer</h2>
+<p>The last step is to pass our formatted data with all the styles and positions to our renderer.</p>
+<p>We'll use the WebGL renderer that is available under <code>@graph-viz/core</code>.</p>
+<p>Here we create an instance of the renderer and assign it to the variable <code>visualization</code>.</p>
+<pre><code class="hljs css language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span>GraphVisualization<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@graph-viz/core'</span>
+
+<span class="token comment">// See docs for argument structures</span>
+<span class="token keyword">const</span> visualization <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">GraphVisualization</span><span class="token punctuation">(</span>
+  data<span class="token punctuation">,</span>    <span class="token comment">// visualization input data</span>
+  canvas<span class="token punctuation">,</span>  <span class="token comment">// Canvas DOM element</span>
+  width<span class="token punctuation">,</span>   <span class="token comment">// number</span>
+  height<span class="token punctuation">,</span>  <span class="token comment">// number</span>
+  config<span class="token punctuation">,</span>  <span class="token comment">// additional config options</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>See docs for class <a href="https://uplevel-technology.github.io/graph-viz/classes/core.graphvisualization.html">GraphVisualization</a>.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/graph-viz/docs/quick-start"><span class="arrow-prev">← </span><span>Quick Start</span></a><a class="docs-next button" href="/graph-viz/docs/adding-interactions"><span>Adding interactions</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#preparing-the-data">Preparing the data</a></li><li><a href="#adding-style-attributes">Adding style attributes</a></li><li><a href="#adding-position-attributes-creating-a-layout">Adding position attributes / Creating a layout</a></li><li><a href="#initializing-the-renderer">Initializing the renderer</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/graph-viz/" class="nav-home"><img src="/graph-viz/img/graph-viz-logo.png" alt="@graph-viz" width="66" height="58"/></a><div><h5>Docs</h5><a href="/graph-viz/docs/en/doc1.html">Getting Started (or other categories)</a><a href="/graph-viz/docs/en/doc2.html">Guides (or other categories)</a><a href="/graph-viz/docs/en/doc3.html">API Reference (or other categories)</a></div><div><h5>Community</h5><a href="/graph-viz/en/users.html">User Showcase</a><a href="https://stackoverflow.com/questions/tagged/" target="_blank" rel="noreferrer noopener">Stack Overflow</a><a href="https://discordapp.com/">Project Chat</a><a href="https://twitter.com/" target="_blank" rel="noreferrer noopener">Twitter</a></div><div><h5>More</h5><a href="/graph-viz/blog">Blog</a><a href="https://github.com/">GitHub</a><a class="github-button" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/graph-viz/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019, Uplevel Technology</section></footer></div></body></html>
