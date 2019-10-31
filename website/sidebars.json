@@ -1,10 +1,96 @@
 {
   "docs": {
-    "Getting Started": ["introduction", "quick-start"],
-    "Guides": ["creating-first-viz", "adding-interactions", "drawing-hulls", "creating-custom-layouts"],
-    "Components": ["using-react-component"]
+    "Getting Started": [
+      "introduction",
+      "quick-start"
+    ],
+    "Guides": [
+      "creating-first-viz",
+      "adding-interactions",
+      "drawing-hulls",
+      "creating-custom-layouts"
+    ],
+    "Components": [
+      "using-react-component"
+    ]
   },
   "docs-other": {
-    "First Category": ["doc4", "doc5"]
+    "First Category": [
+      "doc4",
+      "doc5"
+    ]
+  },
+  "@graph-viz/core": {
+    "Introduction": [
+      "api-docs/index",
+      "api-docs/globals"
+    ],
+    "External Modules": [
+      "api-docs/modules/core",
+      "api-docs/classes/core.displaygroups",
+      "api-docs/classes/core.graphvisualization",
+      "api-docs/classes/core.labels",
+      "api-docs/classes/core.links",
+      "api-docs/classes/core.mouseinteraction",
+      "api-docs/classes/core.nodes",
+      "api-docs/interfaces/core.configurationoptions",
+      "api-docs/interfaces/core.displaygroup",
+      "api-docs/interfaces/core.displaylink",
+      "api-docs/interfaces/core.displaynode",
+      "api-docs/interfaces/core.linkstyleattributes",
+      "api-docs/interfaces/core.point",
+      "api-docs/interfaces/core.populateddisplaylink",
+      "api-docs/interfaces/core.texttexture",
+      "api-docs/interfaces/core.uniforms",
+      "api-docs/interfaces/core.visualizationinputdata",
+      "api-docs/modules/layouts",
+      "api-docs/classes/layouts.forcesimulation",
+      "api-docs/interfaces/layouts.nodeposition",
+      "api-docs/interfaces/layouts.simulationdata",
+      "api-docs/interfaces/layouts.simulationgroup",
+      "api-docs/interfaces/layouts.simulationlink",
+      "api-docs/interfaces/layouts.simulationnode",
+      "api-docs/modules/react",
+      "api-docs/classes/react.graphvizcomponent",
+      "api-docs/interfaces/react.nodetooltipsprops",
+      "api-docs/interfaces/react.props",
+      "api-docs/interfaces/react.state",
+      "api-docs/interfaces/react.tooltipfields",
+      "api-docs/interfaces/react.tooltipnode",
+      "api-docs/interfaces/react.vec2"
+    ],
+    "Classes": [
+      "api-docs/classes/core.displaygroups",
+      "api-docs/classes/core.graphvisualization",
+      "api-docs/classes/core.labels",
+      "api-docs/classes/core.links",
+      "api-docs/classes/core.mouseinteraction",
+      "api-docs/classes/core.nodes",
+      "api-docs/classes/layouts.forcesimulation",
+      "api-docs/classes/react.graphvizcomponent"
+    ],
+    "Interfaces": [
+      "api-docs/interfaces/core.configurationoptions",
+      "api-docs/interfaces/core.displaygroup",
+      "api-docs/interfaces/core.displaylink",
+      "api-docs/interfaces/core.displaynode",
+      "api-docs/interfaces/core.linkstyleattributes",
+      "api-docs/interfaces/core.point",
+      "api-docs/interfaces/core.populateddisplaylink",
+      "api-docs/interfaces/core.texttexture",
+      "api-docs/interfaces/core.uniforms",
+      "api-docs/interfaces/core.visualizationinputdata",
+      "api-docs/interfaces/layouts.nodeposition",
+      "api-docs/interfaces/layouts.simulationdata",
+      "api-docs/interfaces/layouts.simulationgroup",
+      "api-docs/interfaces/layouts.simulationlink",
+      "api-docs/interfaces/layouts.simulationnode",
+      "api-docs/interfaces/react.nodetooltipsprops",
+      "api-docs/interfaces/react.props",
+      "api-docs/interfaces/react.state",
+      "api-docs/interfaces/react.tooltipfields",
+      "api-docs/interfaces/react.tooltipnode",
+      "api-docs/interfaces/react.vec2"
+    ]
   }
 }

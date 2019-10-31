@@ -1,3 +1,11 @@
+---
+id: "index"
+title: "@graph-viz"
+sidebar_label: "README"
+---
+
+[@graph-viz](index.md) › [Globals](globals.md)
+
 GraphViz library is a high-performance WebGL based library for drawing graph visualizations.
 It ships in multiple packages, each having a specific purpose.
 
@@ -39,7 +47,6 @@ const visualization = new GraphVisualization(
   config,  // config
 );
 ```
-
 
 ## @graph-viz/layouts
 

@@ -9,6 +9,142 @@
         "title": "Adding interactions",
         "sidebar_label": "Adding interactions"
       },
+      "api-docs/classes/core.displaygroups": {
+        "title": "DisplayGroups",
+        "sidebar_label": "DisplayGroups"
+      },
+      "api-docs/classes/core.graphvisualization": {
+        "title": "GraphVisualization",
+        "sidebar_label": "GraphVisualization"
+      },
+      "api-docs/classes/core.labels": {
+        "title": "Labels",
+        "sidebar_label": "Labels"
+      },
+      "api-docs/classes/core.links": {
+        "title": "Links",
+        "sidebar_label": "Links"
+      },
+      "api-docs/classes/core.mouseinteraction": {
+        "title": "MouseInteraction",
+        "sidebar_label": "MouseInteraction"
+      },
+      "api-docs/classes/core.nodes": {
+        "title": "Nodes",
+        "sidebar_label": "Nodes"
+      },
+      "api-docs/classes/layouts.forcesimulation": {
+        "title": "ForceSimulation",
+        "sidebar_label": "ForceSimulation"
+      },
+      "api-docs/classes/react.graphvizcomponent": {
+        "title": "GraphVizComponent",
+        "sidebar_label": "GraphVizComponent"
+      },
+      "api-docs/globals": {
+        "title": "@graph-viz",
+        "sidebar_label": "Globals"
+      },
+      "api-docs/index": {
+        "title": "@graph-viz",
+        "sidebar_label": "README"
+      },
+      "api-docs/interfaces/core.configurationoptions": {
+        "title": "ConfigurationOptions",
+        "sidebar_label": "ConfigurationOptions"
+      },
+      "api-docs/interfaces/core.displaygroup": {
+        "title": "DisplayGroup",
+        "sidebar_label": "DisplayGroup"
+      },
+      "api-docs/interfaces/core.displaylink": {
+        "title": "DisplayLink",
+        "sidebar_label": "DisplayLink"
+      },
+      "api-docs/interfaces/core.displaynode": {
+        "title": "DisplayNode",
+        "sidebar_label": "DisplayNode"
+      },
+      "api-docs/interfaces/core.linkstyleattributes": {
+        "title": "LinkStyleAttributes",
+        "sidebar_label": "LinkStyleAttributes"
+      },
+      "api-docs/interfaces/core.point": {
+        "title": "Point",
+        "sidebar_label": "Point"
+      },
+      "api-docs/interfaces/core.populateddisplaylink": {
+        "title": "PopulatedDisplayLink",
+        "sidebar_label": "PopulatedDisplayLink"
+      },
+      "api-docs/interfaces/core.texttexture": {
+        "title": "TextTexture",
+        "sidebar_label": "TextTexture"
+      },
+      "api-docs/interfaces/core.uniforms": {
+        "title": "Uniforms",
+        "sidebar_label": "Uniforms"
+      },
+      "api-docs/interfaces/core.visualizationinputdata": {
+        "title": "VisualizationInputData",
+        "sidebar_label": "VisualizationInputData"
+      },
+      "api-docs/interfaces/layouts.nodeposition": {
+        "title": "NodePosition",
+        "sidebar_label": "NodePosition"
+      },
+      "api-docs/interfaces/layouts.simulationdata": {
+        "title": "SimulationData",
+        "sidebar_label": "SimulationData"
+      },
+      "api-docs/interfaces/layouts.simulationgroup": {
+        "title": "SimulationGroup",
+        "sidebar_label": "SimulationGroup"
+      },
+      "api-docs/interfaces/layouts.simulationlink": {
+        "title": "SimulationLink",
+        "sidebar_label": "SimulationLink"
+      },
+      "api-docs/interfaces/layouts.simulationnode": {
+        "title": "SimulationNode",
+        "sidebar_label": "SimulationNode"
+      },
+      "api-docs/interfaces/react.nodetooltipsprops": {
+        "title": "NodeTooltipsProps",
+        "sidebar_label": "NodeTooltipsProps"
+      },
+      "api-docs/interfaces/react.props": {
+        "title": "Props",
+        "sidebar_label": "Props"
+      },
+      "api-docs/interfaces/react.state": {
+        "title": "State",
+        "sidebar_label": "State"
+      },
+      "api-docs/interfaces/react.tooltipfields": {
+        "title": "TooltipFields",
+        "sidebar_label": "TooltipFields"
+      },
+      "api-docs/interfaces/react.tooltipnode": {
+        "title": "TooltipNode",
+        "sidebar_label": "TooltipNode"
+      },
+      "api-docs/interfaces/react.vec2": {
+        "title": "Vec2",
+        "sidebar_label": "Vec2"
+      },
+      "api-docs/modules/core": {
+        "title": "core",
+        "sidebar_label": "core"
+      },
+      "api-docs/modules/layouts": {
+        "title": "layouts",
+        "sidebar_label": "layouts"
+      },
+      "api-docs/modules/react": {
+        "title": "react",
+        "sidebar_label": "react"
+      },
       "creating-custom-layouts": {
         "title": "Creating custom layouts",
         "sidebar_label": "Creating custom layouts"
@@ -55,7 +191,11 @@
       "Getting Started": "Getting Started",
       "Guides": "Guides",
       "Components": "Components",
-      "First Category": "First Category"
+      "First Category": "First Category",
+      "Introduction": "Introduction",
+      "External Modules": "External Modules",
+      "Classes": "Classes",
+      "Interfaces": "Interfaces"
     }
   },
   "pages-strings": {

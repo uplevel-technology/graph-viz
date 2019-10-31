@@ -1,9 +1,11 @@
 {
   "name": "@graph-viz",
   "mode": "modules",
-  "out": "docs-legacy",
+  "out": "docs/api-docs",
   "preserveConstEnums": "true",
   "readme": "./README.md",
   "external-modulemap": ".*packages\/([^\/]+)\/.*",
-  "exclude": ["packages/react-sandbox"]
+  "exclude": ["packages/react-sandbox"],
+  "plugin": ["typedoc-plugin-markdown"],
+  "theme": "docusaurus"
 }

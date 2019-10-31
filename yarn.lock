@@ -13166,6 +13166,13 @@ typedoc-plugin-external-module-map@^1.0.0:
   resolved "https://registry.yarnpkg.com/typedoc-plugin-external-module-map/-/typedoc-plugin-external-module-map-1.0.0.tgz#7021d0e2bc9a98b7266f4ea2eab593b7c63802ce"
   integrity sha512-OtlTOmanX0yqRYUVLBuGSBjrffLLAjWNn8mqh6k6FkvfXAIIe3Yfg0kCeKZDN/65v4dt3MJ9AuGXTGLPue3Kqg==
 
+typedoc-plugin-markdown@^2.2.11:
+  version "2.2.11"
+  resolved "https://registry.yarnpkg.com/typedoc-plugin-markdown/-/typedoc-plugin-markdown-2.2.11.tgz#81ea607a7bc82cf3ae0bc6de4bbb7e8ea6b437f2"
+  integrity sha512-tzBJJjM23DZMbfV+wds+M/IH8xNUVX4iyvABWyL9+gQZY6Fwbf2xGur2Dg6jNXGn2OsuqjZRI3dvSeqw64MSMA==
+  dependencies:
+    fs-extra "^8.1.0"
+
 typedoc@^0.15.0:
   version "0.15.0"
   resolved "https://registry.yarnpkg.com/typedoc/-/typedoc-0.15.0.tgz#21eaf4db41cf2797bad027a74f2a75cd08ae0c2d"
