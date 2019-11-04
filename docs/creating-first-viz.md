@@ -38,7 +38,7 @@ If you want to change what is drawn, you need to update the data.
 
 **Input Data Structure:**
 
-The full structure of the expected input data can be found [here TODO](). This
+The full structure of the expected input data can be found [here](api-docs/interfaces/core.visualizationinputdata.md). This
 structure should contain all the information that is required by the renderer to 
 draw a graph.
 ```typescript
@@ -48,10 +48,6 @@ interface VisualizationInputData {
   groups: Group[];
 }
 ```
-
-The individual structures of `Node`, `Link` and `Group` elements can 
-be found [here TODO](). 
-
 
 ## Adding style attributes
 
@@ -82,7 +78,7 @@ const data = {
 The renderer is incognizant of the position and the layouts of the graph, so we need
 to tell it about the positions of the nodes via the position attributes
 
-As mentioned in the [docs TODO](), a node expected by the `GraphVisualization` renderer
+Per the [API docs](api-docs/interfaces/core.displaygroup.md), a node expected by the `GraphVisualization` renderer
 requires position attributes `x` & `y`. This is the coordinate of the center of the circle 
 that the the renderer will draw to represent the node.
 
@@ -125,7 +121,7 @@ simulation.init(data);
 ```
 
 The `simulation.init` method internally initializes a real-time force layout simulation 
-based on [`d3-force`TODO]().
+based on [`d3-force`](https://github.com/d3/d3-force).
 
 You can fetch all the node positions at a given point in time using the `getNodePositions`
 method.
@@ -141,7 +137,7 @@ data.nodes.forEach((node, i) => {
 })
 
 ```
-See docs for [ForceSimulation](https://uplevel-technology.github.io/graph-viz/classes/layouts.forcesimulation.html).
+See docs for [ForceSimulation](api-docs/classes/layouts.forcesimulation.md).
 
 **NOTE:** 
 
@@ -161,7 +157,7 @@ simulation.onTick(nodePositions => {
 ```
 
 The `simulation.onTick` can also be used to animate the force simulation by rerendering
-within the callback as shown in [Updating doc TODO]().
+within the callback as shown in [Updating doc (WIP)]().
 
 ## Initializing the renderer
 
@@ -186,5 +182,5 @@ const visualization = new GraphVisualization(
 
 
 
-See docs for class [GraphVisualization](https://uplevel-technology.github.io/graph-viz/classes/core.graphvisualization.html).
+See docs for class [GraphVisualization](api-docs/classes/core.graphvisualization.md).
 

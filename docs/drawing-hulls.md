@@ -18,6 +18,7 @@ the
 
 ## Group data structure
 
+[Link to doc](api-docs/interfaces/core.displaygroup.md)
 ```typescript
 interface DisplayGroup {
   id: string

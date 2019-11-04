@@ -6,7 +6,7 @@ sidebar_label: Quick Start
 
 ## @graph-viz/core
 
-See docs for class [GraphVisualization](https://uplevel-technology.github.io/graph-viz/classes/core.graphvisualization.html).
+See docs for class [GraphVisualization](api-docs/classes/core.graphvisualization.md).
 
 ```typescript
 import {GraphVisualization} from '@graph-viz/core'
@@ -25,7 +25,7 @@ const visualization = new GraphVisualization(
 ## @graph-viz/layouts
 
 
-See docs for [ForceSimulation](https://uplevel-technology.github.io/graph-viz/classes/layouts.forcesimulation.html).
+See docs for [ForceSimulation](api-docs/classes/layouts.forcesimulation.md).
 
 ```typescript
 import {ForceSimulation} from '@graph-viz/layouts'
@@ -39,7 +39,7 @@ simulation.onTick(callback);
 
 ## @graph-viz/react
 
-See docs for [GraphVizComponent](https://uplevel-technology.github.io/graph-viz/classes/react.graphvizcomponent.html).
+See docs for [GraphVizComponent](api-docs/classes/react.graphvizcomponent.md).
 
 ```tsx
 import {GraphVizComponent} from '@graph-viz/react'
