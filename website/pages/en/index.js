@@ -154,13 +154,13 @@ class Index extends React.Component {
             title: 'GPU-powered Rendering',
           },
           {
-            content: 'The graph-viz library is ships in atomic modules broken down by logically consistent units. This makes operations like rendering and layouting highly decoupled and data-driven.',
+            content: 'The graph-viz library is ships in multiple logically-isolated atomic modules. This makes operations like rendering and layouting highly decoupled and data-driven.',
             image: `${baseUrl}img/box.svg`,
             imageAlign: 'top',
-            title: 'Modular and Data-driven',
+            title: 'Modular and Data Driven',
           },
           {
-            content: 'Easy to integrate with existing visualization libraries such as D3 and UI frameworks such as React.',
+            content: 'Built to be used alongside existing visualization libraries such as D3 and UI frameworks such as React.',
             image: `${baseUrl}img/react-icon.jpg`,
             imageAlign: 'top',
             title: 'Interoperable',
