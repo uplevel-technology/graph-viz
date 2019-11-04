@@ -36,39 +36,39 @@ class Footer extends React.Component {
             )}
           </a>
           <div>
-            <h5>Docs</h5>
-            <a href={this.docUrl('doc1.html', this.props.language)}>
-              Getting Started (or other categories)
+            <h5>Guides</h5>
+            <a href={this.docUrl('introduction')}>
+              Installation
             </a>
-            <a href={this.docUrl('doc2.html', this.props.language)}>
-              Guides (or other categories)
+            <a href={this.docUrl('creating-first-viz')}>
+              Creating your first graph viz
             </a>
-            <a href={this.docUrl('doc3.html', this.props.language)}>
-              API Reference (or other categories)
-            </a>
-          </div>
-          <div>
-            <h5>Community</h5>
-            <a href={this.pageUrl('users.html', this.props.language)}>
-              User Showcase
-            </a>
-            <a
-              href="https://stackoverflow.com/questions/tagged/"
-              target="_blank"
-              rel="noreferrer noopener">
-              Stack Overflow
-            </a>
-            <a href="https://discordapp.com/">Project Chat</a>
-            <a
-              href="https://twitter.com/"
-              target="_blank"
-              rel="noreferrer noopener">
-              Twitter
+            <a href={this.docUrl('api-docs')}>
+              API Reference
             </a>
           </div>
+          {/*<div>*/}
+          {/*  <h5>Community</h5>*/}
+          {/*  <a href={this.pageUrl('users.html', this.props.language)}>*/}
+          {/*    User Showcase*/}
+          {/*  </a>*/}
+          {/*  <a*/}
+          {/*    href="https://stackoverflow.com/questions/tagged/"*/}
+          {/*    target="_blank"*/}
+          {/*    rel="noreferrer noopener">*/}
+          {/*    Stack Overflow*/}
+          {/*  </a>*/}
+          {/*  <a href="https://discordapp.com/">Project Chat</a>*/}
+          {/*  <a*/}
+          {/*    href="https://twitter.com/"*/}
+          {/*    target="_blank"*/}
+          {/*    rel="noreferrer noopener">*/}
+          {/*    Twitter*/}
+          {/*  </a>*/}
+          {/*</div>*/}
           <div>
             <h5>More</h5>
-            <a href={`${this.props.config.baseUrl}blog`}>Blog</a>
+            {/*<a href={`${this.props.config.baseUrl}blog`}>Blog</a>*/}
             <a href="https://github.com/uplevel-technology/graph-viz">GitHub</a>
             <a
               className="github-button"
