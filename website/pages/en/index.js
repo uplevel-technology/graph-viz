@@ -30,7 +30,16 @@ class HomeSplash extends React.Component {
     );
 
     const Logo = props => (
-      <div className="projectLogo">
+      <div style={{
+        width: 100,
+        height: 100,
+        padding: 20,
+        paddingTop: 23,
+        margin: 'auto',
+        borderRadius: '50%',
+        overflow: 'hidden',
+        background: '#02293a'
+      }}>
         <img src={props.img_src} alt="Project Logo" />
       </div>
     );
@@ -60,7 +69,7 @@ class HomeSplash extends React.Component {
 
     return (
       <SplashContainer>
-        <Logo img_src={`${baseUrl}img/undraw_monitor.svg`} />
+        <Logo img_src={`${baseUrl}img/graph-viz-logo.png`} />
         <div className="inner">
           <ProjectTitle siteConfig={siteConfig} />
           <PromoSection>
@@ -140,19 +149,19 @@ class Index extends React.Component {
         {[
           {
             content: 'Superfast rendering using WebGL.',
-            image: `${baseUrl}img/undraw_operating_system.svg`,
+            image: `${baseUrl}img/gpu.svg`,
             imageAlign: 'top',
             title: 'GPU-powered Rendering',
           },
           {
             content: 'The graph-viz library is ships in atomic modules broken down by logically consistent units. This makes operations like rendering and layouting highly decoupled and data-driven.',
-            image: `${baseUrl}img/undraw_react.svg`,
+            image: `${baseUrl}img/box.svg`,
             imageAlign: 'top',
             title: 'Modular and Data-driven',
           },
           {
             content: 'Easy to integrate with existing visualization libraries such as D3 and UI frameworks such as React.',
-            image: `${baseUrl}img/undraw_operating_system.svg`,
+            image: `${baseUrl}img/react-icon.jpg`,
             imageAlign: 'top',
             title: 'Interoperable',
           }
