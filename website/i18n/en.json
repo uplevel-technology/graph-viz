@@ -153,23 +153,11 @@
         "title": "Creating your first graph viz",
         "sidebar_label": "Creating your first graph viz"
       },
-      "doc2": {
-        "title": "document number 2"
-      },
-      "doc3": {
-        "title": "This is document number 3"
-      },
       "drawing-hulls": {
         "title": "Drawing hulls (groups)",
         "sidebar_label": "Drawing hulls (Groups)"
       },
-      "doc4": {
-        "title": "Other Document"
-      },
-      "doc5": {
-        "title": "Fifth Document"
-      },
-      "introduction": {
+      "installation": {
         "title": "Installation",
         "sidebar_label": "Installation"
       },
@@ -183,7 +171,7 @@
       }
     },
     "links": {
-      "Docs": "Docs",
+      "Guide": "Guide",
       "API": "API",
       "Help": "Help"
     },
@@ -191,7 +179,6 @@
       "Getting Started": "Getting Started",
       "Guides": "Guides",
       "Components": "Components",
-      "First Category": "First Category",
       "Introduction": "Introduction",
       "External Modules": "External Modules",
       "Classes": "Classes",
