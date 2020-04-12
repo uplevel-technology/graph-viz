@@ -338,10 +338,7 @@ export class GraphVisualization {
    * @param worldX
    * @param worldY
    */
-  public toScreenSpacePoint(
-    worldX: number = 0,
-    worldY: number = 0,
-  ): THREE.Vector3 {
+  public toScreenSpacePoint(worldX = 0, worldY = 0): THREE.Vector3 {
     const pos = new THREE.Vector3(worldX, worldY, 0)
     pos.project(this.camera)
 
@@ -356,7 +353,7 @@ export class GraphVisualization {
    * public method to zoom the graph
    * @param factor
    */
-  public zoom(factor: number = 0) {
+  public zoom(factor = 0) {
     this.userHasAdjustedViewport = true
     this.camera.zoom += factor * this.camera.zoom
     this.camera.updateProjectionMatrix()

@@ -4,7 +4,7 @@ const requiredMetadataKey = Symbol('required')
 
 export function required(
   // tslint:disable-next-line:ban-types
-  target: Object,
+  target: Record<string, any>,
   propertyKey: string | symbol,
   parameterIndex: number,
 ) {
