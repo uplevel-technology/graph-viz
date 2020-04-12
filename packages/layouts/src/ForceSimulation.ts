@@ -145,7 +145,8 @@ function getDefaultLinkForceStrengths(links: SimulationLink[]): number[] {
 }
 
 export class ForceSimulation {
-  private simulation: D3Simulation | undefined
+  public simulation: D3Simulation | undefined
+  public staticMode: boolean = false
   private registeredEventHandlers: {
     tick: (nodePositions: NodePosition[]) => void
   } = {
@@ -153,7 +154,8 @@ export class ForceSimulation {
     tick: noop,
   }
 
-  public initialize(graph: SimulationData) {
+  public initialize(graph: SimulationData, staticMode: boolean = false) {
+    this.staticMode = staticMode
     const nodesCopy = graph.nodes.map(node => ({...node}))
     const linksCopy = graph.links.map(link => ({...link}))
     const groupsCopy = graph.forceGroups.map(group => ({...group}))
@@ -191,27 +193,40 @@ export class ForceSimulation {
         'links',
         d3
           .forceLink(linksCopy)
-          .strength((link, i) =>
-            link.strengthMultiplier !== undefined
-              ? defaultLinkForceStrengths[i] * link.strengthMultiplier
-              : defaultLinkForceStrengths[i],
-          )
+          // .strength((link, i) =>
+          //   link.strengthMultiplier !== undefined
+          //     ? defaultLinkForceStrengths[i] * link.strengthMultiplier
+          //     : defaultLinkForceStrengths[i],
+          // )
           .id((n: SimulationNode) => n.id)
           .distance(linkForceDistance),
       )
       .force(
         'charge',
-        d3
-          .forceManyBody()
-          .strength((n: SimulationNode) =>
-            n.charge !== undefined ? n.charge : -250,
-          )
-          .distanceMax(250),
+        d3.forceManyBody(),
+        // .strength((n: SimulationNode) =>
+        //   n.charge !== undefined ? n.charge : -550,
+        // )
+        // .distanceMax(1250),
       )
       .force('group', forceGroup(groupsCopy))
       .on('tick', () => {
         this.registeredEventHandlers.tick(this.getNodePositions())
       })
+
+    if (staticMode) {
+      this.simulation.stop()
+      this.execManualTicks()
+    }
+  }
+
+  private execManualTicks() {
+    if (this.simulation) {
+      for (let i = 0, n = 300; i < n; ++i) {
+        console.log('manual tick')
+        this.simulation.tick()
+      }
+    }
   }
 
   public getNodePositions(): NodePosition[] {
@@ -253,22 +268,22 @@ export class ForceSimulation {
     if (!this.simulation) {
       return
     }
-    this.simulation.alpha(1)
-    this.simulation.restart()
+    // this.simulation.alpha(1)
+    // this.simulation.restart()
   }
 
   public reheat() {
     if (!this.simulation) {
       return
     }
-    this.simulation.alphaTarget(0.8).restart()
+    // this.simulation.alphaTarget(0.8).restart()
   }
 
   public settle() {
     if (!this.simulation) {
       return
     }
-    this.simulation.alphaTarget(0)
+    // this.simulation.alphaTarget(0)
   }
 
   public stop() {

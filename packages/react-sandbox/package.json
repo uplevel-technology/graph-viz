@@ -12,7 +12,7 @@
     "typescript": "3.6.2"
   },
   "scripts": {
-    "startsandbox": "react-scripts start",
+    "sandbox": "react-scripts start",
     "testsandbox": "react-scripts test",
     "ejectsandbox": "react-scripts eject"
   },
