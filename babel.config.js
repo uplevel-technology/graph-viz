@@ -19,7 +19,11 @@ if (process.env.BABEL_ENV === 'es') {
   ]
 }
 
-const prodPlugins = [['@babel/plugin-transform-runtime', {useESModules: true}]]
+const prodPlugins = [
+  ['@babel/plugin-proposal-decorators', {legacy: true}],
+  'babel-plugin-parameter-decorator',
+  ['@babel/plugin-transform-runtime', {useESModules: true}],
+]
 
 module.exports = {
   presets: defaultPresets.concat([
@@ -28,6 +32,7 @@ module.exports = {
   ]),
   plugins: [
     ['@babel/plugin-proposal-decorators', {legacy: true}],
+    'babel-plugin-parameter-decorator',
     ['@babel/plugin-proposal-class-properties', {loose: true}],
     ['@babel/plugin-proposal-object-rest-spread', {loose: true}],
     // any package needs to declare 7.4.4 as a runtime dependency. default is ^7.0.0
