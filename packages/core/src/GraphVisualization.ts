@@ -395,8 +395,10 @@ export class GraphVisualization {
     visibleBox.max.unproject(this.camera)
 
     // Downgrade to 2D boxes:
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore TODO explicitly downgrade to Box2
     boundingBox = new THREE.Box2().copy(boundingBox)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore TODO explicitly downgrade to Box2
     visibleBox = new THREE.Box2().copy(visibleBox)
 
@@ -404,7 +406,7 @@ export class GraphVisualization {
       return
     }
 
-    const maxZoom = 2.0
+    const maxZoom = 4.0
     const scale = visibleBox
       .getSize(new THREE.Vector3())
       .divide(boundingBox.getSize(new THREE.Vector3()))
