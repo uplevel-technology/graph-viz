@@ -8,16 +8,13 @@
     "@types/react-dom": "16.9.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-scripts": "3.1.1",
+    "react-scripts": "3.4.1",
     "typescript": "3.6.2"
   },
   "scripts": {
     "sandbox": "react-scripts start",
     "testsandbox": "react-scripts test",
     "ejectsandbox": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": {
     "production": [

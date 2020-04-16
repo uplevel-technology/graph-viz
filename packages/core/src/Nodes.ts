@@ -2,10 +2,7 @@
 
 import {defaultTo, size} from 'lodash'
 import * as THREE from 'three'
-import {
-  nodesFragmentShader,
-  nodesVertexShader,
-} from './shaders/asText'
+import {nodesFragmentShader, nodesVertexShader} from './shaders/asText'
 
 export interface DisplayNode {
   /**

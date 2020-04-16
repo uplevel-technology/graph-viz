@@ -8,10 +8,7 @@ import {
 } from './Nodes'
 import {defaultTo} from 'lodash'
 import {Labels} from './Labels'
-import {
-  linksFragmentShader,
-  linksVertexShader,
-} from './shaders/asText'
+import {linksFragmentShader, linksVertexShader} from './shaders/asText'
 
 const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
 

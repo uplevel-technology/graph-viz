@@ -4,7 +4,11 @@
   "main": "./lib/index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "yarn build:cjs && yarn build:esm && yarn build:es",
+    "build:cjs": "cross-env NODE_ENV=production BABEL_ENV=cjs babel src --config-file ../../babel.config.js --out-dir ./lib --extensions .ts --ignore \"**/*.test.ts\"",
+    "build:esm": "cross-env NODE_ENV=production BABEL_ENV=esm babel src --config-file ../../babel.config.js --out-dir ./lib/esm --extensions .ts --ignore \"**/*.test.ts\"",
+    "build:es": "cross-env NODE_ENV=production BABEL_ENV=es babel src --config-file ../../babel.config.js --out-dir ./lib/es --extensions .ts --ignore \"**/*.test.ts\"",
+    "build:umd": "asd...",
     "docs": "typedoc --mode file --out docs src",
     "test": "jest --colors"
   },
