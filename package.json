@@ -13,7 +13,7 @@
     "start-docs": "cd website && yarn run start",
     "test": "lerna run test",
     "build": "lerna run --parallel build",
-    "publish": "lerna run --parallel build && lerna publish"
+    "publish": "lerna run --parallel build && lerna publish from-package"
   },
   "workspaces": [
     "packages/*"
