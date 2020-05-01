@@ -15,9 +15,9 @@ const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
 /**
  * Constants
  */
-export const DEFAULT_LINK_COLOR = 0xcccccc
+export const DEFAULT_LINK_COLOR = '#cccccc'
 export const DEFAULT_LINK_WIDTH = 1
-export const HIGHLIGHTED_LINK_COLOR = 0x333333
+export const HIGHLIGHTED_LINK_COLOR = '#333333'
 export const DEFAULT_ARROW_WIDTH = 10
 export const LARGE_ARROW_WIDTH = 20
 export const DEFAULT_LINK_OPACITY = 1.0
@@ -34,9 +34,9 @@ interface LinkStyleAttributes {
   dashed?: boolean
 
   /**
-   * hex color string or hex number
+   * hex color string
    */
-  color?: string | number
+  color?: string
 
   /**
    * link opacity between 0 and 1

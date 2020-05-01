@@ -26,10 +26,10 @@ export interface DisplayNode {
   y: number
 
   /**
-   * node fill color hex string or hex number
-   * (default is 0x333333)
+   * node fill color hex string
+   * (default is #333333)
    */
-  fill?: number | string
+  fill?: string
 
   /**
    * relative node fill opacity
@@ -56,9 +56,9 @@ export interface DisplayNode {
   innerRadius?: number
 
   /**
-   * node strike color hex string or hex number
+   * node strike color hex string
    */
-  stroke?: number | string
+  stroke?: string
 
   /**
    * relative node stroke opacity
@@ -85,7 +85,7 @@ export interface DisplayNode {
  */
 export const DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE = 20
 export const DEFAULT_NODE_INNER_RADIUS = 0.2
-export const DEFAULT_NODE_FILL = 0x333333
+export const DEFAULT_NODE_FILL = '#333333'
 export const DEFAULT_NODE_FILL_OPACITY = 1.0
 export const DEFAULT_NODE_SCALE = 1.0
 export const DEFAULT_NODE_STROKE_WIDTH = 0.03
@@ -148,7 +148,6 @@ export class Nodes {
       transparent: true,
       uniforms: {
         globalScale: {value: window.devicePixelRatio},
-        defaultColor: {value: new THREE.Color(0xffffff)},
       },
       vertexShader: nodesVertexShader,
     })

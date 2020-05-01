@@ -23,10 +23,10 @@ export interface DisplayGroup {
   shape?: 'convexHull' | 'circle'
 
   /**
-   * fill color hex string or hex number
-   * (default is 0x333333)
+   * fill color hex string
+   * (default is #333333)
    */
-  fill?: number | string
+  fill?: string
 
   /**
    * relative node fill opacity
@@ -40,7 +40,7 @@ export interface DisplayGroup {
   padding?: number
 }
 
-export const DEFAULT_DISPLAY_GROUP_FILL = 0x000000
+export const DEFAULT_DISPLAY_GROUP_FILL = '#000000'
 export const DEFAULT_DISPLAY_GROUP_FILL_OPACITY = 0.09
 
 export class DisplayGroups {
