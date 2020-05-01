@@ -35,9 +35,7 @@ const styles = {
     width: '100%',
     height: '100%',
   },
-  canvas: {
-    backgroundColor: 'white',
-  },
+  canvas: {},
   actionButtons: {
     position: 'absolute' as const,
     top: 0,

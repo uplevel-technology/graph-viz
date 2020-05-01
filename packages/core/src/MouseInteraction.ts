@@ -1,6 +1,7 @@
 import {get, noop, orderBy} from 'lodash'
 import * as THREE from 'three'
 import {DisplayNode, Nodes} from './Nodes'
+import {Intersection} from 'three'
 
 const MAX_CLICK_DURATION = 300
 
@@ -195,7 +196,8 @@ export class MouseInteraction {
         'distanceToRay',
         'asc',
       ).filter(
-        point => !get(this.nodesData, `${point.index}.disableInteractions`),
+        (point: Intersection) =>
+          !get(this.nodesData, `${point.index}.disableInteractions`),
       )
 
       if (

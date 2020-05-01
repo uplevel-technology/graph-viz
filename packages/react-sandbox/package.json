@@ -6,18 +6,16 @@
     "@types/node": "12.7.3",
     "@types/react": "16.9.2",
     "@types/react-dom": "16.9.0",
+    "lodash": "^4.17.15",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-scripts": "3.1.1",
+    "react-scripts": "3.4.1",
     "typescript": "3.6.2"
   },
   "scripts": {
-    "startsandbox": "react-scripts start",
+    "sandbox": "react-scripts start",
     "testsandbox": "react-scripts test",
     "ejectsandbox": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": {
     "production": [
@@ -30,5 +28,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.150"
   }
 }

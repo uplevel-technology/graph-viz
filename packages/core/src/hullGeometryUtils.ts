@@ -124,7 +124,7 @@ function cross(o: Point, p: Point, q: Point): number {
  */
 export function getRoundedOffsetPolygon(
   nodes: DisplayNode[],
-  padding: number = 0,
+  padding = 0,
 ): THREE.Vector2[] {
   const vertices = nodes.map(n => new THREE.Vector2(n.x, n.y))
 
@@ -147,24 +147,60 @@ export function getRoundedOffsetPolygon(
 
     // tslint:disable prettier
     const shiftMatrix = new THREE.Matrix4().set(
-      1, 0, 0, 0,
-      -shift, 1, 0, 0,
-      0, 0, 1, 0,
-      0, 0, 0, 1
+      1,
+      0,
+      0,
+      0,
+      -shift,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
     )
 
     const rotationMatrix = new THREE.Matrix4().set(
-      Math.cos(rHalfAngle), -Math.sin(rHalfAngle), 0, 0,
-      Math.sin(rHalfAngle),  Math.cos(rHalfAngle), 0, 0,
-      0,                    0, 1, 0,
-      0,                    0, 0, 1
+      Math.cos(rHalfAngle),
+      -Math.sin(rHalfAngle),
+      0,
+      0,
+      Math.sin(rHalfAngle),
+      Math.cos(rHalfAngle),
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
     )
 
     const translationMatrix = new THREE.Matrix4().set(
-      1, 0,  0, vertices[i].x,
-      0, 1, 0, vertices[i].y,
-      0, 0, 1, 0,
-      0, 0, 0, 1,
+      1,
+      0,
+      0,
+      vertices[i].x,
+      0,
+      1,
+      0,
+      vertices[i].y,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
     )
     // tslint:enable prettier
 
@@ -218,7 +254,7 @@ export function getRoundedOffsetPolygon(
 export function getCapsulePolygon(
   nodeA: DisplayNode,
   nodeB: DisplayNode,
-  padding: number = 0,
+  padding = 0,
 ): THREE.Vector2[] {
   const a = new THREE.Vector2(nodeA.x, nodeA.y)
   const b = new THREE.Vector2(nodeB.x, nodeB.y)

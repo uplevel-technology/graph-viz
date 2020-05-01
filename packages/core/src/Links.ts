@@ -8,10 +8,7 @@ import {
 } from './Nodes'
 import {defaultTo} from 'lodash'
 import {Labels} from './Labels'
-import {
-  linksFragmentShader,
-  linksVertexShader,
-} from './shaders/asText'
+import {linksFragmentShader, linksVertexShader} from './shaders/asText'
 
 const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
 
@@ -23,6 +20,7 @@ export const DEFAULT_LINK_WIDTH = 1
 export const HIGHLIGHTED_LINK_COLOR = 0x333333
 export const DEFAULT_ARROW_WIDTH = 10
 export const LARGE_ARROW_WIDTH = 20
+export const DEFAULT_LINK_OPACITY = 1.0
 
 interface LinkStyleAttributes {
   /**
@@ -39,6 +37,12 @@ interface LinkStyleAttributes {
    * hex color string or hex number
    */
   color?: string | number
+
+  /**
+   * link opacity between 0 and 1
+   * default is 1
+   */
+  opacity?: number
 
   /**
    * arrow width in pixels
@@ -117,6 +121,10 @@ export class Links {
     this.geometry.addAttribute(
       'color',
       new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3),
+    )
+    this.geometry.addAttribute(
+      'opacity',
+      new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
     )
     this.geometry.addAttribute(
       'arrowWidth',
@@ -324,12 +332,18 @@ export class Links {
    */
   public updateAllColors = (links: PopulatedDisplayLink[]) => {
     const color = this.geometry.getAttribute('color') as THREE.BufferAttribute
+    const opacity = this.geometry.getAttribute(
+      'opacity',
+    ) as THREE.BufferAttribute
 
     const numLinks = links.length
     const numVertices = numLinks * VERTICES_PER_QUAD
 
     if (numVertices !== color.count) {
       color.setArray(new Float32Array(numVertices * color.itemSize))
+    }
+    if (numVertices !== opacity.count) {
+      opacity.setArray(new Float32Array(numVertices * opacity.itemSize))
     }
 
     const tmpColor = new THREE.Color() // for reuse
@@ -344,10 +358,15 @@ export class Links {
         vertexIndex++
       ) {
         color.setXYZ(vertexIndex, tmpColor.r, tmpColor.g, tmpColor.b)
+        opacity.setX(
+          vertexIndex,
+          defaultTo(currentLink.opacity, DEFAULT_LINK_OPACITY) as number,
+        )
       }
     }
 
     color.needsUpdate = true
+    opacity.needsUpdate = true
   }
 
   // updateAllLabels must be called directly when the _text_ of the labels

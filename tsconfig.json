@@ -12,6 +12,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "baseUrl": "."
   },
   "exclude": ["**/*.test.ts"]
