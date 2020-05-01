@@ -35,7 +35,6 @@ const styles = {
     width: '100%',
     height: '100%',
   },
-  canvas: {},
   actionButtons: {
     position: 'absolute' as const,
     top: 0,
@@ -359,7 +358,7 @@ export class GraphVizComponent extends React.Component<
 
     return (
       <div ref={this.rootRef} style={styles.root}>
-        <canvas ref={this.canvasRef} style={styles.canvas} />
+        <canvas ref={this.canvasRef} />
 
         <NodeTooltips node={this.state.currentTooltipNode} />
 
