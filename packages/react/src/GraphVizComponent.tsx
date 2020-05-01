@@ -49,7 +49,7 @@ interface State {
   readonly draftLinkSourceNode?: GraphVizNode
 }
 
-interface Props {
+export interface GraphVizComponentProps {
   nodes: GraphVizNode[]
   links: GraphVizLink[]
   groups: GraphVizGroup[]
@@ -82,7 +82,10 @@ interface Props {
 
 const DRAFT_NODE_ID = 'draft-node'
 
-export class GraphVizComponent extends React.Component<Props, State> {
+export class GraphVizComponent extends React.Component<
+  GraphVizComponentProps,
+  State
+> {
   visualization: GraphVisualization
 
   // There is no need for vizData to be in state as this data is used by the
@@ -104,7 +107,7 @@ export class GraphVizComponent extends React.Component<Props, State> {
     currentlyHoveredIdx: null,
   }
 
-  static defaultProps: Partial<Props> = {
+  static defaultProps: Partial<GraphVizComponentProps> = {
     tooltips: [],
     groups: [],
     onLinkDrawn: noop,
@@ -300,7 +303,7 @@ export class GraphVizComponent extends React.Component<Props, State> {
     }
   }
 
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: GraphVizComponentProps) {
     if (
       prevProps.nodes !== this.props.nodes ||
       prevProps.links !== this.props.links
