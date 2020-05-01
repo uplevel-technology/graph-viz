@@ -1,13 +1,9 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useRef} from 'react'
 import logo from './logo.svg'
 import './App.css'
 import {GraphVizComponent} from '@graph-viz/react'
-import {DisplayGroup, DisplayNode, DisplayLink} from '@graph-viz/core'
-import {GraphVisualization, VisualizationInputData} from '@graph-viz/core'
-import {MPOWER_DATA} from './sample-data'
 
-const DATA = MPOWER_DATA
-const DATA2 = {
+const DATA = {
   nodes: [
     {id: '1', fill: 'coral'},
     {id: '2', fill: 'orange'},
