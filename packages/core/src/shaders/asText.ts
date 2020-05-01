@@ -68,6 +68,7 @@ export const linksVertexShader = `// attribute vec3 position is automatic
 // attribute vec2 uv is automatic
 attribute float quadLength;
 attribute vec3 color;
+attribute float opacity;
 attribute float arrowWidth;
 attribute float arrowOffset;
 attribute float dashGap;
@@ -75,6 +76,7 @@ attribute float dashGap;
 varying vec2 vUV;
 varying float vQuadLength;
 varying vec3 vColor;
+varying float vOpacity;
 varying float vArrowWidth;
 varying float vArrowOffset;
 varying float vDashGap;
@@ -83,6 +85,7 @@ void main() {
     vUV = uv;
     vQuadLength = quadLength;
     vColor = color;
+    vOpacity = opacity;
     vArrowOffset = arrowOffset;
     vArrowWidth = arrowWidth;
     vDashGap = dashGap;
@@ -97,6 +100,7 @@ export const linksFragmentShader = `
 varying vec2 vUV;
 varying float vQuadLength;
 varying vec3 vColor;
+varying float vOpacity;
 varying float vArrowWidth;
 varying float vArrowOffset;
 varying float vDashGap;
@@ -145,5 +149,6 @@ void main() {
   float mask = lineMask + arrowMask;
 
   gl_FragColor = vec4(vColor, mask);
+  gl_FragColor.a = vOpacity;
 }
 `
