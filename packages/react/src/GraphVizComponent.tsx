@@ -35,9 +35,7 @@ const styles = {
     width: '100%',
     height: '100%',
   },
-  canvas: {
-    backgroundColor: 'white',
-  },
+  canvas: {},
   actionButtons: {
     position: 'absolute' as const,
     top: 0,
@@ -198,11 +196,11 @@ export class GraphVizComponent extends React.Component<Props, State> {
 
         toggleNodeLock(this.vizData.nodes[clickedNodeIdx])
 
-        // this.simulation.update({
-        //   nodes: this.vizData.nodes,
-        //   links: this.vizData.links,
-        //   forceGroups: this.vizData.groups,
-        // })
+        this.simulation.update({
+          nodes: this.vizData.nodes,
+          links: this.vizData.links,
+          forceGroups: this.vizData.groups,
+        })
         this.visualization.updateNode(
           clickedNodeIdx,
           this.vizData.nodes[clickedNodeIdx],
@@ -223,11 +221,11 @@ export class GraphVizComponent extends React.Component<Props, State> {
       node.y = worldPos.y
       node.fx = worldPos.x
       node.fy = worldPos.y
-      // this.simulation.update({
-      //   nodes: this.vizData.nodes,
-      //   links: this.vizData.links,
-      //   forceGroups: this.props.groups,
-      // })
+      this.simulation.update({
+        nodes: this.vizData.nodes,
+        links: this.vizData.links,
+        forceGroups: this.props.groups,
+      })
       // ^ the simulation tick handler should handle the position updates after this in our viz
     })
 
@@ -324,14 +322,11 @@ export class GraphVizComponent extends React.Component<Props, State> {
 
   initData() {
     this.simulation.stop()
-    this.simulation.initialize(
-      {
-        nodes: this.props.nodes,
-        links: this.props.links,
-        forceGroups: this.props.groups,
-      },
-      true,
-    )
+    this.simulation.initialize({
+      nodes: this.props.nodes,
+      links: this.props.links,
+      forceGroups: this.props.groups,
+    })
 
     const nodePositions = this.simulation.getNodePositions()
 
