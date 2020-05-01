@@ -52,13 +52,6 @@ export interface SimulationData {
 
 type D3Simulation = d3.Simulation<d3.SimulationNodeDatum, SimulationLink>
 
-function getForceLinkDistance(links: {source: string; target: string}[]) {
-  // NOTE: For now this is set heuristically on visual appearance/performance of large graphs.
-  // We should ideally measure performance & appearance and tweak this accordingly.
-  const dropoff = 30 - links.length / 50
-  return Math.max(dropoff, 0.3)
-}
-
 export interface NodePosition {
   id: string
   x: number
@@ -124,6 +117,10 @@ function getGroupedNodes(
   return nodesByGroup
 }
 
+/**
+ * Based on the default implementation
+ * @see https://github.com/d3/d3-force#link_strength
+ */
 function getDefaultLinkForceStrengths(links: SimulationLink[]): number[] {
   const counts: {[id: string]: number} = {}
 
@@ -146,7 +143,7 @@ function getDefaultLinkForceStrengths(links: SimulationLink[]): number[] {
 
 export class ForceSimulation {
   public simulation: D3Simulation | undefined
-  public staticMode: boolean = false
+  public staticMode = false
   private registeredEventHandlers: {
     tick: (nodePositions: NodePosition[]) => void
   } = {
@@ -154,13 +151,12 @@ export class ForceSimulation {
     tick: noop,
   }
 
-  public initialize(graph: SimulationData, staticMode: boolean = false) {
+  public initialize(graph: SimulationData, staticMode = false) {
     this.staticMode = staticMode
     const nodesCopy = graph.nodes.map(node => ({...node}))
     const linksCopy = graph.links.map(link => ({...link}))
     const groupsCopy = graph.forceGroups.map(group => ({...group}))
 
-    const linkForceDistance = getForceLinkDistance(linksCopy)
     const defaultLinkForceStrengths = getDefaultLinkForceStrengths(linksCopy)
 
     // stop any previous simulation before reinitializing to prevent
@@ -193,21 +189,20 @@ export class ForceSimulation {
         'links',
         d3
           .forceLink(linksCopy)
-          // .strength((link, i) =>
-          //   link.strengthMultiplier !== undefined
-          //     ? defaultLinkForceStrengths[i] * link.strengthMultiplier
-          //     : defaultLinkForceStrengths[i],
-          // )
-          .id((n: SimulationNode) => n.id)
-          .distance(linkForceDistance),
+          .strength((link, i) =>
+            link.strengthMultiplier !== undefined
+              ? defaultLinkForceStrengths[i] * link.strengthMultiplier
+              : defaultLinkForceStrengths[i],
+          )
+          .id((n: SimulationNode) => n.id),
       )
       .force(
         'charge',
-        d3.forceManyBody(),
-        // .strength((n: SimulationNode) =>
-        //   n.charge !== undefined ? n.charge : -550,
-        // )
-        // .distanceMax(1250),
+        d3
+          .forceManyBody()
+          .strength((n: SimulationNode) =>
+            n.charge !== undefined ? n.charge : -30,
+          ),
       )
       .force('group', forceGroup(groupsCopy))
       .on('tick', () => {
@@ -223,7 +218,6 @@ export class ForceSimulation {
   private execManualTicks() {
     if (this.simulation) {
       for (let i = 0, n = 300; i < n; ++i) {
-        console.log('manual tick')
         this.simulation.tick()
       }
     }
@@ -254,36 +248,41 @@ export class ForceSimulation {
     const nodesCopy = graph.nodes.map(node => ({...node}))
     const linksCopy = graph.links.map(link => ({...link}))
 
-    const linkForceDistance = getForceLinkDistance(linksCopy)
     this.simulation.nodes(nodesCopy).force(
       'links',
-      d3
-        .forceLink(linksCopy)
-        .id((n: SimulationNode) => n.id)
-        .distance(linkForceDistance),
+      d3.forceLink(linksCopy).id((n: SimulationNode) => n.id),
     )
+    // if (this.staticMode) {
+    //   this.execManualTicks()
+    // }
   }
 
   public restart() {
     if (!this.simulation) {
       return
     }
-    // this.simulation.alpha(1)
-    // this.simulation.restart()
+    // if (this.staticMode) {
+    //   this.execManualTicks()
+    // }
+    this.simulation.alpha(1)
+    this.simulation.restart()
   }
 
   public reheat() {
     if (!this.simulation) {
       return
     }
-    // this.simulation.alphaTarget(0.8).restart()
+    // if (this.staticMode) {
+    //   this.execManualTicks()
+    // }
+    this.simulation.alphaTarget(0.8).restart()
   }
 
   public settle() {
     if (!this.simulation) {
       return
     }
-    // this.simulation.alphaTarget(0)
+    this.simulation.alphaTarget(0)
   }
 
   public stop() {
