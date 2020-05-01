@@ -4,56 +4,40 @@ import './App.css'
 import {GraphVizComponent} from '@graph-viz/react'
 import {DisplayGroup, DisplayNode, DisplayLink} from '@graph-viz/core'
 import {GraphVisualization, VisualizationInputData} from '@graph-viz/core'
-import data from './rostergroups.json'
+import {MPOWER_DATA} from './sample-data'
 
-// const DATA = {
-//   nodes: [
-//     {id: '1', fill: 'coral'},
-//     {id: '2', fill: 'orange'},
-//     {id: '3', displayGroupIds: ['c2'], fill: 'blue'},
-//     {id: '4', displayGroupIds: ['c2'], fill: 'lightblue'},
-//     {id: '5', displayGroupIds: ['c2'], fill: 'orange'},
-//     {id: '6', displayGroupIds: ['c2'], fill: 'green'},
-//     {id: '7', fill: 'green'},
-//     {id: '8', fill: 'yellow'},
-//     {id: '9', fill: 'pink'},
-//     {id: '10', fill: 'violet'},
-//   ],
-//   links: [
-//     {source: '1', target: '2'},
-//     {source: '3', target: '4'},
-//     {source: '3', target: '5'},
-//     {source: '3', target: '6'},
-//     {source: '1', target: '7'},
-//     {source: '1', target: '8'},
-//     {source: '1', target: '9'},
-//     {source: '1', target: '10'},
-//     {source: '6', target: '1'},
-//
-//   ],
-//   groups: [
-//     {
-//       id: 'c2',
-//       visible: true,
-//       shape: 'convexHull' as const,
-//     },
-//   ],
-// }
-
-const nodes = [
-  ...new Set(data.flatMap(d => [d.username, d.jid.split('@')[0]])),
-].map((d, i) => ({
-  id: d,
-  fill: `hsl(${Math.random() * 360}, 95%, 50%)`,
-}))
-
-export const DATA = {
-  nodes,
-  links: data.map(d => ({
-    source: d.username,
-    target: d.jid.split('@')[0],
-  })),
-  groups: [],
+const DATA = MPOWER_DATA
+const DATA2 = {
+  nodes: [
+    {id: '1', fill: 'coral'},
+    {id: '2', fill: 'orange'},
+    {id: '3', displayGroupIds: ['c2'], fill: 'blue'},
+    {id: '4', displayGroupIds: ['c2'], fill: 'lightblue'},
+    {id: '5', displayGroupIds: ['c2'], fill: 'orange'},
+    {id: '6', displayGroupIds: ['c2'], fill: 'green'},
+    {id: '7', fill: 'green'},
+    {id: '8', fill: 'yellow'},
+    {id: '9', fill: 'pink'},
+    {id: '10', fill: 'violet'},
+  ],
+  links: [
+    {source: '1', target: '2'},
+    {source: '3', target: '4'},
+    {source: '3', target: '5'},
+    {source: '3', target: '6'},
+    {source: '1', target: '7'},
+    {source: '1', target: '8'},
+    {source: '1', target: '9'},
+    {source: '1', target: '10'},
+    {source: '6', target: '1'},
+  ],
+  groups: [
+    {
+      id: 'c2',
+      visible: true,
+      shape: 'convexHull' as const,
+    },
+  ],
 }
 
 const App: React.FC = () => {
