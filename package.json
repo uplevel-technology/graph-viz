@@ -12,8 +12,8 @@
     "deploy-docs": "cd website && yarn run build && GIT_USER=sagar-sm CURRENT_BRANCH=master yarn run publish-gh-pages",
     "start-docs": "cd website && yarn run start",
     "test": "lerna run test",
-    "build": "lerna run build",
-    "publish": "lerna run build && lerna publish"
+    "build": "lerna run --parallel build",
+    "publish": "lerna run --parallel build && lerna publish"
   },
   "workspaces": [
     "packages/*"
