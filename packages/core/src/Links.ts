@@ -270,6 +270,17 @@ export class Links {
    * @param links
    */
   public updateAllPositions = (links: PopulatedDisplayLink[]) => {
+    const numLinks = links.length
+    const numVertices = numLinks * VERTICES_PER_QUAD
+    this.initPositionIfNeeded(numVertices)
+    this.initUvIfNeeded(numVertices)
+    this.initQuadLengthIfNeeded(numVertices)
+    this.initArrowWidthIfNeeded(numVertices)
+    this.initArrowOffsetIfNeeded(numVertices)
+    this.initDashGapIfNeeded(numVertices)
+
+    let labelsNeedUpdate = false
+
     const position = this.geometry.getAttribute(
       'position',
     ) as THREE.BufferAttribute
@@ -286,18 +297,6 @@ export class Links {
     const dashGap = this.geometry.getAttribute(
       'dashGap',
     ) as THREE.BufferAttribute
-
-    const numLinks = links.length
-    const numVertices = numLinks * VERTICES_PER_QUAD
-
-    this.initPositionIfNeeded(numVertices)
-    this.initUvIfNeeded(numVertices)
-    this.initQuadLengthIfNeeded(numVertices)
-    this.initArrowWidthIfNeeded(numVertices)
-    this.initArrowOffsetIfNeeded(numVertices)
-    this.initDashGapIfNeeded(numVertices)
-
-    let labelsNeedUpdate = false
 
     const source = new THREE.Vector2()
     const target = new THREE.Vector2()
@@ -399,19 +398,18 @@ export class Links {
    * @param links
    */
   public updateAllColors = (links: PopulatedDisplayLink[]) => {
-    const color = this.geometry.getAttribute('color') as THREE.BufferAttribute
-    const opacity = this.geometry.getAttribute(
-      'opacity',
-    ) as THREE.BufferAttribute
-
     const numLinks = links.length
     const numVertices = numLinks * VERTICES_PER_QUAD
 
     this.initColorIfNeeded(numVertices)
     this.initOpacityIfNeeded(numVertices)
 
-    const tmpColor = new THREE.Color() // for reuse
+    const color = this.geometry.getAttribute('color') as THREE.BufferAttribute
+    const opacity = this.geometry.getAttribute(
+      'opacity',
+    ) as THREE.BufferAttribute
 
+    const tmpColor = new THREE.Color() // for reuse
     for (let i = 0; i < numLinks; i++) {
       const currentLink = links[i]
       tmpColor.set(defaultTo(currentLink.color, DEFAULT_LINK_COLOR) as string)

@@ -362,13 +362,12 @@ export class Nodes {
    * @param nodes
    */
   public updateAllPositions = (nodes: DisplayNode[]) => {
-    const position = this.geometry.getAttribute(
-      'position',
-    ) as THREE.BufferAttribute
-
     const numNodes = size(nodes)
     this.initPositionIfNeeded(numNodes)
 
+    const position = this.geometry.getAttribute(
+      'position',
+    ) as THREE.BufferAttribute
     for (let i = 0; i < numNodes; i++) {
       position.setXYZ(i, nodes[i].x!, nodes[i].y!, 0)
     }
@@ -382,13 +381,12 @@ export class Nodes {
    * @param nodes
    */
   public updateAllAbsoluteSizes = (nodes: DisplayNode[]) => {
-    const absoluteSize = this.geometry.getAttribute(
-      'absoluteSize',
-    ) as THREE.BufferAttribute
-
     const numNodes = size(nodes)
     this.initAbsoluteSizeIfNeeded(numNodes)
 
+    const absoluteSize = this.geometry.getAttribute(
+      'absoluteSize',
+    ) as THREE.BufferAttribute
     for (let i = 0; i < numNodes; i++) {
       absoluteSize.setX(
         i,
@@ -404,11 +402,10 @@ export class Nodes {
    * @param nodes
    */
   public updateAllScales = (nodes: DisplayNode[]) => {
-    const scale = this.geometry.getAttribute('scale') as THREE.BufferAttribute
-
     const numNodes = size(nodes)
     this.initScaleIfNeeded(numNodes)
 
+    const scale = this.geometry.getAttribute('scale') as THREE.BufferAttribute
     for (let i = 0; i < numNodes; i++) {
       scale.setX(i, nodes[i].scale || DEFAULT_NODE_SCALE)
     }
@@ -421,13 +418,12 @@ export class Nodes {
    * @param nodes
    */
   public updateAllInnerRadii = (nodes: DisplayNode[]) => {
-    const innerRadius = this.geometry.getAttribute(
-      'innerRadius',
-    ) as THREE.BufferAttribute
-
     const numNodes = size(nodes)
     this.initInnerRadiusIfNeeded(numNodes)
 
+    const innerRadius = this.geometry.getAttribute(
+      'innerRadius',
+    ) as THREE.BufferAttribute
     for (let i = 0; i < numNodes; i++) {
       innerRadius.setX(i, nodes[i].innerRadius || DEFAULT_NODE_INNER_RADIUS)
     }
@@ -440,17 +436,16 @@ export class Nodes {
    * @param nodes
    */
   public updateAllFills = (nodes: DisplayNode[]) => {
+    const numNodes = size(nodes)
+    this.initFillIfNeeded(numNodes)
+    this.initFillOpacityIfNeeded(numNodes)
+
     const fill = this.geometry.getAttribute('fill') as THREE.BufferAttribute
     const fillOpacity = this.geometry.getAttribute(
       'fillOpacity',
     ) as THREE.BufferAttribute
 
-    const numNodes = size(nodes)
-    this.initFillIfNeeded(numNodes)
-    this.initFillOpacityIfNeeded(numNodes)
-
     const tmpColor = new THREE.Color() // for reuse
-
     for (let i = 0; i < numNodes; i++) {
       tmpColor.set(defaultTo(nodes[i].fill, DEFAULT_NODE_FILL) as string)
       fill.setXYZ(i, tmpColor.r, tmpColor.g, tmpColor.b)
@@ -469,10 +464,10 @@ export class Nodes {
    * @param nodes
    */
   public updateAllStrokes = (nodes: DisplayNode[]) => {
-    const stroke = this.geometry.getAttribute('stroke') as THREE.BufferAttribute
     const numNodes = size(nodes)
     this.initStrokeIfNeeded(numNodes)
 
+    const stroke = this.geometry.getAttribute('stroke') as THREE.BufferAttribute
     const tmpColor = new THREE.Color() // for reuse
     for (let i = 0; i < numNodes; i++) {
       tmpColor.set(defaultTo(nodes[i].stroke, nodes[i].fill) as string)
@@ -487,13 +482,12 @@ export class Nodes {
    * @param nodes
    */
   public updateAllStrokeWidths = (nodes: DisplayNode[]) => {
-    const strokeWidth = this.geometry.getAttribute(
-      'strokeWidth',
-    ) as THREE.BufferAttribute
-
     const numNodes = size(nodes)
     this.initStrokeWidthIfNeeded(numNodes)
 
+    const strokeWidth = this.geometry.getAttribute(
+      'strokeWidth',
+    ) as THREE.BufferAttribute
     for (let i = 0; i < numNodes; i++) {
       // preserve stroke widths during data updates for locked nodes
       if (!this.lockedIds[i]) {
@@ -512,13 +506,12 @@ export class Nodes {
    * @param nodes
    */
   public updateAllStrokeOpacities = (nodes: DisplayNode[]) => {
-    const strokeOpacity = this.geometry.getAttribute(
-      'strokeOpacity',
-    ) as THREE.BufferAttribute
-
     const numNodes = size(nodes)
     this.initStrokeOpacityIfNeeded(numNodes)
 
+    const strokeOpacity = this.geometry.getAttribute(
+      'strokeOpacity',
+    ) as THREE.BufferAttribute
     for (let i = 0; i < numNodes; i++) {
       if (!this.lockedIds[i]) {
         strokeOpacity.setX(
