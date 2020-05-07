@@ -1,4 +1,4 @@
-import React, {useRef} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import logo from './logo.svg'
 import './App.css'
 import {GraphVizComponent} from '@graph-viz/react'
@@ -55,6 +55,28 @@ const App: React.FC = () => {
   //   // viz.onNodeHoverIn()
   // }, [])
 
+  const [data, setData] = useState<any>(DATA)
+  useEffect(() => {
+    setTimeout(() => {
+      setData({
+        nodes: [...DATA.nodes, {id: 'black', fill: 'black'}],
+        links: [...DATA.links, {source: 'black', target: '2'}],
+        groups: [...DATA.groups],
+      })
+    }, 3000)
+    // setTimeout(() => {
+    //   setData({
+    //     nodes: [
+    //       ...DATA.nodes,
+    //       // {id: 'black', fill: 'black'},
+    //       {id: 'black', fill: 'pink'},
+    //     ],
+    //     links: [...DATA.links, {source: 'black', target: '2'}],
+    //     groups: [...DATA.groups],
+    //   })
+    // }, 5000)
+  }, [])
+
   return (
     <div className="App">
       <header className="App-header">
@@ -64,9 +86,9 @@ const App: React.FC = () => {
       <div className="App-content">
         <div className="App-graph-viz-container">
           <GraphVizComponent
-            nodes={DATA.nodes}
-            links={DATA.links}
-            groups={DATA.groups}
+            nodes={data.nodes}
+            links={data.links}
+            groups={data.groups}
           />
         </div>
       </div>
