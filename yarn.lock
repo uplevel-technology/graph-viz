@@ -2628,13 +2628,6 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
   integrity sha512-l42BggppR6zLmpfU6fq9HEa2oGPEI8yrSPL3GITjfRInppYFahObbIQOQK3UGxEnyQpltZLaPe75046NOZQikw==
 
-"@types/three@^0.103.2":
-  version "0.103.2"
-  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.103.2.tgz#f7d49130001c551941a0ded757def810579aafc4"
-  integrity sha512-zhtf0Qs5wLJpIn1+VWCpzSgpKayj/GSWZ6woiuz09FW59KEDeLpnBkYz6lbblVpRmGdlnG8nd0unaASshOvcXw==
-  dependencies:
-    three "*"
-
 "@types/yargs-parser@*":
   version "15.0.0"
   resolved "https://registry.yarnpkg.com/@types/yargs-parser/-/yargs-parser-15.0.0.tgz#cb3f9f741869e20cce330ffbeb9271590483882d"
@@ -13760,15 +13753,10 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
-three@*:
-  version "0.116.0"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.116.0.tgz#282b21c00feb09d0303a579ae86c649ebd6a06c6"
-  integrity sha512-6KTGp6mfs0hGgY+2/UtAfxa1w4vNxNSPp6Sdu7DjnCzQZwWX6Q1hL5awyM3zPWDaPEsuRRNt2jIZPp/kwsPgjg==
-
-three@^0.107.0:
-  version "0.107.0"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.107.0.tgz#0c862c348d61bd3f22058e01f5e771c1294315a1"
-  integrity sha512-vqbKJRLBEviPVa7poEzXocobicwxzsctr5mnymA7n8fEzcVS49rYP0RrwqZ98JqujRoruK+/YzcchNpRP+kXsQ==
+three@^0.116.1:
+  version "0.116.1"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.116.1.tgz#a393f7a81fdc3e2fbf57ded5ba47dc5bd3678ce0"
+  integrity sha512-l2JCMiA/lVZAuSrLWRYMalvpR+0j8hbIhCpfs4V6JFnw2+JQEQJ5HltNpfFr+9TDpQts1BhtcISehWf/xBGPvQ==
 
 throat@^4.0.0:
   version "4.1.0"
