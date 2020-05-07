@@ -9,6 +9,7 @@ import {
 import {defaultTo} from 'lodash'
 import {Labels} from './Labels'
 import {linksFragmentShader, linksVertexShader} from './shaders/asText'
+import {BufferAttribute} from 'three'
 
 const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
 
@@ -103,41 +104,15 @@ export class Links {
 
   constructor(links: PopulatedDisplayLink[]) {
     const numLinks = links.length
-    const numVertices = numLinks * VERTICES_PER_QUAD
-
     this.geometry = new THREE.BufferGeometry()
-    this.geometry.addAttribute(
-      'position',
-      new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3),
-    )
-    this.geometry.addAttribute(
-      'uv',
-      new THREE.BufferAttribute(new Float32Array(numVertices * 2), 2),
-    )
-    this.geometry.addAttribute(
-      'quadLength',
-      new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
-    )
-    this.geometry.addAttribute(
-      'color',
-      new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3),
-    )
-    this.geometry.addAttribute(
-      'opacity',
-      new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
-    )
-    this.geometry.addAttribute(
-      'arrowWidth',
-      new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
-    )
-    this.geometry.addAttribute(
-      'arrowOffset',
-      new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
-    )
-    this.geometry.addAttribute(
-      'dashGap',
-      new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
-    )
+    this.initPositionIfNeeded(numLinks * VERTICES_PER_QUAD)
+    this.initUvIfNeeded(numLinks * VERTICES_PER_QUAD)
+    this.initQuadLengthIfNeeded(numLinks * VERTICES_PER_QUAD)
+    this.initColorIfNeeded(numLinks * VERTICES_PER_QUAD)
+    this.initOpacityIfNeeded(numLinks * VERTICES_PER_QUAD)
+    this.initArrowWidthIfNeeded(numLinks * VERTICES_PER_QUAD)
+    this.initArrowOffsetIfNeeded(numLinks * VERTICES_PER_QUAD)
+    this.initDashGapIfNeeded(numLinks * VERTICES_PER_QUAD)
 
     this.material = new THREE.ShaderMaterial({
       vertexShader: linksVertexShader,
@@ -157,6 +132,116 @@ export class Links {
     this.object.add(this.labels.object)
 
     this.updateAll(links)
+  }
+
+  /**
+   * initAttrIfNeeded
+   * initializes the attribute if the attribute is undefined OR if the
+   * attribute.count needs to be resized
+   * @param numVertices
+   */
+  private initPositionIfNeeded(numVertices: number) {
+    const attrName = 'position'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3),
+      )
+    }
+  }
+
+  private initUvIfNeeded(numVertices: number) {
+    const attrName = 'uv'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices * 2), 2),
+      )
+    }
+  }
+
+  private initQuadLengthIfNeeded(numVertices: number) {
+    const attrName = 'quadLength'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices), 1),
+      )
+    }
+  }
+
+  private initColorIfNeeded(numVertices: number) {
+    const attrName = 'color'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3),
+      )
+    }
+  }
+
+  private initOpacityIfNeeded(numVertices: number) {
+    const attrName = 'opacity'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices), 1),
+      )
+    }
+  }
+
+  private initArrowWidthIfNeeded(numVertices: number) {
+    const attrName = 'arrowWidth'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices), 1),
+      )
+    }
+  }
+
+  private initArrowOffsetIfNeeded(numVertices: number) {
+    const attrName = 'arrowOffset'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices), 1),
+      )
+    }
+  }
+
+  private initDashGapIfNeeded(numVertices: number) {
+    const attrName = 'dashGap'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices), 1),
+      )
+    }
   }
 
   public handleCameraZoom = (zoom: number) => {
@@ -205,29 +290,12 @@ export class Links {
     const numLinks = links.length
     const numVertices = numLinks * VERTICES_PER_QUAD
 
-    if (numVertices !== position.count) {
-      position.setArray(new Float32Array(numVertices * position.itemSize))
-    }
-
-    if (numVertices !== uv.count) {
-      uv.setArray(new Float32Array(numVertices * uv.itemSize))
-    }
-
-    if (numVertices !== quadLength.count) {
-      quadLength.setArray(new Float32Array(numVertices * quadLength.itemSize))
-    }
-
-    if (numVertices !== arrowWidth.count) {
-      arrowWidth.setArray(new Float32Array(numVertices * arrowWidth.itemSize))
-    }
-
-    if (numVertices !== arrowOffset.count) {
-      arrowOffset.setArray(new Float32Array(numVertices * arrowOffset.itemSize))
-    }
-
-    if (numVertices !== dashGap.count) {
-      dashGap.setArray(new Float32Array(numVertices * dashGap.itemSize))
-    }
+    this.initPositionIfNeeded(numVertices)
+    this.initUvIfNeeded(numVertices)
+    this.initQuadLengthIfNeeded(numVertices)
+    this.initArrowWidthIfNeeded(numVertices)
+    this.initArrowOffsetIfNeeded(numVertices)
+    this.initDashGapIfNeeded(numVertices)
 
     let labelsNeedUpdate = false
 
@@ -339,12 +407,8 @@ export class Links {
     const numLinks = links.length
     const numVertices = numLinks * VERTICES_PER_QUAD
 
-    if (numVertices !== color.count) {
-      color.setArray(new Float32Array(numVertices * color.itemSize))
-    }
-    if (numVertices !== opacity.count) {
-      opacity.setArray(new Float32Array(numVertices * opacity.itemSize))
-    }
+    this.initColorIfNeeded(numVertices)
+    this.initOpacityIfNeeded(numVertices)
 
     const tmpColor = new THREE.Color() // for reuse
 

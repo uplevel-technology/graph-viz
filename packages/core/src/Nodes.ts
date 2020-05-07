@@ -3,6 +3,7 @@
 import {defaultTo, size} from 'lodash'
 import * as THREE from 'three'
 import {nodesFragmentShader, nodesVertexShader} from './shaders/asText'
+import {BufferAttribute} from 'three'
 
 export interface DisplayNode {
   /**
@@ -104,42 +105,15 @@ export class Nodes {
   constructor(nodes: DisplayNode[]) {
     const numNodes = size(nodes)
     this.geometry = new THREE.BufferGeometry()
-    this.geometry.addAttribute(
-      'position',
-      new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3),
-    )
-    this.geometry.addAttribute(
-      'absoluteSize',
-      new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1),
-    )
-    this.geometry.addAttribute(
-      'scale',
-      new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1),
-    )
-    this.geometry.addAttribute(
-      'innerRadius',
-      new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1),
-    )
-    this.geometry.addAttribute(
-      'fill',
-      new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3),
-    )
-    this.geometry.addAttribute(
-      'fillOpacity',
-      new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1),
-    )
-    this.geometry.addAttribute(
-      'stroke',
-      new THREE.BufferAttribute(new Float32Array(numNodes * 3), 3),
-    )
-    this.geometry.addAttribute(
-      'strokeWidth',
-      new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1),
-    )
-    this.geometry.addAttribute(
-      'strokeOpacity',
-      new THREE.BufferAttribute(new Float32Array(numNodes * 1), 1),
-    )
+    this.initPositionIfNeeded(numNodes)
+    this.initAbsoluteSizeIfNeeded(numNodes)
+    this.initScaleIfNeeded(numNodes)
+    this.initInnerRadiusIfNeeded(numNodes)
+    this.initFillIfNeeded(numNodes)
+    this.initFillOpacityIfNeeded(numNodes)
+    this.initStrokeIfNeeded(numNodes)
+    this.initStrokeWidthIfNeeded(numNodes)
+    this.initStrokeOpacityIfNeeded(numNodes)
 
     this.updateAll(nodes)
 
@@ -153,6 +127,129 @@ export class Nodes {
     })
 
     this.object = new THREE.Points(this.geometry, this.material)
+  }
+
+  /**
+   * initAttrIfNeeded
+   * initializes the attribute if the attribute is undefined OR if the
+   * attribute.count needs to be resized
+   * @param numVertices
+   */
+  private initPositionIfNeeded(numVertices: number) {
+    const attrName = 'position'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3),
+      )
+    }
+  }
+
+  private initAbsoluteSizeIfNeeded(numVertices: number) {
+    const attrName = 'absoluteSize'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
+      )
+    }
+  }
+
+  private initScaleIfNeeded(numVertices: number) {
+    const attrName = 'scale'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
+      )
+    }
+  }
+
+  private initInnerRadiusIfNeeded(numVertices: number) {
+    const attrName = 'innerRadius'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
+      )
+    }
+  }
+
+  private initFillIfNeeded(numVertices: number) {
+    const attrName = 'fill'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3),
+      )
+    }
+  }
+
+  private initFillOpacityIfNeeded(numVertices: number) {
+    const attrName = 'fillOpacity'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
+      )
+    }
+  }
+
+  private initStrokeIfNeeded(numVertices: number) {
+    const attrName = 'stroke'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices * 3), 3),
+      )
+    }
+  }
+
+  private initStrokeWidthIfNeeded(numVertices: number) {
+    const attrName = 'strokeWidth'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
+      )
+    }
+  }
+
+  private initStrokeOpacityIfNeeded(numVertices: number) {
+    const attrName = 'strokeOpacity'
+    const attr = this.geometry.getAttribute(attrName) as
+      | BufferAttribute
+      | undefined
+    if (attr === undefined || attr.count !== numVertices) {
+      this.geometry.setAttribute(
+        attrName,
+        new THREE.BufferAttribute(new Float32Array(numVertices * 1), 1),
+      )
+    }
   }
 
   public handleCameraZoom = (zoom: number) => {
@@ -270,16 +367,13 @@ export class Nodes {
     ) as THREE.BufferAttribute
 
     const numNodes = size(nodes)
-    if (numNodes !== position.count) {
-      position.setArray(new Float32Array(position.itemSize * numNodes))
-    }
+    this.initPositionIfNeeded(numNodes)
 
     for (let i = 0; i < numNodes; i++) {
       position.setXYZ(i, nodes[i].x!, nodes[i].y!, 0)
     }
 
     position.needsUpdate = true
-
     this.geometry.computeBoundingSphere()
   }
 
@@ -293,9 +387,7 @@ export class Nodes {
     ) as THREE.BufferAttribute
 
     const numNodes = size(nodes)
-    if (numNodes !== absoluteSize.count) {
-      absoluteSize.setArray(new Float32Array(absoluteSize.itemSize * numNodes))
-    }
+    this.initAbsoluteSizeIfNeeded(numNodes)
 
     for (let i = 0; i < numNodes; i++) {
       absoluteSize.setX(
@@ -315,9 +407,7 @@ export class Nodes {
     const scale = this.geometry.getAttribute('scale') as THREE.BufferAttribute
 
     const numNodes = size(nodes)
-    if (numNodes !== scale.count) {
-      scale.setArray(new Float32Array(scale.itemSize * numNodes))
-    }
+    this.initScaleIfNeeded(numNodes)
 
     for (let i = 0; i < numNodes; i++) {
       scale.setX(i, nodes[i].scale || DEFAULT_NODE_SCALE)
@@ -336,9 +426,7 @@ export class Nodes {
     ) as THREE.BufferAttribute
 
     const numNodes = size(nodes)
-    if (numNodes !== innerRadius.count) {
-      innerRadius.setArray(new Float32Array(innerRadius.itemSize * numNodes))
-    }
+    this.initInnerRadiusIfNeeded(numNodes)
 
     for (let i = 0; i < numNodes; i++) {
       innerRadius.setX(i, nodes[i].innerRadius || DEFAULT_NODE_INNER_RADIUS)
@@ -358,12 +446,11 @@ export class Nodes {
     ) as THREE.BufferAttribute
 
     const numNodes = size(nodes)
-    if (numNodes !== fill.count) {
-      fill.setArray(new Float32Array(fill.itemSize * numNodes))
-      fillOpacity.setArray(new Float32Array(fillOpacity.itemSize * numNodes))
-    }
+    this.initFillIfNeeded(numNodes)
+    this.initFillOpacityIfNeeded(numNodes)
 
     const tmpColor = new THREE.Color() // for reuse
+
     for (let i = 0; i < numNodes; i++) {
       tmpColor.set(defaultTo(nodes[i].fill, DEFAULT_NODE_FILL) as string)
       fill.setXYZ(i, tmpColor.r, tmpColor.g, tmpColor.b)
@@ -383,11 +470,8 @@ export class Nodes {
    */
   public updateAllStrokes = (nodes: DisplayNode[]) => {
     const stroke = this.geometry.getAttribute('stroke') as THREE.BufferAttribute
-
     const numNodes = size(nodes)
-    if (numNodes !== stroke.count) {
-      stroke.setArray(new Float32Array(stroke.itemSize * numNodes))
-    }
+    this.initStrokeIfNeeded(numNodes)
 
     const tmpColor = new THREE.Color() // for reuse
     for (let i = 0; i < numNodes; i++) {
@@ -408,9 +492,7 @@ export class Nodes {
     ) as THREE.BufferAttribute
 
     const numNodes = size(nodes)
-    if (numNodes !== strokeWidth.count) {
-      strokeWidth.setArray(new Float32Array(strokeWidth.itemSize * numNodes))
-    }
+    this.initStrokeWidthIfNeeded(numNodes)
 
     for (let i = 0; i < numNodes; i++) {
       // preserve stroke widths during data updates for locked nodes
@@ -435,11 +517,7 @@ export class Nodes {
     ) as THREE.BufferAttribute
 
     const numNodes = size(nodes)
-    if (numNodes !== strokeOpacity.count) {
-      strokeOpacity.setArray(
-        new Float32Array(strokeOpacity.itemSize * numNodes),
-      )
-    }
+    this.initStrokeOpacityIfNeeded(numNodes)
 
     for (let i = 0; i < numNodes; i++) {
       if (!this.lockedIds[i]) {
