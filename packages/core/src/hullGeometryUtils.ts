@@ -145,7 +145,6 @@ export function getRoundedOffsetPolygon(
 
     const shift = Math.tan(halfAngle - Math.PI / 2) // shift by slope in the opposite direction
 
-    // tslint:disable prettier
     const shiftMatrix = new THREE.Matrix4().set(
       1,
       0,
@@ -215,9 +214,9 @@ export function getRoundedOffsetPolygon(
       new Float32Array([offMag, 0, 0]),
       3,
     )
-    shiftMatrix.applyToBufferAttribute(offsetAttr)
-    rotationMatrix.applyToBufferAttribute(offsetAttr)
-    translationMatrix.applyToBufferAttribute(offsetAttr)
+    offsetAttr.applyMatrix4(shiftMatrix)
+    offsetAttr.applyMatrix4(rotationMatrix)
+    offsetAttr.applyMatrix4(translationMatrix)
 
     return new THREE.Vector2(offsetAttr.getX(0), offsetAttr.getY(0))
   })
