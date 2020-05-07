@@ -343,8 +343,8 @@ export class GraphVisualization {
     pos.project(this.camera)
 
     return new THREE.Vector3(
-      THREE.Math.mapLinear(pos.x, -1, 1, 0, this.width),
-      THREE.Math.mapLinear(pos.y, 1, -1, 0, this.height),
+      THREE.MathUtils.mapLinear(pos.x, -1, 1, 0, this.width),
+      THREE.MathUtils.mapLinear(pos.y, 1, -1, 0, this.height),
       0,
     )
   }

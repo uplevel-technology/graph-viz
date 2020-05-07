@@ -169,14 +169,14 @@ export class MouseInteraction {
   private findNearestNodeIndex = (event: MouseEvent): number | null => {
     const rect = this.canvas.getBoundingClientRect()
 
-    this.mouse.x = THREE.Math.mapLinear(
+    this.mouse.x = THREE.MathUtils.mapLinear(
       event.clientX - rect.left,
       0,
       rect.width,
       -1,
       1,
     )
-    this.mouse.y = THREE.Math.mapLinear(
+    this.mouse.y = THREE.MathUtils.mapLinear(
       event.clientY - rect.top,
       0,
       rect.height,

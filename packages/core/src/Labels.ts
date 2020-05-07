@@ -27,8 +27,8 @@ function buildTexture(text: string, labelScale = 1): TextTexture {
   const textWidth = context.measureText(text).width + xPadding * extraScale
   const textHeight = fontSize * 1.5 // make this up, big enough to show descender
   // WebGL textures need to have power-of-two dimensions:
-  canvas.width = THREE.Math.ceilPowerOfTwo(textWidth)
-  canvas.height = THREE.Math.ceilPowerOfTwo(textHeight)
+  canvas.width = THREE.MathUtils.ceilPowerOfTwo(textWidth)
+  canvas.height = THREE.MathUtils.ceilPowerOfTwo(textHeight)
 
   // Now we can actually draw the text:
   context.fillStyle = 'black'
