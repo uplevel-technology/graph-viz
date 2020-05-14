@@ -1,11 +1,6 @@
 import * as THREE from 'three'
 import {VisualizationInputData} from './GraphVisualization'
-import {
-  DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE,
-  DEFAULT_NODE_INNER_RADIUS,
-  DEFAULT_NODE_SCALE,
-  DisplayNode,
-} from './Nodes'
+import {DisplayNode, NODE_DEFAULTS} from './Nodes'
 import {defaultTo} from 'lodash'
 import {Labels} from './Labels'
 import {linksFragmentShader, linksVertexShader} from './shaders/asText'
@@ -23,7 +18,7 @@ export const DEFAULT_ARROW_WIDTH = 10
 export const LARGE_ARROW_WIDTH = 20
 export const DEFAULT_LINK_OPACITY = 1.0
 
-interface LinkStyleAttributes {
+export interface LinkStyleAttributes {
   /**
    * determines whether an arrow is drawn on the link
    */
@@ -51,25 +46,38 @@ interface LinkStyleAttributes {
   arrowWidth?: number
 
   /**
-   * text to display
-   */
-  label?: string
-
-  /**
    * relative scale of the label.
    * default is 1.0
    */
   labelScale?: number
 }
 
-export interface DisplayLink extends LinkStyleAttributes {
+interface CommonLinkAttributes {
+  /**
+   * text to display
+   */
+  label?: string
+}
+
+export interface DisplayLink extends CommonLinkAttributes, LinkStyleAttributes {
   source: string
   target: string
 }
 
-export interface PopulatedDisplayLink extends LinkStyleAttributes {
+export interface PopulatedDisplayLink
+  extends CommonLinkAttributes,
+    LinkStyleAttributes {
   source: DisplayNode
   target: DisplayNode
+}
+
+export const LINK_DEFAULTS = {
+  directed: false,
+  dashed: false,
+  color: '#cccccc',
+  opacity: 1,
+  arrowWidth: 10,
+  labelScale: 1,
 }
 
 export function populateLinks(
@@ -86,11 +94,11 @@ export function populateLinks(
 const calculateAbsoluteArrowOffset = (link: PopulatedDisplayLink): number => {
   const relativePadding = 0.05 // space between arrow tip and edge of node border
   const outerRadius =
-    defaultTo(link.target.innerRadius, DEFAULT_NODE_INNER_RADIUS) +
-    defaultTo(link.target.strokeWidth, 0)
+    defaultTo(link.target.innerRadius, NODE_DEFAULTS.innerRadius) +
+    defaultTo(link.target.strokeWidth, NODE_DEFAULTS.strokeWidth)
   const absoluteContainerSize =
-    defaultTo(link.target.absoluteSize, DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) *
-    defaultTo(link.target.scale, DEFAULT_NODE_SCALE)
+    defaultTo(link.target.absoluteSize, NODE_DEFAULTS.absoluteSize) *
+    defaultTo(link.target.scale, NODE_DEFAULTS.scale)
   return (outerRadius + relativePadding) * absoluteContainerSize
 }
 
@@ -99,8 +107,9 @@ export class Links {
 
   private readonly geometry: THREE.BufferGeometry
   private readonly material: THREE.ShaderMaterial
-
   private readonly labels: Labels
+
+  private defaults: Required<LinkStyleAttributes> = LINK_DEFAULTS
 
   constructor(links: PopulatedDisplayLink[]) {
     const numLinks = links.length
@@ -253,6 +262,18 @@ export class Links {
     this.geometry.dispose()
     this.material.dispose()
     this.labels.dispose()
+  }
+
+  /**
+   * update default attrs for all links
+   * @param newDefaults
+   * @param links
+   */
+  public updateDefaults = (
+    newDefaults: LinkStyleAttributes,
+    links: PopulatedDisplayLink[],
+  ) => {
+    // TODO
   }
 
   /**
