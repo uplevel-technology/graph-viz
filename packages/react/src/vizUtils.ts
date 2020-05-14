@@ -1,5 +1,5 @@
-import {NODE_DEFAULTS} from '@graph-viz/core/lib/Nodes'
 import {GraphVizNode} from './GraphVizComponent'
+import {NODE_DEFAULTS} from '@graph-viz/core/lib/Nodes'
 
 export const LOCKED_NODE_STROKE_WIDTH = 0.3
 export const LOCKED_NODE_STROKE_OPACITY = 0.4

@@ -1,8 +1,7 @@
 import * as THREE from 'three'
 import {PopulatedDisplayLink} from './Links'
-
-import {DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE} from './Nodes'
 import {values} from 'lodash'
+import {NODE_DEFAULTS} from './Nodes'
 
 interface TextTexture {
   texture: THREE.Texture
@@ -189,9 +188,9 @@ export class Labels {
       const linkLength = Math.sqrt(dx * dx + dy * dy)
       // Pad away from the ends of the link:
       const sourceRadius =
-        (link.target.absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) / 2
+        (link.target.absoluteSize ?? NODE_DEFAULTS.absoluteSize) / 2
       const targetRadius =
-        (link.source.absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) / 2
+        (link.source.absoluteSize ?? NODE_DEFAULTS.absoluteSize) / 2
       const labelPadding = sourceRadius + targetRadius
 
       const availableX = Math.max(0, linkLength - labelPadding)

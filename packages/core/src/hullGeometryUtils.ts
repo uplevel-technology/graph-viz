@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import {DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE, DisplayNode} from './Nodes'
+import {DisplayNode, NODE_DEFAULTS} from './Nodes'
 import {meanBy} from 'lodash'
 
 interface Point {
@@ -204,7 +204,7 @@ export function getRoundedOffsetPolygon(
     // tslint:enable prettier
 
     const offset =
-      (nodes[i].absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) +
+      (nodes[i].absoluteSize ?? NODE_DEFAULTS.absoluteSize) +
       padding +
       nodes.length // add nodes.length to make offset proportional to display group size
 
@@ -261,8 +261,7 @@ export function getCapsulePolygon(
   const tangent = new THREE.Vector2().copy(b).sub(a) // B - A
   const normal = new THREE.Vector2(-tangent.y, tangent.x) // rotate 90 degrees to make it normal to the B - A
 
-  const radiusA =
-    (nodeA.absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) + padding
+  const radiusA = (nodeA.absoluteSize ?? NODE_DEFAULTS.absoluteSize) + padding
   const curveA = new THREE.EllipseCurve(
     a.x,
     a.y,
@@ -274,8 +273,7 @@ export function getCapsulePolygon(
     0,
   )
 
-  const radiusB =
-    (nodeB.absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE) + padding
+  const radiusB = (nodeB.absoluteSize ?? NODE_DEFAULTS.absoluteSize) + padding
   const curveB = new THREE.EllipseCurve(
     b.x,
     b.y,
