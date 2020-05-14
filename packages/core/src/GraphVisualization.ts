@@ -1,7 +1,7 @@
 import {size} from 'lodash'
 import * as THREE from 'three'
 import {Vector3} from 'three'
-import {DisplayLink, Links, populateLinks} from './Links'
+import {DisplayLink, Links, LinkStyleAttributes, populateLinks} from './Links'
 import {
   ClickEventHandler,
   DragEndEventHandler,
@@ -13,8 +13,12 @@ import {
   SecondaryClickEventHandler,
   ZoomEventHandler,
 } from './MouseInteraction'
-import {DisplayNode, Nodes} from './Nodes'
-import {DisplayGroup, DisplayGroups} from './DisplayGroups'
+import {DisplayNode, Nodes, NodeStyleAttributes} from './Nodes'
+import {
+  DisplayGroup,
+  DisplayGroups,
+  GroupStyleAttributes,
+} from './DisplayGroups'
 import {validate, required, validateClassConstructor} from './validators'
 
 const MAX_ZOOM = 5.0
@@ -35,22 +39,25 @@ function constructIdToIdxMap(arr: Array<{id: string}>): {[id: string]: number} {
   return map
 }
 
-const DEFAULT_CONFIG_OPTIONS = {
-  disableClick: false,
-  disableHover: false,
-  disablePan: false,
-  disableZoom: false,
-  disableDrag: false,
-  disableSecondaryClick: false,
+export interface ConfigurationOptions {
+  nodes: NodeStyleAttributes
+  links: LinkStyleAttributes
+  groups: GroupStyleAttributes
+  events: {
+    disableClick?: boolean
+    disableHover?: boolean
+    disablePan?: boolean
+    disableZoom?: boolean
+    disableDrag?: boolean
+    disableSecondaryClick?: boolean
+  }
 }
 
-export interface ConfigurationOptions {
-  disableClick?: boolean
-  disableHover?: boolean
-  disablePan?: boolean
-  disableZoom?: boolean
-  disableDrag?: boolean
-  disableSecondaryClick?: boolean
+const DEFAULT_CONFIG_OPTIONS = {
+  nodes: {},
+  links: {},
+  groups: {},
+  events: {},
 }
 
 @validateClassConstructor
@@ -90,7 +97,7 @@ export class GraphVisualization {
     @required canvas: HTMLCanvasElement,
     @required width: number,
     @required height: number,
-    config: ConfigurationOptions = {},
+    config: ConfigurationOptions = DEFAULT_CONFIG_OPTIONS,
   ) {
     this.data = graphData
     this.canvas = canvas
@@ -148,35 +155,35 @@ export class GraphVisualization {
       this.data.nodes,
     )
 
-    const configWithDefault = {
+    const configWithDefaults = {
       ...DEFAULT_CONFIG_OPTIONS,
       ...config,
     }
 
-    if (!configWithDefault.disableClick) {
+    if (!configWithDefaults.events.disableClick) {
       this.mouseInteraction.onClick(this.handleClick)
     }
 
-    if (!configWithDefault.disableHover) {
+    if (!configWithDefaults.events.disableHover) {
       this.mouseInteraction.onNodeHoverIn(this.handleHoverIn)
       this.mouseInteraction.onNodeHoverOut(this.handleHoverOut)
     }
 
-    if (!configWithDefault.disableDrag) {
+    if (!configWithDefaults.events.disableDrag) {
       this.mouseInteraction.onDragStart(this.handleDragStart)
       this.mouseInteraction.onDragEnd(this.handleDragEnd)
       this.mouseInteraction.onNodeDrag(this.handleNodeDrag)
     }
 
-    if (!configWithDefault.disablePan) {
+    if (!configWithDefaults.events.disablePan) {
       this.mouseInteraction.onPan(this.handlePan)
     }
 
-    if (!configWithDefault.disableZoom) {
+    if (!configWithDefaults.events.disableZoom) {
       this.mouseInteraction.onZoom(this.handleZoomOnWheel)
     }
 
-    if (!configWithDefault.disableSecondaryClick) {
+    if (!configWithDefaults.events.disableSecondaryClick) {
       this.mouseInteraction.onSecondaryClick(this.handleSecondaryClick)
     }
   }
