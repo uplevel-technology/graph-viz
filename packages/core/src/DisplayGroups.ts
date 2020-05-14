@@ -8,9 +8,7 @@ import {
   getRoundedOffsetPolygon,
 } from './hullGeometryUtils'
 
-export interface DisplayGroup {
-  id: string
-
+export interface GroupStyleAttributes {
   /**
    * boolean to toggle the visibility of a display group on or off
    */
@@ -24,7 +22,7 @@ export interface DisplayGroup {
 
   /**
    * fill color hex string
-   * (default is #333333)
+   * (default is #000000)
    */
   fill?: string
 
@@ -40,17 +38,50 @@ export interface DisplayGroup {
   padding?: number
 }
 
-export const DEFAULT_DISPLAY_GROUP_FILL = '#000000'
-export const DEFAULT_DISPLAY_GROUP_FILL_OPACITY = 0.09
+export interface DisplayGroup extends GroupStyleAttributes {
+  id: string
+}
+
+export const GROUP_DEFAULTS: Required<GroupStyleAttributes> = {
+  shape: 'convexHull',
+  visible: false,
+  fill: '#000000',
+  fillOpacity: 0.09,
+  padding: 0,
+}
 
 export class DisplayGroups {
   public object = new THREE.Group()
   private meshes: {[groupId: string]: THREE.Mesh} = {}
+  private defaults: Required<GroupStyleAttributes> = GROUP_DEFAULTS
 
   constructor(nodes: DisplayNode[], groups: DisplayGroup[]) {
     this.updateAll(nodes, groups)
   }
 
+  /**
+   * update defaults
+   * @param newDefaults
+   * @param nodes
+   * @param groups
+   */
+  public updateDefaults(
+    newDefaults: GroupStyleAttributes,
+    nodes: DisplayNode[],
+    groups: DisplayGroup[],
+  ) {
+    this.defaults = {
+      ...this.defaults,
+      ...newDefaults,
+    }
+    this.updateAll(nodes, groups)
+  }
+
+  /**
+   * update all attributes and recompute everything to be sent to gpu
+   * @param nodes
+   * @param groups
+   */
   public updateAll(nodes: DisplayNode[], groups: DisplayGroup[]) {
     const nodesByGroup = this.getGroupedNodes(nodes)
 
@@ -104,8 +135,15 @@ export class DisplayGroups {
     const vertices =
       nodesInGroup.length === 2
         ? // a capsule polygon is an offset polygon convex hull for 2 nodes
-          getCapsulePolygon(nodesInGroup[0], nodesInGroup[1], group.padding)
-        : getRoundedOffsetPolygon(convexHull, group.padding)
+          getCapsulePolygon(
+            nodesInGroup[0],
+            nodesInGroup[1],
+            group.padding ?? this.defaults.padding,
+          )
+        : getRoundedOffsetPolygon(
+            convexHull,
+            group.padding ?? this.defaults.padding,
+          )
 
     let geometry
 
@@ -114,8 +152,8 @@ export class DisplayGroups {
       // NOTE: we probably don't need a BufferGeometry after r102 amirite?
       geometry = new THREE.Geometry()
       const material = new MeshBasicMaterial({
-        color: group.fill || DEFAULT_DISPLAY_GROUP_FILL,
-        opacity: group.fillOpacity || DEFAULT_DISPLAY_GROUP_FILL_OPACITY,
+        color: group.fill ?? this.defaults.fill,
+        opacity: group.fillOpacity ?? this.defaults.fillOpacity,
         transparent: true,
       })
       this.meshes[group.id] = new THREE.Mesh(geometry, material)
@@ -154,16 +192,16 @@ export class DisplayGroups {
       const geometry = new THREE.CircleGeometry(1.05, evenSegments)
 
       const material = new MeshBasicMaterial({
-        color: group.fill || DEFAULT_DISPLAY_GROUP_FILL,
-        opacity: group.fillOpacity || DEFAULT_DISPLAY_GROUP_FILL_OPACITY,
+        color: group.fill ?? this.defaults.fill,
+        opacity: group.fillOpacity ?? this.defaults.fillOpacity,
         transparent: true,
       })
       this.meshes[group.id] = new THREE.Mesh(geometry, material)
       this.object.add(this.meshes[group.id])
     }
 
-    this.meshes[group.id].scale.x = hull.radius + (group.padding || 10)
-    this.meshes[group.id].scale.y = hull.radius + (group.padding || 10)
+    this.meshes[group.id].scale.x = hull.radius + (group.padding ?? 10)
+    this.meshes[group.id].scale.y = hull.radius + (group.padding ?? 10)
     this.meshes[group.id].position.x = hull.center.x
     this.meshes[group.id].position.y = hull.center.y
   }
