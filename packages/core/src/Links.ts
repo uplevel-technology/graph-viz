@@ -6,17 +6,11 @@ import {Labels} from './Labels'
 import {linksFragmentShader, linksVertexShader} from './shaders/asText'
 import {BufferAttribute} from 'three'
 
-const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
-
 /**
  * Constants
  */
-export const DEFAULT_LINK_COLOR = '#cccccc'
-export const DEFAULT_LINK_WIDTH = 1
-export const HIGHLIGHTED_LINK_COLOR = '#333333'
-export const DEFAULT_ARROW_WIDTH = 10
-export const LARGE_ARROW_WIDTH = 20
-export const DEFAULT_LINK_OPACITY = 1.0
+const VERTICES_PER_QUAD = 6 // quads require 6 vertices (2 repeated)
+const DEFAULT_LINK_WIDTH = 1
 
 export interface LinkStyleAttributes {
   /**
@@ -52,23 +46,22 @@ export interface LinkStyleAttributes {
   labelScale?: number
 }
 
-interface CommonLinkAttributes {
+export interface DisplayLink extends LinkStyleAttributes {
+  source: string
+  target: string
   /**
    * text to display
    */
   label?: string
 }
 
-export interface DisplayLink extends CommonLinkAttributes, LinkStyleAttributes {
-  source: string
-  target: string
-}
-
-export interface PopulatedDisplayLink
-  extends CommonLinkAttributes,
-    LinkStyleAttributes {
+export interface PopulatedDisplayLink extends LinkStyleAttributes {
   source: DisplayNode
   target: DisplayNode
+  /**
+   * text to display
+   */
+  label?: string
 }
 
 export const LINK_DEFAULTS = {
@@ -273,7 +266,17 @@ export class Links {
     newDefaults: LinkStyleAttributes,
     links: PopulatedDisplayLink[],
   ) => {
-    // TODO
+    this.defaults = {
+      ...this.defaults,
+      ...newDefaults,
+    }
+
+    // Note: optimize this for a per-attribute basis when
+    this.updateAll(links)
+
+    if (this.defaults.labelScale !== newDefaults.labelScale) {
+      this.labels.updateDefaults({scale: newDefaults.labelScale}, links)
+    }
   }
 
   /**
@@ -333,7 +336,7 @@ export class Links {
       const quadWidth = links[i].directed
         ? Math.max(
             DEFAULT_LINK_WIDTH,
-            links[i].arrowWidth || DEFAULT_ARROW_WIDTH,
+            links[i].arrowWidth ?? this.defaults.arrowWidth,
           )
         : DEFAULT_LINK_WIDTH
 
@@ -378,7 +381,7 @@ export class Links {
         if (links[i].directed) {
           arrowWidth.setX(
             vertexIndex,
-            links[i].arrowWidth || DEFAULT_ARROW_WIDTH,
+            links[i].arrowWidth ?? this.defaults.arrowWidth,
           )
           arrowOffset.setX(vertexIndex, calculateAbsoluteArrowOffset(links[i]))
         } else {
@@ -433,7 +436,7 @@ export class Links {
     const tmpColor = new THREE.Color() // for reuse
     for (let i = 0; i < numLinks; i++) {
       const currentLink = links[i]
-      tmpColor.set(defaultTo(currentLink.color, DEFAULT_LINK_COLOR) as string)
+      tmpColor.set(defaultTo(currentLink.color, this.defaults.color) as string)
       // Repeat for all vertices of this quad:
       for (
         let vertexIndex = i * VERTICES_PER_QUAD;
@@ -443,7 +446,7 @@ export class Links {
         color.setXYZ(vertexIndex, tmpColor.r, tmpColor.g, tmpColor.b)
         opacity.setX(
           vertexIndex,
-          defaultTo(currentLink.opacity, DEFAULT_LINK_OPACITY) as number,
+          defaultTo(currentLink.opacity, this.defaults.opacity) as number,
         )
       }
     }

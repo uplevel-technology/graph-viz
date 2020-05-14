@@ -119,11 +119,20 @@ function setMeshTexture(mesh: THREE.Mesh, texture: TextTexture) {
   offset.y = (1 - repeat.y) / 2
 }
 
+export interface LabelStyleAttributes {
+  scale?: number
+}
+
+export const LABEL_DEFAULTS = {
+  scale: 1.0,
+}
+
 export class Labels {
   public readonly object: THREE.Object3D
   private readonly planeGeometry: THREE.PlaneBufferGeometry
   private readonly meshes: {[linkIndex: number]: THREE.Mesh}
   private readonly textures: {[text: string]: TextTexture}
+  private defaults: Required<LabelStyleAttributes> = LABEL_DEFAULTS
 
   constructor() {
     this.object = new THREE.Object3D()
@@ -133,7 +142,7 @@ export class Labels {
     this.textures = {}
   }
 
-  private getTexture(text: string, labelScale = 1): TextTexture {
+  private getTexture(text: string, labelScale: number): TextTexture {
     let texture = this.textures[text]
     if (!texture) {
       texture = buildTexture(text, labelScale)
@@ -141,6 +150,17 @@ export class Labels {
     this.textures[text] = texture
     // TODO: dispose of unused textures
     return texture
+  }
+
+  public updateDefaults(
+    newDefaults: LabelStyleAttributes,
+    links: PopulatedDisplayLink[],
+  ) {
+    this.defaults = {
+      ...this.defaults,
+      ...newDefaults,
+    }
+    this.updateAll(links)
   }
 
   public updateAll(links: PopulatedDisplayLink[]) {
@@ -179,7 +199,8 @@ export class Labels {
         mesh.rotation.z += Math.PI
       }
 
-      setMeshTexture(mesh, this.getTexture(link.label, link.labelScale))
+      const labelScale = link.labelScale ?? this.defaults.scale
+      setMeshTexture(mesh, this.getTexture(link.label, labelScale))
 
       // TODO: scale down if the camera is really zoomed in, to avoid the
       // ugliness of visible pixels, and also to make better use of space.
@@ -196,7 +217,6 @@ export class Labels {
       const availableX = Math.max(0, linkLength - labelPadding)
 
       // Try to squish the label down to make it fit:
-      const labelScale = link.labelScale || 1
       const maxSquishScaled = 1 / labelScale
       const squishFactor = Math.max(maxSquishScaled, mesh.scale.x / availableX)
       mesh.scale.x /= squishFactor
