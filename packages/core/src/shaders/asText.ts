@@ -146,9 +146,7 @@ void main() {
   );
   arrowMask -= aaStep(diagonalEdgeX, xFromCenter);
 
-  float mask = lineMask + arrowMask;
-
+  float mask = (lineMask + arrowMask) * vOpacity;
   gl_FragColor = vec4(vColor, mask);
-  gl_FragColor.a = vOpacity;
 }
 `

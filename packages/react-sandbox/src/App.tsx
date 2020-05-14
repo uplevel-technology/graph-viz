@@ -17,8 +17,8 @@ const DATA = {
     {id: '10', fill: 'violet'},
   ],
   links: [
-    {source: '1', target: '2'},
-    {source: '3', target: '4'},
+    {source: '1', target: '2', directed: true, opacity: 0.1},
+    {source: '3', target: '4', opacity: 0.1},
     {source: '3', target: '5'},
     {source: '3', target: '6'},
     {source: '1', target: '7'},
