@@ -5,27 +5,7 @@ import * as THREE from 'three'
 import {nodesFragmentShader, nodesVertexShader} from './shaders/asText'
 import {BufferAttribute} from 'three'
 
-export interface DisplayNode {
-  /**
-   * Unique node id
-   */
-  id: string
-
-  /**
-   * optional display group IDs
-   */
-  displayGroupIds?: string[]
-
-  /**
-   * x coordinate of the node position
-   */
-  x: number
-
-  /**
-   * y position of the node position
-   */
-  y: number
-
+export interface NodeStyleAttributes {
   /**
    * node fill color hex string
    * (default is #333333)
@@ -72,6 +52,28 @@ export interface DisplayNode {
    * (This width is relative to the node container. Must be between 0.0 to 1.0)
    */
   strokeWidth?: number
+}
+
+export interface DisplayNode extends NodeStyleAttributes {
+  /**
+   * Unique node id
+   */
+  id: string
+
+  /**
+   * optional display group IDs
+   */
+  displayGroupIds?: string[]
+
+  /**
+   * x coordinate of the node position
+   */
+  x: number
+
+  /**
+   * y position of the node position
+   */
+  y: number
 
   /**
    * disables interactions on this node if set
@@ -81,19 +83,16 @@ export interface DisplayNode {
   disableInteractions?: boolean
 }
 
-/**
- * Constants
- */
-export const DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE = 20
-export const DEFAULT_NODE_INNER_RADIUS = 0.2
-export const DEFAULT_NODE_FILL = '#333333'
-export const DEFAULT_NODE_FILL_OPACITY = 1.0
-export const DEFAULT_NODE_SCALE = 1.0
-export const DEFAULT_NODE_STROKE_WIDTH = 0.03
-export const DEFAULT_NODE_STROKE_OPACITY = 1.0
-export const LOCKED_NODE_STROKE_WIDTH = 0.3
-export const LOCKED_NODE_STROKE_OPACITY = 0.4
-export const HOVERED_NODE_SCALE = 1.5
+export const NODE_DEFAULTS = {
+  absoluteSize: 20,
+  innerRadius: 0.2,
+  fill: '#333333',
+  fillOpacity: 1.0,
+  scale: 1.0,
+  stroke: '#333333',
+  strokeWidth: 0,
+  strokeOpacity: 1.0,
+}
 
 export class Nodes {
   public object: THREE.Points
@@ -101,6 +100,7 @@ export class Nodes {
   private readonly geometry: THREE.BufferGeometry
   private readonly material: THREE.ShaderMaterial
   private lockedIds: {[id: string]: boolean} = {}
+  private defaults: Required<NodeStyleAttributes> = NODE_DEFAULTS
 
   constructor(nodes: DisplayNode[]) {
     const numNodes = size(nodes)
@@ -300,27 +300,27 @@ export class Nodes {
 
     absoluteSize.setX(
       index,
-      defaultTo(node.absoluteSize, DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE),
+      defaultTo(node.absoluteSize, this.defaults.absoluteSize),
     )
     absoluteSize.needsUpdate = true
 
-    scale.setX(index, defaultTo(node.scale, DEFAULT_NODE_SCALE))
+    scale.setX(index, defaultTo(node.scale, this.defaults.scale))
     scale.needsUpdate = true
 
     innerRadius.setX(
       index,
-      defaultTo(node.innerRadius, DEFAULT_NODE_INNER_RADIUS),
+      defaultTo(node.innerRadius, this.defaults.innerRadius),
     )
     innerRadius.needsUpdate = true
 
     const color = new THREE.Color()
-    color.set(defaultTo(node.fill, DEFAULT_NODE_FILL) as string)
+    color.set(defaultTo(node.fill, this.defaults.fill) as string)
     fill.setXYZ(index, color.r, color.g, color.b)
     fill.needsUpdate = true
 
     fillOpacity.setX(
       index,
-      defaultTo(node.fillOpacity, DEFAULT_NODE_FILL_OPACITY),
+      defaultTo(node.fillOpacity, this.defaults.fillOpacity),
     )
 
     if (node.stroke) {
@@ -331,15 +331,51 @@ export class Nodes {
 
     strokeWidth.setX(
       index,
-      defaultTo(node.strokeWidth, DEFAULT_NODE_STROKE_WIDTH),
+      defaultTo(node.strokeWidth, this.defaults.strokeWidth),
     )
     strokeWidth.needsUpdate = true
 
     strokeOpacity.setX(
       index,
-      defaultTo(node.strokeOpacity, DEFAULT_NODE_STROKE_OPACITY),
+      defaultTo(node.strokeOpacity, this.defaults.strokeOpacity),
     )
     strokeOpacity.needsUpdate = true
+  }
+
+  /**
+   * update the default style values applied to all nodes
+   * @param newDefaults
+   * @param nodes
+   */
+  public updateDefaults(
+    newDefaults: NodeStyleAttributes,
+    nodes: DisplayNode[],
+  ) {
+    if (newDefaults.absoluteSize !== this.defaults.absoluteSize) {
+      this.updateAllAbsoluteSizes(nodes)
+    }
+    if (newDefaults.scale !== this.defaults.scale) {
+      this.updateAllScales(nodes)
+    }
+    if (newDefaults.innerRadius !== this.defaults.innerRadius) {
+      this.updateAllInnerRadii(nodes)
+    }
+    if (newDefaults.fill !== this.defaults.fill) {
+      this.updateAllFills(nodes)
+    }
+    if (newDefaults.stroke !== this.defaults.stroke) {
+      this.updateAllStrokes(nodes)
+    }
+    if (newDefaults.strokeWidth !== this.defaults.strokeWidth) {
+      this.updateAllStrokeWidths(nodes)
+    }
+    if (newDefaults.strokeOpacity !== this.defaults.strokeOpacity) {
+      this.updateAllStrokeOpacities(nodes)
+    }
+    this.defaults = {
+      ...this.defaults,
+      ...newDefaults,
+    }
   }
 
   /**
@@ -388,10 +424,7 @@ export class Nodes {
       'absoluteSize',
     ) as THREE.BufferAttribute
     for (let i = 0; i < numNodes; i++) {
-      absoluteSize.setX(
-        i,
-        nodes[i].absoluteSize || DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE,
-      )
+      absoluteSize.setX(i, nodes[i].absoluteSize ?? this.defaults.absoluteSize)
     }
 
     absoluteSize.needsUpdate = true
@@ -407,7 +440,7 @@ export class Nodes {
 
     const scale = this.geometry.getAttribute('scale') as THREE.BufferAttribute
     for (let i = 0; i < numNodes; i++) {
-      scale.setX(i, nodes[i].scale || DEFAULT_NODE_SCALE)
+      scale.setX(i, nodes[i].scale ?? this.defaults.scale)
     }
 
     scale.needsUpdate = true
@@ -425,7 +458,7 @@ export class Nodes {
       'innerRadius',
     ) as THREE.BufferAttribute
     for (let i = 0; i < numNodes; i++) {
-      innerRadius.setX(i, nodes[i].innerRadius || DEFAULT_NODE_INNER_RADIUS)
+      innerRadius.setX(i, nodes[i].innerRadius ?? this.defaults.innerRadius)
     }
 
     innerRadius.needsUpdate = true
@@ -447,11 +480,11 @@ export class Nodes {
 
     const tmpColor = new THREE.Color() // for reuse
     for (let i = 0; i < numNodes; i++) {
-      tmpColor.set(defaultTo(nodes[i].fill, DEFAULT_NODE_FILL) as string)
+      tmpColor.set(defaultTo(nodes[i].fill, this.defaults.fill) as string)
       fill.setXYZ(i, tmpColor.r, tmpColor.g, tmpColor.b)
       fillOpacity.setX(
         i,
-        defaultTo(nodes[i].fillOpacity, DEFAULT_NODE_FILL_OPACITY),
+        defaultTo(nodes[i].fillOpacity, this.defaults.fillOpacity),
       )
     }
 
@@ -493,7 +526,7 @@ export class Nodes {
       if (!this.lockedIds[i]) {
         strokeWidth.setX(
           i,
-          defaultTo(nodes[i].strokeWidth, DEFAULT_NODE_STROKE_WIDTH),
+          defaultTo(nodes[i].strokeWidth, this.defaults.strokeWidth),
         )
       }
     }
@@ -516,7 +549,7 @@ export class Nodes {
       if (!this.lockedIds[i]) {
         strokeOpacity.setX(
           i,
-          defaultTo(nodes[i].strokeOpacity, DEFAULT_NODE_STROKE_OPACITY),
+          defaultTo(nodes[i].strokeOpacity, this.defaults.strokeOpacity),
         )
       }
     }

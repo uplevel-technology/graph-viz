@@ -1,12 +1,9 @@
-import {
-  DEFAULT_NODE_SCALE,
-  DEFAULT_NODE_STROKE_OPACITY,
-  DEFAULT_NODE_STROKE_WIDTH,
-  HOVERED_NODE_SCALE,
-  LOCKED_NODE_STROKE_OPACITY,
-  LOCKED_NODE_STROKE_WIDTH,
-} from '@graph-viz/core/lib/Nodes'
+import {NODE_DEFAULTS} from '@graph-viz/core/lib/Nodes'
 import {GraphVizNode} from './GraphVizComponent'
+
+export const LOCKED_NODE_STROKE_WIDTH = 0.3
+export const LOCKED_NODE_STROKE_OPACITY = 0.4
+export const HOVERED_NODE_SCALE = 1.5
 
 interface Vec2 {
   x: number
@@ -38,8 +35,8 @@ export const unlockNode = (node: GraphVizNode): void => {
   node.fx = null
   node.fy = null
 
-  node.strokeWidth = DEFAULT_NODE_STROKE_WIDTH
-  node.strokeOpacity = DEFAULT_NODE_STROKE_OPACITY
+  node.strokeWidth = NODE_DEFAULTS.strokeWidth
+  node.strokeOpacity = NODE_DEFAULTS.strokeOpacity
 }
 
 export const magnifyNode = (node: GraphVizNode): void => {
@@ -47,5 +44,5 @@ export const magnifyNode = (node: GraphVizNode): void => {
 }
 
 export const resetNodeScale = (node: GraphVizNode): void => {
-  node.scale = DEFAULT_NODE_SCALE
+  node.scale = NODE_DEFAULTS.scale
 }
