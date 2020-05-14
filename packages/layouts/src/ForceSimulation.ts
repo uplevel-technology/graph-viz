@@ -59,7 +59,7 @@ export interface NodePosition {
   z?: number
 }
 
-function forceGroup(groups: SimulationGroup[]) {
+function forceGroup(groups: SimulationGroup[], defaultStrength: number) {
   let nodes: SimulationNode[]
   let nodesByGroup: {[groupId: string]: SimulationNode[]}
 
@@ -73,7 +73,7 @@ function forceGroup(groups: SimulationGroup[]) {
       const groupNodes = nodesByGroup[group.id]
 
       const {x: cx, y: cy} = getCentroid(groupNodes)
-      const l = alpha * (group.strength || 0)
+      const l = alpha * (group.strength ?? defaultStrength)
 
       groupNodes.forEach(node => {
         node.vx! -= (node.x! - cx) * l
@@ -141,6 +141,17 @@ function getDefaultLinkForceStrengths(links: SimulationLink[]): number[] {
   })
 }
 
+export interface ForceConfig {
+  nodeCharge?: number
+  linkStrengthMultiplier?: number
+  groupStrength?: number
+}
+export const FORCE_DEFAULTS = {
+  nodeCharge: -30,
+  linkStrengthMultiplier: 1,
+  groupStrength: 0,
+}
+
 export class ForceSimulation {
   public simulation: D3Simulation | undefined
   public staticMode = false
@@ -150,6 +161,7 @@ export class ForceSimulation {
     // Default no-op implementation. Will be overwritten by the callback provided to onSimulationTick
     tick: noop,
   }
+  private readonly config: Required<ForceConfig> = FORCE_DEFAULTS
 
   public initialize(graph: SimulationData, staticMode = false) {
     this.staticMode = staticMode
@@ -174,7 +186,7 @@ export class ForceSimulation {
           .strength((node: SimulationNode) =>
             node.forceX !== undefined ? 0.1 : 0,
           )
-          .x((node: SimulationNode) => node.forceX || 0),
+          .x((node: SimulationNode) => node.forceX ?? 0),
       )
       .force(
         'y',
@@ -183,16 +195,16 @@ export class ForceSimulation {
           .strength((node: SimulationNode) =>
             node.forceY !== undefined ? 0.1 : 0,
           )
-          .y((node: SimulationNode) => node.forceY || 0),
+          .y((node: SimulationNode) => node.forceY ?? 0),
       )
       .force(
         'links',
         d3
           .forceLink(linksCopy)
-          .strength((link, i) =>
-            link.strengthMultiplier !== undefined
-              ? defaultLinkForceStrengths[i] * link.strengthMultiplier
-              : defaultLinkForceStrengths[i],
+          .strength(
+            (link, i) =>
+              defaultLinkForceStrengths[i] *
+              (link.strengthMultiplier ?? this.config.linkStrengthMultiplier),
           )
           .id((n: SimulationNode) => n.id),
       )
@@ -201,10 +213,10 @@ export class ForceSimulation {
         d3
           .forceManyBody()
           .strength((n: SimulationNode) =>
-            n.charge !== undefined ? n.charge : -30,
+            n.charge !== undefined ? n.charge : this.config.nodeCharge,
           ),
       )
-      .force('group', forceGroup(groupsCopy))
+      .force('group', forceGroup(groupsCopy, this.config.groupStrength))
       .on('tick', () => {
         this.registeredEventHandlers.tick(this.getNodePositions())
       })
@@ -231,13 +243,22 @@ export class ForceSimulation {
 
     return nodes.map(node => ({
       id: node.id,
-      x: node.x || 0,
-      y: node.y || 0,
+      x: node.x ?? 0,
+      y: node.y ?? 0,
     }))
   }
 
   public onTick(callback: (nodePositions: NodePosition[]) => void) {
     this.registeredEventHandlers.tick = callback
+  }
+
+  /**
+   * update config and force simulation as needed
+   * @param newDefaults
+   */
+  public updateConfig(newConfig: ForceConfig) {
+    Object.assign(this.config, newConfig) // preserve reference !important
+    this.restart()
   }
 
   public update(graph: SimulationData) {
