@@ -16,7 +16,7 @@ import {
 } from '@graph-viz/core'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
-import {debounce, noop, remove} from 'lodash'
+import {debounce, noop, remove, isEqual} from 'lodash'
 
 /**
  * Primary GraphVizData type definitions
@@ -313,6 +313,10 @@ export class GraphVizComponent extends React.Component<
     if (prevProps.groups !== this.props.groups) {
       this.vizData.groups = this.props.groups
       this.visualization.updateGroups(this.vizData.groups)
+    }
+
+    if (!isEqual(prevProps.config, this.props.config)) {
+      this.visualization.updateConfig(this.props.config)
     }
   }
 
