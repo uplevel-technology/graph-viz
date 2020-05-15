@@ -1,6 +1,6 @@
 // @flow
 
-import {defaultTo, size} from 'lodash'
+import {defaultTo, size, defaults} from 'lodash'
 import * as THREE from 'three'
 import {nodesFragmentShader, nodesVertexShader} from './shaders/asText'
 import {BufferAttribute} from 'three'
@@ -344,37 +344,44 @@ export class Nodes {
 
   /**
    * update the default style values applied to all nodes
+   * undefined values reset to default
    * @param newDefaults
    * @param nodes
    */
   public updateDefaults(
-    newDefaults: NodeStyleAttributes,
+    newDefaults: NodeStyleAttributes | undefined,
     nodes: DisplayNode[],
   ) {
-    if (newDefaults.absoluteSize !== this.defaults.absoluteSize) {
+    // merge with NODE_DEFAULTS so undefined values are reset to default values
+    const mergedDefaults = defaults({}, newDefaults, NODE_DEFAULTS)
+
+    if (mergedDefaults.absoluteSize !== this.defaults.absoluteSize) {
+      this.defaults.absoluteSize = mergedDefaults.absoluteSize
       this.updateAllAbsoluteSizes(nodes)
     }
-    if (newDefaults.scale !== this.defaults.scale) {
+    if (mergedDefaults.scale !== this.defaults.scale) {
+      this.defaults.scale = mergedDefaults.scale
       this.updateAllScales(nodes)
     }
-    if (newDefaults.innerRadius !== this.defaults.innerRadius) {
+    if (mergedDefaults.innerRadius !== this.defaults.innerRadius) {
+      this.defaults.innerRadius = mergedDefaults.innerRadius
       this.updateAllInnerRadii(nodes)
     }
-    if (newDefaults.fill !== this.defaults.fill) {
+    if (mergedDefaults.fill !== this.defaults.fill) {
+      this.defaults.fill = mergedDefaults.fill
       this.updateAllFills(nodes)
     }
-    if (newDefaults.stroke !== this.defaults.stroke) {
+    if (mergedDefaults.stroke !== this.defaults.stroke) {
+      this.defaults.stroke = mergedDefaults.stroke
       this.updateAllStrokes(nodes)
     }
-    if (newDefaults.strokeWidth !== this.defaults.strokeWidth) {
+    if (mergedDefaults.strokeWidth !== this.defaults.strokeWidth) {
+      this.defaults.strokeWidth = mergedDefaults.strokeWidth
       this.updateAllStrokeWidths(nodes)
     }
-    if (newDefaults.strokeOpacity !== this.defaults.strokeOpacity) {
+    if (mergedDefaults.strokeOpacity !== this.defaults.strokeOpacity) {
+      this.defaults.strokeOpacity = mergedDefaults.strokeOpacity
       this.updateAllStrokeOpacities(nodes)
-    }
-    this.defaults = {
-      ...this.defaults,
-      ...newDefaults,
     }
   }
 

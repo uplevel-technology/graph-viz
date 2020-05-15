@@ -7,6 +7,7 @@ import {
   getCircularHull,
   getRoundedOffsetPolygon,
 } from './hullGeometryUtils'
+import {defaults} from 'lodash'
 
 export interface GroupStyleAttributes {
   /**
@@ -61,19 +62,23 @@ export class DisplayGroups {
 
   /**
    * update defaults
+   * undefined values reset to default
    * @param newDefaults
    * @param nodes
    * @param groups
    */
   public updateDefaults(
-    newDefaults: GroupStyleAttributes,
+    newDefaults: GroupStyleAttributes | undefined,
     nodes: DisplayNode[],
     groups: DisplayGroup[],
   ) {
-    this.defaults = {
-      ...this.defaults,
-      ...newDefaults,
-    }
+    this.defaults = defaults(
+      {},
+      newDefaults,
+      GROUP_DEFAULTS, // reset undefined values to default values
+      this.defaults, // preserve the rest
+    )
+
     this.updateAll(nodes, groups)
   }
 

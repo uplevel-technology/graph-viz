@@ -1,7 +1,13 @@
-import {size, noop, isEqual} from 'lodash'
+import {size, noop, isEqual, defaultsDeep} from 'lodash'
 import * as THREE from 'three'
 import {Vector3} from 'three'
-import {DisplayLink, Links, LinkStyleAttributes, populateLinks} from './Links'
+import {
+  DisplayLink,
+  LINK_DEFAULTS,
+  Links,
+  LinkStyleAttributes,
+  populateLinks,
+} from './Links'
 import {
   ClickEventHandler,
   DragEndEventHandler,
@@ -13,10 +19,11 @@ import {
   SecondaryClickEventHandler,
   ZoomEventHandler,
 } from './MouseInteraction'
-import {DisplayNode, Nodes, NodeStyleAttributes} from './Nodes'
+import {DisplayNode, NODE_DEFAULTS, Nodes, NodeStyleAttributes} from './Nodes'
 import {
   DisplayGroup,
   DisplayGroups,
+  GROUP_DEFAULTS,
   GroupStyleAttributes,
 } from './DisplayGroups'
 import {required, validate, validateClassConstructor} from './validators'
@@ -54,10 +61,17 @@ export interface ConfigurationOptions {
 }
 
 const DEFAULT_CONFIG_OPTIONS = {
-  nodes: {},
-  links: {},
-  groups: {},
-  events: {},
+  nodes: NODE_DEFAULTS,
+  links: LINK_DEFAULTS,
+  groups: GROUP_DEFAULTS,
+  events: {
+    disableClick: false,
+    disableHover: false,
+    disablePan: false,
+    disableZoom: false,
+    disableDrag: false,
+    disableSecondaryClick: false,
+  },
 }
 
 @validateClassConstructor
@@ -162,33 +176,33 @@ export class GraphVisualization {
    * update config and re-render
    * @param newConfig
    */
-  public updateConfig(newConfig: ConfigurationOptions) {
+  public updateConfig(newConfig: ConfigurationOptions | undefined) {
     let needsUpdate = false
-    if (!isEqual(newConfig.nodes, this.config.nodes)) {
-      this.nodesMesh.updateDefaults(newConfig.nodes, this.data.nodes)
+    if (!isEqual(newConfig?.nodes, this.config.nodes)) {
+      this.nodesMesh.updateDefaults(newConfig?.nodes, this.data.nodes)
       needsUpdate = true
     }
-    if (!isEqual(newConfig.links, this.config.links)) {
+    if (!isEqual(newConfig?.links, this.config.links)) {
       this.linksMesh.updateDefaults(
-        newConfig.links,
+        newConfig?.links,
         populateLinks(this.data, this.nodeIdToIndexMap),
       )
       needsUpdate = true
     }
-    if (!isEqual(newConfig.groups, this.config.groups)) {
+    if (!isEqual(newConfig?.groups, this.config.groups)) {
       this.groupsMesh.updateDefaults(
-        newConfig.groups,
+        newConfig?.groups,
         this.data.nodes,
         this.data.groups,
       )
       needsUpdate = true
     }
 
-    this.config = Object.assign(
+    this.config = defaultsDeep(
       {},
-      DEFAULT_CONFIG_OPTIONS,
-      this.config,
       newConfig,
+      DEFAULT_CONFIG_OPTIONS, // reset undefined to default vals
+      this.config, // preserve other values
     )
 
     if (needsUpdate) {

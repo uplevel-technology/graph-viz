@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import {VisualizationInputData} from './GraphVisualization'
 import {DisplayNode, NODE_DEFAULTS} from './Nodes'
-import {defaultTo} from 'lodash'
+import {defaultTo, defaults, omit} from 'lodash'
 import {Labels} from './Labels'
 import {linksFragmentShader, linksVertexShader} from './shaders/asText'
 import {BufferAttribute} from 'three'
@@ -259,23 +259,28 @@ export class Links {
 
   /**
    * update default attrs for all links
+   * undefined values reset to default
    * @param newDefaults
    * @param links
    */
   public updateDefaults = (
-    newDefaults: LinkStyleAttributes,
+    newDefaults: LinkStyleAttributes | undefined,
     links: PopulatedDisplayLink[],
   ) => {
-    this.defaults = {
-      ...this.defaults,
-      ...newDefaults,
-    }
+    this.defaults = defaults(
+      {},
+      omit(newDefaults, 'labelScale'), // handle labelScale separately for perf reasons
+      LINK_DEFAULTS, // reset undefined values to default values
+      this.defaults, // preserve the other keys
+    )
 
     // Note: optimize this for a per-attribute basis when
     this.updateAll(links)
 
-    if (this.defaults.labelScale !== newDefaults.labelScale) {
-      this.labels.updateDefaults({scale: newDefaults.labelScale}, links)
+    if (this.defaults.labelScale !== newDefaults?.labelScale) {
+      this.defaults.labelScale =
+        newDefaults?.labelScale ?? LINK_DEFAULTS.labelScale
+      this.labels.updateDefaults({scale: this.defaults.labelScale}, links)
     }
   }
 
