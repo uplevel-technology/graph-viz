@@ -1,4 +1,4 @@
-import {size} from 'lodash'
+import {size, noop, isEqual} from 'lodash'
 import * as THREE from 'three'
 import {Vector3} from 'three'
 import {DisplayLink, Links, LinkStyleAttributes, populateLinks} from './Links'
@@ -19,7 +19,7 @@ import {
   DisplayGroups,
   GroupStyleAttributes,
 } from './DisplayGroups'
-import {validate, required, validateClassConstructor} from './validators'
+import {required, validate, validateClassConstructor} from './validators'
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
@@ -91,6 +91,7 @@ export class GraphVisualization {
   private readonly scene: THREE.Scene
   private readonly renderer: THREE.WebGLRenderer
   private readonly mouseInteraction: MouseInteraction
+  private config: ConfigurationOptions = DEFAULT_CONFIG_OPTIONS
 
   constructor(
     @required graphData: VisualizationInputData,
@@ -154,37 +155,86 @@ export class GraphVisualization {
       this.nodesMesh,
       this.data.nodes,
     )
+    this.updateConfig(config)
+  }
 
-    const configWithDefaults = {
-      ...DEFAULT_CONFIG_OPTIONS,
-      ...config,
+  /**
+   * update config and re-render
+   * @param newConfig
+   */
+  public updateConfig(newConfig: ConfigurationOptions) {
+    let needsUpdate = false
+    if (!isEqual(newConfig.nodes, this.config.nodes)) {
+      this.nodesMesh.updateDefaults(newConfig.nodes, this.data.nodes)
+      needsUpdate = true
+    }
+    if (!isEqual(newConfig.links, this.config.links)) {
+      this.linksMesh.updateDefaults(
+        newConfig.links,
+        populateLinks(this.data, this.nodeIdToIndexMap),
+      )
+      needsUpdate = true
+    }
+    if (!isEqual(newConfig.groups, this.config.groups)) {
+      this.groupsMesh.updateDefaults(
+        newConfig.groups,
+        this.data.nodes,
+        this.data.groups,
+      )
+      needsUpdate = true
     }
 
-    if (!configWithDefaults.events.disableClick) {
+    this.config = Object.assign(
+      {},
+      DEFAULT_CONFIG_OPTIONS,
+      this.config,
+      newConfig,
+    )
+
+    if (needsUpdate) {
+      this.render()
+    }
+
+    if (!this.config.events.disableClick) {
       this.mouseInteraction.onClick(this.handleClick)
+    } else {
+      this.mouseInteraction.onClick(noop)
     }
 
-    if (!configWithDefaults.events.disableHover) {
+    if (!this.config.events.disableHover) {
       this.mouseInteraction.onNodeHoverIn(this.handleHoverIn)
       this.mouseInteraction.onNodeHoverOut(this.handleHoverOut)
+    } else {
+      this.mouseInteraction.onNodeHoverIn(noop)
+      this.mouseInteraction.onNodeHoverOut(noop)
     }
 
-    if (!configWithDefaults.events.disableDrag) {
+    if (!this.config.events.disableDrag) {
       this.mouseInteraction.onDragStart(this.handleDragStart)
       this.mouseInteraction.onDragEnd(this.handleDragEnd)
       this.mouseInteraction.onNodeDrag(this.handleNodeDrag)
+    } else {
+      this.mouseInteraction.onDragStart(noop)
+      this.mouseInteraction.onDragEnd(noop)
+      this.mouseInteraction.onNodeDrag(noop)
     }
 
-    if (!configWithDefaults.events.disablePan) {
+    if (!this.config.events.disablePan) {
       this.mouseInteraction.onPan(this.handlePan)
+    } else {
+      this.mouseInteraction.onPan(noop)
     }
 
-    if (!configWithDefaults.events.disableZoom) {
+    if (!this.config.events.disableZoom) {
       this.mouseInteraction.onZoom(this.handleZoomOnWheel)
+    } else {
+      this.mouseInteraction.onZoom(noop)
     }
 
-    if (!configWithDefaults.events.disableSecondaryClick) {
+    if (!this.config.events.disableSecondaryClick) {
       this.mouseInteraction.onSecondaryClick(this.handleSecondaryClick)
+    } else {
+      this.mouseInteraction.onSecondaryClick(noop)
     }
   }
 
