@@ -11,10 +11,10 @@ const DATA = {
     {id: '4', displayGroupIds: ['c2'], fill: 'lightblue'},
     {id: '5', displayGroupIds: ['c2'], fill: 'orange'},
     {id: '6', displayGroupIds: ['c2'], fill: 'green'},
-    {id: '7', fill: 'green'},
-    {id: '8', fill: 'yellow'},
-    {id: '9', fill: 'pink'},
-    {id: '10', fill: 'violet'},
+    {id: '7'},
+    {id: '8'},
+    {id: '9'},
+    {id: '10'},
   ],
   links: [
     {source: '1', target: '2', directed: true, opacity: 0.5},
@@ -56,6 +56,11 @@ const App: React.FC = () => {
   // }, [])
 
   const [data, setData] = useState<any>(DATA)
+  const [config, setConfig] = useState<any>({
+    nodes: {
+      fill: 'pink',
+    },
+  })
   useEffect(() => {
     setTimeout(() => {
       setData({
@@ -64,17 +69,13 @@ const App: React.FC = () => {
         groups: [...DATA.groups],
       })
     }, 3000)
-    // setTimeout(() => {
-    //   setData({
-    //     nodes: [
-    //       ...DATA.nodes,
-    //       // {id: 'black', fill: 'black'},
-    //       {id: 'black', fill: 'pink'},
-    //     ],
-    //     links: [...DATA.links, {source: 'black', target: '2'}],
-    //     groups: [...DATA.groups],
-    //   })
-    // }, 5000)
+    setTimeout(() => {
+      setConfig({
+        nodes: {
+          fill: 'purple',
+        },
+      })
+    }, 6000)
   }, [])
 
   return (
@@ -89,6 +90,7 @@ const App: React.FC = () => {
             nodes={data.nodes}
             links={data.links}
             groups={data.groups}
+            config={config}
           />
         </div>
       </div>
