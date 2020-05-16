@@ -65,9 +65,21 @@
         "title": "DisplayNode",
         "sidebar_label": "DisplayNode"
       },
+      "api-docs/interfaces/core.groupstyleattributes": {
+        "title": "GroupStyleAttributes",
+        "sidebar_label": "GroupStyleAttributes"
+      },
+      "api-docs/interfaces/core.labelstyleattributes": {
+        "title": "LabelStyleAttributes",
+        "sidebar_label": "LabelStyleAttributes"
+      },
       "api-docs/interfaces/core.linkstyleattributes": {
         "title": "LinkStyleAttributes",
         "sidebar_label": "LinkStyleAttributes"
+      },
+      "api-docs/interfaces/core.nodestyleattributes": {
+        "title": "NodeStyleAttributes",
+        "sidebar_label": "NodeStyleAttributes"
       },
       "api-docs/interfaces/core.point": {
         "title": "Point",
@@ -89,6 +101,10 @@
         "title": "VisualizationInputData",
         "sidebar_label": "VisualizationInputData"
       },
+      "api-docs/interfaces/layouts.forceconfig": {
+        "title": "ForceConfig",
+        "sidebar_label": "ForceConfig"
+      },
       "api-docs/interfaces/layouts.nodeposition": {
         "title": "NodePosition",
         "sidebar_label": "NodePosition"
@@ -109,13 +125,13 @@
         "title": "SimulationNode",
         "sidebar_label": "SimulationNode"
       },
+      "api-docs/interfaces/react.graphvizcomponentprops": {
+        "title": "GraphVizComponentProps",
+        "sidebar_label": "GraphVizComponentProps"
+      },
       "api-docs/interfaces/react.nodetooltipsprops": {
         "title": "NodeTooltipsProps",
         "sidebar_label": "NodeTooltipsProps"
-      },
-      "api-docs/interfaces/react.props": {
-        "title": "Props",
-        "sidebar_label": "Props"
       },
       "api-docs/interfaces/react.state": {
         "title": "State",
@@ -180,7 +196,7 @@
       "Guides": "Guides",
       "Components": "Components",
       "Introduction": "Introduction",
-      "External Modules": "External Modules",
+      "Modules": "Modules",
       "Classes": "Classes",
       "Interfaces": "Interfaces"
     }
