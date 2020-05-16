@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react'
 import logo from './logo.svg'
 import './App.css'
 import {GraphVizComponent} from '@graph-viz/react'
+import {ForceConfig} from '@graph-viz/layouts'
 
 const DATA = {
   nodes: [
@@ -61,6 +62,9 @@ const App: React.FC = () => {
       fill: 'pink',
     },
   })
+  const [forceConfig, setForceConfig] = useState<ForceConfig>({
+    nodeCharge: -30,
+  })
   useEffect(() => {
     setTimeout(() => {
       setData({
@@ -76,6 +80,12 @@ const App: React.FC = () => {
         },
       })
     }, 6000)
+
+    setTimeout(() => {
+      setForceConfig({
+        nodeCharge: -300,
+      })
+    }, 8000)
   }, [])
 
   return (
@@ -91,6 +101,7 @@ const App: React.FC = () => {
             links={data.links}
             groups={data.groups}
             config={config}
+            forceConfig={forceConfig}
           />
         </div>
       </div>
