@@ -5,4 +5,5 @@ export {
   SimulationLink,
   SimulationGroup,
   SimulationData,
+  ForceConfig,
 } from './ForceSimulation'

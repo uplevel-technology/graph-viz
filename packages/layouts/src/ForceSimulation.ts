@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import {meanBy, noop} from 'lodash'
+import {meanBy, noop, defaults} from 'lodash'
 
 export interface SimulationNode extends d3.SimulationNodeDatum {
   id: string
@@ -161,15 +161,26 @@ export class ForceSimulation {
     // Default no-op implementation. Will be overwritten by the callback provided to onSimulationTick
     tick: noop,
   }
+  // this is tracked referentially so readonly is important here
   private readonly config: Required<ForceConfig> = FORCE_DEFAULTS
 
-  public initialize(graph: SimulationData, staticMode = false) {
+  private defaultLinkForceStrengths: number[] = []
+
+  public initialize(
+    graph: SimulationData,
+    config: ForceConfig = FORCE_DEFAULTS,
+    staticMode = false,
+  ) {
+    // reset undefined values to default values
+    const mergedConfig = defaults({}, config, FORCE_DEFAULTS)
+    Object.assign(this.config, mergedConfig) // preserve referential equality
+
     this.staticMode = staticMode
     const nodesCopy = graph.nodes.map(node => ({...node}))
     const linksCopy = graph.links.map(link => ({...link}))
     const groupsCopy = graph.forceGroups.map(group => ({...group}))
 
-    const defaultLinkForceStrengths = getDefaultLinkForceStrengths(linksCopy)
+    this.defaultLinkForceStrengths = getDefaultLinkForceStrengths(linksCopy)
 
     // stop any previous simulation before reinitializing to prevent
     // zombie tick events
@@ -203,7 +214,7 @@ export class ForceSimulation {
           .forceLink(linksCopy)
           .strength(
             (link, i) =>
-              defaultLinkForceStrengths[i] *
+              this.defaultLinkForceStrengths[i] *
               (link.strengthMultiplier ?? this.config.linkStrengthMultiplier),
           )
           .id((n: SimulationNode) => n.id),
@@ -254,11 +265,42 @@ export class ForceSimulation {
 
   /**
    * update config and force simulation as needed
-   * @param newDefaults
+   * @param newConfig
    */
-  public updateConfig(newConfig: ForceConfig) {
-    Object.assign(this.config, newConfig) // preserve reference !important
-    this.restart()
+  public updateConfig(newConfig?: ForceConfig) {
+    if (!this.simulation) {
+      return
+    }
+    const mergedConfig = defaults({}, newConfig, FORCE_DEFAULTS)
+
+    if (this.config.nodeCharge !== mergedConfig.nodeCharge) {
+      // NOTE: preserve reference for this.config !important
+      this.config.nodeCharge = mergedConfig.nodeCharge
+      const forceMB = this.simulation.force('charge') as d3.ForceManyBody<
+        SimulationNode
+      >
+      forceMB.strength((n: SimulationNode) =>
+        n.charge !== undefined ? n.charge : this.config.nodeCharge,
+      )
+    }
+
+    if (
+      this.config.linkStrengthMultiplier !== mergedConfig.linkStrengthMultiplier
+    ) {
+      this.config.linkStrengthMultiplier = mergedConfig.linkStrengthMultiplier
+      const forceLink = this.simulation.force('links') as d3.ForceLink<
+        SimulationNode,
+        SimulationLink
+      >
+      forceLink.strength(
+        (link, i) =>
+          this.defaultLinkForceStrengths[i] *
+          (link.strengthMultiplier ?? this.config.linkStrengthMultiplier),
+      )
+    }
+
+    Object.assign(this.config, newConfig)
+    this.reheat()
   }
 
   public update(graph: SimulationData) {
