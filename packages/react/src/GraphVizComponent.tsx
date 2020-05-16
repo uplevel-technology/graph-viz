@@ -5,6 +5,7 @@ import {
   SimulationGroup,
   SimulationLink,
   SimulationNode,
+  ForceConfig,
 } from '@graph-viz/layouts'
 import {
   ConfigurationOptions,
@@ -55,6 +56,7 @@ export interface GraphVizComponentProps {
   tooltips: Partial<TooltipNode>[]
   onRefresh?: () => any
   config?: ConfigurationOptions
+  forceConfig?: ForceConfig
   showControls?: boolean
   /**
    * enables graph editing
@@ -318,6 +320,10 @@ export class GraphVizComponent extends React.Component<
     if (!isEqual(prevProps.config, this.props.config)) {
       this.visualization.updateConfig(this.props.config)
     }
+
+    if (!isEqual(prevProps.forceConfig, this.props.forceConfig)) {
+      this.simulation.updateConfig(this.props.forceConfig)
+    }
   }
 
   componentWillUnmount() {
@@ -328,11 +334,14 @@ export class GraphVizComponent extends React.Component<
 
   initData() {
     this.simulation.stop()
-    this.simulation.initialize({
-      nodes: this.props.nodes,
-      links: this.props.links,
-      forceGroups: this.props.groups,
-    })
+    this.simulation.initialize(
+      {
+        nodes: this.props.nodes,
+        links: this.props.links,
+        forceGroups: this.props.groups,
+      },
+      this.props.forceConfig,
+    )
 
     const nodePositions = this.simulation.getNodePositions()
 
