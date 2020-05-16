@@ -14,30 +14,30 @@ sidebar_label: "State"
 
 ### Properties
 
-* [currentTooltipNode](react.state.md#currenttooltipnode)
-* [currentlyHoveredIdx](react.state.md#currentlyhoveredidx)
-* [draftLinkSourceNode](react.state.md#optional-draftlinksourcenode)
+* [currentTooltipNode](react.state.md#readonly-currenttooltipnode)
+* [currentlyHoveredIdx](react.state.md#readonly-currentlyhoveredidx)
+* [draftLinkSourceNode](react.state.md#optional-readonly-draftlinksourcenode)
 
 ## Properties
 
-###  currentTooltipNode
+### `Readonly` currentTooltipNode
 
 • **currentTooltipNode**: *[TooltipNode](react.tooltipnode.md) | null*
 
-*Defined in [react/src/GraphVizComponent.tsx:49](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L49)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:47](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L47)*
 
 ___
 
-###  currentlyHoveredIdx
+### `Readonly` currentlyHoveredIdx
 
 • **currentlyHoveredIdx**: *number | null*
 
-*Defined in [react/src/GraphVizComponent.tsx:50](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L50)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:48](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L48)*
 
 ___
 
-### `Optional` draftLinkSourceNode
+### `Optional` `Readonly` draftLinkSourceNode
 
 • **draftLinkSourceNode**? : *[GraphVizNode](../modules/react.md#graphviznode)*
 
-*Defined in [react/src/GraphVizComponent.tsx:51](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L51)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:49](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L49)*

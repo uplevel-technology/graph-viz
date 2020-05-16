@@ -24,7 +24,7 @@ sidebar_label: "TextTexture"
 
 • **size**: *Vector2*
 
-*Defined in [core/src/Labels.ts:9](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L9)*
+*Defined in [packages/core/src/Labels.ts:8](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L8)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **textSize**: *Vector2*
 
-*Defined in [core/src/Labels.ts:10](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L10)*
+*Defined in [packages/core/src/Labels.ts:9](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L9)*
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 • **texture**: *Texture*
 
-*Defined in [core/src/Labels.ts:8](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L8)*
+*Defined in [packages/core/src/Labels.ts:7](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L7)*

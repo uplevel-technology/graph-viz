@@ -18,6 +18,7 @@ sidebar_label: "DisplayGroups"
 
 ### Properties
 
+* [defaults](core.displaygroups.md#private-defaults)
 * [meshes](core.displaygroups.md#private-meshes)
 * [object](core.displaygroups.md#object)
 
@@ -27,6 +28,7 @@ sidebar_label: "DisplayGroups"
 * [renderCircle](core.displaygroups.md#private-rendercircle)
 * [renderConvexHull](core.displaygroups.md#private-renderconvexhull)
 * [updateAll](core.displaygroups.md#updateall)
+* [updateDefaults](core.displaygroups.md#updatedefaults)
 
 ## Constructors
 
@@ -34,7 +36,7 @@ sidebar_label: "DisplayGroups"
 
 \+ **new DisplayGroups**(`nodes`: [DisplayNode](../interfaces/core.displaynode.md)[], `groups`: [DisplayGroup](../interfaces/core.displaygroup.md)[]): *[DisplayGroups](core.displaygroups.md)*
 
-*Defined in [core/src/DisplayGroups.ts:48](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/DisplayGroups.ts#L48)*
+*Defined in [packages/core/src/DisplayGroups.ts:57](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/DisplayGroups.ts#L57)*
 
 **Parameters:**
 
@@ -47,11 +49,19 @@ Name | Type |
 
 ## Properties
 
+### `Private` defaults
+
+• **defaults**: *Required‹[GroupStyleAttributes](../interfaces/core.groupstyleattributes.md)›* = GROUP_DEFAULTS
+
+*Defined in [packages/core/src/DisplayGroups.ts:57](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/DisplayGroups.ts#L57)*
+
+___
+
 ### `Private` meshes
 
 • **meshes**: *object*
 
-*Defined in [core/src/DisplayGroups.ts:48](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/DisplayGroups.ts#L48)*
+*Defined in [packages/core/src/DisplayGroups.ts:56](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/DisplayGroups.ts#L56)*
 
 #### Type declaration:
 
@@ -61,9 +71,9 @@ ___
 
 ###  object
 
-• **object**: *Group* =  new THREE.Group()
+• **object**: *Group‹›* = new THREE.Group()
 
-*Defined in [core/src/DisplayGroups.ts:47](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/DisplayGroups.ts#L47)*
+*Defined in [packages/core/src/DisplayGroups.ts:55](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/DisplayGroups.ts#L55)*
 
 ## Methods
 
@@ -71,7 +81,7 @@ ___
 
 ▸ **getGroupedNodes**(`nodes`: [DisplayNode](../interfaces/core.displaynode.md)[]): *object*
 
-*Defined in [core/src/DisplayGroups.ts:83](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/DisplayGroups.ts#L83)*
+*Defined in [packages/core/src/DisplayGroups.ts:119](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/DisplayGroups.ts#L119)*
 
 **Parameters:**
 
@@ -89,7 +99,7 @@ ___
 
 ▸ **renderCircle**(`group`: [DisplayGroup](../interfaces/core.displaygroup.md), `nodesInGroup`: [DisplayNode](../interfaces/core.displaynode.md)[]): *void*
 
-*Defined in [core/src/DisplayGroups.ts:140](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/DisplayGroups.ts#L140)*
+*Defined in [packages/core/src/DisplayGroups.ts:183](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/DisplayGroups.ts#L183)*
 
 **Parameters:**
 
@@ -106,7 +116,7 @@ ___
 
 ▸ **renderConvexHull**(`group`: [DisplayGroup](../interfaces/core.displaygroup.md), `nodesInGroup`: [DisplayNode](../interfaces/core.displaynode.md)[]): *void*
 
-*Defined in [core/src/DisplayGroups.ts:101](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/DisplayGroups.ts#L101)*
+*Defined in [packages/core/src/DisplayGroups.ts:137](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/DisplayGroups.ts#L137)*
 
 **Parameters:**
 
@@ -123,13 +133,36 @@ ___
 
 ▸ **updateAll**(`nodes`: [DisplayNode](../interfaces/core.displaynode.md)[], `groups`: [DisplayGroup](../interfaces/core.displaygroup.md)[]): *void*
 
-*Defined in [core/src/DisplayGroups.ts:54](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/DisplayGroups.ts#L54)*
+*Defined in [packages/core/src/DisplayGroups.ts:90](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/DisplayGroups.ts#L90)*
+
+update all attributes and recompute everything to be sent to gpu
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`nodes` | [DisplayNode](../interfaces/core.displaynode.md)[] |
-`groups` | [DisplayGroup](../interfaces/core.displaygroup.md)[] |
+Name | Type | Description |
+------ | ------ | ------ |
+`nodes` | [DisplayNode](../interfaces/core.displaynode.md)[] | - |
+`groups` | [DisplayGroup](../interfaces/core.displaygroup.md)[] |   |
+
+**Returns:** *void*
+
+___
+
+###  updateDefaults
+
+▸ **updateDefaults**(`newDefaults`: [GroupStyleAttributes](../interfaces/core.groupstyleattributes.md) | undefined, `nodes`: [DisplayNode](../interfaces/core.displaynode.md)[], `groups`: [DisplayGroup](../interfaces/core.displaygroup.md)[]): *void*
+
+*Defined in [packages/core/src/DisplayGroups.ts:70](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/DisplayGroups.ts#L70)*
+
+update defaults
+undefined values reset to default
+
+**Parameters:**
+
+Name | Type | Description |
+------ | ------ | ------ |
+`newDefaults` | [GroupStyleAttributes](../interfaces/core.groupstyleattributes.md) &#124; undefined | - |
+`nodes` | [DisplayNode](../interfaces/core.displaynode.md)[] | - |
+`groups` | [DisplayGroup](../interfaces/core.displaygroup.md)[] |   |
 
 **Returns:** *void*

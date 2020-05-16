@@ -35,7 +35,7 @@ sidebar_label: "SimulationNode"
 
 • **charge**? : *undefined | number*
 
-*Defined in [layouts/src/ForceSimulation.ts:25](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L25)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:25](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L25)*
 
 d3 force manyBody strength
 
@@ -47,7 +47,7 @@ ___
 
 • **displayGroupIds**? : *string[]*
 
-*Defined in [layouts/src/ForceSimulation.ts:7](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L7)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:7](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L7)*
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 • **forceX**? : *undefined | number*
 
-*Defined in [layouts/src/ForceSimulation.ts:13](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L13)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:13](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L13)*
 
 d3 forceX seed value
 
@@ -67,7 +67,7 @@ ___
 
 • **forceY**? : *undefined | number*
 
-*Defined in [layouts/src/ForceSimulation.ts:19](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L19)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:19](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L19)*
 
 d3 forceY seed value
 
@@ -79,9 +79,9 @@ ___
 
 • **fx**? : *number | null*
 
-*Inherited from void*
+*Inherited from [SimulationNode](layouts.simulationnode.md).[fx](layouts.simulationnode.md#optional-fx)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/d3-force/index.d.ts:51
+Defined in node_modules/@types/d3-force/index.d.ts:51
 
 Node’s fixed x-position (if position was fixed)
 
@@ -91,9 +91,9 @@ ___
 
 • **fy**? : *number | null*
 
-*Inherited from void*
+*Inherited from [SimulationNode](layouts.simulationnode.md).[fy](layouts.simulationnode.md#optional-fy)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/d3-force/index.d.ts:55
+Defined in node_modules/@types/d3-force/index.d.ts:55
 
 Node’s fixed y-position (if position was fixed)
 
@@ -103,7 +103,7 @@ ___
 
 • **id**: *string*
 
-*Defined in [layouts/src/ForceSimulation.ts:5](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L5)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:5](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L5)*
 
 ___
 
@@ -111,9 +111,9 @@ ___
 
 • **index**? : *undefined | number*
 
-*Inherited from void*
+*Inherited from [SimulationNode](layouts.simulationnode.md).[index](layouts.simulationnode.md#optional-index)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/d3-force/index.d.ts:31
+Defined in node_modules/@types/d3-force/index.d.ts:31
 
 Node’s zero-based index into nodes array. This property is set during the initialization process of a simulation.
 
@@ -123,9 +123,9 @@ ___
 
 • **vx**? : *undefined | number*
 
-*Inherited from void*
+*Inherited from [SimulationNode](layouts.simulationnode.md).[vx](layouts.simulationnode.md#optional-vx)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/d3-force/index.d.ts:43
+Defined in node_modules/@types/d3-force/index.d.ts:43
 
 Node’s current x-velocity
 
@@ -135,9 +135,9 @@ ___
 
 • **vy**? : *undefined | number*
 
-*Inherited from void*
+*Inherited from [SimulationNode](layouts.simulationnode.md).[vy](layouts.simulationnode.md#optional-vy)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/d3-force/index.d.ts:47
+Defined in node_modules/@types/d3-force/index.d.ts:47
 
 Node’s current y-velocity
 
@@ -147,9 +147,9 @@ ___
 
 • **x**? : *undefined | number*
 
-*Inherited from void*
+*Inherited from [SimulationNode](layouts.simulationnode.md).[x](layouts.simulationnode.md#optional-x)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/d3-force/index.d.ts:35
+Defined in node_modules/@types/d3-force/index.d.ts:35
 
 Node’s current x-position
 
@@ -159,8 +159,8 @@ ___
 
 • **y**? : *undefined | number*
 
-*Inherited from void*
+*Inherited from [SimulationNode](layouts.simulationnode.md).[y](layouts.simulationnode.md#optional-y)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/d3-force/index.d.ts:39
+Defined in node_modules/@types/d3-force/index.d.ts:39
 
 Node’s current y-position

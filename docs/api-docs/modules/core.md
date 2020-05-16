@@ -8,6 +8,20 @@ sidebar_label: "core"
 
 ## Index
 
+### References
+
+* [ConfigurationOptions](core.md#configurationoptions)
+* [DisplayGroup](core.md#displaygroup)
+* [DisplayGroups](core.md#displaygroups)
+* [DisplayLink](core.md#displaylink)
+* [DisplayNode](core.md#displaynode)
+* [GraphVisualization](core.md#graphvisualization)
+* [Labels](core.md#labels)
+* [Links](core.md#links)
+* [MouseInteraction](core.md#mouseinteraction)
+* [Nodes](core.md#nodes)
+* [VisualizationInputData](core.md#visualizationinputdata)
+
 ### Classes
 
 * [DisplayGroups](../classes/core.displaygroups.md)
@@ -23,7 +37,10 @@ sidebar_label: "core"
 * [DisplayGroup](../interfaces/core.displaygroup.md)
 * [DisplayLink](../interfaces/core.displaylink.md)
 * [DisplayNode](../interfaces/core.displaynode.md)
+* [GroupStyleAttributes](../interfaces/core.groupstyleattributes.md)
+* [LabelStyleAttributes](../interfaces/core.labelstyleattributes.md)
 * [LinkStyleAttributes](../interfaces/core.linkstyleattributes.md)
+* [NodeStyleAttributes](../interfaces/core.nodestyleattributes.md)
 * [Point](../interfaces/core.point.md)
 * [PopulatedDisplayLink](../interfaces/core.populateddisplaylink.md)
 * [TextTexture](../interfaces/core.texttexture.md)
@@ -44,23 +61,7 @@ sidebar_label: "core"
 
 ### Variables
 
-* [DEFAULT_ARROW_WIDTH](core.md#const-default_arrow_width)
-* [DEFAULT_DISPLAY_GROUP_FILL](core.md#const-default_display_group_fill)
-* [DEFAULT_DISPLAY_GROUP_FILL_OPACITY](core.md#const-default_display_group_fill_opacity)
-* [DEFAULT_LINK_COLOR](core.md#const-default_link_color)
 * [DEFAULT_LINK_WIDTH](core.md#const-default_link_width)
-* [DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE](core.md#const-default_node_container_absolute_size)
-* [DEFAULT_NODE_FILL](core.md#const-default_node_fill)
-* [DEFAULT_NODE_FILL_OPACITY](core.md#const-default_node_fill_opacity)
-* [DEFAULT_NODE_INNER_RADIUS](core.md#const-default_node_inner_radius)
-* [DEFAULT_NODE_SCALE](core.md#const-default_node_scale)
-* [DEFAULT_NODE_STROKE_OPACITY](core.md#const-default_node_stroke_opacity)
-* [DEFAULT_NODE_STROKE_WIDTH](core.md#const-default_node_stroke_width)
-* [HIGHLIGHTED_LINK_COLOR](core.md#const-highlighted_link_color)
-* [HOVERED_NODE_SCALE](core.md#const-hovered_node_scale)
-* [LARGE_ARROW_WIDTH](core.md#const-large_arrow_width)
-* [LOCKED_NODE_STROKE_OPACITY](core.md#const-locked_node_stroke_opacity)
-* [LOCKED_NODE_STROKE_WIDTH](core.md#const-locked_node_stroke_width)
 * [MAX_CLICK_DURATION](core.md#const-max_click_duration)
 * [MAX_ZOOM](core.md#const-max_zoom)
 * [PAN_SPEED](core.md#const-pan_speed)
@@ -96,6 +97,76 @@ sidebar_label: "core"
 
 * [DATA](core.md#const-data)
 * [DEFAULT_CONFIG_OPTIONS](core.md#const-default_config_options)
+* [GROUP_DEFAULTS](core.md#const-group_defaults)
+* [LABEL_DEFAULTS](core.md#const-label_defaults)
+* [LINK_DEFAULTS](core.md#const-link_defaults)
+* [NODE_DEFAULTS](core.md#const-node_defaults)
+
+## References
+
+###  ConfigurationOptions
+
+• **ConfigurationOptions**:
+
+___
+
+###  DisplayGroup
+
+• **DisplayGroup**:
+
+___
+
+###  DisplayGroups
+
+• **DisplayGroups**:
+
+___
+
+###  DisplayLink
+
+• **DisplayLink**:
+
+___
+
+###  DisplayNode
+
+• **DisplayNode**:
+
+___
+
+###  GraphVisualization
+
+• **GraphVisualization**:
+
+___
+
+###  Labels
+
+• **Labels**:
+
+___
+
+###  Links
+
+• **Links**:
+
+___
+
+###  MouseInteraction
+
+• **MouseInteraction**:
+
+___
+
+###  Nodes
+
+• **Nodes**:
+
+___
+
+###  VisualizationInputData
+
+• **VisualizationInputData**:
 
 ## Type aliases
 
@@ -103,7 +174,7 @@ sidebar_label: "core"
 
 Ƭ **ClickEventHandler**: *[GenericMouseEventHandler](core.md#genericmouseeventhandler)*
 
-*Defined in [core/src/MouseInteraction.ts:21](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L21)*
+*Defined in [packages/core/src/MouseInteraction.ts:22](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L22)*
 
 dispatched when the canvas is clicked. if a node click is detected the clickedNodeIdx will be non-null
 
@@ -113,7 +184,7 @@ ___
 
 Ƭ **DragEndEventHandler**: *[GenericMouseEventHandler](core.md#genericmouseeventhandler)*
 
-*Defined in [core/src/MouseInteraction.ts:31](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L31)*
+*Defined in [packages/core/src/MouseInteraction.ts:32](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L32)*
 
 dispatched when a mouse drag end is detected anywhere on the canvas
 
@@ -123,7 +194,7 @@ ___
 
 Ƭ **DragStartEventHandler**: *[GenericMouseEventHandler](core.md#genericmouseeventhandler)*
 
-*Defined in [core/src/MouseInteraction.ts:26](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L26)*
+*Defined in [packages/core/src/MouseInteraction.ts:27](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L27)*
 
 dispatched when a mouse drag start is detected anywhere on the canvas
 
@@ -133,7 +204,7 @@ ___
 
 Ƭ **GenericMouseEventHandler**: *function*
 
-*Defined in [core/src/MouseInteraction.ts:7](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L7)*
+*Defined in [packages/core/src/MouseInteraction.ts:8](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L8)*
 
 #### Type declaration:
 
@@ -153,7 +224,7 @@ ___
 
 Ƭ **HoverEventHandler**: *function*
 
-*Defined in [core/src/MouseInteraction.ts:16](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L16)*
+*Defined in [packages/core/src/MouseInteraction.ts:17](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L17)*
 
 dispatched when a node is hovered in or out
 
@@ -173,7 +244,7 @@ ___
 
 Ƭ **NodeDragEventHandler**: *function*
 
-*Defined in [core/src/MouseInteraction.ts:37](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L37)*
+*Defined in [packages/core/src/MouseInteraction.ts:38](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L38)*
 
 dispatched when a mouse dragging event is detected after dragStart was dispatched with a non-null node
 i.e. node was dragged
@@ -195,7 +266,7 @@ ___
 
 Ƭ **PanEventHandler**: *function*
 
-*Defined in [core/src/MouseInteraction.ts:46](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L46)*
+*Defined in [packages/core/src/MouseInteraction.ts:47](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L47)*
 
 dispatched when a mouse dragging event is detected after dragStart was dispatched with a null node
 i.e. canvas was panned
@@ -216,7 +287,7 @@ ___
 
 Ƭ **SecondaryClickEventHandler**: *function*
 
-*Defined in [core/src/MouseInteraction.ts:57](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L57)*
+*Defined in [packages/core/src/MouseInteraction.ts:58](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L58)*
 
 dispatched on event: 'contextmenu'
 (usually right click or Ctrl+click in most browsers)
@@ -238,7 +309,7 @@ ___
 
 Ƭ **ZoomEventHandler**: *function*
 
-*Defined in [core/src/MouseInteraction.ts:51](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L51)*
+*Defined in [packages/core/src/MouseInteraction.ts:52](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L52)*
 
 dispatched on mouse wheel change
 
@@ -254,143 +325,11 @@ Name | Type |
 
 ## Variables
 
-### `Const` DEFAULT_ARROW_WIDTH
-
-• **DEFAULT_ARROW_WIDTH**: *10* = 10
-
-*Defined in [core/src/Links.ts:24](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Links.ts#L24)*
-
-___
-
-### `Const` DEFAULT_DISPLAY_GROUP_FILL
-
-• **DEFAULT_DISPLAY_GROUP_FILL**: *0* = 0
-
-*Defined in [core/src/DisplayGroups.ts:43](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/DisplayGroups.ts#L43)*
-
-___
-
-### `Const` DEFAULT_DISPLAY_GROUP_FILL_OPACITY
-
-• **DEFAULT_DISPLAY_GROUP_FILL_OPACITY**: *0.09* = 0.09
-
-*Defined in [core/src/DisplayGroups.ts:44](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/DisplayGroups.ts#L44)*
-
-___
-
-### `Const` DEFAULT_LINK_COLOR
-
-• **DEFAULT_LINK_COLOR**: *13421772* = 13421772
-
-*Defined in [core/src/Links.ts:21](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Links.ts#L21)*
-
-Constants
-
-___
-
 ### `Const` DEFAULT_LINK_WIDTH
 
 • **DEFAULT_LINK_WIDTH**: *1* = 1
 
-*Defined in [core/src/Links.ts:22](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Links.ts#L22)*
-
-___
-
-### `Const` DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE
-
-• **DEFAULT_NODE_CONTAINER_ABSOLUTE_SIZE**: *20* = 20
-
-*Defined in [core/src/Nodes.ts:89](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L89)*
-
-Constants
-
-___
-
-### `Const` DEFAULT_NODE_FILL
-
-• **DEFAULT_NODE_FILL**: *3355443* = 3355443
-
-*Defined in [core/src/Nodes.ts:91](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L91)*
-
-___
-
-### `Const` DEFAULT_NODE_FILL_OPACITY
-
-• **DEFAULT_NODE_FILL_OPACITY**: *1* = 1
-
-*Defined in [core/src/Nodes.ts:92](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L92)*
-
-___
-
-### `Const` DEFAULT_NODE_INNER_RADIUS
-
-• **DEFAULT_NODE_INNER_RADIUS**: *0.2* = 0.2
-
-*Defined in [core/src/Nodes.ts:90](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L90)*
-
-___
-
-### `Const` DEFAULT_NODE_SCALE
-
-• **DEFAULT_NODE_SCALE**: *1* = 1
-
-*Defined in [core/src/Nodes.ts:93](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L93)*
-
-___
-
-### `Const` DEFAULT_NODE_STROKE_OPACITY
-
-• **DEFAULT_NODE_STROKE_OPACITY**: *1* = 1
-
-*Defined in [core/src/Nodes.ts:95](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L95)*
-
-___
-
-### `Const` DEFAULT_NODE_STROKE_WIDTH
-
-• **DEFAULT_NODE_STROKE_WIDTH**: *0.03* = 0.03
-
-*Defined in [core/src/Nodes.ts:94](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L94)*
-
-___
-
-### `Const` HIGHLIGHTED_LINK_COLOR
-
-• **HIGHLIGHTED_LINK_COLOR**: *3355443* = 3355443
-
-*Defined in [core/src/Links.ts:23](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Links.ts#L23)*
-
-___
-
-### `Const` HOVERED_NODE_SCALE
-
-• **HOVERED_NODE_SCALE**: *1.5* = 1.5
-
-*Defined in [core/src/Nodes.ts:98](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L98)*
-
-___
-
-### `Const` LARGE_ARROW_WIDTH
-
-• **LARGE_ARROW_WIDTH**: *20* = 20
-
-*Defined in [core/src/Links.ts:25](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Links.ts#L25)*
-
-___
-
-### `Const` LOCKED_NODE_STROKE_OPACITY
-
-• **LOCKED_NODE_STROKE_OPACITY**: *0.4* = 0.4
-
-*Defined in [core/src/Nodes.ts:97](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L97)*
-
-___
-
-### `Const` LOCKED_NODE_STROKE_WIDTH
-
-• **LOCKED_NODE_STROKE_WIDTH**: *0.3* = 0.3
-
-*Defined in [core/src/Nodes.ts:96](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L96)*
+*Defined in [packages/core/src/Links.ts:13](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L13)*
 
 ___
 
@@ -398,7 +337,7 @@ ___
 
 • **MAX_CLICK_DURATION**: *300* = 300
 
-*Defined in [core/src/MouseInteraction.ts:5](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L5)*
+*Defined in [packages/core/src/MouseInteraction.ts:6](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L6)*
 
 ___
 
@@ -406,7 +345,7 @@ ___
 
 • **MAX_ZOOM**: *5* = 5
 
-*Defined in [core/src/GraphVisualization.ts:20](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L20)*
+*Defined in [packages/core/src/GraphVisualization.ts:31](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L31)*
 
 ___
 
@@ -414,7 +353,7 @@ ___
 
 • **PAN_SPEED**: *1* = 1
 
-*Defined in [core/src/GraphVisualization.ts:21](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L21)*
+*Defined in [packages/core/src/GraphVisualization.ts:32](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L32)*
 
 ___
 
@@ -422,7 +361,9 @@ ___
 
 • **VERTICES_PER_QUAD**: *6* = 6
 
-*Defined in [core/src/Links.ts:16](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Links.ts#L16)*
+*Defined in [packages/core/src/Links.ts:12](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L12)*
+
+Constants
 
 ___
 
@@ -434,6 +375,7 @@ ___
 varying vec2 vUV;
 varying float vQuadLength;
 varying vec3 vColor;
+varying float vOpacity;
 varying float vArrowWidth;
 varying float vArrowOffset;
 varying float vDashGap;
@@ -479,16 +421,16 @@ void main() {
   );
   arrowMask -= aaStep(diagonalEdgeX, xFromCenter);
 
-  float mask = lineMask + arrowMask;
-
+  float mask = (lineMask + arrowMask) * vOpacity;
   gl_FragColor = vec4(vColor, mask);
 }
-"* =  `
+"* = `
 #define SQRT2OVER2 0.707107
 
 varying vec2 vUV;
 varying float vQuadLength;
 varying vec3 vColor;
+varying float vOpacity;
 varying float vArrowWidth;
 varying float vArrowOffset;
 varying float vDashGap;
@@ -534,13 +476,12 @@ void main() {
   );
   arrowMask -= aaStep(diagonalEdgeX, xFromCenter);
 
-  float mask = lineMask + arrowMask;
-
+  float mask = (lineMask + arrowMask) * vOpacity;
   gl_FragColor = vec4(vColor, mask);
 }
 `
 
-*Defined in [core/src/shaders/asText.ts:94](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/shaders/asText.ts#L94)*
+*Defined in [packages/core/src/shaders/asText.ts:97](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/shaders/asText.ts#L97)*
 
 ___
 
@@ -550,6 +491,7 @@ ___
 // attribute vec2 uv is automatic
 attribute float quadLength;
 attribute vec3 color;
+attribute float opacity;
 attribute float arrowWidth;
 attribute float arrowOffset;
 attribute float dashGap;
@@ -557,6 +499,7 @@ attribute float dashGap;
 varying vec2 vUV;
 varying float vQuadLength;
 varying vec3 vColor;
+varying float vOpacity;
 varying float vArrowWidth;
 varying float vArrowOffset;
 varying float vDashGap;
@@ -565,16 +508,18 @@ void main() {
     vUV = uv;
     vQuadLength = quadLength;
     vColor = color;
+    vOpacity = opacity;
     vArrowOffset = arrowOffset;
     vArrowWidth = arrowWidth;
     vDashGap = dashGap;
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 }
-"* =  `// attribute vec3 position is automatic
+"* = `// attribute vec3 position is automatic
 // attribute vec2 uv is automatic
 attribute float quadLength;
 attribute vec3 color;
+attribute float opacity;
 attribute float arrowWidth;
 attribute float arrowOffset;
 attribute float dashGap;
@@ -582,6 +527,7 @@ attribute float dashGap;
 varying vec2 vUV;
 varying float vQuadLength;
 varying vec3 vColor;
+varying float vOpacity;
 varying float vArrowWidth;
 varying float vArrowOffset;
 varying float vDashGap;
@@ -590,6 +536,7 @@ void main() {
     vUV = uv;
     vQuadLength = quadLength;
     vColor = color;
+    vOpacity = opacity;
     vArrowOffset = arrowOffset;
     vArrowWidth = arrowWidth;
     vDashGap = dashGap;
@@ -598,7 +545,7 @@ void main() {
 }
 `
 
-*Defined in [core/src/shaders/asText.ts:67](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/shaders/asText.ts#L67)*
+*Defined in [packages/core/src/shaders/asText.ts:67](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/shaders/asText.ts#L67)*
 
 ___
 
@@ -628,7 +575,7 @@ void main() {
     gl_FragColor.rgb = mix(vFill, vStroke, strokeMask);
     gl_FragColor.a = max(strokeMask * vStrokeOpacity, fillMask * vFillOpacity);
 }
-"* =  `
+"* = `
 #define SQRT_2 1.41421
 
 varying vec3 vFill;
@@ -654,7 +601,7 @@ void main() {
 }
 `
 
-*Defined in [core/src/shaders/asText.ts:41](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/shaders/asText.ts#L41)*
+*Defined in [packages/core/src/shaders/asText.ts:41](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/shaders/asText.ts#L41)*
 
 ___
 
@@ -698,7 +645,7 @@ void main() {
 
     gl_Position = projectionMatrix * mvPosition;
 }
-"* =  `
+"* = `
 uniform float globalScale;
 
 attribute vec3 fill;
@@ -738,15 +685,15 @@ void main() {
 }
 `
 
-*Defined in [core/src/shaders/asText.ts:1](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/shaders/asText.ts#L1)*
+*Defined in [packages/core/src/shaders/asText.ts:1](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/shaders/asText.ts#L1)*
 
 ___
 
 ### `Const` requiredMetadataKey
 
-• **requiredMetadataKey**: *unique symbol* =  Symbol('required')
+• **requiredMetadataKey**: *unique symbol* = Symbol('required')
 
-*Defined in [core/src/validators.ts:3](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/validators.ts#L3)*
+*Defined in [packages/core/src/validators.ts:3](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/validators.ts#L3)*
 
 ## Functions
 
@@ -754,7 +701,7 @@ ___
 
 ▸ **buildMaterial**(): *ShaderMaterial*
 
-*Defined in [core/src/Labels.ts:66](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L66)*
+*Defined in [packages/core/src/Labels.ts:64](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L64)*
 
 **Returns:** *ShaderMaterial*
 
@@ -764,7 +711,7 @@ ___
 
 ▸ **buildTexture**(`text`: string, `labelScale`: number): *[TextTexture](../interfaces/core.texttexture.md)*
 
-*Defined in [core/src/Labels.ts:13](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L13)*
+*Defined in [packages/core/src/Labels.ts:12](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L12)*
 
 **Parameters:**
 
@@ -781,7 +728,7 @@ ___
 
 ▸ **byPosition**(`a`: [Point](../interfaces/core.point.md), `b`: [Point](../interfaces/core.point.md)): *number*
 
-*Defined in [core/src/hullGeometryUtils.ts:15](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/hullGeometryUtils.ts#L15)*
+*Defined in [packages/core/src/hullGeometryUtils.ts:15](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/hullGeometryUtils.ts#L15)*
 
 predicate to sort two points by x and y coordinates
 
@@ -800,7 +747,7 @@ ___
 
 ▸ **calculateAbsoluteArrowOffset**(`link`: [PopulatedDisplayLink](../interfaces/core.populateddisplaylink.md)): *number*
 
-*Defined in [core/src/Links.ts:81](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Links.ts#L81)*
+*Defined in [packages/core/src/Links.ts:87](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L87)*
 
 **Parameters:**
 
@@ -816,7 +763,7 @@ ___
 
 ▸ **constructIdToIdxMap**(`arr`: Array‹object›): *object*
 
-*Defined in [core/src/GraphVisualization.ts:29](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L29)*
+*Defined in [packages/core/src/GraphVisualization.ts:40](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L40)*
 
 **Parameters:**
 
@@ -834,7 +781,7 @@ ___
 
 ▸ **cross**(`o`: [Point](../interfaces/core.point.md), `p`: [Point](../interfaces/core.point.md), `q`: [Point](../interfaces/core.point.md)): *number*
 
-*Defined in [core/src/hullGeometryUtils.ts:95](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/hullGeometryUtils.ts#L95)*
+*Defined in [packages/core/src/hullGeometryUtils.ts:95](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/hullGeometryUtils.ts#L95)*
 
 Returns the 2D cross product of OP and OQ vectors,
 i.e. z-component of their 3D cross product.
@@ -859,7 +806,7 @@ ___
 
 ▸ **findNormalViaIntersection**(`v1`: Vector2, `v2`: Vector2, `via`: Vector2): *Vector2*
 
-*Defined in [core/src/hullGeometryUtils.ts:317](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/hullGeometryUtils.ts#L317)*
+*Defined in [packages/core/src/hullGeometryUtils.ts:350](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/hullGeometryUtils.ts#L350)*
 
 Finds the intersection point P of:
  1. The vector V1→V2, and,
@@ -884,7 +831,7 @@ ___
 
 ▸ **get2DConvexHull**(`points`: [Point](../interfaces/core.point.md)[]): *[Point](../interfaces/core.point.md)[]*
 
-*Defined in [core/src/hullGeometryUtils.ts:33](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/hullGeometryUtils.ts#L33)*
+*Defined in [packages/core/src/hullGeometryUtils.ts:33](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/hullGeometryUtils.ts#L33)*
 
 Returns points on the convex hull of the given set of co-planar points.
 The convex hull excludes collinear points.
@@ -908,7 +855,7 @@ ___
 
 ▸ **getCapsulePolygon**(`nodeA`: [DisplayNode](../interfaces/core.displaynode.md), `nodeB`: [DisplayNode](../interfaces/core.displaynode.md), `padding`: number): *Vector2[]*
 
-*Defined in [core/src/hullGeometryUtils.ts:218](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/hullGeometryUtils.ts#L218)*
+*Defined in [packages/core/src/hullGeometryUtils.ts:253](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/hullGeometryUtils.ts#L253)*
 
 gets a bounding polygon in the shape of a capsule enclosing two nodes. 💊
 
@@ -928,7 +875,7 @@ ___
 
 ▸ **getCentroid**(`points`: [Point](../interfaces/core.point.md)[]): *[Point](../interfaces/core.point.md)*
 
-*Defined in [core/src/hullGeometryUtils.ts:290](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/hullGeometryUtils.ts#L290)*
+*Defined in [packages/core/src/hullGeometryUtils.ts:323](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/hullGeometryUtils.ts#L323)*
 
 gets the centroid of a given list of points
 
@@ -946,7 +893,7 @@ ___
 
 ▸ **getCircularHull**(`points`: [Point](../interfaces/core.point.md)[]): *object*
 
-*Defined in [core/src/hullGeometryUtils.ts:265](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/hullGeometryUtils.ts#L265)*
+*Defined in [packages/core/src/hullGeometryUtils.ts:298](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/hullGeometryUtils.ts#L298)*
 
 gets the circular hull of a given list of points
 
@@ -968,7 +915,7 @@ ___
 
 ▸ **getDistance**(`a`: [Point](../interfaces/core.point.md), `b`: [Point](../interfaces/core.point.md)): *number*
 
-*Defined in [core/src/hullGeometryUtils.ts:302](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/hullGeometryUtils.ts#L302)*
+*Defined in [packages/core/src/hullGeometryUtils.ts:335](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/hullGeometryUtils.ts#L335)*
 
 gets the distance between two points
 
@@ -987,7 +934,7 @@ ___
 
 ▸ **getRoundedOffsetPolygon**(`nodes`: [DisplayNode](../interfaces/core.displaynode.md)[], `padding`: number): *Vector2[]*
 
-*Defined in [core/src/hullGeometryUtils.ts:125](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/hullGeometryUtils.ts#L125)*
+*Defined in [packages/core/src/hullGeometryUtils.ts:125](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/hullGeometryUtils.ts#L125)*
 
 Gets the rounded offset polygon.
 ---------------------------------
@@ -1026,7 +973,7 @@ ___
 
 ▸ **populateLinks**(`graphData`: [VisualizationInputData](../interfaces/core.visualizationinputdata.md), `nodeIdToIdxMap`: object): *[PopulatedDisplayLink](../interfaces/core.populateddisplaylink.md)[]*
 
-*Defined in [core/src/Links.ts:70](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Links.ts#L70)*
+*Defined in [packages/core/src/Links.ts:76](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L76)*
 
 **Parameters:**
 
@@ -1041,15 +988,15 @@ ___
 
 ###  required
 
-▸ **required**(`target`: Object, `propertyKey`: string | symbol, `parameterIndex`: number): *void*
+▸ **required**(`target`: Record‹string, any›, `propertyKey`: string | symbol, `parameterIndex`: number): *void*
 
-*Defined in [core/src/validators.ts:5](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/validators.ts#L5)*
+*Defined in [packages/core/src/validators.ts:5](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/validators.ts#L5)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`target` | Object |
+`target` | Record‹string, any› |
 `propertyKey` | string &#124; symbol |
 `parameterIndex` | number |
 
@@ -1061,7 +1008,7 @@ ___
 
 ▸ **setMeshTexture**(`mesh`: Mesh, `texture`: [TextTexture](../interfaces/core.texttexture.md)): *void*
 
-*Defined in [core/src/Labels.ts:99](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L99)*
+*Defined in [packages/core/src/Labels.ts:97](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L97)*
 
 **Parameters:**
 
@@ -1078,7 +1025,7 @@ ___
 
 ▸ **validate**(`target`: any, `propertyName`: string, `descriptor`: TypedPropertyDescriptor‹Function›): *void*
 
-*Defined in [core/src/validators.ts:22](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/validators.ts#L22)*
+*Defined in [packages/core/src/validators.ts:22](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/validators.ts#L22)*
 
 **Parameters:**
 
@@ -1096,7 +1043,7 @@ ___
 
 ▸ **validateClassConstructor**<**T**>(`target`: T): *any*
 
-*Defined in [core/src/validators.ts:53](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/validators.ts#L53)*
+*Defined in [packages/core/src/validators.ts:53](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/validators.ts#L53)*
 
 **Type parameters:**
 
@@ -1116,11 +1063,11 @@ Name | Type |
 
 ### ▪ **DATA**: *object*
 
-*Defined in [core/src/GraphVisualization.test.ts:6](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.test.ts#L6)*
+*Defined in [packages/core/src/GraphVisualization.test.ts:6](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.test.ts#L6)*
 
 ###  groups
 
-• **groups**: *object[]* =  [
+• **groups**: *object[]* = [
     {
       id: 'c2',
       visible: true,
@@ -1128,22 +1075,22 @@ Name | Type |
     },
   ]
 
-*Defined in [core/src/GraphVisualization.test.ts:21](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.test.ts#L21)*
+*Defined in [packages/core/src/GraphVisualization.test.ts:21](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.test.ts#L21)*
 
 ###  links
 
-• **links**: *object[]* =  [
+• **links**: *object[]* = [
     {source: '1', target: '2'},
     {source: '3', target: '4'},
     {source: '3', target: '5'},
     {source: '3', target: '6'},
   ]
 
-*Defined in [core/src/GraphVisualization.test.ts:15](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.test.ts#L15)*
+*Defined in [packages/core/src/GraphVisualization.test.ts:15](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.test.ts#L15)*
 
 ###  nodes
 
-• **nodes**: *[DisplayNode](../interfaces/core.displaynode.md)[]* =  [
+• **nodes**: *[DisplayNode](../interfaces/core.displaynode.md)[]* = [
     {id: '1', fill: 'coral'},
     {id: '2', fill: 'orange'},
     {id: '3', displayGroupIds: ['c2'], fill: 'blue'},
@@ -1152,7 +1099,7 @@ Name | Type |
     {id: '6', displayGroupIds: ['c2'], fill: 'green'},
   ] as DisplayNode[]
 
-*Defined in [core/src/GraphVisualization.test.ts:7](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.test.ts#L7)*
+*Defined in [packages/core/src/GraphVisualization.test.ts:7](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.test.ts#L7)*
 
 ___
 
@@ -1160,40 +1107,224 @@ ___
 
 ### ▪ **DEFAULT_CONFIG_OPTIONS**: *object*
 
-*Defined in [core/src/GraphVisualization.ts:38](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L38)*
+*Defined in [packages/core/src/GraphVisualization.ts:63](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L63)*
 
-###  disableClick
+###  groups
 
-• **disableClick**: *boolean* = false
+• **groups**: *object* = GROUP_DEFAULTS
 
-*Defined in [core/src/GraphVisualization.ts:39](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L39)*
+*Defined in [packages/core/src/GraphVisualization.ts:66](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L66)*
 
-###  disableDrag
+#### Type declaration:
 
-• **disableDrag**: *boolean* = false
+###  links
 
-*Defined in [core/src/GraphVisualization.ts:43](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L43)*
+• **links**: *object* = LINK_DEFAULTS
 
-###  disableHover
+*Defined in [packages/core/src/GraphVisualization.ts:65](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L65)*
 
-• **disableHover**: *boolean* = false
+#### Type declaration:
 
-*Defined in [core/src/GraphVisualization.ts:40](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L40)*
+* **arrowWidth**: *number* = 10
 
-###  disablePan
+* **color**: *string* = "#cccccc"
 
-• **disablePan**: *boolean* = false
+* **dashed**: *boolean* = false
 
-*Defined in [core/src/GraphVisualization.ts:41](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L41)*
+* **directed**: *boolean* = false
 
-###  disableSecondaryClick
+* **labelScale**: *number* = 1
 
-• **disableSecondaryClick**: *boolean* = false
+* **opacity**: *number* = 1
 
-*Defined in [core/src/GraphVisualization.ts:44](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L44)*
+###  nodes
 
-###  disableZoom
+• **nodes**: *object* = NODE_DEFAULTS
 
-• **disableZoom**: *boolean* = false
+*Defined in [packages/core/src/GraphVisualization.ts:64](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L64)*
 
-*Defined in [core/src/GraphVisualization.ts:42](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L42)*
+#### Type declaration:
+
+* **absoluteSize**: *number* = 20
+
+* **fill**: *string* = "#333333"
+
+* **fillOpacity**: *number* = 1
+
+* **innerRadius**: *number* = 0.2
+
+* **scale**: *number* = 1
+
+* **stroke**: *string* = "#333333"
+
+* **strokeOpacity**: *number* = 1
+
+* **strokeWidth**: *number* = 0
+
+▪ **events**: *object*
+
+*Defined in [packages/core/src/GraphVisualization.ts:67](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L67)*
+
+* **disableClick**: *boolean* = false
+
+* **disableDrag**: *boolean* = false
+
+* **disableHover**: *boolean* = false
+
+* **disablePan**: *boolean* = false
+
+* **disableSecondaryClick**: *boolean* = false
+
+* **disableZoom**: *boolean* = false
+
+___
+
+### `Const` GROUP_DEFAULTS
+
+### ▪ **GROUP_DEFAULTS**: *object*
+
+*Defined in [packages/core/src/DisplayGroups.ts:46](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/DisplayGroups.ts#L46)*
+
+###  fill
+
+• **fill**: *string* = "#000000"
+
+*Defined in [packages/core/src/DisplayGroups.ts:49](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/DisplayGroups.ts#L49)*
+
+###  fillOpacity
+
+• **fillOpacity**: *number* = 0.09
+
+*Defined in [packages/core/src/DisplayGroups.ts:50](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/DisplayGroups.ts#L50)*
+
+###  padding
+
+• **padding**: *number* = 0
+
+*Defined in [packages/core/src/DisplayGroups.ts:51](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/DisplayGroups.ts#L51)*
+
+###  shape
+
+• **shape**: *"convexHull"* = "convexHull"
+
+*Defined in [packages/core/src/DisplayGroups.ts:47](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/DisplayGroups.ts#L47)*
+
+###  visible
+
+• **visible**: *false* = false
+
+*Defined in [packages/core/src/DisplayGroups.ts:48](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/DisplayGroups.ts#L48)*
+
+___
+
+### `Const` LABEL_DEFAULTS
+
+### ▪ **LABEL_DEFAULTS**: *object*
+
+*Defined in [packages/core/src/Labels.ts:126](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L126)*
+
+###  scale
+
+• **scale**: *number* = 1
+
+*Defined in [packages/core/src/Labels.ts:127](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L127)*
+
+___
+
+### `Const` LINK_DEFAULTS
+
+### ▪ **LINK_DEFAULTS**: *object*
+
+*Defined in [packages/core/src/Links.ts:67](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L67)*
+
+###  arrowWidth
+
+• **arrowWidth**: *number* = 10
+
+*Defined in [packages/core/src/Links.ts:72](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L72)*
+
+###  color
+
+• **color**: *string* = "#cccccc"
+
+*Defined in [packages/core/src/Links.ts:70](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L70)*
+
+###  dashed
+
+• **dashed**: *boolean* = false
+
+*Defined in [packages/core/src/Links.ts:69](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L69)*
+
+###  directed
+
+• **directed**: *boolean* = false
+
+*Defined in [packages/core/src/Links.ts:68](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L68)*
+
+###  labelScale
+
+• **labelScale**: *number* = 1
+
+*Defined in [packages/core/src/Links.ts:73](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L73)*
+
+###  opacity
+
+• **opacity**: *number* = 1
+
+*Defined in [packages/core/src/Links.ts:71](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L71)*
+
+___
+
+### `Const` NODE_DEFAULTS
+
+### ▪ **NODE_DEFAULTS**: *object*
+
+*Defined in [packages/core/src/Nodes.ts:86](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L86)*
+
+###  absoluteSize
+
+• **absoluteSize**: *number* = 20
+
+*Defined in [packages/core/src/Nodes.ts:87](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L87)*
+
+###  fill
+
+• **fill**: *string* = "#333333"
+
+*Defined in [packages/core/src/Nodes.ts:89](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L89)*
+
+###  fillOpacity
+
+• **fillOpacity**: *number* = 1
+
+*Defined in [packages/core/src/Nodes.ts:90](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L90)*
+
+###  innerRadius
+
+• **innerRadius**: *number* = 0.2
+
+*Defined in [packages/core/src/Nodes.ts:88](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L88)*
+
+###  scale
+
+• **scale**: *number* = 1
+
+*Defined in [packages/core/src/Nodes.ts:91](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L91)*
+
+###  stroke
+
+• **stroke**: *string* = "#333333"
+
+*Defined in [packages/core/src/Nodes.ts:92](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L92)*
+
+###  strokeOpacity
+
+• **strokeOpacity**: *number* = 1
+
+*Defined in [packages/core/src/Nodes.ts:94](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L94)*
+
+###  strokeWidth
+
+• **strokeWidth**: *number* = 0
+
+*Defined in [packages/core/src/Nodes.ts:93](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L93)*

@@ -8,7 +8,7 @@ sidebar_label: "Globals"
 
 ## Index
 
-### External modules
+### Modules
 
 * [core](modules/core.md)
 * [layouts](modules/layouts.md)

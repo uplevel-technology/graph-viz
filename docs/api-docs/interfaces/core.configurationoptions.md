@@ -14,57 +14,53 @@ sidebar_label: "ConfigurationOptions"
 
 ### Properties
 
-* [disableClick](core.configurationoptions.md#optional-disableclick)
-* [disableDrag](core.configurationoptions.md#optional-disabledrag)
-* [disableHover](core.configurationoptions.md#optional-disablehover)
-* [disablePan](core.configurationoptions.md#optional-disablepan)
-* [disableSecondaryClick](core.configurationoptions.md#optional-disablesecondaryclick)
-* [disableZoom](core.configurationoptions.md#optional-disablezoom)
+* [events](core.configurationoptions.md#events)
+* [groups](core.configurationoptions.md#groups)
+* [links](core.configurationoptions.md#links)
+* [nodes](core.configurationoptions.md#nodes)
 
 ## Properties
 
-### `Optional` disableClick
+###  events
 
-• **disableClick**? : *undefined | false | true*
+• **events**: *object*
 
-*Defined in [core/src/GraphVisualization.ts:48](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L48)*
+*Defined in [packages/core/src/GraphVisualization.ts:53](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L53)*
 
-___
+#### Type declaration:
 
-### `Optional` disableDrag
+* **disableClick**? : *undefined | false | true*
 
-• **disableDrag**? : *undefined | false | true*
+* **disableDrag**? : *undefined | false | true*
 
-*Defined in [core/src/GraphVisualization.ts:52](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L52)*
+* **disableHover**? : *undefined | false | true*
 
-___
+* **disablePan**? : *undefined | false | true*
 
-### `Optional` disableHover
+* **disableSecondaryClick**? : *undefined | false | true*
 
-• **disableHover**? : *undefined | false | true*
-
-*Defined in [core/src/GraphVisualization.ts:49](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L49)*
+* **disableZoom**? : *undefined | false | true*
 
 ___
 
-### `Optional` disablePan
+###  groups
 
-• **disablePan**? : *undefined | false | true*
+• **groups**: *[GroupStyleAttributes](core.groupstyleattributes.md)*
 
-*Defined in [core/src/GraphVisualization.ts:50](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L50)*
-
-___
-
-### `Optional` disableSecondaryClick
-
-• **disableSecondaryClick**? : *undefined | false | true*
-
-*Defined in [core/src/GraphVisualization.ts:53](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L53)*
+*Defined in [packages/core/src/GraphVisualization.ts:52](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L52)*
 
 ___
 
-### `Optional` disableZoom
+###  links
 
-• **disableZoom**? : *undefined | false | true*
+• **links**: *[LinkStyleAttributes](core.linkstyleattributes.md)*
 
-*Defined in [core/src/GraphVisualization.ts:51](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L51)*
+*Defined in [packages/core/src/GraphVisualization.ts:51](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L51)*
+
+___
+
+###  nodes
+
+• **nodes**: *[NodeStyleAttributes](core.nodestyleattributes.md)*
+
+*Defined in [packages/core/src/GraphVisualization.ts:50](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L50)*

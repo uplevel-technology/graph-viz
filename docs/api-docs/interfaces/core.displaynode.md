@@ -8,7 +8,9 @@ sidebar_label: "DisplayNode"
 
 ## Hierarchy
 
-* **DisplayNode**
+* [NodeStyleAttributes](core.nodestyleattributes.md)
+
+  ↳ **DisplayNode**
 
 ## Index
 
@@ -34,7 +36,9 @@ sidebar_label: "DisplayNode"
 
 • **absoluteSize**? : *undefined | number*
 
-*Defined in [core/src/Nodes.ts:47](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L47)*
+*Inherited from [NodeStyleAttributes](core.nodestyleattributes.md).[absoluteSize](core.nodestyleattributes.md#optional-absolutesize)*
+
+*Defined in [packages/core/src/Nodes.ts:25](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L25)*
 
 the absolute side in pixels of the bounding square container of the node
 (default is 20 pixels)
@@ -45,7 +49,7 @@ ___
 
 • **disableInteractions**? : *undefined | false | true*
 
-*Defined in [core/src/Nodes.ts:83](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L83)*
+*Defined in [packages/core/src/Nodes.ts:83](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L83)*
 
 disables interactions on this node if set
 (default is false)
@@ -57,7 +61,7 @@ ___
 
 • **displayGroupIds**? : *string[]*
 
-*Defined in [core/src/Nodes.ts:19](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L19)*
+*Defined in [packages/core/src/Nodes.ts:66](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L66)*
 
 optional display group IDs
 
@@ -65,12 +69,14 @@ ___
 
 ### `Optional` fill
 
-• **fill**? : *number | string*
+• **fill**? : *undefined | string*
 
-*Defined in [core/src/Nodes.ts:35](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L35)*
+*Inherited from [NodeStyleAttributes](core.nodestyleattributes.md).[fill](core.nodestyleattributes.md#optional-fill)*
 
-node fill color hex string or hex number
-(default is 0x333333)
+*Defined in [packages/core/src/Nodes.ts:13](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L13)*
+
+node fill color hex string
+(default is #333333)
 
 ___
 
@@ -78,7 +84,9 @@ ___
 
 • **fillOpacity**? : *undefined | number*
 
-*Defined in [core/src/Nodes.ts:41](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L41)*
+*Inherited from [NodeStyleAttributes](core.nodestyleattributes.md).[fillOpacity](core.nodestyleattributes.md#optional-fillopacity)*
+
+*Defined in [packages/core/src/Nodes.ts:19](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L19)*
 
 relative node fill opacity
 (must be between 0.0 - 1.0)
@@ -89,7 +97,7 @@ ___
 
 • **id**: *string*
 
-*Defined in [core/src/Nodes.ts:14](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L14)*
+*Defined in [packages/core/src/Nodes.ts:61](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L61)*
 
 Unique node id
 
@@ -99,7 +107,9 @@ ___
 
 • **innerRadius**? : *undefined | number*
 
-*Defined in [core/src/Nodes.ts:59](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L59)*
+*Inherited from [NodeStyleAttributes](core.nodestyleattributes.md).[innerRadius](core.nodestyleattributes.md#optional-innerradius)*
+
+*Defined in [packages/core/src/Nodes.ts:37](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L37)*
 
 inner radius of the node circle relative to the absolute container size
 (must be between 0.0 to 1.0). (default is 0.2)
@@ -110,7 +120,9 @@ ___
 
 • **scale**? : *undefined | number*
 
-*Defined in [core/src/Nodes.ts:53](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L53)*
+*Inherited from [NodeStyleAttributes](core.nodestyleattributes.md).[scale](core.nodestyleattributes.md#optional-scale)*
+
+*Defined in [packages/core/src/Nodes.ts:31](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L31)*
 
 node container's scale factor
 (default is 1.0)
@@ -119,11 +131,13 @@ ___
 
 ### `Optional` stroke
 
-• **stroke**? : *number | string*
+• **stroke**? : *undefined | string*
 
-*Defined in [core/src/Nodes.ts:64](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L64)*
+*Inherited from [NodeStyleAttributes](core.nodestyleattributes.md).[stroke](core.nodestyleattributes.md#optional-stroke)*
 
-node strike color hex string or hex number
+*Defined in [packages/core/src/Nodes.ts:42](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L42)*
+
+node strike color hex string
 
 ___
 
@@ -131,7 +145,9 @@ ___
 
 • **strokeOpacity**? : *undefined | number*
 
-*Defined in [core/src/Nodes.ts:70](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L70)*
+*Inherited from [NodeStyleAttributes](core.nodestyleattributes.md).[strokeOpacity](core.nodestyleattributes.md#optional-strokeopacity)*
+
+*Defined in [packages/core/src/Nodes.ts:48](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L48)*
 
 relative node stroke opacity
 (must be between 0.0 - 1.0)
@@ -142,7 +158,9 @@ ___
 
 • **strokeWidth**? : *undefined | number*
 
-*Defined in [core/src/Nodes.ts:76](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L76)*
+*Inherited from [NodeStyleAttributes](core.nodestyleattributes.md).[strokeWidth](core.nodestyleattributes.md#optional-strokewidth)*
+
+*Defined in [packages/core/src/Nodes.ts:54](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L54)*
 
 relative node stroke width
 (This width is relative to the node container. Must be between 0.0 to 1.0)
@@ -153,7 +171,7 @@ ___
 
 • **x**: *number*
 
-*Defined in [core/src/Nodes.ts:24](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L24)*
+*Defined in [packages/core/src/Nodes.ts:71](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L71)*
 
 x coordinate of the node position
 
@@ -163,6 +181,6 @@ ___
 
 • **y**: *number*
 
-*Defined in [core/src/Nodes.ts:29](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Nodes.ts#L29)*
+*Defined in [packages/core/src/Nodes.ts:76](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Nodes.ts#L76)*
 
 y position of the node position

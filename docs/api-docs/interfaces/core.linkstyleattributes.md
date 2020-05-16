@@ -22,8 +22,8 @@ sidebar_label: "LinkStyleAttributes"
 * [color](core.linkstyleattributes.md#optional-color)
 * [dashed](core.linkstyleattributes.md#optional-dashed)
 * [directed](core.linkstyleattributes.md#optional-directed)
-* [label](core.linkstyleattributes.md#optional-label)
 * [labelScale](core.linkstyleattributes.md#optional-labelscale)
+* [opacity](core.linkstyleattributes.md#optional-opacity)
 
 ## Properties
 
@@ -31,7 +31,7 @@ sidebar_label: "LinkStyleAttributes"
 
 • **arrowWidth**? : *undefined | number*
 
-*Defined in [core/src/Links.ts:46](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Links.ts#L46)*
+*Defined in [packages/core/src/Links.ts:40](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L40)*
 
 arrow width in pixels
 
@@ -39,11 +39,11 @@ ___
 
 ### `Optional` color
 
-• **color**? : *string | number*
+• **color**? : *undefined | string*
 
-*Defined in [core/src/Links.ts:41](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Links.ts#L41)*
+*Defined in [packages/core/src/Links.ts:29](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L29)*
 
-hex color string or hex number
+hex color string
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 • **dashed**? : *undefined | false | true*
 
-*Defined in [core/src/Links.ts:36](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Links.ts#L36)*
+*Defined in [packages/core/src/Links.ts:24](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L24)*
 
 determine whether the line should be dashed
 
@@ -61,19 +61,9 @@ ___
 
 • **directed**? : *undefined | false | true*
 
-*Defined in [core/src/Links.ts:31](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Links.ts#L31)*
+*Defined in [packages/core/src/Links.ts:19](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L19)*
 
 determines whether an arrow is drawn on the link
-
-___
-
-### `Optional` label
-
-• **label**? : *undefined | string*
-
-*Defined in [core/src/Links.ts:51](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Links.ts#L51)*
-
-text to display
 
 ___
 
@@ -81,7 +71,18 @@ ___
 
 • **labelScale**? : *undefined | number*
 
-*Defined in [core/src/Links.ts:57](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Links.ts#L57)*
+*Defined in [packages/core/src/Links.ts:46](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L46)*
 
 relative scale of the label.
 default is 1.0
+
+___
+
+### `Optional` opacity
+
+• **opacity**? : *undefined | number*
+
+*Defined in [packages/core/src/Links.ts:35](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Links.ts#L35)*
+
+link opacity between 0 and 1
+default is 1

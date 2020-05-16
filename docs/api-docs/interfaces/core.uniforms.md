@@ -24,7 +24,7 @@ sidebar_label: "Uniforms"
 
 • **map**: *object*
 
-*Defined in [core/src/Labels.ts:61](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L61)*
+*Defined in [packages/core/src/Labels.ts:59](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L59)*
 
 #### Type declaration:
 
@@ -36,7 +36,7 @@ ___
 
 • **offset**: *object*
 
-*Defined in [core/src/Labels.ts:62](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L62)*
+*Defined in [packages/core/src/Labels.ts:60](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L60)*
 
 #### Type declaration:
 
@@ -48,7 +48,7 @@ ___
 
 • **repeat**: *object*
 
-*Defined in [core/src/Labels.ts:63](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L63)*
+*Defined in [packages/core/src/Labels.ts:61](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L61)*
 
 #### Type declaration:
 

@@ -29,7 +29,7 @@ sidebar_label: "TooltipNode"
 
 *Inherited from [TooltipFields](react.tooltipfields.md).[displayName](react.tooltipfields.md#displayname)*
 
-*Defined in [react/src/NodeTooltips.tsx:6](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/NodeTooltips.tsx#L6)*
+*Defined in [packages/react/src/NodeTooltips.tsx:6](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/NodeTooltips.tsx#L6)*
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 *Inherited from [TooltipFields](react.tooltipfields.md).[id](react.tooltipfields.md#id)*
 
-*Defined in [react/src/NodeTooltips.tsx:5](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/NodeTooltips.tsx#L5)*
+*Defined in [packages/react/src/NodeTooltips.tsx:5](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/NodeTooltips.tsx#L5)*
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 • **screenX**: *number*
 
-*Defined in [react/src/NodeTooltips.tsx:10](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/NodeTooltips.tsx#L10)*
+*Defined in [packages/react/src/NodeTooltips.tsx:10](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/NodeTooltips.tsx#L10)*
 
 ___
 
@@ -55,4 +55,4 @@ ___
 
 • **screenY**: *number*
 
-*Defined in [react/src/NodeTooltips.tsx:11](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/NodeTooltips.tsx#L11)*
+*Defined in [packages/react/src/NodeTooltips.tsx:11](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/NodeTooltips.tsx#L11)*

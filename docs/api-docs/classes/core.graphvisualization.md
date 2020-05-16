@@ -18,18 +18,19 @@ sidebar_label: "GraphVisualization"
 
 ### Properties
 
-* [camera](core.graphvisualization.md#camera)
-* [canvas](core.graphvisualization.md#canvas)
+* [camera](core.graphvisualization.md#readonly-camera)
+* [canvas](core.graphvisualization.md#readonly-canvas)
+* [config](core.graphvisualization.md#private-config)
 * [data](core.graphvisualization.md#private-data)
 * [groupsMesh](core.graphvisualization.md#groupsmesh)
 * [height](core.graphvisualization.md#private-height)
 * [linksMesh](core.graphvisualization.md#linksmesh)
-* [mouseInteraction](core.graphvisualization.md#private-mouseinteraction)
+* [mouseInteraction](core.graphvisualization.md#private-readonly-mouseinteraction)
 * [nodeIdToIndexMap](core.graphvisualization.md#private-nodeidtoindexmap)
 * [nodesMesh](core.graphvisualization.md#nodesmesh)
 * [registeredEventHandlers](core.graphvisualization.md#private-registeredeventhandlers)
-* [renderer](core.graphvisualization.md#private-renderer)
-* [scene](core.graphvisualization.md#private-scene)
+* [renderer](core.graphvisualization.md#private-readonly-renderer)
+* [scene](core.graphvisualization.md#private-readonly-scene)
 * [userHasAdjustedViewport](core.graphvisualization.md#private-userhasadjustedviewport)
 * [width](core.graphvisualization.md#private-width)
 
@@ -58,6 +59,7 @@ sidebar_label: "GraphVisualization"
 * [resize](core.graphvisualization.md#resize)
 * [toScreenSpacePoint](core.graphvisualization.md#toscreenspacepoint)
 * [update](core.graphvisualization.md#update)
+* [updateConfig](core.graphvisualization.md#updateconfig)
 * [updateGroups](core.graphvisualization.md#updategroups)
 * [updateNode](core.graphvisualization.md#updatenode)
 * [updatePositions](core.graphvisualization.md#updatepositions)
@@ -70,7 +72,7 @@ sidebar_label: "GraphVisualization"
 
 \+ **new GraphVisualization**(`graphData`: [VisualizationInputData](../interfaces/core.visualizationinputdata.md), `canvas`: HTMLCanvasElement, `width`: number, `height`: number, `config`: [ConfigurationOptions](../interfaces/core.configurationoptions.md)): *[GraphVisualization](core.graphvisualization.md)*
 
-*Defined in [core/src/GraphVisualization.ts:86](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L86)*
+*Defined in [packages/core/src/GraphVisualization.ts:108](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L108)*
 
 **Parameters:**
 
@@ -80,25 +82,33 @@ Name | Type | Default |
 `canvas` | HTMLCanvasElement | - |
 `width` | number | - |
 `height` | number | - |
-`config` | [ConfigurationOptions](../interfaces/core.configurationoptions.md) |  {} |
+`config` | [ConfigurationOptions](../interfaces/core.configurationoptions.md) | DEFAULT_CONFIG_OPTIONS |
 
 **Returns:** *[GraphVisualization](core.graphvisualization.md)*
 
 ## Properties
 
-###  camera
+### `Readonly` camera
 
 • **camera**: *OrthographicCamera*
 
-*Defined in [core/src/GraphVisualization.ts:63](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L63)*
+*Defined in [packages/core/src/GraphVisualization.ts:84](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L84)*
 
 ___
 
-###  canvas
+### `Readonly` canvas
 
 • **canvas**: *HTMLCanvasElement*
 
-*Defined in [core/src/GraphVisualization.ts:62](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L62)*
+*Defined in [packages/core/src/GraphVisualization.ts:83](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L83)*
+
+___
+
+### `Private` config
+
+• **config**: *[ConfigurationOptions](../interfaces/core.configurationoptions.md)* = DEFAULT_CONFIG_OPTIONS
+
+*Defined in [packages/core/src/GraphVisualization.ts:108](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L108)*
 
 ___
 
@@ -106,7 +116,7 @@ ___
 
 • **data**: *[VisualizationInputData](../interfaces/core.visualizationinputdata.md)*
 
-*Defined in [core/src/GraphVisualization.ts:65](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L65)*
+*Defined in [packages/core/src/GraphVisualization.ts:86](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L86)*
 
 ___
 
@@ -114,7 +124,7 @@ ___
 
 • **groupsMesh**: *[DisplayGroups](core.displaygroups.md)*
 
-*Defined in [core/src/GraphVisualization.ts:60](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L60)*
+*Defined in [packages/core/src/GraphVisualization.ts:81](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L81)*
 
 ___
 
@@ -122,7 +132,7 @@ ___
 
 • **height**: *number*
 
-*Defined in [core/src/GraphVisualization.ts:82](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L82)*
+*Defined in [packages/core/src/GraphVisualization.ts:103](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L103)*
 
 ___
 
@@ -130,15 +140,15 @@ ___
 
 • **linksMesh**: *[Links](core.links.md)*
 
-*Defined in [core/src/GraphVisualization.ts:59](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L59)*
+*Defined in [packages/core/src/GraphVisualization.ts:80](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L80)*
 
 ___
 
-### `Private` mouseInteraction
+### `Private` `Readonly` mouseInteraction
 
 • **mouseInteraction**: *[MouseInteraction](core.mouseinteraction.md)*
 
-*Defined in [core/src/GraphVisualization.ts:86](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L86)*
+*Defined in [packages/core/src/GraphVisualization.ts:107](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L107)*
 
 ___
 
@@ -146,7 +156,7 @@ ___
 
 • **nodeIdToIndexMap**: *object*
 
-*Defined in [core/src/GraphVisualization.ts:66](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L66)*
+*Defined in [packages/core/src/GraphVisualization.ts:87](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L87)*
 
 #### Type declaration:
 
@@ -158,7 +168,7 @@ ___
 
 • **nodesMesh**: *[Nodes](core.nodes.md)*
 
-*Defined in [core/src/GraphVisualization.ts:58](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L58)*
+*Defined in [packages/core/src/GraphVisualization.ts:79](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L79)*
 
 ___
 
@@ -166,7 +176,7 @@ ___
 
 • **registeredEventHandlers**: *object*
 
-*Defined in [core/src/GraphVisualization.ts:69](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L69)*
+*Defined in [packages/core/src/GraphVisualization.ts:90](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L90)*
 
 #### Type declaration:
 
@@ -190,19 +200,19 @@ ___
 
 ___
 
-### `Private` renderer
+### `Private` `Readonly` renderer
 
 • **renderer**: *WebGLRenderer*
 
-*Defined in [core/src/GraphVisualization.ts:85](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L85)*
+*Defined in [packages/core/src/GraphVisualization.ts:106](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L106)*
 
 ___
 
-### `Private` scene
+### `Private` `Readonly` scene
 
 • **scene**: *Scene*
 
-*Defined in [core/src/GraphVisualization.ts:84](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L84)*
+*Defined in [packages/core/src/GraphVisualization.ts:105](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L105)*
 
 ___
 
@@ -210,7 +220,7 @@ ___
 
 • **userHasAdjustedViewport**: *boolean*
 
-*Defined in [core/src/GraphVisualization.ts:67](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L67)*
+*Defined in [packages/core/src/GraphVisualization.ts:88](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L88)*
 
 ___
 
@@ -218,7 +228,7 @@ ___
 
 • **width**: *number*
 
-*Defined in [core/src/GraphVisualization.ts:81](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L81)*
+*Defined in [packages/core/src/GraphVisualization.ts:102](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L102)*
 
 ## Methods
 
@@ -226,7 +236,7 @@ ___
 
 ▸ **dispose**(): *void*
 
-*Defined in [core/src/GraphVisualization.ts:371](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L371)*
+*Defined in [packages/core/src/GraphVisualization.ts:439](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L439)*
 
 disposes the graph viz context
 
@@ -238,7 +248,7 @@ ___
 
 ▸ **handleClick**(`worldSpaceMouse`: Vector3, `clickedNodeIdx`: number | null, `event`: MouseEvent): *void*
 
-*Defined in [core/src/GraphVisualization.ts:513](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L513)*
+*Defined in [packages/core/src/GraphVisualization.ts:583](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L583)*
 
 **Parameters:**
 
@@ -256,7 +266,7 @@ ___
 
 ▸ **handleDragEnd**(`worldSpaceMouse`: Vector3, `nodeIdx`: number, `event`: MouseEvent): *void*
 
-*Defined in [core/src/GraphVisualization.ts:465](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L465)*
+*Defined in [packages/core/src/GraphVisualization.ts:535](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L535)*
 
 **Parameters:**
 
@@ -274,7 +284,7 @@ ___
 
 ▸ **handleDragStart**(`worldSpaceMouse`: Vector3, `draggedNodeIdx`: number | null, `event`: MouseEvent): *void*
 
-*Defined in [core/src/GraphVisualization.ts:439](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L439)*
+*Defined in [packages/core/src/GraphVisualization.ts:509](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L509)*
 
 **Parameters:**
 
@@ -292,7 +302,7 @@ ___
 
 ▸ **handleHoverIn**(`hoveredToNodeIdx`: number): *void*
 
-*Defined in [core/src/GraphVisualization.ts:423](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L423)*
+*Defined in [packages/core/src/GraphVisualization.ts:493](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L493)*
 
 **Parameters:**
 
@@ -308,7 +318,7 @@ ___
 
 ▸ **handleHoverOut**(`hoveredFromNodeIdx`: number): *void*
 
-*Defined in [core/src/GraphVisualization.ts:431](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L431)*
+*Defined in [packages/core/src/GraphVisualization.ts:501](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L501)*
 
 **Parameters:**
 
@@ -324,7 +334,7 @@ ___
 
 ▸ **handleNodeDrag**(`worldSpaceMouse`: Vector3, `draggedNodeIdx`: number): *void*
 
-*Defined in [core/src/GraphVisualization.ts:455](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L455)*
+*Defined in [packages/core/src/GraphVisualization.ts:525](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L525)*
 
 **Parameters:**
 
@@ -341,7 +351,7 @@ ___
 
 ▸ **handlePan**(`panDelta`: Vector3): *void*
 
-*Defined in [core/src/GraphVisualization.ts:475](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L475)*
+*Defined in [packages/core/src/GraphVisualization.ts:545](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L545)*
 
 **Parameters:**
 
@@ -357,7 +367,7 @@ ___
 
 ▸ **handleSecondaryClick**(`event`: MouseEvent, `clickedNodeIdx`: number | null): *void*
 
-*Defined in [core/src/GraphVisualization.ts:526](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L526)*
+*Defined in [packages/core/src/GraphVisualization.ts:596](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L596)*
 
 **Parameters:**
 
@@ -374,7 +384,7 @@ ___
 
 ▸ **handleZoomOnWheel**(`event`: MouseWheelEvent): *void*
 
-*Defined in [core/src/GraphVisualization.ts:497](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L497)*
+*Defined in [packages/core/src/GraphVisualization.ts:567](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L567)*
 
 **Parameters:**
 
@@ -390,7 +400,7 @@ ___
 
 ▸ **onClick**(`callback`: [ClickEventHandler](../modules/core.md#clickeventhandler)): *void*
 
-*Defined in [core/src/GraphVisualization.ts:195](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L195)*
+*Defined in [packages/core/src/GraphVisualization.ts:266](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L266)*
 
 **Parameters:**
 
@@ -406,7 +416,7 @@ ___
 
 ▸ **onDragEnd**(`callback`: [DragEndEventHandler](../modules/core.md#dragendeventhandler)): *void*
 
-*Defined in [core/src/GraphVisualization.ts:205](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L205)*
+*Defined in [packages/core/src/GraphVisualization.ts:276](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L276)*
 
 **Parameters:**
 
@@ -422,7 +432,7 @@ ___
 
 ▸ **onDragStart**(`callback`: [DragStartEventHandler](../modules/core.md#dragstarteventhandler)): *void*
 
-*Defined in [core/src/GraphVisualization.ts:200](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L200)*
+*Defined in [packages/core/src/GraphVisualization.ts:271](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L271)*
 
 **Parameters:**
 
@@ -438,7 +448,7 @@ ___
 
 ▸ **onNodeDrag**(`callback`: [NodeDragEventHandler](../modules/core.md#nodedrageventhandler)): *void*
 
-*Defined in [core/src/GraphVisualization.ts:210](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L210)*
+*Defined in [packages/core/src/GraphVisualization.ts:281](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L281)*
 
 **Parameters:**
 
@@ -454,7 +464,7 @@ ___
 
 ▸ **onNodeHoverIn**(`callback`: [HoverEventHandler](../modules/core.md#hovereventhandler)): *void*
 
-*Defined in [core/src/GraphVisualization.ts:185](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L185)*
+*Defined in [packages/core/src/GraphVisualization.ts:256](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L256)*
 
 **Parameters:**
 
@@ -470,7 +480,7 @@ ___
 
 ▸ **onNodeHoverOut**(`callback`: [HoverEventHandler](../modules/core.md#hovereventhandler)): *void*
 
-*Defined in [core/src/GraphVisualization.ts:190](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L190)*
+*Defined in [packages/core/src/GraphVisualization.ts:261](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L261)*
 
 **Parameters:**
 
@@ -486,7 +496,7 @@ ___
 
 ▸ **onPan**(`callback`: [PanEventHandler](../modules/core.md#paneventhandler)): *void*
 
-*Defined in [core/src/GraphVisualization.ts:220](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L220)*
+*Defined in [packages/core/src/GraphVisualization.ts:291](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L291)*
 
 **Parameters:**
 
@@ -502,7 +512,7 @@ ___
 
 ▸ **onSecondaryClick**(`callback`: [SecondaryClickEventHandler](../modules/core.md#secondaryclickeventhandler)): *void*
 
-*Defined in [core/src/GraphVisualization.ts:215](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L215)*
+*Defined in [packages/core/src/GraphVisualization.ts:286](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L286)*
 
 **Parameters:**
 
@@ -518,7 +528,7 @@ ___
 
 ▸ **onZoom**(`callback`: [ZoomEventHandler](../modules/core.md#zoomeventhandler)): *void*
 
-*Defined in [core/src/GraphVisualization.ts:225](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L225)*
+*Defined in [packages/core/src/GraphVisualization.ts:296](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L296)*
 
 **Parameters:**
 
@@ -534,7 +544,7 @@ ___
 
 ▸ **render**(): *void*
 
-*Defined in [core/src/GraphVisualization.ts:229](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L229)*
+*Defined in [packages/core/src/GraphVisualization.ts:300](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L300)*
 
 **Returns:** *void*
 
@@ -544,7 +554,7 @@ ___
 
 ▸ **resize**(`width`: number, `height`: number): *void*
 
-*Defined in [core/src/GraphVisualization.ts:320](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L320)*
+*Defined in [packages/core/src/GraphVisualization.ts:391](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L391)*
 
 resize the canvas
 
@@ -563,7 +573,7 @@ ___
 
 ▸ **toScreenSpacePoint**(`worldX`: number, `worldY`: number): *Vector3*
 
-*Defined in [core/src/GraphVisualization.ts:341](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L341)*
+*Defined in [packages/core/src/GraphVisualization.ts:412](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L412)*
 
 converts a world space coordinate to screen space
 
@@ -582,7 +592,7 @@ ___
 
 ▸ **update**(`graphData`: [VisualizationInputData](../interfaces/core.visualizationinputdata.md)): *void*
 
-*Defined in [core/src/GraphVisualization.ts:239](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L239)*
+*Defined in [packages/core/src/GraphVisualization.ts:310](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L310)*
 
 update or redraw all attributes of nodes and links
 adds/removes new/deleted nodes
@@ -597,11 +607,29 @@ Name | Type | Description |
 
 ___
 
+###  updateConfig
+
+▸ **updateConfig**(`newConfig`: [ConfigurationOptions](../interfaces/core.configurationoptions.md) | undefined): *void*
+
+*Defined in [packages/core/src/GraphVisualization.ts:179](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L179)*
+
+update config and re-render
+
+**Parameters:**
+
+Name | Type | Description |
+------ | ------ | ------ |
+`newConfig` | [ConfigurationOptions](../interfaces/core.configurationoptions.md) &#124; undefined |   |
+
+**Returns:** *void*
+
+___
+
 ###  updateGroups
 
 ▸ **updateGroups**(`groups`: [DisplayGroup](../interfaces/core.displaygroup.md)[]): *void*
 
-*Defined in [core/src/GraphVisualization.ts:308](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L308)*
+*Defined in [packages/core/src/GraphVisualization.ts:379](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L379)*
 
 updates only the groups mesh.
 Useful in situations that require ONLY display groups to update.
@@ -622,7 +650,7 @@ ___
 
 ▸ **updateNode**(`index`: number, `updatedNode`: [DisplayNode](../interfaces/core.displaynode.md)): *void*
 
-*Defined in [core/src/GraphVisualization.ts:289](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L289)*
+*Defined in [packages/core/src/GraphVisualization.ts:360](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L360)*
 
 update all the attributes of a single node at a given index
 
@@ -641,7 +669,7 @@ ___
 
 ▸ **updatePositions**(`updatedGraphData`: [VisualizationInputData](../interfaces/core.visualizationinputdata.md)): *void*
 
-*Defined in [core/src/GraphVisualization.ts:258](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L258)*
+*Defined in [packages/core/src/GraphVisualization.ts:329](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L329)*
 
 update only the position attributes of existing nodes and links.
 
@@ -663,7 +691,7 @@ ___
 
 ▸ **zoom**(`factor`: number): *void*
 
-*Defined in [core/src/GraphVisualization.ts:359](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L359)*
+*Defined in [packages/core/src/GraphVisualization.ts:427](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L427)*
 
 public method to zoom the graph
 
@@ -681,7 +709,7 @@ ___
 
 ▸ **zoomToFit**(`graphData`: [VisualizationInputData](../interfaces/core.visualizationinputdata.md)): *void*
 
-*Defined in [core/src/GraphVisualization.ts:377](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L377)*
+*Defined in [packages/core/src/GraphVisualization.ts:445](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L445)*
 
 **Parameters:**
 

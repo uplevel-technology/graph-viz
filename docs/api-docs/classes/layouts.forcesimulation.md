@@ -14,10 +14,14 @@ sidebar_label: "ForceSimulation"
 
 ### Properties
 
-* [simulation](layouts.forcesimulation.md#private-simulation)
+* [config](layouts.forcesimulation.md#private-readonly-config)
+* [defaultLinkForceStrengths](layouts.forcesimulation.md#private-defaultlinkforcestrengths)
+* [simulation](layouts.forcesimulation.md#simulation)
+* [staticMode](layouts.forcesimulation.md#staticmode)
 
 ### Methods
 
+* [execManualTicks](layouts.forcesimulation.md#private-execmanualticks)
 * [getNodePositions](layouts.forcesimulation.md#getnodepositions)
 * [initialize](layouts.forcesimulation.md#initialize)
 * [onTick](layouts.forcesimulation.md#ontick)
@@ -26,6 +30,7 @@ sidebar_label: "ForceSimulation"
 * [settle](layouts.forcesimulation.md#settle)
 * [stop](layouts.forcesimulation.md#stop)
 * [update](layouts.forcesimulation.md#update)
+* [updateConfig](layouts.forcesimulation.md#updateconfig)
 
 ### Object literals
 
@@ -33,19 +38,53 @@ sidebar_label: "ForceSimulation"
 
 ## Properties
 
-### `Private` simulation
+### `Private` `Readonly` config
+
+• **config**: *Required‹[ForceConfig](../interfaces/layouts.forceconfig.md)›* = FORCE_DEFAULTS
+
+*Defined in [packages/layouts/src/ForceSimulation.ts:165](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L165)*
+
+___
+
+### `Private` defaultLinkForceStrengths
+
+• **defaultLinkForceStrengths**: *number[]* = []
+
+*Defined in [packages/layouts/src/ForceSimulation.ts:167](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L167)*
+
+___
+
+###  simulation
 
 • **simulation**: *[D3Simulation](../modules/layouts.md#d3simulation) | undefined*
 
-*Defined in [layouts/src/ForceSimulation.ts:148](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L148)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:156](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L156)*
+
+___
+
+###  staticMode
+
+• **staticMode**: *boolean* = false
+
+*Defined in [packages/layouts/src/ForceSimulation.ts:157](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L157)*
 
 ## Methods
+
+### `Private` execManualTicks
+
+▸ **execManualTicks**(): *void*
+
+*Defined in [packages/layouts/src/ForceSimulation.ts:241](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L241)*
+
+**Returns:** *void*
+
+___
 
 ###  getNodePositions
 
 ▸ **getNodePositions**(): *[NodePosition](../interfaces/layouts.nodeposition.md)[]*
 
-*Defined in [layouts/src/ForceSimulation.ts:217](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L217)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:249](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L249)*
 
 **Returns:** *[NodePosition](../interfaces/layouts.nodeposition.md)[]*
 
@@ -53,15 +92,17 @@ ___
 
 ###  initialize
 
-▸ **initialize**(`graph`: [SimulationData](../interfaces/layouts.simulationdata.md)): *void*
+▸ **initialize**(`graph`: [SimulationData](../interfaces/layouts.simulationdata.md), `config`: [ForceConfig](../interfaces/layouts.forceconfig.md), `staticMode`: boolean): *void*
 
-*Defined in [layouts/src/ForceSimulation.ts:156](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L156)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:169](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L169)*
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`graph` | [SimulationData](../interfaces/layouts.simulationdata.md) |
+Name | Type | Default |
+------ | ------ | ------ |
+`graph` | [SimulationData](../interfaces/layouts.simulationdata.md) | - |
+`config` | [ForceConfig](../interfaces/layouts.forceconfig.md) | FORCE_DEFAULTS |
+`staticMode` | boolean | false |
 
 **Returns:** *void*
 
@@ -71,7 +112,7 @@ ___
 
 ▸ **onTick**(`callback`: function): *void*
 
-*Defined in [layouts/src/ForceSimulation.ts:230](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L230)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:262](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L262)*
 
 **Parameters:**
 
@@ -93,7 +134,7 @@ ___
 
 ▸ **reheat**(): *void*
 
-*Defined in [layouts/src/ForceSimulation.ts:260](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L260)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:334](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L334)*
 
 **Returns:** *void*
 
@@ -103,7 +144,7 @@ ___
 
 ▸ **restart**(): *void*
 
-*Defined in [layouts/src/ForceSimulation.ts:252](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L252)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:323](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L323)*
 
 **Returns:** *void*
 
@@ -113,7 +154,7 @@ ___
 
 ▸ **settle**(): *void*
 
-*Defined in [layouts/src/ForceSimulation.ts:267](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L267)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:344](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L344)*
 
 **Returns:** *void*
 
@@ -123,7 +164,7 @@ ___
 
 ▸ **stop**(): *void*
 
-*Defined in [layouts/src/ForceSimulation.ts:274](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L274)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:351](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L351)*
 
 **Returns:** *void*
 
@@ -133,7 +174,7 @@ ___
 
 ▸ **update**(`graph`: [SimulationData](../interfaces/layouts.simulationdata.md)): *void*
 
-*Defined in [layouts/src/ForceSimulation.ts:234](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L234)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:306](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L306)*
 
 **Parameters:**
 
@@ -143,16 +184,34 @@ Name | Type |
 
 **Returns:** *void*
 
+___
+
+###  updateConfig
+
+▸ **updateConfig**(`newConfig?`: [ForceConfig](../modules/layouts.md#forceconfig)): *void*
+
+*Defined in [packages/layouts/src/ForceSimulation.ts:270](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L270)*
+
+update config and force simulation as needed
+
+**Parameters:**
+
+Name | Type | Description |
+------ | ------ | ------ |
+`newConfig?` | [ForceConfig](../modules/layouts.md#forceconfig) |   |
+
+**Returns:** *void*
+
 ## Object literals
 
 ### `Private` registeredEventHandlers
 
 ### ▪ **registeredEventHandlers**: *object*
 
-*Defined in [layouts/src/ForceSimulation.ts:149](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L149)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:158](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L158)*
 
 ###  tick
 
-• **tick**: *noop* =  noop
+• **tick**: *noop* = noop
 
-*Defined in [layouts/src/ForceSimulation.ts:153](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L153)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:162](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L162)*

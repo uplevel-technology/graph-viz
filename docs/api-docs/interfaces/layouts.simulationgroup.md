@@ -23,7 +23,7 @@ sidebar_label: "SimulationGroup"
 
 • **id**: *string*
 
-*Defined in [layouts/src/ForceSimulation.ts:43](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L43)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:43](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L43)*
 
 ___
 
@@ -31,4 +31,4 @@ ___
 
 • **strength**? : *undefined | number*
 
-*Defined in [layouts/src/ForceSimulation.ts:44](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L44)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:44](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L44)*

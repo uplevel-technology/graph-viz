@@ -23,7 +23,7 @@ sidebar_label: "Point"
 
 • **x**: *number*
 
-*Defined in [core/src/hullGeometryUtils.ts:6](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/hullGeometryUtils.ts#L6)*
+*Defined in [packages/core/src/hullGeometryUtils.ts:6](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/hullGeometryUtils.ts#L6)*
 
 ___
 
@@ -31,4 +31,4 @@ ___
 
 • **y**: *number*
 
-*Defined in [core/src/hullGeometryUtils.ts:7](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/hullGeometryUtils.ts#L7)*
+*Defined in [packages/core/src/hullGeometryUtils.ts:7](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/hullGeometryUtils.ts#L7)*

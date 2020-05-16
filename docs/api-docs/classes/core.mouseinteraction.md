@@ -18,17 +18,17 @@ sidebar_label: "MouseInteraction"
 
 ### Properties
 
-* [camera](core.mouseinteraction.md#private-camera)
-* [canvas](core.mouseinteraction.md#private-canvas)
+* [camera](core.mouseinteraction.md#private-readonly-camera)
+* [canvas](core.mouseinteraction.md#private-readonly-canvas)
 * [dragging](core.mouseinteraction.md#private-dragging)
 * [intersectedPointIdx](core.mouseinteraction.md#private-intersectedpointidx)
-* [mouse](core.mouseinteraction.md#private-mouse)
+* [mouse](core.mouseinteraction.md#private-readonly-mouse)
 * [nodesData](core.mouseinteraction.md#private-nodesdata)
-* [nodesMesh](core.mouseinteraction.md#private-nodesmesh)
-* [panDelta](core.mouseinteraction.md#private-pandelta)
-* [panEnd](core.mouseinteraction.md#private-panend)
-* [panStart](core.mouseinteraction.md#private-panstart)
-* [raycaster](core.mouseinteraction.md#private-raycaster)
+* [nodesMesh](core.mouseinteraction.md#private-readonly-nodesmesh)
+* [panDelta](core.mouseinteraction.md#private-readonly-pandelta)
+* [panEnd](core.mouseinteraction.md#private-readonly-panend)
+* [panStart](core.mouseinteraction.md#private-readonly-panstart)
+* [raycaster](core.mouseinteraction.md#private-readonly-raycaster)
 * [registerClick](core.mouseinteraction.md#private-registerclick)
 
 ### Methods
@@ -61,7 +61,7 @@ sidebar_label: "MouseInteraction"
 
 \+ **new MouseInteraction**(`canvas`: HTMLCanvasElement, `camera`: OrthographicCamera, `nodesMesh`: [Nodes](core.nodes.md), `nodesData`: [DisplayNode](../interfaces/core.displaynode.md)[]): *[MouseInteraction](core.mouseinteraction.md)*
 
-*Defined in [core/src/MouseInteraction.ts:96](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L96)*
+*Defined in [packages/core/src/MouseInteraction.ts:97](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L97)*
 
 **Parameters:**
 
@@ -76,19 +76,19 @@ Name | Type |
 
 ## Properties
 
-### `Private` camera
+### `Private` `Readonly` camera
 
 • **camera**: *OrthographicCamera*
 
-*Defined in [core/src/MouseInteraction.ts:91](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L91)*
+*Defined in [packages/core/src/MouseInteraction.ts:92](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L92)*
 
 ___
 
-### `Private` canvas
+### `Private` `Readonly` canvas
 
 • **canvas**: *HTMLCanvasElement*
 
-*Defined in [core/src/MouseInteraction.ts:90](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L90)*
+*Defined in [packages/core/src/MouseInteraction.ts:91](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L91)*
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 • **dragging**: *boolean*
 
-*Defined in [core/src/MouseInteraction.ts:65](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L65)*
+*Defined in [packages/core/src/MouseInteraction.ts:66](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L66)*
 
 ___
 
@@ -104,15 +104,15 @@ ___
 
 • **intersectedPointIdx**: *number | null*
 
-*Defined in [core/src/MouseInteraction.ts:64](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L64)*
+*Defined in [packages/core/src/MouseInteraction.ts:65](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L65)*
 
 ___
 
-### `Private` mouse
+### `Private` `Readonly` mouse
 
 • **mouse**: *Vector2*
 
-*Defined in [core/src/MouseInteraction.ts:95](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L95)*
+*Defined in [packages/core/src/MouseInteraction.ts:96](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L96)*
 
 ___
 
@@ -120,47 +120,47 @@ ___
 
 • **nodesData**: *[DisplayNode](../interfaces/core.displaynode.md)[]*
 
-*Defined in [core/src/MouseInteraction.ts:63](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L63)*
+*Defined in [packages/core/src/MouseInteraction.ts:64](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L64)*
 
 ___
 
-### `Private` nodesMesh
+### `Private` `Readonly` nodesMesh
 
 • **nodesMesh**: *[Nodes](core.nodes.md)*
 
-*Defined in [core/src/MouseInteraction.ts:89](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L89)*
+*Defined in [packages/core/src/MouseInteraction.ts:90](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L90)*
 
 ___
 
-### `Private` panDelta
+### `Private` `Readonly` panDelta
 
 • **panDelta**: *Vector3*
 
-*Defined in [core/src/MouseInteraction.ts:94](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L94)*
+*Defined in [packages/core/src/MouseInteraction.ts:95](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L95)*
 
 ___
 
-### `Private` panEnd
+### `Private` `Readonly` panEnd
 
 • **panEnd**: *Vector3*
 
-*Defined in [core/src/MouseInteraction.ts:93](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L93)*
+*Defined in [packages/core/src/MouseInteraction.ts:94](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L94)*
 
 ___
 
-### `Private` panStart
+### `Private` `Readonly` panStart
 
 • **panStart**: *Vector3*
 
-*Defined in [core/src/MouseInteraction.ts:92](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L92)*
+*Defined in [packages/core/src/MouseInteraction.ts:93](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L93)*
 
 ___
 
-### `Private` raycaster
+### `Private` `Readonly` raycaster
 
 • **raycaster**: *Raycaster*
 
-*Defined in [core/src/MouseInteraction.ts:96](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L96)*
+*Defined in [packages/core/src/MouseInteraction.ts:97](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L97)*
 
 ___
 
@@ -168,7 +168,7 @@ ___
 
 • **registerClick**: *boolean*
 
-*Defined in [core/src/MouseInteraction.ts:66](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L66)*
+*Defined in [packages/core/src/MouseInteraction.ts:67](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L67)*
 
 ## Methods
 
@@ -176,7 +176,7 @@ ___
 
 ▸ **findNearestNodeIndex**(`event`: MouseEvent): *number | null*
 
-*Defined in [core/src/MouseInteraction.ts:168](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L168)*
+*Defined in [packages/core/src/MouseInteraction.ts:169](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L169)*
 
 **Parameters:**
 
@@ -190,9 +190,9 @@ ___
 
 ### `Private` getMouseInWorldSpace
 
-▸ **getMouseInWorldSpace**(`z`: number): *Vector3*
+▸ **getMouseInWorldSpace**(`z`: number): *Vector3‹›*
 
-*Defined in [core/src/MouseInteraction.ts:297](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L297)*
+*Defined in [packages/core/src/MouseInteraction.ts:299](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L299)*
 
 **Parameters:**
 
@@ -200,7 +200,7 @@ Name | Type |
 ------ | ------ |
 `z` | number |
 
-**Returns:** *Vector3*
+**Returns:** *Vector3‹›*
 
 ___
 
@@ -208,7 +208,7 @@ ___
 
 ▸ **onClick**(`callback`: [ClickEventHandler](../modules/core.md#clickeventhandler)): *void*
 
-*Defined in [core/src/MouseInteraction.ts:140](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L140)*
+*Defined in [packages/core/src/MouseInteraction.ts:141](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L141)*
 
 **Parameters:**
 
@@ -224,7 +224,7 @@ ___
 
 ▸ **onContextMenu**(`event`: MouseEvent): *void*
 
-*Defined in [core/src/MouseInteraction.ts:303](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L303)*
+*Defined in [packages/core/src/MouseInteraction.ts:305](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L305)*
 
 **Parameters:**
 
@@ -240,7 +240,7 @@ ___
 
 ▸ **onDragEnd**(`callback`: [DragEndEventHandler](../modules/core.md#dragendeventhandler)): *void*
 
-*Defined in [core/src/MouseInteraction.ts:152](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L152)*
+*Defined in [packages/core/src/MouseInteraction.ts:153](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L153)*
 
 **Parameters:**
 
@@ -256,7 +256,7 @@ ___
 
 ▸ **onDragStart**(`callback`: [DragStartEventHandler](../modules/core.md#dragstarteventhandler)): *void*
 
-*Defined in [core/src/MouseInteraction.ts:144](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L144)*
+*Defined in [packages/core/src/MouseInteraction.ts:145](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L145)*
 
 **Parameters:**
 
@@ -272,7 +272,7 @@ ___
 
 ▸ **onMouseDown**(`event`: MouseEvent): *void*
 
-*Defined in [core/src/MouseInteraction.ts:211](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L211)*
+*Defined in [packages/core/src/MouseInteraction.ts:213](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L213)*
 
 **Parameters:**
 
@@ -288,7 +288,7 @@ ___
 
 ▸ **onMouseMove**(`event`: MouseEvent): *void*
 
-*Defined in [core/src/MouseInteraction.ts:251](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L251)*
+*Defined in [packages/core/src/MouseInteraction.ts:253](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L253)*
 
 **Parameters:**
 
@@ -304,7 +304,7 @@ ___
 
 ▸ **onMouseUp**(`event`: MouseEvent): *void*
 
-*Defined in [core/src/MouseInteraction.ts:229](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L229)*
+*Defined in [packages/core/src/MouseInteraction.ts:231](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L231)*
 
 **Parameters:**
 
@@ -320,7 +320,7 @@ ___
 
 ▸ **onMouseWheel**(`event`: WheelEvent): *void*
 
-*Defined in [core/src/MouseInteraction.ts:291](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L291)*
+*Defined in [packages/core/src/MouseInteraction.ts:293](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L293)*
 
 **Parameters:**
 
@@ -336,7 +336,7 @@ ___
 
 ▸ **onNodeDrag**(`callback`: [NodeDragEventHandler](../modules/core.md#nodedrageventhandler)): *void*
 
-*Defined in [core/src/MouseInteraction.ts:148](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L148)*
+*Defined in [packages/core/src/MouseInteraction.ts:149](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L149)*
 
 **Parameters:**
 
@@ -352,7 +352,7 @@ ___
 
 ▸ **onNodeHoverIn**(`callback`: [HoverEventHandler](../modules/core.md#hovereventhandler)): *void*
 
-*Defined in [core/src/MouseInteraction.ts:132](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L132)*
+*Defined in [packages/core/src/MouseInteraction.ts:133](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L133)*
 
 **Parameters:**
 
@@ -368,7 +368,7 @@ ___
 
 ▸ **onNodeHoverOut**(`callback`: [HoverEventHandler](../modules/core.md#hovereventhandler)): *void*
 
-*Defined in [core/src/MouseInteraction.ts:136](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L136)*
+*Defined in [packages/core/src/MouseInteraction.ts:137](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L137)*
 
 **Parameters:**
 
@@ -384,7 +384,7 @@ ___
 
 ▸ **onPan**(`callback`: [PanEventHandler](../modules/core.md#paneventhandler)): *void*
 
-*Defined in [core/src/MouseInteraction.ts:156](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L156)*
+*Defined in [packages/core/src/MouseInteraction.ts:157](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L157)*
 
 **Parameters:**
 
@@ -400,7 +400,7 @@ ___
 
 ▸ **onSecondaryClick**(`callback`: [SecondaryClickEventHandler](../modules/core.md#secondaryclickeventhandler)): *void*
 
-*Defined in [core/src/MouseInteraction.ts:164](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L164)*
+*Defined in [packages/core/src/MouseInteraction.ts:165](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L165)*
 
 **Parameters:**
 
@@ -416,7 +416,7 @@ ___
 
 ▸ **onZoom**(`callback`: [ZoomEventHandler](../modules/core.md#zoomeventhandler)): *void*
 
-*Defined in [core/src/MouseInteraction.ts:160](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L160)*
+*Defined in [packages/core/src/MouseInteraction.ts:161](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L161)*
 
 **Parameters:**
 
@@ -432,7 +432,7 @@ ___
 
 ▸ **updateData**(`nodesData`: [DisplayNode](../interfaces/core.displaynode.md)[]): *void*
 
-*Defined in [core/src/MouseInteraction.ts:128](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L128)*
+*Defined in [packages/core/src/MouseInteraction.ts:129](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L129)*
 
 **Parameters:**
 
@@ -448,58 +448,58 @@ Name | Type |
 
 ### ▪ **registeredEventHandlers**: *object*
 
-*Defined in [core/src/MouseInteraction.ts:67](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L67)*
+*Defined in [packages/core/src/MouseInteraction.ts:68](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L68)*
 
 ###  click
 
-• **click**: *noop* =  noop
+• **click**: *noop* = noop
 
-*Defined in [core/src/MouseInteraction.ts:78](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L78)*
+*Defined in [packages/core/src/MouseInteraction.ts:79](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L79)*
 
 ###  dragEnd
 
-• **dragEnd**: *noop* =  noop
+• **dragEnd**: *noop* = noop
 
-*Defined in [core/src/MouseInteraction.ts:82](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L82)*
+*Defined in [packages/core/src/MouseInteraction.ts:83](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L83)*
 
 ###  dragStart
 
-• **dragStart**: *noop* =  noop
+• **dragStart**: *noop* = noop
 
-*Defined in [core/src/MouseInteraction.ts:81](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L81)*
+*Defined in [packages/core/src/MouseInteraction.ts:82](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L82)*
 
 ###  nodeDrag
 
-• **nodeDrag**: *noop* =  noop
+• **nodeDrag**: *noop* = noop
 
-*Defined in [core/src/MouseInteraction.ts:83](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L83)*
+*Defined in [packages/core/src/MouseInteraction.ts:84](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L84)*
 
 ###  nodeHoverIn
 
-• **nodeHoverIn**: *noop* =  noop
+• **nodeHoverIn**: *noop* = noop
 
-*Defined in [core/src/MouseInteraction.ts:79](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L79)*
+*Defined in [packages/core/src/MouseInteraction.ts:80](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L80)*
 
 ###  nodeHoverOut
 
-• **nodeHoverOut**: *noop* =  noop
+• **nodeHoverOut**: *noop* = noop
 
-*Defined in [core/src/MouseInteraction.ts:80](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L80)*
+*Defined in [packages/core/src/MouseInteraction.ts:81](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L81)*
 
 ###  pan
 
-• **pan**: *noop* =  noop
+• **pan**: *noop* = noop
 
-*Defined in [core/src/MouseInteraction.ts:84](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L84)*
+*Defined in [packages/core/src/MouseInteraction.ts:85](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L85)*
 
 ###  secondaryClick
 
-• **secondaryClick**: *noop* =  noop
+• **secondaryClick**: *noop* = noop
 
-*Defined in [core/src/MouseInteraction.ts:86](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L86)*
+*Defined in [packages/core/src/MouseInteraction.ts:87](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L87)*
 
 ###  zoom
 
-• **zoom**: *noop* =  noop
+• **zoom**: *noop* = noop
 
-*Defined in [core/src/MouseInteraction.ts:85](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/MouseInteraction.ts#L85)*
+*Defined in [packages/core/src/MouseInteraction.ts:86](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/MouseInteraction.ts#L86)*

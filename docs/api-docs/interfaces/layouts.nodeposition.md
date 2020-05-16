@@ -25,7 +25,7 @@ sidebar_label: "NodePosition"
 
 • **id**: *string*
 
-*Defined in [layouts/src/ForceSimulation.ts:63](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L63)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:56](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L56)*
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **x**: *number*
 
-*Defined in [layouts/src/ForceSimulation.ts:64](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L64)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:57](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L57)*
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 • **y**: *number*
 
-*Defined in [layouts/src/ForceSimulation.ts:65](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L65)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:58](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L58)*
 
 ___
 
@@ -49,4 +49,4 @@ ___
 
 • **z**? : *undefined | number*
 
-*Defined in [layouts/src/ForceSimulation.ts:66](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L66)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:59](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L59)*

@@ -22,4 +22,4 @@ sidebar_label: "NodeTooltipsProps"
 
 • **node**: *[TooltipNode](react.tooltipnode.md) | null*
 
-*Defined in [react/src/NodeTooltips.tsx:40](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/NodeTooltips.tsx#L40)*
+*Defined in [packages/react/src/NodeTooltips.tsx:40](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/NodeTooltips.tsx#L40)*

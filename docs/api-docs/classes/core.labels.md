@@ -18,16 +18,18 @@ sidebar_label: "Labels"
 
 ### Properties
 
-* [meshes](core.labels.md#private-meshes)
-* [object](core.labels.md#object)
-* [planeGeometry](core.labels.md#private-planegeometry)
-* [textures](core.labels.md#private-textures)
+* [defaults](core.labels.md#private-defaults)
+* [meshes](core.labels.md#private-readonly-meshes)
+* [object](core.labels.md#readonly-object)
+* [planeGeometry](core.labels.md#private-readonly-planegeometry)
+* [textures](core.labels.md#private-readonly-textures)
 
 ### Methods
 
 * [dispose](core.labels.md#dispose)
 * [getTexture](core.labels.md#private-gettexture)
 * [updateAll](core.labels.md#updateall)
+* [updateDefaults](core.labels.md#updatedefaults)
 
 ## Constructors
 
@@ -35,17 +37,25 @@ sidebar_label: "Labels"
 
 \+ **new Labels**(): *[Labels](core.labels.md)*
 
-*Defined in [core/src/Labels.ts:128](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L128)*
+*Defined in [packages/core/src/Labels.ts:135](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L135)*
 
 **Returns:** *[Labels](core.labels.md)*
 
 ## Properties
 
-### `Private` meshes
+### `Private` defaults
+
+• **defaults**: *Required‹[LabelStyleAttributes](../interfaces/core.labelstyleattributes.md)›* = LABEL_DEFAULTS
+
+*Defined in [packages/core/src/Labels.ts:135](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L135)*
+
+___
+
+### `Private` `Readonly` meshes
 
 • **meshes**: *object*
 
-*Defined in [core/src/Labels.ts:127](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L127)*
+*Defined in [packages/core/src/Labels.ts:133](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L133)*
 
 #### Type declaration:
 
@@ -53,27 +63,27 @@ sidebar_label: "Labels"
 
 ___
 
-###  object
+### `Readonly` object
 
 • **object**: *Object3D*
 
-*Defined in [core/src/Labels.ts:125](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L125)*
+*Defined in [packages/core/src/Labels.ts:131](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L131)*
 
 ___
 
-### `Private` planeGeometry
+### `Private` `Readonly` planeGeometry
 
 • **planeGeometry**: *PlaneBufferGeometry*
 
-*Defined in [core/src/Labels.ts:126](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L126)*
+*Defined in [packages/core/src/Labels.ts:132](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L132)*
 
 ___
 
-### `Private` textures
+### `Private` `Readonly` textures
 
 • **textures**: *object*
 
-*Defined in [core/src/Labels.ts:128](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L128)*
+*Defined in [packages/core/src/Labels.ts:134](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L134)*
 
 #### Type declaration:
 
@@ -85,7 +95,7 @@ ___
 
 ▸ **dispose**(): *void*
 
-*Defined in [core/src/Labels.ts:214](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L214)*
+*Defined in [packages/core/src/Labels.ts:232](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L232)*
 
 **Returns:** *void*
 
@@ -95,14 +105,14 @@ ___
 
 ▸ **getTexture**(`text`: string, `labelScale`: number): *[TextTexture](../interfaces/core.texttexture.md)*
 
-*Defined in [core/src/Labels.ts:138](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L138)*
+*Defined in [packages/core/src/Labels.ts:145](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L145)*
 
 **Parameters:**
 
-Name | Type | Default |
------- | ------ | ------ |
-`text` | string | - |
-`labelScale` | number | 1 |
+Name | Type |
+------ | ------ |
+`text` | string |
+`labelScale` | number |
 
 **Returns:** *[TextTexture](../interfaces/core.texttexture.md)*
 
@@ -112,12 +122,29 @@ ___
 
 ▸ **updateAll**(`links`: [PopulatedDisplayLink](../interfaces/core.populateddisplaylink.md)[]): *void*
 
-*Defined in [core/src/Labels.ts:148](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/Labels.ts#L148)*
+*Defined in [packages/core/src/Labels.ts:166](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L166)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
+`links` | [PopulatedDisplayLink](../interfaces/core.populateddisplaylink.md)[] |
+
+**Returns:** *void*
+
+___
+
+###  updateDefaults
+
+▸ **updateDefaults**(`newDefaults`: [LabelStyleAttributes](../interfaces/core.labelstyleattributes.md), `links`: [PopulatedDisplayLink](../interfaces/core.populateddisplaylink.md)[]): *void*
+
+*Defined in [packages/core/src/Labels.ts:155](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/Labels.ts#L155)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`newDefaults` | [LabelStyleAttributes](../interfaces/core.labelstyleattributes.md) |
 `links` | [PopulatedDisplayLink](../interfaces/core.populateddisplaylink.md)[] |
 
 **Returns:** *void*

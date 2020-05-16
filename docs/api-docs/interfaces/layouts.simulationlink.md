@@ -24,7 +24,7 @@ sidebar_label: "SimulationLink"
 
 • **source**: *string*
 
-*Defined in [layouts/src/ForceSimulation.ts:29](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L29)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:29](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L29)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **strengthMultiplier**? : *undefined | number*
 
-*Defined in [layouts/src/ForceSimulation.ts:39](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L39)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:39](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L39)*
 
 Multiplicative factor applied to default d3 link force,
 which serves as an attractive force between the endpoints.
@@ -47,4 +47,4 @@ ___
 
 • **target**: *string*
 
-*Defined in [layouts/src/ForceSimulation.ts:30](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/layouts/src/ForceSimulation.ts#L30)*
+*Defined in [packages/layouts/src/ForceSimulation.ts:30](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/layouts/src/ForceSimulation.ts#L30)*

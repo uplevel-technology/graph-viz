@@ -24,7 +24,7 @@ sidebar_label: "VisualizationInputData"
 
 • **groups**: *[DisplayGroup](core.displaygroup.md)[]*
 
-*Defined in [core/src/GraphVisualization.ts:26](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L26)*
+*Defined in [packages/core/src/GraphVisualization.ts:37](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L37)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **links**: *[DisplayLink](core.displaylink.md)[]*
 
-*Defined in [core/src/GraphVisualization.ts:25](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L25)*
+*Defined in [packages/core/src/GraphVisualization.ts:36](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L36)*
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 • **nodes**: *[DisplayNode](core.displaynode.md)[]*
 
-*Defined in [core/src/GraphVisualization.ts:24](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/core/src/GraphVisualization.ts#L24)*
+*Defined in [packages/core/src/GraphVisualization.ts:35](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/core/src/GraphVisualization.ts#L35)*

@@ -12,7 +12,7 @@ sidebar_label: "GraphVizComponent"
 
 ## Hierarchy
 
-* Component‹[Props](../interfaces/react.props.md), [State](../interfaces/react.state.md)›
+* Component‹[GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md), [State](../interfaces/react.state.md)›
 
   ↳ **GraphVizComponent**
 
@@ -27,7 +27,7 @@ sidebar_label: "GraphVizComponent"
 * [canvasRef](react.graphvizcomponent.md#canvasref)
 * [context](react.graphvizcomponent.md#context)
 * [onWindowResize](react.graphvizcomponent.md#onwindowresize)
-* [props](react.graphvizcomponent.md#props)
+* [props](react.graphvizcomponent.md#readonly-props)
 * [refs](react.graphvizcomponent.md#refs)
 * [rootRef](react.graphvizcomponent.md#rootref)
 * [simulation](react.graphvizcomponent.md#simulation)
@@ -58,7 +58,7 @@ sidebar_label: "GraphVizComponent"
 
 ### Object literals
 
-* [state](react.graphvizcomponent.md#state)
+* [state](react.graphvizcomponent.md#readonly-state)
 * [vizData](react.graphvizcomponent.md#vizdata)
 * [defaultProps](react.graphvizcomponent.md#static-defaultprops)
 
@@ -66,25 +66,11 @@ sidebar_label: "GraphVizComponent"
 
 ###  constructor
 
-\+ **new GraphVizComponent**(`props`: Readonly‹[Props](../interfaces/react.props.md)›): *[GraphVizComponent](react.graphvizcomponent.md)*
+\+ **new GraphVizComponent**(`props`: Readonly‹[GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md)›): *[GraphVizComponent](react.graphvizcomponent.md)*
 
-*Inherited from void*
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[constructor](react.graphvizcomponent.md#constructor)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:425
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`props` | Readonly‹[Props](../interfaces/react.props.md)› |
-
-**Returns:** *[GraphVizComponent](react.graphvizcomponent.md)*
-
-\+ **new GraphVizComponent**(`props`: [Props](../interfaces/react.props.md), `context?`: any): *[GraphVizComponent](react.graphvizcomponent.md)*
-
-*Inherited from void*
-
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:427
+Defined in node_modules/@types/react/index.d.ts:486
 
 **`deprecated`** 
 
@@ -94,7 +80,25 @@ Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:427
 
 Name | Type |
 ------ | ------ |
-`props` | [Props](../interfaces/react.props.md) |
+`props` | Readonly‹[GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md)› |
+
+**Returns:** *[GraphVizComponent](react.graphvizcomponent.md)*
+
+\+ **new GraphVizComponent**(`props`: [GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md), `context?`: any): *[GraphVizComponent](react.graphvizcomponent.md)*
+
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[constructor](react.graphvizcomponent.md#constructor)*
+
+Defined in node_modules/@types/react/index.d.ts:488
+
+**`deprecated`** 
+
+**`see`** https://reactjs.org/docs/legacy-context.html
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`props` | [GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md) |
 `context?` | any |
 
 **Returns:** *[GraphVizComponent](react.graphvizcomponent.md)*
@@ -103,9 +107,9 @@ Name | Type |
 
 ###  canvasRef
 
-• **canvasRef**: *RefObject‹HTMLCanvasElement›* =  React.createRef()
+• **canvasRef**: *RefObject‹HTMLCanvasElement›* = React.createRef()
 
-*Defined in [react/src/GraphVizComponent.tsx:102](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L102)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:104](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L104)*
 
 ___
 
@@ -113,34 +117,36 @@ ___
 
 • **context**: *any*
 
-*Inherited from void*
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[context](react.graphvizcomponent.md#context)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:425
+Defined in node_modules/@types/react/index.d.ts:486
 
 If using the new style context, re-declare this in your class to be the
 `React.ContextType` of your `static contextType`.
+Should be used with type annotation or static contextType.
 
 ```ts
 static contextType = MyContext
+// For TS pre-3.7:
 context!: React.ContextType<typeof MyContext>
+// For TS 3.7 and above:
+declare React.ContextType<typeof MyContext>
 ```
 
-**`deprecated`** if used without a type annotation, or without static contextType
-
-**`see`** https://reactjs.org/docs/legacy-context.html
+**`see`** https://reactjs.org/docs/context.html
 
 ___
 
 ###  onWindowResize
 
-• **onWindowResize**: *function* =  debounce(() => {
+• **onWindowResize**: *function* = debounce(() => {
     const root = this.rootRef.current!
     const {width, height} = root.getBoundingClientRect()
 
     this.visualization.resize(width, height)
   }, 500)
 
-*Defined in [react/src/GraphVizComponent.tsx:117](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L117)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:119](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L119)*
 
 #### Type declaration:
 
@@ -148,13 +154,13 @@ ___
 
 ___
 
-###  props
+### `Readonly` props
 
-• **props**: *Readonly‹[Props](../interfaces/react.props.md)› & Readonly‹object›*
+• **props**: *Readonly‹[GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md)› & Readonly‹object›*
 
-*Inherited from void*
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[props](react.graphvizcomponent.md#readonly-props)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:450
+Defined in node_modules/@types/react/index.d.ts:511
 
 ___
 
@@ -162,9 +168,9 @@ ___
 
 • **refs**: *object*
 
-*Inherited from void*
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[refs](react.graphvizcomponent.md#refs)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:456
+Defined in node_modules/@types/react/index.d.ts:517
 
 **`deprecated`** 
 https://reactjs.org/docs/refs-and-the-dom.html#legacy-api-string-refs
@@ -177,9 +183,9 @@ ___
 
 ###  rootRef
 
-• **rootRef**: *RefObject‹HTMLDivElement›* =  React.createRef()
+• **rootRef**: *RefObject‹HTMLDivElement›* = React.createRef()
 
-*Defined in [react/src/GraphVizComponent.tsx:101](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L101)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:103](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L103)*
 
 ___
 
@@ -187,7 +193,7 @@ ___
 
 • **simulation**: *ForceSimulation*
 
-*Defined in [react/src/GraphVizComponent.tsx:99](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L99)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:101](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L101)*
 
 ___
 
@@ -195,7 +201,7 @@ ___
 
 • **tooltipNodes**: *[TooltipNode](../interfaces/react.tooltipnode.md)[]*
 
-*Defined in [react/src/GraphVizComponent.tsx:98](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L98)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:100](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L100)*
 
 ___
 
@@ -203,7 +209,7 @@ ___
 
 • **visualization**: *GraphVisualization*
 
-*Defined in [react/src/GraphVizComponent.tsx:88](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L88)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:90](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L90)*
 
 ___
 
@@ -211,9 +217,9 @@ ___
 
 ▪ **contextType**? : *Context‹any›*
 
-*Inherited from void*
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[contextType](react.graphvizcomponent.md#static-optional-contexttype)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:410
+Defined in node_modules/@types/react/index.d.ts:468
 
 If set, `this.context` will be set at runtime to the current value of the given Context.
 
@@ -240,9 +246,9 @@ class Foo extends React.Component {
 
 ▸ **UNSAFE_componentWillMount**(): *void*
 
-*Inherited from void*
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[UNSAFE_componentWillMount](react.graphvizcomponent.md#optional-unsafe_componentwillmount)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:638
+Defined in node_modules/@types/react/index.d.ts:712
 
 Called immediately before mounting occurs, and before `Component#render`.
 Avoid introducing any side-effects or subscriptions in this method.
@@ -264,11 +270,11 @@ ___
 
 ### `Optional` UNSAFE_componentWillReceiveProps
 
-▸ **UNSAFE_componentWillReceiveProps**(`nextProps`: Readonly‹[Props](../interfaces/react.props.md)›, `nextContext`: any): *void*
+▸ **UNSAFE_componentWillReceiveProps**(`nextProps`: Readonly‹[GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md)›, `nextContext`: any): *void*
 
-*Inherited from void*
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[UNSAFE_componentWillReceiveProps](react.graphvizcomponent.md#optional-unsafe_componentwillreceiveprops)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:670
+Defined in node_modules/@types/react/index.d.ts:744
 
 Called when the component may be receiving new props.
 React may call this even if props have not changed, so be sure to compare new and existing
@@ -291,7 +297,7 @@ prevents this from being invoked.
 
 Name | Type |
 ------ | ------ |
-`nextProps` | Readonly‹[Props](../interfaces/react.props.md)› |
+`nextProps` | Readonly‹[GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md)› |
 `nextContext` | any |
 
 **Returns:** *void*
@@ -300,11 +306,11 @@ ___
 
 ### `Optional` UNSAFE_componentWillUpdate
 
-▸ **UNSAFE_componentWillUpdate**(`nextProps`: Readonly‹[Props](../interfaces/react.props.md)›, `nextState`: Readonly‹[State](../interfaces/react.state.md)›, `nextContext`: any): *void*
+▸ **UNSAFE_componentWillUpdate**(`nextProps`: Readonly‹[GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md)›, `nextState`: Readonly‹[State](../interfaces/react.state.md)›, `nextContext`: any): *void*
 
-*Inherited from void*
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[UNSAFE_componentWillUpdate](react.graphvizcomponent.md#optional-unsafe_componentwillupdate)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:698
+Defined in node_modules/@types/react/index.d.ts:772
 
 Called immediately before rendering when new props or state is received. Not called for the initial render.
 
@@ -325,7 +331,7 @@ prevents this from being invoked.
 
 Name | Type |
 ------ | ------ |
-`nextProps` | Readonly‹[Props](../interfaces/react.props.md)› |
+`nextProps` | Readonly‹[GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md)› |
 `nextState` | Readonly‹[State](../interfaces/react.state.md)› |
 `nextContext` | any |
 
@@ -337,9 +343,9 @@ ___
 
 ▸ **componentDidCatch**(`error`: Error, `errorInfo`: ErrorInfo): *void*
 
-*Inherited from void*
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[componentDidCatch](react.graphvizcomponent.md#optional-componentdidcatch)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:567
+Defined in node_modules/@types/react/index.d.ts:641
 
 Catches exceptions generated in descendant components. Unhandled exceptions will cause
 the entire component tree to unmount.
@@ -361,7 +367,7 @@ ___
 
 *Overrides void*
 
-*Defined in [react/src/GraphVizComponent.tsx:124](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L124)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:126](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L126)*
 
 **Returns:** *void*
 
@@ -369,17 +375,17 @@ ___
 
 ###  componentDidUpdate
 
-▸ **componentDidUpdate**(`prevProps`: [Props](../interfaces/react.props.md)): *void*
+▸ **componentDidUpdate**(`prevProps`: [GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md)): *void*
 
 *Overrides void*
 
-*Defined in [react/src/GraphVizComponent.tsx:305](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L305)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:307](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L307)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`prevProps` | [Props](../interfaces/react.props.md) |
+`prevProps` | [GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md) |
 
 **Returns:** *void*
 
@@ -389,9 +395,9 @@ ___
 
 ▸ **componentWillMount**(): *void*
 
-*Inherited from void*
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[componentWillMount](react.graphvizcomponent.md#optional-componentwillmount)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:624
+Defined in node_modules/@types/react/index.d.ts:698
 
 Called immediately before mounting occurs, and before `Component#render`.
 Avoid introducing any side-effects or subscriptions in this method.
@@ -411,11 +417,11 @@ ___
 
 ### `Optional` componentWillReceiveProps
 
-▸ **componentWillReceiveProps**(`nextProps`: Readonly‹[Props](../interfaces/react.props.md)›, `nextContext`: any): *void*
+▸ **componentWillReceiveProps**(`nextProps`: Readonly‹[GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md)›, `nextContext`: any): *void*
 
-*Inherited from void*
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[componentWillReceiveProps](react.graphvizcomponent.md#optional-componentwillreceiveprops)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:653
+Defined in node_modules/@types/react/index.d.ts:727
 
 Called when the component may be receiving new props.
 React may call this even if props have not changed, so be sure to compare new and existing
@@ -436,7 +442,7 @@ prevents this from being invoked.
 
 Name | Type |
 ------ | ------ |
-`nextProps` | Readonly‹[Props](../interfaces/react.props.md)› |
+`nextProps` | Readonly‹[GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md)› |
 `nextContext` | any |
 
 **Returns:** *void*
@@ -449,7 +455,7 @@ ___
 
 *Overrides void*
 
-*Defined in [react/src/GraphVizComponent.tsx:319](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L319)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:329](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L329)*
 
 **Returns:** *void*
 
@@ -457,11 +463,11 @@ ___
 
 ### `Optional` componentWillUpdate
 
-▸ **componentWillUpdate**(`nextProps`: Readonly‹[Props](../interfaces/react.props.md)›, `nextState`: Readonly‹[State](../interfaces/react.state.md)›, `nextContext`: any): *void*
+▸ **componentWillUpdate**(`nextProps`: Readonly‹[GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md)›, `nextState`: Readonly‹[State](../interfaces/react.state.md)›, `nextContext`: any): *void*
 
-*Inherited from void*
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[componentWillUpdate](react.graphvizcomponent.md#optional-componentwillupdate)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:683
+Defined in node_modules/@types/react/index.d.ts:757
 
 Called immediately before rendering when new props or state is received. Not called for the initial render.
 
@@ -480,7 +486,7 @@ prevents this from being invoked.
 
 Name | Type |
 ------ | ------ |
-`nextProps` | Readonly‹[Props](../interfaces/react.props.md)› |
+`nextProps` | Readonly‹[GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md)› |
 `nextState` | Readonly‹[State](../interfaces/react.state.md)› |
 `nextContext` | any |
 
@@ -492,9 +498,9 @@ ___
 
 ▸ **forceUpdate**(`callback?`: undefined | function): *void*
 
-*Inherited from void*
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[forceUpdate](react.graphvizcomponent.md#forceupdate)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:442
+Defined in node_modules/@types/react/index.d.ts:503
 
 **Parameters:**
 
@@ -508,11 +514,11 @@ ___
 
 ### `Optional` getSnapshotBeforeUpdate
 
-▸ **getSnapshotBeforeUpdate**(`prevProps`: Readonly‹[Props](../interfaces/react.props.md)›, `prevState`: Readonly‹[State](../interfaces/react.state.md)›): *SS | null*
+▸ **getSnapshotBeforeUpdate**(`prevProps`: Readonly‹[GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md)›, `prevState`: Readonly‹[State](../interfaces/react.state.md)›): *SS | null*
 
-*Inherited from void*
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[getSnapshotBeforeUpdate](react.graphvizcomponent.md#optional-getsnapshotbeforeupdate)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:603
+Defined in node_modules/@types/react/index.d.ts:677
 
 Runs before React applies the result of `render` to the document, and
 returns an object to be given to componentDidUpdate. Useful for saving
@@ -525,7 +531,7 @@ lifecycle events from running.
 
 Name | Type |
 ------ | ------ |
-`prevProps` | Readonly‹[Props](../interfaces/react.props.md)› |
+`prevProps` | Readonly‹[GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md)› |
 `prevState` | Readonly‹[State](../interfaces/react.state.md)› |
 
 **Returns:** *SS | null*
@@ -536,7 +542,7 @@ ___
 
 ▸ **initData**(): *void*
 
-*Defined in [react/src/GraphVizComponent.tsx:325](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L325)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:335](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L335)*
 
 **Returns:** *void*
 
@@ -544,13 +550,13 @@ ___
 
 ###  render
 
-▸ **render**(): *Element*
+▸ **render**(): *Element‹›*
 
 *Overrides void*
 
-*Defined in [react/src/GraphVizComponent.tsx:356](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L356)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:369](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L369)*
 
-**Returns:** *Element*
+**Returns:** *Element‹›*
 
 ___
 
@@ -558,9 +564,9 @@ ___
 
 ▸ **setState**<**K**>(`state`: function | null | S | object, `callback?`: undefined | function): *void*
 
-*Inherited from void*
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[setState](react.graphvizcomponent.md#setstate)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:437
+Defined in node_modules/@types/react/index.d.ts:498
 
 **Type parameters:**
 
@@ -579,11 +585,11 @@ ___
 
 ### `Optional` shouldComponentUpdate
 
-▸ **shouldComponentUpdate**(`nextProps`: Readonly‹[Props](../interfaces/react.props.md)›, `nextState`: Readonly‹[State](../interfaces/react.state.md)›, `nextContext`: any): *boolean*
+▸ **shouldComponentUpdate**(`nextProps`: Readonly‹[GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md)›, `nextState`: Readonly‹[State](../interfaces/react.state.md)›, `nextContext`: any): *boolean*
 
-*Inherited from void*
+*Inherited from [GraphVizComponent](react.graphvizcomponent.md).[shouldComponentUpdate](react.graphvizcomponent.md#optional-shouldcomponentupdate)*
 
-Defined in /Users/smohite/graph-viz/node_modules/@types/react/index.d.ts:557
+Defined in node_modules/@types/react/index.d.ts:631
 
 Called to determine whether the change in props and state should trigger a re-render.
 
@@ -598,7 +604,7 @@ and `componentDidUpdate` will not be called.
 
 Name | Type |
 ------ | ------ |
-`nextProps` | Readonly‹[Props](../interfaces/react.props.md)› |
+`nextProps` | Readonly‹[GraphVizComponentProps](../interfaces/react.graphvizcomponentprops.md)› |
 `nextState` | Readonly‹[State](../interfaces/react.state.md)› |
 `nextContext` | any |
 
@@ -610,7 +616,7 @@ ___
 
 ▸ **zoomIn**(): *void*
 
-*Defined in [react/src/GraphVizComponent.tsx:348](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L348)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:361](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L361)*
 
 **Returns:** *void*
 
@@ -620,31 +626,31 @@ ___
 
 ▸ **zoomOut**(): *void*
 
-*Defined in [react/src/GraphVizComponent.tsx:352](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L352)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:365](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L365)*
 
 **Returns:** *void*
 
 ## Object literals
 
-###  state
+### `Readonly` state
 
 ### ▪ **state**: *object*
 
 *Overrides void*
 
-*Defined in [react/src/GraphVizComponent.tsx:104](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L104)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:106](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L106)*
 
 ###  currentTooltipNode
 
-• **currentTooltipNode**: *null* =  null
+• **currentTooltipNode**: *null* = null
 
-*Defined in [react/src/GraphVizComponent.tsx:105](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L105)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:107](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L107)*
 
 ###  currentlyHoveredIdx
 
-• **currentlyHoveredIdx**: *null* =  null
+• **currentlyHoveredIdx**: *null* = null
 
-*Defined in [react/src/GraphVizComponent.tsx:106](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L106)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:108](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L108)*
 
 ___
 
@@ -652,25 +658,25 @@ ___
 
 ### ▪ **vizData**: *object*
 
-*Defined in [react/src/GraphVizComponent.tsx:92](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L92)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:94](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L94)*
 
 ###  groups
 
-• **groups**: *never[]* =  []
+• **groups**: *never[]* = []
 
-*Defined in [react/src/GraphVizComponent.tsx:95](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L95)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:97](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L97)*
 
 ###  links
 
-• **links**: *never[]* =  []
+• **links**: *never[]* = []
 
-*Defined in [react/src/GraphVizComponent.tsx:94](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L94)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:96](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L96)*
 
 ###  nodes
 
-• **nodes**: *never[]* =  []
+• **nodes**: *never[]* = []
 
-*Defined in [react/src/GraphVizComponent.tsx:93](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L93)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:95](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L95)*
 
 ___
 
@@ -678,34 +684,34 @@ ___
 
 ### ▪ **defaultProps**: *object*
 
-*Defined in [react/src/GraphVizComponent.tsx:109](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L109)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:111](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L111)*
 
 ###  groups
 
-• **groups**: *never[]* =  []
+• **groups**: *never[]* = []
 
-*Defined in [react/src/GraphVizComponent.tsx:111](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L111)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:113](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L113)*
 
 ###  onClick
 
-• **onClick**: *noop* =  noop
+• **onClick**: *noop* = noop
 
-*Defined in [react/src/GraphVizComponent.tsx:113](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L113)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:115](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L115)*
 
 ###  onLinkDrawn
 
-• **onLinkDrawn**: *noop* =  noop
+• **onLinkDrawn**: *noop* = noop
 
-*Defined in [react/src/GraphVizComponent.tsx:112](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L112)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:114](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L114)*
 
 ###  onSecondaryClick
 
-• **onSecondaryClick**: *noop* =  noop
+• **onSecondaryClick**: *noop* = noop
 
-*Defined in [react/src/GraphVizComponent.tsx:114](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L114)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:116](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L116)*
 
 ###  tooltips
 
-• **tooltips**: *never[]* =  []
+• **tooltips**: *never[]* = []
 
-*Defined in [react/src/GraphVizComponent.tsx:110](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/GraphVizComponent.tsx#L110)*
+*Defined in [packages/react/src/GraphVizComponent.tsx:112](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/GraphVizComponent.tsx#L112)*

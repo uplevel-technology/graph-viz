@@ -25,7 +25,7 @@ sidebar_label: "TooltipFields"
 
 • **displayName**: *string*
 
-*Defined in [react/src/NodeTooltips.tsx:6](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/NodeTooltips.tsx#L6)*
+*Defined in [packages/react/src/NodeTooltips.tsx:6](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/NodeTooltips.tsx#L6)*
 
 ___
 
@@ -33,4 +33,4 @@ ___
 
 • **id**: *string*
 
-*Defined in [react/src/NodeTooltips.tsx:5](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/NodeTooltips.tsx#L5)*
+*Defined in [packages/react/src/NodeTooltips.tsx:5](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/NodeTooltips.tsx#L5)*

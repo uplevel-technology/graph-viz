@@ -23,7 +23,7 @@ sidebar_label: "Vec2"
 
 • **x**: *number*
 
-*Defined in [react/src/vizUtils.ts:12](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/vizUtils.ts#L12)*
+*Defined in [packages/react/src/vizUtils.ts:9](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/vizUtils.ts#L9)*
 
 ___
 
@@ -31,4 +31,4 @@ ___
 
 • **y**: *number*
 
-*Defined in [react/src/vizUtils.ts:13](https://github.com/uplevel-technology/graph-viz/blob/d488454d/packages/react/src/vizUtils.ts#L13)*
+*Defined in [packages/react/src/vizUtils.ts:10](https://github.com/uplevel-technology/graph-viz/blob/a1a88b4/packages/react/src/vizUtils.ts#L10)*
