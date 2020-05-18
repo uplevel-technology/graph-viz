@@ -63,6 +63,7 @@ const App: React.FC = () => {
     },
   })
   const [forceConfig, setForceConfig] = useState<ForceConfig>({
+    groupStrength: 0,
     nodeCharge: -30,
   })
   useEffect(() => {
@@ -83,6 +84,7 @@ const App: React.FC = () => {
 
     setTimeout(() => {
       setForceConfig({
+        groupStrength: 2,
         nodeCharge: -300,
       })
     }, 8000)

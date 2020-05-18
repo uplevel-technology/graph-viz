@@ -62,6 +62,7 @@ export interface NodePosition {
 function forceGroup(groups: SimulationGroup[], defaultStrength: number) {
   let nodes: SimulationNode[]
   let nodesByGroup: {[groupId: string]: SimulationNode[]}
+  let strength = defaultStrength
 
   function force(alpha: number) {
     groups.forEach(group => {
@@ -73,7 +74,7 @@ function forceGroup(groups: SimulationGroup[], defaultStrength: number) {
       const groupNodes = nodesByGroup[group.id]
 
       const {x: cx, y: cy} = getCentroid(groupNodes)
-      const l = alpha * (group.strength ?? defaultStrength)
+      const l = alpha * (group.strength ?? strength)
 
       groupNodes.forEach(node => {
         node.vx! -= (node.x! - cx) * l
@@ -87,6 +88,10 @@ function forceGroup(groups: SimulationGroup[], defaultStrength: number) {
     nodes = data
     nodesByGroup = getGroupedNodes(nodes)
     return nodes
+  }
+
+  force.strength = (value: number) => {
+    strength = value
   }
 
   return force
@@ -299,8 +304,15 @@ export class ForceSimulation {
       )
     }
 
-    Object.assign(this.config, newConfig)
-    this.reheat()
+    if (this.config.groupStrength !== mergedConfig.groupStrength) {
+      this.config.groupStrength = mergedConfig.groupStrength
+      const force = this.simulation.force('group') as ReturnType<
+        typeof forceGroup
+      >
+      force.strength(this.config.groupStrength)
+    }
+
+    this.simulation.alpha(0.1).restart()
   }
 
   public update(graph: SimulationData) {
