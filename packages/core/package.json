@@ -37,7 +37,7 @@
     "url": "https://github.com/uplevel-technology/graph-viz/issues"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.137",
+    "@types/lodash": "^4.14.151",
     "canvas": "^2.6.0",
     "jest-canvas-mock": "^2.1.1"
   },
