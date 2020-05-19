@@ -367,8 +367,12 @@ export class Nodes {
       this.defaults.innerRadius = mergedDefaults.innerRadius
       this.updateAllInnerRadii(nodes)
     }
-    if (mergedDefaults.fill !== this.defaults.fill) {
+    if (
+      mergedDefaults.fill !== this.defaults.fill ||
+      mergedDefaults.fillOpacity !== this.defaults.fillOpacity
+    ) {
       this.defaults.fill = mergedDefaults.fill
+      this.defaults.fillOpacity = mergedDefaults.fillOpacity
       this.updateAllFills(nodes)
     }
     if (mergedDefaults.stroke !== this.defaults.stroke) {
