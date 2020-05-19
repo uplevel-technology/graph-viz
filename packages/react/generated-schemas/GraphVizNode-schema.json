@@ -1,0 +1,124 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "allOf": [
+        {
+            "$ref": "#/definitions/Partial<DisplayNode&SimulationNode>"
+        },
+        {
+            "$ref": "#/definitions/Pick<DisplayNode,\"id\">"
+        }
+    ],
+    "definitions": {
+        "Partial<DisplayNode&SimulationNode>": {
+            "properties": {
+                "absoluteSize": {
+                    "description": "the absolute side in pixels of the bounding square container of the node\n(default is 20 pixels)",
+                    "type": "number"
+                },
+                "charge": {
+                    "description": "d3 force manyBody strength",
+                    "type": "number"
+                },
+                "disableInteractions": {
+                    "description": "disables interactions on this node if set\n(default is false)\nNOTE: this could be defined on a mouse interaction node interface",
+                    "type": "boolean"
+                },
+                "displayGroupIds": {
+                    "description": "optional display group IDs",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "fill": {
+                    "description": "node fill color hex string\n(default is #333333)",
+                    "type": "string"
+                },
+                "fillOpacity": {
+                    "description": "relative node fill opacity\n(must be between 0.0 - 1.0)",
+                    "type": "number"
+                },
+                "forceX": {
+                    "description": "d3 forceX seed value",
+                    "type": "number"
+                },
+                "forceY": {
+                    "description": "d3 forceY seed value",
+                    "type": "number"
+                },
+                "fx": {
+                    "description": "Node’s fixed x-position (if position was fixed)",
+                    "type": [
+                        "null",
+                        "number"
+                    ]
+                },
+                "fy": {
+                    "description": "Node’s fixed y-position (if position was fixed)",
+                    "type": [
+                        "null",
+                        "number"
+                    ]
+                },
+                "id": {
+                    "description": "Unique node id",
+                    "type": "string"
+                },
+                "index": {
+                    "description": "Node’s zero-based index into nodes array. This property is set during the initialization process of a simulation.",
+                    "type": "number"
+                },
+                "innerRadius": {
+                    "description": "inner radius of the node circle relative to the absolute container size\n(must be between 0.0 to 1.0). (default is 0.2)",
+                    "type": "number"
+                },
+                "scale": {
+                    "description": "node container's scale factor\n(default is 1.0)",
+                    "type": "number"
+                },
+                "stroke": {
+                    "description": "node strike color hex string",
+                    "type": "string"
+                },
+                "strokeOpacity": {
+                    "description": "relative node stroke opacity\n(must be between 0.0 - 1.0)",
+                    "type": "number"
+                },
+                "strokeWidth": {
+                    "description": "relative node stroke width\n(This width is relative to the node container. Must be between 0.0 to 1.0)",
+                    "type": "number"
+                },
+                "vx": {
+                    "description": "Node’s current x-velocity",
+                    "type": "number"
+                },
+                "vy": {
+                    "description": "Node’s current y-velocity",
+                    "type": "number"
+                },
+                "x": {
+                    "description": "x coordinate of the node position\nNode’s current x-position",
+                    "type": "number"
+                },
+                "y": {
+                    "description": "y position of the node position\nNode’s current y-position",
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "Pick<DisplayNode,\"id\">": {
+            "properties": {
+                "id": {
+                    "description": "Unique node id",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "type": "object"
+        }
+    }
+}
+

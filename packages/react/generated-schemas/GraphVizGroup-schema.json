@@ -1,0 +1,63 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "allOf": [
+        {
+            "$ref": "#/definitions/DisplayGroup"
+        },
+        {
+            "$ref": "#/definitions/SimulationGroup"
+        }
+    ],
+    "definitions": {
+        "DisplayGroup": {
+            "properties": {
+                "fill": {
+                    "description": "fill color hex string\n(default is #000000)",
+                    "type": "string"
+                },
+                "fillOpacity": {
+                    "description": "relative node fill opacity\n(must be between 0.0 - 1.0)",
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "padding": {
+                    "description": "inner padding from the boundary nodes",
+                    "type": "number"
+                },
+                "shape": {
+                    "description": "type of polygon to draw\ndefault is convexHull",
+                    "enum": [
+                        "circle",
+                        "convexHull"
+                    ],
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "boolean to toggle the visibility of a display group on or off",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "type": "object"
+        },
+        "SimulationGroup": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "strength": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "type": "object"
+        }
+    }
+}
+

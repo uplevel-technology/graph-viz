@@ -1,0 +1,76 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "allOf": [
+        {
+            "$ref": "#/definitions/DisplayLink"
+        },
+        {
+            "$ref": "#/definitions/SimulationLink"
+        }
+    ],
+    "definitions": {
+        "DisplayLink": {
+            "properties": {
+                "arrowWidth": {
+                    "description": "arrow width in pixels",
+                    "type": "number"
+                },
+                "color": {
+                    "description": "hex color string",
+                    "type": "string"
+                },
+                "dashed": {
+                    "description": "determine whether the line should be dashed",
+                    "type": "boolean"
+                },
+                "directed": {
+                    "description": "determines whether an arrow is drawn on the link",
+                    "type": "boolean"
+                },
+                "label": {
+                    "description": "text to display",
+                    "type": "string"
+                },
+                "labelScale": {
+                    "description": "relative scale of the label.\ndefault is 1.0",
+                    "type": "number"
+                },
+                "opacity": {
+                    "description": "link opacity between 0 and 1\ndefault is 1",
+                    "type": "number"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "target": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "source",
+                "target"
+            ],
+            "type": "object"
+        },
+        "SimulationLink": {
+            "properties": {
+                "source": {
+                    "type": "string"
+                },
+                "strengthMultiplier": {
+                    "description": "Multiplicative factor applied to default d3 link force,\nwhich serves as an attractive force between the endpoints.\nA value between 0 and 1 will reduce the attractive force,\ntending to increase the length of the link.",
+                    "type": "number"
+                },
+                "target": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "source",
+                "target"
+            ],
+            "type": "object"
+        }
+    }
+}
+
