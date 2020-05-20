@@ -24,7 +24,7 @@ export interface GroupStyleAttributes {
 
   /**
    * fill color hex string
-   * @default '#000000'
+   * @default "#000000"
    */
   fill?: string
 

@@ -4,7 +4,7 @@
         "GroupStyleAttributes": {
             "properties": {
                 "fill": {
-                    "default": "'#000000'",
+                    "default": "#000000",
                     "description": "fill color hex string",
                     "type": "string"
                 },
