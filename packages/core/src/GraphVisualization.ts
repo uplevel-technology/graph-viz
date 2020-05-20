@@ -58,15 +58,53 @@ function constructIdToIdxMap(arr: Array<{id: string}>): {[id: string]: number} {
 }
 
 export interface ConfigurationOptions {
+  /**
+   * node style config
+   */
   nodes: NodeStyleAttributes
+
+  /**
+   * link style config
+   */
   links: LinkStyleAttributes
+
+  /**
+   * group style config
+   */
   groups: GroupStyleAttributes
+
+  /**
+   * events style config
+   */
   events: {
+    /**
+     * disables click event
+     */
     disableClick?: boolean
+
+    /**
+     * disables hover events
+     */
     disableHover?: boolean
+
+    /**
+     * disables pan event
+     */
     disablePan?: boolean
+
+    /**
+     * disables zoom event
+     */
     disableZoom?: boolean
+
+    /**
+     * disables drag events
+     */
     disableDrag?: boolean
+
+    /**
+     * disables secondary click event
+     */
     disableSecondaryClick?: boolean
   }
 }
@@ -123,7 +161,7 @@ export class GraphVisualization {
     @required canvas: HTMLCanvasElement,
     @required width: number,
     @required height: number,
-    config: ConfigurationOptions = DEFAULT_CONFIG_OPTIONS,
+    config: Partial<ConfigurationOptions> = DEFAULT_CONFIG_OPTIONS,
   ) {
     this.data = graphData
     this.canvas = canvas
@@ -187,7 +225,7 @@ export class GraphVisualization {
    * update config and re-render
    * @param newConfig
    */
-  public updateConfig(newConfig: ConfigurationOptions | undefined) {
+  public updateConfig(newConfig: Partial<ConfigurationOptions> | undefined) {
     let needsUpdate = false
     if (!isEqual(newConfig?.nodes, this.config.nodes)) {
       this.nodesMesh.updateDefaults(newConfig?.nodes, this.data.nodes)
