@@ -20,6 +20,7 @@ if (process.env.BABEL_ENV === 'es') {
 }
 
 const prodPlugins = [
+  ['inline-json-import', {}],
   ['@babel/plugin-proposal-decorators', {legacy: true}],
   'babel-plugin-parameter-decorator',
   ['@babel/plugin-transform-runtime', {useESModules: true}],
@@ -31,6 +32,7 @@ module.exports = {
     '@babel/preset-typescript',
   ]),
   plugins: [
+    ['inline-json-import', {}],
     ['@babel/plugin-proposal-decorators', {legacy: true}],
     'babel-plugin-parameter-decorator',
     ['@babel/plugin-proposal-class-properties', {loose: true}],

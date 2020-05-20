@@ -27,6 +27,30 @@ import {
   GroupStyleAttributes,
 } from './DisplayGroups'
 import {required, validate, validateClassConstructor} from './validators'
+import Ajv from 'ajv'
+import inputDataSchema from './generated-schema/VisualizationInputData-schema.json'
+import configDataSchema from './generated-schema/ConfigurationOptions-schema.json'
+
+const ajv = new Ajv()
+const validateInputData = ajv.compile(inputDataSchema)
+const validateConfig = ajv.compile(configDataSchema)
+
+const test = {
+  nodes: [{id: '1', x: 0, y: 0}, {fill: 'pink'}],
+  links: [{source: '1', target: '2'}],
+  groups: [{id: 'hello'}],
+}
+const testConfig = {
+  nodes: {
+    fillOpacity: 123,
+    hello: 'world',
+  },
+}
+
+// eslint-disable-next-line no-console
+console.log(validateInputData(test), validateInputData.errors)
+// eslint-disable-next-line no-console
+console.log(validateConfig(testConfig), validateConfig.errors)
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0

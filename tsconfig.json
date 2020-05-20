@@ -9,6 +9,7 @@
     "strictNullChecks": true,
     "jsx": "react",
     "lib": ["esnext", "dom"],
+    "resolveJsonModule": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "moduleResolution": "node",
