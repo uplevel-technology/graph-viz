@@ -15,51 +15,74 @@ const DEFAULT_LINK_WIDTH = 1
 export interface LinkStyleAttributes {
   /**
    * determines whether an arrow is drawn on the link
+   * @default false
+   *
    */
   directed?: boolean
 
   /**
    * determine whether the line should be dashed
+   * @default false
    */
   dashed?: boolean
 
   /**
-   * hex color string
+   * valid HTML color string
+   * @default "#cccccc"
    */
   color?: string
 
   /**
-   * link opacity between 0 and 1
-   * default is 1
+   * link opacity
+   * @default 1
+   * @minimum 0
+   * @maximum 1
    */
   opacity?: number
 
   /**
    * arrow width in pixels
+   * @minimum 0
    */
   arrowWidth?: number
 
   /**
-   * relative scale of the label.
-   * default is 1.0
+   * relative scale of the label
+   * @default 1
    */
   labelScale?: number
 }
 
 export interface DisplayLink extends LinkStyleAttributes {
-  source: string
-  target: string
   /**
-   * text to display
+   * source node id
+   */
+  source: string
+
+  /**
+   * target node id
+   */
+  target: string
+
+  /**
+   * label to display
    */
   label?: string
 }
 
 export interface PopulatedDisplayLink extends LinkStyleAttributes {
-  source: DisplayNode
-  target: DisplayNode
   /**
-   * text to display
+   * populated source node
+   */
+  source: DisplayNode
+
+  /**
+   * populated target node
+   */
+  target: DisplayNode
+
+  /**
+   * label to display
    */
   label?: string
 }

@@ -32,8 +32,19 @@ const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
 
 export interface VisualizationInputData {
+  /**
+   * list of nodes with their style and position attributes
+   */
   nodes: DisplayNode[]
+
+  /**
+   * list of links
+   */
   links: DisplayLink[]
+
+  /**
+   * list of groups
+   */
   groups: DisplayGroup[]
 }
 

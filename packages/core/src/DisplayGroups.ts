@@ -11,35 +11,43 @@ import {defaults} from 'lodash'
 
 export interface GroupStyleAttributes {
   /**
-   * boolean to toggle the visibility of a display group on or off
+   * boolean to toggle the visibility of a display group
+   * @default false
    */
   visible?: boolean
 
   /**
    * type of polygon to draw
-   * default is convexHull
+   * @default "convexHull"
    */
   shape?: 'convexHull' | 'circle'
 
   /**
    * fill color hex string
-   * (default is #000000)
+   * @default '#000000'
    */
   fill?: string
 
   /**
    * relative node fill opacity
-   * (must be between 0.0 - 1.0)
+   * @default 0.09
+   * @minimum 0
+   * @maximum 1
    */
   fillOpacity?: number
 
   /**
    * inner padding from the boundary nodes
+   * @default 0
+   * @minimum 0
    */
   padding?: number
 }
 
 export interface DisplayGroup extends GroupStyleAttributes {
+  /**
+   * unique id for group
+   */
   id: string
 }
 

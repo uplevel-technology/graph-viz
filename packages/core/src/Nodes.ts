@@ -8,55 +8,66 @@ import {BufferAttribute} from 'three'
 export interface NodeStyleAttributes {
   /**
    * node fill color hex string
-   * (default is #333333)
+   * @default "#333333"
    */
   fill?: string
 
   /**
    * relative node fill opacity
-   * (must be between 0.0 - 1.0)
+   * @default 1
+   * @minimum 0
+   * @maximum 1
    */
   fillOpacity?: number
 
   /**
    * the absolute side in pixels of the bounding square container of the node
-   * (default is 20 pixels)
+   * @default 20
+   * @minimum 0
    */
   absoluteSize?: number
 
   /**
    * node container's scale factor
-   * (default is 1.0)
+   * @default 1
+   * @minimum 0
+   * @maximum 1
    */
   scale?: number
 
   /**
    * inner radius of the node circle relative to the absolute container size
-   * (must be between 0.0 to 1.0). (default is 0.2)
+   * (default is 0.2 or 20% of the absolute size)
+   * @default 0.2
+   * @minimum 0
+   * @maximum 1
    */
   innerRadius?: number
 
   /**
    * node strike color hex string
+   * @default "#333333"
    */
   stroke?: string
 
   /**
-   * relative node stroke opacity
-   * (must be between 0.0 - 1.0)
+   * relative node stroke opacity.
+   * @default 1
+   * @minimum 0
+   * @maximum 1
    */
   strokeOpacity?: number
 
   /**
-   * relative node stroke width
-   * (This width is relative to the node container. Must be between 0.0 to 1.0)
+   * node stroke width relative to node container.
+   * @default 0
    */
   strokeWidth?: number
 }
 
 export interface DisplayNode extends NodeStyleAttributes {
   /**
-   * Unique node id
+   * unique node id
    */
   id: string
 
@@ -75,10 +86,10 @@ export interface DisplayNode extends NodeStyleAttributes {
    */
   y: number
 
+  // NOTE: this could be defined on a mouse interaction node interface
   /**
    * disables interactions on this node if set
-   * (default is false)
-   * NOTE: this could be defined on a mouse interaction node interface
+   * @default false
    */
   disableInteractions?: boolean
 }
