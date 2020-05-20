@@ -4,9 +4,12 @@
         "SimulationGroup": {
             "properties": {
                 "id": {
+                    "description": "id of the group",
                     "type": "string"
                 },
                 "strength": {
+                    "default": 0,
+                    "description": "attractive strength of the nodes in this group",
                     "type": "number"
                 }
             },
@@ -18,13 +21,18 @@
         "SimulationLink": {
             "properties": {
                 "source": {
+                    "description": "id of source node",
                     "type": "string"
                 },
                 "strengthMultiplier": {
+                    "default": 1,
                     "description": "Multiplicative factor applied to default d3 link force,\nwhich serves as an attractive force between the endpoints.\nA value between 0 and 1 will reduce the attractive force,\ntending to increase the length of the link.",
+                    "maximum": 1,
+                    "minimum": 0,
                     "type": "number"
                 },
                 "target": {
+                    "description": "id of target node",
                     "type": "string"
                 }
             },
@@ -37,10 +45,13 @@
         "SimulationNode": {
             "properties": {
                 "charge": {
+                    "default": -30,
                     "description": "d3 force manyBody strength",
+                    "maximum": 0,
                     "type": "number"
                 },
                 "displayGroupIds": {
+                    "description": "array of group ids the node belongs to",
                     "items": {
                         "type": "string"
                     },
@@ -69,6 +80,7 @@
                     ]
                 },
                 "id": {
+                    "description": "unique id for the node",
                     "type": "string"
                 },
                 "index": {
@@ -100,18 +112,21 @@
     },
     "properties": {
         "forceGroups": {
+            "description": "list of forceGroups",
             "items": {
                 "$ref": "#/definitions/SimulationGroup"
             },
             "type": "array"
         },
         "links": {
+            "description": "list of simulation links",
             "items": {
                 "$ref": "#/definitions/SimulationLink"
             },
             "type": "array"
         },
         "nodes": {
+            "description": "list of simulation nodes",
             "items": {
                 "$ref": "#/definitions/SimulationNode"
             },

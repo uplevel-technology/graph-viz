@@ -2,12 +2,21 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "properties": {
         "groupStrength": {
+            "default": 0,
+            "description": "strength for each group",
             "type": "number"
         },
         "linkStrengthMultiplier": {
+            "default": 1,
+            "description": "strengthMultiplier for each link",
+            "maximum": 1,
+            "minimum": 0,
             "type": "number"
         },
         "nodeCharge": {
+            "default": -30,
+            "description": "charge on each node",
+            "maximum": 0,
             "type": "number"
         }
     },

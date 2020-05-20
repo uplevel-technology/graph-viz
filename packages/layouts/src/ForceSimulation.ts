@@ -1,9 +1,17 @@
 import * as d3 from 'd3'
 import {meanBy, noop, defaults} from 'lodash'
+import {validateForceConfig, validateSimulationData} from './validators'
+import Ajv from 'ajv'
 
 export interface SimulationNode extends d3.SimulationNodeDatum {
+  /**
+   * unique id for the node
+   */
   id: string
 
+  /**
+   * array of group ids the node belongs to
+   */
   displayGroupIds?: string[]
 
   /**
@@ -21,12 +29,21 @@ export interface SimulationNode extends d3.SimulationNodeDatum {
   /**
    * d3 force manyBody strength
    * @see https://github.com/d3/d3-force#forceManyBody
+   * @default -30
+   * @maximum 0
    */
   charge?: number
 }
 
 export interface SimulationLink {
+  /**
+   * id of source node
+   */
   source: string
+
+  /**
+   * id of target node
+   */
   target: string
 
   /**
@@ -35,18 +52,40 @@ export interface SimulationLink {
    * A value between 0 and 1 will reduce the attractive force,
    * tending to increase the length of the link.
    * @see https://github.com/d3/d3-force#link_strength
+   * @default 1
+   * @minimum 0
+   * @maximum 1
    */
   strengthMultiplier?: number
 }
 
 export interface SimulationGroup {
+  /**
+   * id of the group
+   */
   id: string
+
+  /**
+   * attractive strength of the nodes in this group
+   * @default 0
+   */
   strength?: number
 }
 
 export interface SimulationData {
+  /**
+   * list of simulation nodes
+   */
   nodes: SimulationNode[]
+
+  /**
+   * list of simulation links
+   */
   links: SimulationLink[]
+
+  /**
+   * list of forceGroups
+   */
   forceGroups: SimulationGroup[]
 }
 
@@ -147,8 +186,27 @@ function getDefaultLinkForceStrengths(links: SimulationLink[]): number[] {
 }
 
 export interface ForceConfig {
+  /**
+   * charge on each node
+   * @default -30
+   * @maximum 0
+   */
   nodeCharge?: number
+
+  /**
+   * strengthMultiplier for each link
+   *
+   * @default 1
+   * @minimum 0
+   * @maximum 1
+   */
   linkStrengthMultiplier?: number
+
+  /**
+   * strength for each group
+   *
+   * @default 0
+   */
   groupStrength?: number
 }
 export const FORCE_DEFAULTS = {
@@ -176,6 +234,11 @@ export class ForceSimulation {
     config: ForceConfig = FORCE_DEFAULTS,
     staticMode = false,
   ) {
+    if (!validateSimulationData(graph)) {
+      const err = validateSimulationData.errors?.[0] as Ajv.ErrorObject
+      throw new Error(`data${err.dataPath} ${err.message}`)
+    }
+
     // reset undefined values to default values
     const mergedConfig = defaults({}, config, FORCE_DEFAULTS)
     Object.assign(this.config, mergedConfig) // preserve referential equality
@@ -273,6 +336,10 @@ export class ForceSimulation {
    * @param newConfig
    */
   public updateConfig(newConfig?: ForceConfig) {
+    if (!validateForceConfig(newConfig)) {
+      const err = validateForceConfig.errors?.[0] as Ajv.ErrorObject
+      throw new Error(`config${err.dataPath} ${err.message}`)
+    }
     if (!this.simulation) {
       return
     }
