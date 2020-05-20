@@ -1,7 +1,31 @@
 import 'reflect-metadata'
+import Ajv from 'ajv'
+import inputDataSchema from './generated-schema/VisualizationInputData-schema.json'
+import configDataSchema from './generated-schema/ConfigurationOptions-schema.json'
 
+const ajv = new Ajv()
+
+/**
+ * validator to validate data against VisualizationInputData schema
+ */
+export const validateInputData = ajv.compile(inputDataSchema)
+
+/**
+ * validator to validate data against ForceConfig schema
+ */
+export const validateConfig = ajv.compile(configDataSchema)
+
+/**
+ * symbol to attach to required params
+ */
 const requiredMetadataKey = Symbol('required')
 
+/**
+ * parameter decorator to flag a function param as required
+ * @param target
+ * @param propertyKey
+ * @param parameterIndex
+ */
 export function required(
   target: Record<string, any>,
   propertyKey: string | symbol,
@@ -18,7 +42,14 @@ export function required(
   )
 }
 
-export function validate(
+/**
+ * decorator that enables parameter validation on a function definition
+ * using reflection
+ * @param target
+ * @param propertyName
+ * @param descriptor
+ */
+export function validateArgs(
   target: any,
   propertyName: string,
   descriptor: TypedPropertyDescriptor<Function>,
@@ -48,6 +79,11 @@ export function validate(
   }
 }
 
+/**
+ * decorator that enables parameter validation on a classConstructor definition
+ * using reflection
+ * @param target
+ */
 export function validateClassConstructor<T extends new (...args: any[]) => {}>(
   target: T,
 ): any {

@@ -26,31 +26,14 @@ import {
   GROUP_DEFAULTS,
   GroupStyleAttributes,
 } from './DisplayGroups'
-import {required, validate, validateClassConstructor} from './validators'
+import {
+  validateInputData,
+  validateConfig,
+  required,
+  validateArgs,
+  validateClassConstructor,
+} from './validators'
 import Ajv from 'ajv'
-import inputDataSchema from './generated-schema/VisualizationInputData-schema.json'
-import configDataSchema from './generated-schema/ConfigurationOptions-schema.json'
-
-const ajv = new Ajv()
-const validateInputData = ajv.compile(inputDataSchema)
-const validateConfig = ajv.compile(configDataSchema)
-
-const test = {
-  nodes: [{id: '1', x: 0, y: 0}, {fill: 'pink'}],
-  links: [{source: '1', target: '2'}],
-  groups: [{id: 'hello'}],
-}
-const testConfig = {
-  nodes: {
-    fillOpacity: 123,
-    hello: 'world',
-  },
-}
-
-// eslint-disable-next-line no-console
-console.log(validateInputData(test), validateInputData.errors)
-// eslint-disable-next-line no-console
-console.log(validateConfig(testConfig), validateConfig.errors)
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
@@ -187,6 +170,11 @@ export class GraphVisualization {
     @required height: number,
     config: ConfigurationOptions = DEFAULT_CONFIG_OPTIONS,
   ) {
+    if (!validateInputData(graphData)) {
+      const err = validateInputData.errors?.[0] as Ajv.ErrorObject
+      throw new Error(`data${err.dataPath} ${err.message}`)
+    }
+
     this.data = graphData
     this.canvas = canvas
     this.width = width
@@ -250,6 +238,11 @@ export class GraphVisualization {
    * @param newConfig
    */
   public updateConfig(newConfig?: ConfigurationOptions) {
+    if (!validateConfig(newConfig)) {
+      const err = validateConfig.errors?.[0] as Ajv.ErrorObject
+      throw new Error(`config${err.dataPath} ${err.message}`)
+    }
+
     let needsUpdate = false
     if (!isEqual(newConfig?.nodes, this.config.nodes)) {
       this.nodesMesh.updateDefaults(newConfig?.nodes, this.data.nodes)
@@ -325,47 +318,47 @@ export class GraphVisualization {
     }
   }
 
-  @validate
+  @validateArgs
   public onNodeHoverIn(@required callback: HoverEventHandler) {
     this.registeredEventHandlers.nodeHoverIn = callback
   }
 
-  @validate
+  @validateArgs
   public onNodeHoverOut(@required callback: HoverEventHandler) {
     this.registeredEventHandlers.nodeHoverOut = callback
   }
 
-  @validate
+  @validateArgs
   public onClick(@required callback: ClickEventHandler) {
     this.registeredEventHandlers.click = callback
   }
 
-  @validate
+  @validateArgs
   public onDragStart(@required callback: DragStartEventHandler) {
     this.registeredEventHandlers.dragStart = callback
   }
 
-  @validate
+  @validateArgs
   public onDragEnd(@required callback: DragEndEventHandler) {
     this.registeredEventHandlers.dragEnd = callback
   }
 
-  @validate
+  @validateArgs
   public onNodeDrag(@required callback: NodeDragEventHandler) {
     this.registeredEventHandlers.nodeDrag = callback
   }
 
-  @validate
+  @validateArgs
   public onSecondaryClick(@required callback: SecondaryClickEventHandler) {
     this.registeredEventHandlers.secondaryClick = callback
   }
 
-  @validate
+  @validateArgs
   public onPan(@required callback: PanEventHandler) {
     this.registeredEventHandlers.pan = callback
   }
 
-  @validate
+  @validateArgs
   public onZoom(@required callback: ZoomEventHandler) {
     this.registeredEventHandlers.zoom = callback
   }
@@ -379,8 +372,13 @@ export class GraphVisualization {
    * adds/removes new/deleted nodes
    * @param graphData
    */
-  @validate
+  @validateArgs
   public update(@required graphData: VisualizationInputData) {
+    if (!validateInputData(graphData)) {
+      const err = validateInputData.errors?.[0] as Ajv.ErrorObject
+      throw new Error(`data${err.dataPath} ${err.message}`)
+    }
+
     this.data = graphData
     this.nodeIdToIndexMap = constructIdToIdxMap(graphData.nodes)
     this.nodesMesh.updateAll(graphData.nodes)
@@ -398,14 +396,26 @@ export class GraphVisualization {
    *
    * @param updatedGraphData
    */
-  @validate
+  @validateArgs
   public updatePositions(@required updatedGraphData: VisualizationInputData) {
     if (updatedGraphData.nodes.length !== this.data.nodes.length) {
       throw new Error(
         `GraphVisualization.updatePositions should only be used 
-          when the size and the order of the nodes has not changed. 
+          when the size and the order of the nodes has not changed.
+          Use update() to resize the data.
+          
           Currently rendered ${this.data.nodes.length} nodes.
           Received update for ${updatedGraphData.nodes.length} nodes.`,
+      )
+    }
+    if (updatedGraphData.links.length !== this.data.links.length) {
+      throw new Error(
+        `GraphVisualization.updatePositions should only be used 
+          when the size and the order of the links has not changed.
+          Use update() to resize the data.
+          
+          Currently rendered ${this.data.links.length} links.
+          Received update for ${updatedGraphData.links.length} links.`,
       )
     }
 
@@ -429,7 +439,7 @@ export class GraphVisualization {
    * @param index
    * @param updatedNode
    */
-  @validate
+  @validateArgs
   public updateNode(
     @required index: number,
     @required updatedNode: DisplayNode,
@@ -448,7 +458,7 @@ export class GraphVisualization {
    * have NOT changed.
    * @param groups
    */
-  @validate
+  @validateArgs
   public updateGroups(@required groups: DisplayGroup[]) {
     this.data.groups = groups
     this.groupsMesh.updateAll(this.data.nodes, this.data.groups)
@@ -460,7 +470,7 @@ export class GraphVisualization {
    * @param width
    * @param height
    */
-  @validate
+  @validateArgs
   public resize(@required width: number, @required height: number) {
     if (width === this.width && height === this.height) {
       return
