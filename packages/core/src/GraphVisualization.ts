@@ -61,22 +61,22 @@ export interface ConfigurationOptions {
   /**
    * node style config
    */
-  nodes: NodeStyleAttributes
+  nodes?: NodeStyleAttributes
 
   /**
    * link style config
    */
-  links: LinkStyleAttributes
+  links?: LinkStyleAttributes
 
   /**
    * group style config
    */
-  groups: GroupStyleAttributes
+  groups?: GroupStyleAttributes
 
   /**
    * events style config
    */
-  events: {
+  events?: {
     /**
      * disables click event
      */
@@ -109,7 +109,7 @@ export interface ConfigurationOptions {
   }
 }
 
-const DEFAULT_CONFIG_OPTIONS = {
+const DEFAULT_CONFIG_OPTIONS: Required<ConfigurationOptions> = {
   nodes: NODE_DEFAULTS,
   links: LINK_DEFAULTS,
   groups: GROUP_DEFAULTS,
@@ -154,14 +154,14 @@ export class GraphVisualization {
   private readonly scene: THREE.Scene
   private readonly renderer: THREE.WebGLRenderer
   private readonly mouseInteraction: MouseInteraction
-  private config: ConfigurationOptions = DEFAULT_CONFIG_OPTIONS
+  private config: Required<ConfigurationOptions> = DEFAULT_CONFIG_OPTIONS
 
   constructor(
     @required graphData: VisualizationInputData,
     @required canvas: HTMLCanvasElement,
     @required width: number,
     @required height: number,
-    config: Partial<ConfigurationOptions> = DEFAULT_CONFIG_OPTIONS,
+    config: ConfigurationOptions = DEFAULT_CONFIG_OPTIONS,
   ) {
     this.data = graphData
     this.canvas = canvas
@@ -225,7 +225,7 @@ export class GraphVisualization {
    * update config and re-render
    * @param newConfig
    */
-  public updateConfig(newConfig: Partial<ConfigurationOptions> | undefined) {
+  public updateConfig(newConfig?: ConfigurationOptions) {
     let needsUpdate = false
     if (!isEqual(newConfig?.nodes, this.config.nodes)) {
       this.nodesMesh.updateDefaults(newConfig?.nodes, this.data.nodes)
