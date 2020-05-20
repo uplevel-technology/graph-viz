@@ -1,0 +1,215 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "DisplayGroup": {
+            "properties": {
+                "fill": {
+                    "default": "'#000000'",
+                    "description": "fill color hex string",
+                    "type": "string"
+                },
+                "fillOpacity": {
+                    "default": 0.09,
+                    "description": "relative node fill opacity",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "id": {
+                    "description": "unique id for group",
+                    "type": "string"
+                },
+                "padding": {
+                    "default": 0,
+                    "description": "inner padding from the boundary nodes",
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "shape": {
+                    "default": "convexHull",
+                    "description": "type of polygon to draw",
+                    "enum": [
+                        "circle",
+                        "convexHull"
+                    ],
+                    "type": "string"
+                },
+                "visible": {
+                    "default": false,
+                    "description": "boolean to toggle the visibility of a display group",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "type": "object"
+        },
+        "DisplayLink": {
+            "properties": {
+                "arrowWidth": {
+                    "description": "arrow width in pixels",
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "color": {
+                    "default": "#cccccc",
+                    "description": "valid HTML color string",
+                    "type": "string"
+                },
+                "dashed": {
+                    "default": false,
+                    "description": "determine whether the line should be dashed",
+                    "type": "boolean"
+                },
+                "directed": {
+                    "default": false,
+                    "description": "determines whether an arrow is drawn on the link",
+                    "type": "boolean"
+                },
+                "label": {
+                    "description": "label to display",
+                    "type": "string"
+                },
+                "labelScale": {
+                    "default": 1,
+                    "description": "relative scale of the label",
+                    "type": "number"
+                },
+                "opacity": {
+                    "default": 1,
+                    "description": "link opacity",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "source": {
+                    "description": "source node id",
+                    "type": "string"
+                },
+                "target": {
+                    "description": "target node id",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "source",
+                "target"
+            ],
+            "type": "object"
+        },
+        "DisplayNode": {
+            "properties": {
+                "absoluteSize": {
+                    "default": 20,
+                    "description": "the absolute side in pixels of the bounding square container of the node",
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "disableInteractions": {
+                    "default": false,
+                    "description": "disables interactions on this node if set",
+                    "type": "boolean"
+                },
+                "displayGroupIds": {
+                    "description": "optional display group IDs",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "fill": {
+                    "default": "#333333",
+                    "description": "node fill color hex string",
+                    "type": "string"
+                },
+                "fillOpacity": {
+                    "default": 1,
+                    "description": "relative node fill opacity",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "id": {
+                    "description": "unique node id",
+                    "type": "string"
+                },
+                "innerRadius": {
+                    "default": 0.2,
+                    "description": "inner radius of the node circle relative to the absolute container size\n(default is 0.2 or 20% of the absolute size)",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "scale": {
+                    "default": 1,
+                    "description": "node container's scale factor",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "stroke": {
+                    "default": "#333333",
+                    "description": "node strike color hex string",
+                    "type": "string"
+                },
+                "strokeOpacity": {
+                    "default": 1,
+                    "description": "relative node stroke opacity.",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "strokeWidth": {
+                    "default": 0,
+                    "description": "node stroke width relative to node container.",
+                    "type": "number"
+                },
+                "x": {
+                    "description": "x coordinate of the node position",
+                    "type": "number"
+                },
+                "y": {
+                    "description": "y position of the node position",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "id",
+                "x",
+                "y"
+            ],
+            "type": "object"
+        }
+    },
+    "properties": {
+        "groups": {
+            "description": "list of groups",
+            "items": {
+                "$ref": "#/definitions/DisplayGroup"
+            },
+            "type": "array"
+        },
+        "links": {
+            "description": "list of links",
+            "items": {
+                "$ref": "#/definitions/DisplayLink"
+            },
+            "type": "array"
+        },
+        "nodes": {
+            "description": "list of nodes with their style and position attributes",
+            "items": {
+                "$ref": "#/definitions/DisplayNode"
+            },
+            "type": "array"
+        }
+    },
+    "required": [
+        "groups",
+        "links",
+        "nodes"
+    ],
+    "type": "object"
+}
+
