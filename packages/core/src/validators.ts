@@ -3,7 +3,6 @@ import 'reflect-metadata'
 const requiredMetadataKey = Symbol('required')
 
 export function required(
-  // tslint:disable-next-line:ban-types
   target: Record<string, any>,
   propertyKey: string | symbol,
   parameterIndex: number,
@@ -22,11 +21,10 @@ export function required(
 export function validate(
   target: any,
   propertyName: string,
-  // tslint:disable-next-line:ban-types
   descriptor: TypedPropertyDescriptor<Function>,
 ) {
   const method = descriptor.value
-  descriptor.value = function() {
+  descriptor.value = function(...args: any[]) {
     const requiredParameters: number[] = Reflect.getOwnMetadata(
       requiredMetadataKey,
       target,
@@ -37,7 +35,7 @@ export function validate(
       for (const parameterIndex of requiredParameters) {
         if (
           parameterIndex >= arguments.length ||
-          arguments[parameterIndex] === undefined
+          args[parameterIndex] === undefined
         ) {
           throw new Error(
             `Call to ${target.constructor.name}.${propertyName}() missing required argument(s). Please refer to the docs for correct usage.`,
@@ -46,7 +44,7 @@ export function validate(
       }
     }
 
-    return method!.apply(this, arguments)
+    return method!.apply(this, args)
   }
 }
 
@@ -64,10 +62,10 @@ export function validateClassConstructor<T extends new (...args: any[]) => {}>(
         for (const parameterIndex of requiredParameters) {
           if (
             parameterIndex >= arguments.length ||
-            arguments[parameterIndex] === undefined
+            args[parameterIndex] === undefined
           ) {
             throw new Error(
-              `${target.constructor.name} initialized with missing argument(s). Please refer to the docs for correct usage.`,
+              `${target.name} initialized with missing argument(s). Please refer to the docs for correct usage.`,
             )
           }
         }
