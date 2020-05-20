@@ -1,0 +1,128 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "SimulationGroup": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "strength": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "type": "object"
+        },
+        "SimulationLink": {
+            "properties": {
+                "source": {
+                    "type": "string"
+                },
+                "strengthMultiplier": {
+                    "description": "Multiplicative factor applied to default d3 link force,\nwhich serves as an attractive force between the endpoints.\nA value between 0 and 1 will reduce the attractive force,\ntending to increase the length of the link.",
+                    "type": "number"
+                },
+                "target": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "source",
+                "target"
+            ],
+            "type": "object"
+        },
+        "SimulationNode": {
+            "properties": {
+                "charge": {
+                    "description": "d3 force manyBody strength",
+                    "type": "number"
+                },
+                "displayGroupIds": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "forceX": {
+                    "description": "d3 forceX seed value",
+                    "type": "number"
+                },
+                "forceY": {
+                    "description": "d3 forceY seed value",
+                    "type": "number"
+                },
+                "fx": {
+                    "description": "Node’s fixed x-position (if position was fixed)",
+                    "type": [
+                        "null",
+                        "number"
+                    ]
+                },
+                "fy": {
+                    "description": "Node’s fixed y-position (if position was fixed)",
+                    "type": [
+                        "null",
+                        "number"
+                    ]
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "description": "Node’s zero-based index into nodes array. This property is set during the initialization process of a simulation.",
+                    "type": "number"
+                },
+                "vx": {
+                    "description": "Node’s current x-velocity",
+                    "type": "number"
+                },
+                "vy": {
+                    "description": "Node’s current y-velocity",
+                    "type": "number"
+                },
+                "x": {
+                    "description": "Node’s current x-position",
+                    "type": "number"
+                },
+                "y": {
+                    "description": "Node’s current y-position",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "type": "object"
+        }
+    },
+    "properties": {
+        "forceGroups": {
+            "items": {
+                "$ref": "#/definitions/SimulationGroup"
+            },
+            "type": "array"
+        },
+        "links": {
+            "items": {
+                "$ref": "#/definitions/SimulationLink"
+            },
+            "type": "array"
+        },
+        "nodes": {
+            "items": {
+                "$ref": "#/definitions/SimulationNode"
+            },
+            "type": "array"
+        }
+    },
+    "required": [
+        "forceGroups",
+        "links",
+        "nodes"
+    ],
+    "type": "object"
+}
+

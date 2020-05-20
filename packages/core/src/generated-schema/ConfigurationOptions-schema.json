@@ -1,0 +1,179 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "GroupStyleAttributes": {
+            "properties": {
+                "fill": {
+                    "default": "'#000000'",
+                    "description": "fill color hex string",
+                    "type": "string"
+                },
+                "fillOpacity": {
+                    "default": 0.09,
+                    "description": "relative node fill opacity",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "padding": {
+                    "default": 0,
+                    "description": "inner padding from the boundary nodes",
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "shape": {
+                    "default": "convexHull",
+                    "description": "type of polygon to draw",
+                    "enum": [
+                        "circle",
+                        "convexHull"
+                    ],
+                    "type": "string"
+                },
+                "visible": {
+                    "default": false,
+                    "description": "boolean to toggle the visibility of a display group",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "LinkStyleAttributes": {
+            "properties": {
+                "arrowWidth": {
+                    "description": "arrow width in pixels",
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "color": {
+                    "default": "#cccccc",
+                    "description": "valid HTML color string",
+                    "type": "string"
+                },
+                "dashed": {
+                    "default": false,
+                    "description": "determine whether the line should be dashed",
+                    "type": "boolean"
+                },
+                "directed": {
+                    "default": false,
+                    "description": "determines whether an arrow is drawn on the link",
+                    "type": "boolean"
+                },
+                "labelScale": {
+                    "default": 1,
+                    "description": "relative scale of the label",
+                    "type": "number"
+                },
+                "opacity": {
+                    "default": 1,
+                    "description": "link opacity",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "NodeStyleAttributes": {
+            "properties": {
+                "absoluteSize": {
+                    "default": 20,
+                    "description": "the absolute side in pixels of the bounding square container of the node",
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "fill": {
+                    "default": "#333333",
+                    "description": "node fill color hex string",
+                    "type": "string"
+                },
+                "fillOpacity": {
+                    "default": 1,
+                    "description": "relative node fill opacity",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "innerRadius": {
+                    "default": 0.2,
+                    "description": "inner radius of the node circle relative to the absolute container size\n(default is 0.2 or 20% of the absolute size)",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "scale": {
+                    "default": 1,
+                    "description": "node container's scale factor",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "stroke": {
+                    "default": "#333333",
+                    "description": "node strike color hex string",
+                    "type": "string"
+                },
+                "strokeOpacity": {
+                    "default": 1,
+                    "description": "relative node stroke opacity.",
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": "number"
+                },
+                "strokeWidth": {
+                    "default": 0,
+                    "description": "node stroke width relative to node container.",
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "properties": {
+        "events": {
+            "description": "events style config",
+            "properties": {
+                "disableClick": {
+                    "description": "disables click event",
+                    "type": "boolean"
+                },
+                "disableDrag": {
+                    "description": "disables drag events",
+                    "type": "boolean"
+                },
+                "disableHover": {
+                    "description": "disables hover events",
+                    "type": "boolean"
+                },
+                "disablePan": {
+                    "description": "disables pan event",
+                    "type": "boolean"
+                },
+                "disableSecondaryClick": {
+                    "description": "disables secondary click event",
+                    "type": "boolean"
+                },
+                "disableZoom": {
+                    "description": "disables zoom event",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "groups": {
+            "$ref": "#/definitions/GroupStyleAttributes",
+            "description": "group style config"
+        },
+        "links": {
+            "$ref": "#/definitions/LinkStyleAttributes",
+            "description": "link style config"
+        },
+        "nodes": {
+            "$ref": "#/definitions/NodeStyleAttributes",
+            "description": "node style config"
+        }
+    },
+    "type": "object"
+}
+

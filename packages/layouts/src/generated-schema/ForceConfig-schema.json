@@ -1,0 +1,16 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "properties": {
+        "groupStrength": {
+            "type": "number"
+        },
+        "linkStrengthMultiplier": {
+            "type": "number"
+        },
+        "nodeCharge": {
+            "type": "number"
+        }
+    },
+    "type": "object"
+}
+

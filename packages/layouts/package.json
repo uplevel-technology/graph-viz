@@ -24,7 +24,7 @@
     "url": "git+https://github.com/uplevel-technology/graph-viz.git"
   },
   "scripts": {
-    "generate:InputSchema": "typescript-json-schema ./tsconfig.json VisualizationInputData --required > ./src/generated-schema/VisualizationInputData-schema.json",
+    "generate:InputSchema": "typescript-json-schema ./tsconfig.json SimulationData --required > ./src/generated-schema/SimulationData-schema.json",
     "generate:ConfigSchema": "typescript-json-schema ./tsconfig.json ForceConfig --required > ./src/generated-schema/ForceConfig-schema.json",
     "generateSchemas": "yarn run generate:InputSchema && yarn run generate:ConfigSchema",
     "build": "yarn build:ts && yarn build:cjs && yarn build:esm && yarn build:es",
