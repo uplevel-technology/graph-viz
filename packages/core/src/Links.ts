@@ -356,8 +356,14 @@ export class Links {
     const normal = new THREE.Vector2()
 
     for (let i = 0; i < numLinks; i++) {
-      source.set(links[i].source.x!, links[i].source.y!)
-      target.set(links[i].target.x!, links[i].target.y!)
+      source.set(
+        links[i].source.x ?? Math.random() * 20,
+        links[i].source.y ?? Math.random() * 20,
+      )
+      target.set(
+        links[i].target.x ?? Math.random() * 20,
+        links[i].target.y ?? Math.random() * 20,
+      )
 
       tangent.copy(target).sub(source)
 

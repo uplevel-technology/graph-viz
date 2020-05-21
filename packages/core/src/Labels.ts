@@ -181,6 +181,11 @@ export class Labels {
 
       this.object.add(mesh)
 
+      link.source.x = link.source.x ?? Math.random() * 20
+      link.source.y = link.source.y ?? Math.random() * 20
+      link.target.x = link.target.x ?? Math.random() * 20
+      link.target.y = link.target.y ?? Math.random() * 20
+
       // Position at the center of the link:
       mesh.position.x = (link.source.x + link.target.x) / 2
       mesh.position.y = (link.source.y + link.target.y) / 2

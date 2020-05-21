@@ -105,8 +105,6 @@
                 "scale": {
                     "default": 1,
                     "description": "node container's scale factor",
-                    "maximum": 1,
-                    "minimum": 0,
                     "type": "number"
                 },
                 "stroke": {

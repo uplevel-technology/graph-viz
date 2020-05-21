@@ -30,8 +30,6 @@ export interface NodeStyleAttributes {
   /**
    * node container's scale factor
    * @default 1
-   * @minimum 0
-   * @maximum 1
    */
   scale?: number
 
@@ -78,13 +76,15 @@ export interface DisplayNode extends NodeStyleAttributes {
 
   /**
    * x coordinate of the node position
+   * @default random
    */
-  x: number
+  x?: number
 
   /**
    * y position of the node position
+   * @default random
    */
-  y: number
+  y?: number
 
   // NOTE: this could be defined on a mouse interaction node interface
   /**
@@ -306,7 +306,12 @@ export class Nodes {
       'strokeOpacity',
     ) as THREE.BufferAttribute
 
-    position.setXYZ(index, node.x, node.y, 0)
+    position.setXYZ(
+      index,
+      node.x ?? Math.random() * 20,
+      node.y ?? Math.random() * 20,
+      0,
+    )
     position.needsUpdate = true
 
     absoluteSize.setX(
@@ -427,7 +432,12 @@ export class Nodes {
       'position',
     ) as THREE.BufferAttribute
     for (let i = 0; i < numNodes; i++) {
-      position.setXYZ(i, nodes[i].x!, nodes[i].y!, 0)
+      position.setXYZ(
+        i,
+        nodes[i].x ?? Math.random() * 20,
+        nodes[i].y ?? Math.random() * 20,
+        0,
+      )
     }
 
     position.needsUpdate = true

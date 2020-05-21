@@ -327,13 +327,16 @@ export class GraphVizComponent extends React.Component<
   }
 
   componentWillUnmount() {
-    this.simulation.stop()
-    this.visualization.dispose()
+    if (this.simulation) {
+      this.simulation.stop()
+    }
+    if (this.visualization) {
+      this.visualization.dispose()
+    }
     window.removeEventListener('resize', this.onWindowResize)
   }
 
   initData() {
-    this.simulation.stop()
     this.simulation.initialize(
       {
         nodes: this.props.nodes,

@@ -144,8 +144,6 @@
                 "scale": {
                     "default": 1,
                     "description": "node container's scale factor",
-                    "maximum": 1,
-                    "minimum": 0,
                     "type": "number"
                 },
                 "stroke": {
@@ -166,18 +164,18 @@
                     "type": "number"
                 },
                 "x": {
+                    "default": "random",
                     "description": "x coordinate of the node position",
                     "type": "number"
                 },
                 "y": {
+                    "default": "random",
                     "description": "y position of the node position",
                     "type": "number"
                 }
             },
             "required": [
-                "id",
-                "x",
-                "y"
+                "id"
             ],
             "type": "object"
         }

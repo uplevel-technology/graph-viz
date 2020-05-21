@@ -143,7 +143,12 @@ export class DisplayGroups {
   }
 
   private renderConvexHull(group: DisplayGroup, nodesInGroup: DisplayNode[]) {
-    const convexHull = get2DConvexHull(nodesInGroup) as DisplayNode[]
+    const nodesWithPositions = nodesInGroup.map(n => ({
+      ...n,
+      x: n.x ?? 0,
+      y: n.y ?? 0,
+    }))
+    const convexHull = get2DConvexHull(nodesWithPositions) as DisplayNode[]
 
     const vertices =
       nodesInGroup.length === 2
@@ -189,7 +194,12 @@ export class DisplayGroups {
   }
 
   private renderCircle(group: DisplayGroup, nodesInGroup: DisplayNode[]) {
-    const hull = getCircularHull(nodesInGroup)
+    const nodesWithPositions = nodesInGroup.map(n => ({
+      ...n,
+      x: n.x ?? Math.random() * 20,
+      y: n.y ?? Math.random() * 20,
+    }))
+    const hull = getCircularHull(nodesWithPositions)
 
     // add new display group
     if (this.meshes[group.id] === undefined) {
