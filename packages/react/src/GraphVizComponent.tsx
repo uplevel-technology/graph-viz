@@ -55,6 +55,7 @@ export interface GraphVizComponentProps {
   groups: GraphVizGroup[]
   tooltips: Partial<TooltipNode>[]
   onRefresh?: () => any
+  onError?: (error: Error) => any
   config?: ConfigurationOptions
   forceConfig?: ForceConfig
   showControls?: boolean
@@ -135,13 +136,23 @@ export class GraphVizComponent extends React.Component<
     this.tooltipNodes = this.props.tooltips as TooltipNode[]
 
     const {width, height} = root.getBoundingClientRect()
-    this.visualization = new GraphVisualization(
-      this.vizData,
-      canvas,
-      width,
-      height,
-      this.props.config,
-    )
+
+    try {
+      this.visualization = new GraphVisualization(
+        this.vizData,
+        canvas,
+        width,
+        height,
+        this.props.config,
+      )
+    } catch (err) {
+      if (this.props.onError) {
+        this.props.onError(err)
+        return
+      } else {
+        throw err
+      }
+    }
 
     window.addEventListener('resize', this.onWindowResize)
 
@@ -337,14 +348,23 @@ export class GraphVizComponent extends React.Component<
   }
 
   initData() {
-    this.simulation.initialize(
-      {
-        nodes: this.props.nodes,
-        links: this.props.links,
-        forceGroups: this.props.groups,
-      },
-      this.props.forceConfig,
-    )
+    try {
+      this.simulation.initialize(
+        {
+          nodes: this.props.nodes,
+          links: this.props.links,
+          forceGroups: this.props.groups,
+        },
+        this.props.forceConfig,
+      )
+    } catch (err) {
+      if (this.props.onError) {
+        this.props.onError(err)
+        return
+      } else {
+        throw err
+      }
+    }
 
     const nodePositions = this.simulation.getNodePositions()
 
