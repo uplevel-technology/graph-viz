@@ -98,7 +98,7 @@ export class DisplayGroups {
   public updateAll(nodes: DisplayNode[], groups: DisplayGroup[]) {
     const nodesByGroup = this.getGroupedNodes(nodes)
 
-    const visibleGroups = groups.filter(g => g.visible)
+    const visibleGroups = groups.filter(g => g.visible ?? this.defaults.visible)
 
     for (const group of visibleGroups) {
       const nodesInGroup = nodesByGroup[group.id]
@@ -113,7 +113,9 @@ export class DisplayGroups {
       }
     }
 
-    const invisibleGroups = groups.filter(g => !g.visible)
+    const invisibleGroups = groups.filter(
+      g => !(g.visible ?? this.defaults.visible),
+    )
 
     // remove invisible groups that were previously visible
     for (const group of invisibleGroups) {
