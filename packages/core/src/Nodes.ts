@@ -308,6 +308,7 @@ export class Nodes {
 
     position.setXYZ(
       index,
+      // initialize with a random seed value to prevent boundingSphere radius from being NaN
       node.x ?? Math.random() * 20,
       node.y ?? Math.random() * 20,
       0,

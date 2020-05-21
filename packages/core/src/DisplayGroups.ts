@@ -145,8 +145,8 @@ export class DisplayGroups {
   private renderConvexHull(group: DisplayGroup, nodesInGroup: DisplayNode[]) {
     const nodesWithPositions = nodesInGroup.map(n => ({
       ...n,
-      x: n.x ?? 0,
-      y: n.y ?? 0,
+      x: n.x ?? Math.random() * 20,
+      y: n.y ?? Math.random() * 20,
     }))
     const convexHull = get2DConvexHull(nodesWithPositions) as DisplayNode[]
 
