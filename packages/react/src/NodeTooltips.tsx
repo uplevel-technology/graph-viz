@@ -3,7 +3,7 @@ import {CSSProperties} from 'react'
 
 export interface TooltipFields {
   id: string
-  displayName: string
+  displayName?: string
 }
 
 export interface TooltipNode extends TooltipFields {
@@ -46,7 +46,7 @@ export function NodeTooltips(props: NodeTooltipsProps) {
   }
   return (
     <div style={{...styles.root, ...getTooltipStyle(props.node)}}>
-      {props.node.displayName}
+      {props.node.displayName ?? props.node.id}
     </div>
   )
 }
