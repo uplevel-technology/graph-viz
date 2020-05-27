@@ -1,11 +1,11 @@
 import * as React from 'react'
 import {
+  ForceConfig,
   ForceSimulation,
   NodePosition,
   SimulationGroup,
   SimulationLink,
   SimulationNode,
-  ForceConfig,
 } from '@graph-viz/layouts'
 import {
   ConfigurationOptions,
@@ -17,7 +17,7 @@ import {
 } from '@graph-viz/core'
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
-import {debounce, noop, remove, isEqual} from 'lodash'
+import {debounce, isEqual, noop, remove} from 'lodash'
 
 /**
  * Primary GraphVizData type definitions
@@ -80,6 +80,22 @@ export interface GraphVizComponentProps {
    * callback dispatched on secondary click
    */
   onSecondaryClick: (event: MouseEvent, clickedNodeIdx: number | null) => any
+
+  /**
+   * callback dispatched when force simulation and graph visualization
+   * instances are initialized
+   */
+  onInit?: (
+    visualization: GraphVisualization,
+    simulation: ForceSimulation,
+  ) => any
+
+  /**
+   * flag to prevent re-rendering the viz by default
+   * useful in situation when you want to call render functions on the
+   * GraphVisualization instance passed to the parent via onInit
+   */
+  preventRenderOnPropsChange?: boolean
 }
 
 const DRAFT_NODE_ID = 'draft-node'
@@ -313,9 +329,16 @@ export class GraphVizComponent extends React.Component<
     if (this.props.nodes.length > 0) {
       this.initData()
     }
+
+    if (this.props.onInit) {
+      this.props.onInit(this.visualization, this.simulation)
+    }
   }
 
   componentDidUpdate(prevProps: GraphVizComponentProps) {
+    if (this.props.preventRenderOnPropsChange) {
+      return
+    }
     if (
       prevProps.nodes !== this.props.nodes ||
       prevProps.links !== this.props.links
