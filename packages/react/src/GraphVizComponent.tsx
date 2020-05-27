@@ -1,4 +1,5 @@
 import * as React from 'react'
+import {MutableRefObject} from 'react'
 import {
   ForceConfig,
   ForceSimulation,
@@ -82,20 +83,21 @@ export interface GraphVizComponentProps {
   onSecondaryClick: (event: MouseEvent, clickedNodeIdx: number | null) => any
 
   /**
-   * callback dispatched when force simulation and graph visualization
-   * instances are initialized
+   * on mount this ref points to a function to trigger graph viz initialization
    */
-  onInit?: (
-    visualization: GraphVisualization,
-    simulation: ForceSimulation,
-  ) => any
+  updateLayoutAndStylesRef?: MutableRefObject<() => any>
+
+  /**
+   * on mount this ref points to a function to trigger graph viz updateStyles
+   */
+  updateStylesRef?: MutableRefObject<() => any>
 
   /**
    * flag to prevent re-rendering the viz by default
    * useful in situation when you want to call render functions on the
    * GraphVisualization instance passed to the parent via onInit
    */
-  preventRenderOnPropsChange?: boolean
+  preventAutomaticVizUpdate?: boolean
 }
 
 const DRAFT_NODE_ID = 'draft-node'
@@ -327,25 +329,29 @@ export class GraphVizComponent extends React.Component<
 
     // Initialize data
     if (this.props.nodes.length > 0) {
-      this.initData()
+      this.updateLayoutAndStyles()
     }
 
-    if (this.props.onInit) {
-      this.props.onInit(this.visualization, this.simulation)
+    if (this.props.updateLayoutAndStylesRef) {
+      this.props.updateLayoutAndStylesRef.current = this.updateLayoutAndStyles
+    }
+
+    if (this.props.updateStylesRef) {
+      this.props.updateStylesRef.current = this.updateStyles
     }
   }
 
   componentDidUpdate(prevProps: GraphVizComponentProps) {
-    if (this.props.preventRenderOnPropsChange) {
-      return
-    }
     if (
-      prevProps.nodes !== this.props.nodes ||
-      prevProps.links !== this.props.links
+      !this.props.preventAutomaticVizUpdate &&
+      (prevProps.nodes !== this.props.nodes ||
+        prevProps.links !== this.props.links ||
+        prevProps.groups !== this.props.groups)
     ) {
       this.tooltipNodes = this.props.tooltips as TooltipNode[]
-      this.initData()
+      this.updateLayoutAndStyles()
     }
+
     if (prevProps.groups !== this.props.groups) {
       this.vizData.groups = this.props.groups
       this.visualization.updateGroups(this.vizData.groups)
@@ -370,7 +376,7 @@ export class GraphVizComponent extends React.Component<
     window.removeEventListener('resize', this.onWindowResize)
   }
 
-  initData() {
+  updateLayoutAndStyles = () => {
     try {
       this.simulation.initialize(
         {
@@ -401,6 +407,18 @@ export class GraphVizComponent extends React.Component<
       groups: this.props.groups,
     }
 
+    this.visualization.update(this.vizData)
+  }
+
+  updateStyles = () => {
+    this.vizData = {
+      nodes: this.props.nodes.map((node, i) => ({
+        ...this.vizData.nodes[i], // preserve layout,
+        ...node,
+      })),
+      links: this.props.links,
+      groups: this.props.groups,
+    }
     this.visualization.update(this.vizData)
   }
 
