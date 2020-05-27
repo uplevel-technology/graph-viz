@@ -411,14 +411,16 @@ export class GraphVizComponent extends React.Component<
   }
 
   updateStyles = () => {
-    this.vizData = {
-      nodes: this.props.nodes.map((node, i) => ({
-        ...this.vizData.nodes[i], // preserve layout,
-        ...node,
-      })),
-      links: this.props.links,
-      groups: this.props.groups,
-    }
+    this.vizData.nodes = this.props.nodes.map((node, i) =>
+      // preserve ref
+      Object.assign(
+        this.vizData.nodes[i], // preserve layout
+        node,
+      ),
+    )
+    this.vizData.links = this.props.links
+    this.vizData.groups = this.props.groups
+
     this.visualization.update(this.vizData)
   }
 
