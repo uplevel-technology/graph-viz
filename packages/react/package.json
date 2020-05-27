@@ -1,6 +1,6 @@
 {
   "name": "@graph-viz/react",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "main": "./lib/index.js",
   "license": "MIT",
   "description": "> TODO: description",
