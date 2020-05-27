@@ -1,4 +1,4 @@
-import {size, noop, isEqual, defaultsDeep} from 'lodash'
+import {defaultsDeep, isEqual, noop, size} from 'lodash'
 import * as THREE from 'three'
 import {Vector3} from 'three'
 import {
@@ -27,11 +27,11 @@ import {
   GroupStyleAttributes,
 } from './DisplayGroups'
 import {
-  validateInputData,
-  validateConfig,
   required,
   validateArgs,
   validateClassConstructor,
+  validateConfig,
+  validateInputData,
 } from './validators'
 import Ajv from 'ajv'
 
@@ -385,6 +385,7 @@ export class GraphVisualization {
     this.linksMesh.updateAll(populateLinks(graphData, this.nodeIdToIndexMap))
     this.groupsMesh.updateAll(graphData.nodes, graphData.groups)
     this.mouseInteraction.updateData(this.data.nodes)
+    this.render()
   }
 
   /**
