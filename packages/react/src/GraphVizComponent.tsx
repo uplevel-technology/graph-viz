@@ -19,6 +19,12 @@ import {
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
 import {debounce, isEqual, noop, remove} from 'lodash'
+import {
+  DragEndEventHandler,
+  DragStartEventHandler,
+  HoverEventHandler,
+  NodeDragEventHandler,
+} from '@graph-viz/core/lib/MouseInteraction'
 
 /**
  * Primary GraphVizData type definitions
@@ -76,6 +82,31 @@ export interface GraphVizComponentProps {
    * callback dispatched on primary click
    */
   onClick: (event: MouseEvent, clickedNodeIdx: number | null) => any
+
+  /**
+   * callback for event onNodeHoverIn
+   */
+  onNodeHoverIn?: HoverEventHandler
+
+  /**
+   * callback for event onNodeHoverOut
+   */
+  onNodeHoverOut?: HoverEventHandler
+
+  /**
+   * callback for event onNodeDrag
+   */
+  onNodeDrag?: NodeDragEventHandler
+
+  /**
+   * callback for event onDragStart
+   */
+  onDragStart?: DragStartEventHandler
+
+  /**
+   * callback for event onDragEnd
+   */
+  onDragEnd?: DragEndEventHandler
 
   /**
    * callback dispatched on secondary click
@@ -198,6 +229,10 @@ export class GraphVizComponent extends React.Component<
           },
         })
       }
+
+      if (this.props.onNodeHoverIn) {
+        this.props.onNodeHoverIn(hoveredNodeIdx)
+      }
     })
 
     this.simulation.onTick((nodePositions: NodePosition[]) => {
@@ -216,6 +251,10 @@ export class GraphVizComponent extends React.Component<
       // only hide tooltip if currently shown tooltip is hovered out
       if (hoveredOutNodeIdx === this.state.currentlyHoveredIdx) {
         this.setState({currentTooltipNode: null, currentlyHoveredIdx: null})
+      }
+
+      if (this.props.onNodeHoverOut) {
+        this.props.onNodeHoverOut(hoveredOutNodeIdx)
       }
     })
 
@@ -260,67 +299,80 @@ export class GraphVizComponent extends React.Component<
         forceGroups: this.props.groups,
       })
       // ^ the simulation tick handler should handle the position updates after this in our viz
+      if (this.props.onNodeDrag) {
+        this.props.onNodeDrag(worldPos, draggedNodeIdx)
+      }
     })
 
-    this.visualization.onDragStart((mouse, draggedNodeIdx: number | null) => {
-      if (draggedNodeIdx === null) {
-        return
-      }
-      const draggedNode = this.vizData.nodes[draggedNodeIdx]
-
-      if (this.props.editMode) {
-        this.setState({draftLinkSourceNode: draggedNode})
-        const draftNode = {
-          id: DRAFT_NODE_ID,
-          x: mouse.x,
-          y: mouse.y,
-          absoluteSize: 1,
-          // setting charge to 0 is required to ensure that the draftNode
-          // does not repel the targets
-          charge: 0,
-          // Important: disableInteractions on the draft node to make sure hover,
-          // click, dragEnd and other events ignore this node
-          disableInteractions: true,
-          fill: 'orange',
+    this.visualization.onDragStart(
+      (mouse, draggedNodeIdx: number | null, ...rest) => {
+        if (draggedNodeIdx === null) {
+          return
         }
-        const draftLink = {
-          source: draggedNode.id,
-          target: draftNode.id,
-          color: 'orange',
-        }
-        this.vizData.nodes.push(draftNode)
-        this.vizData.links.push(draftLink)
-        this.visualization.update(this.vizData)
-      }
-      lockNode(this.vizData.nodes[draggedNodeIdx])
-      this.visualization.updateNode(
-        draggedNodeIdx,
-        this.vizData.nodes[draggedNodeIdx],
-      )
-      this.simulation.reheat()
-    })
+        const draggedNode = this.vizData.nodes[draggedNodeIdx]
 
-    this.visualization.onDragEnd((mouse, targetNodeIdx: number | null) => {
-      if (this.props.editMode) {
-        if (this.state.draftLinkSourceNode) {
-          // This means a draft link was being drawn.
-          // Remove the placeholder (draftNode, draftLink) pair
-          remove(this.vizData.links, n => n.target === DRAFT_NODE_ID)
-          remove(this.vizData.nodes, n => n.id === DRAFT_NODE_ID)
+        if (this.props.editMode) {
+          this.setState({draftLinkSourceNode: draggedNode})
+          const draftNode = {
+            id: DRAFT_NODE_ID,
+            x: mouse.x,
+            y: mouse.y,
+            absoluteSize: 1,
+            // setting charge to 0 is required to ensure that the draftNode
+            // does not repel the targets
+            charge: 0,
+            // Important: disableInteractions on the draft node to make sure hover,
+            // click, dragEnd and other events ignore this node
+            disableInteractions: true,
+            fill: 'orange',
+          }
+          const draftLink = {
+            source: draggedNode.id,
+            target: draftNode.id,
+            color: 'orange',
+          }
+          this.vizData.nodes.push(draftNode)
+          this.vizData.links.push(draftLink)
           this.visualization.update(this.vizData)
+        }
+        lockNode(this.vizData.nodes[draggedNodeIdx])
+        this.visualization.updateNode(
+          draggedNodeIdx,
+          this.vizData.nodes[draggedNodeIdx],
+        )
+        this.simulation.reheat()
+        if (this.props.onDragStart) {
+          this.props.onDragStart(mouse, draggedNodeIdx, ...rest)
+        }
+      },
+    )
 
-          if (targetNodeIdx !== null) {
-            const sourceNode = this.state.draftLinkSourceNode!
-            const targetNode = this.vizData.nodes[targetNodeIdx]
-            if (sourceNode !== targetNode) {
-              this.props.onLinkDrawn(sourceNode, targetNode)
+    this.visualization.onDragEnd(
+      (mouse, targetNodeIdx: number | null, ...rest) => {
+        if (this.props.editMode) {
+          if (this.state.draftLinkSourceNode) {
+            // This means a draft link was being drawn.
+            // Remove the placeholder (draftNode, draftLink) pair
+            remove(this.vizData.links, n => n.target === DRAFT_NODE_ID)
+            remove(this.vizData.nodes, n => n.id === DRAFT_NODE_ID)
+            this.visualization.update(this.vizData)
+
+            if (targetNodeIdx !== null) {
+              const sourceNode = this.state.draftLinkSourceNode!
+              const targetNode = this.vizData.nodes[targetNodeIdx]
+              if (sourceNode !== targetNode) {
+                this.props.onLinkDrawn(sourceNode, targetNode)
+              }
+              this.setState({draftLinkSourceNode: undefined})
             }
-            this.setState({draftLinkSourceNode: undefined})
           }
         }
-      }
-      this.simulation.settle()
-    })
+        this.simulation.settle()
+        if (this.props.onDragEnd) {
+          this.props.onDragEnd(mouse, targetNodeIdx, ...rest)
+        }
+      },
+    )
 
     this.visualization.onSecondaryClick((...args) => {
       this.simulation.stop()
