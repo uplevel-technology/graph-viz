@@ -160,7 +160,8 @@ export class GraphVisualization {
 
   private readonly scene: THREE.Scene
   private readonly renderer: THREE.WebGLRenderer
-  private readonly mouseInteraction: MouseInteraction
+
+  public readonly interaction: MouseInteraction
   private config: Required<ConfigurationOptions> = DEFAULT_CONFIG_OPTIONS
 
   constructor(
@@ -224,7 +225,7 @@ export class GraphVisualization {
 
     this.render()
 
-    this.mouseInteraction = new MouseInteraction(
+    this.interaction = new MouseInteraction(
       this.canvas,
       this.camera,
       this.nodesMesh,
@@ -276,45 +277,45 @@ export class GraphVisualization {
     }
 
     if (!this.config.events.disableClick) {
-      this.mouseInteraction.onClick(this.handleClick)
+      this.interaction.onClick(this.handleClick)
     } else {
-      this.mouseInteraction.onClick(noop)
+      this.interaction.onClick(noop)
     }
 
     if (!this.config.events.disableHover) {
-      this.mouseInteraction.onNodeHoverIn(this.handleHoverIn)
-      this.mouseInteraction.onNodeHoverOut(this.handleHoverOut)
+      this.interaction.onNodeHoverIn(this.handleHoverIn)
+      this.interaction.onNodeHoverOut(this.handleHoverOut)
     } else {
-      this.mouseInteraction.onNodeHoverIn(noop)
-      this.mouseInteraction.onNodeHoverOut(noop)
+      this.interaction.onNodeHoverIn(noop)
+      this.interaction.onNodeHoverOut(noop)
     }
 
     if (!this.config.events.disableDrag) {
-      this.mouseInteraction.onDragStart(this.handleDragStart)
-      this.mouseInteraction.onDragEnd(this.handleDragEnd)
-      this.mouseInteraction.onNodeDrag(this.handleNodeDrag)
+      this.interaction.onDragStart(this.handleDragStart)
+      this.interaction.onDragEnd(this.handleDragEnd)
+      this.interaction.onNodeDrag(this.handleNodeDrag)
     } else {
-      this.mouseInteraction.onDragStart(noop)
-      this.mouseInteraction.onDragEnd(noop)
-      this.mouseInteraction.onNodeDrag(noop)
+      this.interaction.onDragStart(noop)
+      this.interaction.onDragEnd(noop)
+      this.interaction.onNodeDrag(noop)
     }
 
     if (!this.config.events.disablePan) {
-      this.mouseInteraction.onPan(this.handlePan)
+      this.interaction.onPan(this.handlePan)
     } else {
-      this.mouseInteraction.onPan(noop)
+      this.interaction.onPan(noop)
     }
 
     if (!this.config.events.disableZoom) {
-      this.mouseInteraction.onZoom(this.handleZoomOnWheel)
+      this.interaction.onZoom(this.handleZoomOnWheel)
     } else {
-      this.mouseInteraction.onZoom(noop)
+      this.interaction.onZoom(noop)
     }
 
     if (!this.config.events.disableSecondaryClick) {
-      this.mouseInteraction.onSecondaryClick(this.handleSecondaryClick)
+      this.interaction.onSecondaryClick(this.handleSecondaryClick)
     } else {
-      this.mouseInteraction.onSecondaryClick(noop)
+      this.interaction.onSecondaryClick(noop)
     }
   }
 
@@ -384,7 +385,7 @@ export class GraphVisualization {
     this.nodesMesh.updateAll(graphData.nodes)
     this.linksMesh.updateAll(populateLinks(graphData, this.nodeIdToIndexMap))
     this.groupsMesh.updateAll(graphData.nodes, graphData.groups)
-    this.mouseInteraction.updateData(this.data.nodes)
+    this.interaction.updateData(this.data.nodes)
     this.render()
   }
 
@@ -427,7 +428,7 @@ export class GraphVisualization {
       populateLinks(updatedGraphData, this.nodeIdToIndexMap),
     )
     this.groupsMesh.updateAll(updatedGraphData.nodes, updatedGraphData.groups)
-    this.mouseInteraction.updateData(this.data.nodes)
+    this.interaction.updateData(this.data.nodes)
 
     if (!this.userHasAdjustedViewport) {
       this.zoomToFit(updatedGraphData)
@@ -447,7 +448,7 @@ export class GraphVisualization {
   ) {
     this.data.nodes[index] = updatedNode
     this.nodesMesh.updateOne(index, updatedNode)
-    this.mouseInteraction.updateData(this.data.nodes)
+    this.interaction.updateData(this.data.nodes)
     this.groupsMesh.updateAll(this.data.nodes, this.data.groups)
     this.render()
   }
