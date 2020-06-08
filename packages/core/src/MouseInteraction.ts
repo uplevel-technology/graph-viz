@@ -179,64 +179,63 @@ export class MouseInteraction {
    * @deprecated use addEventListener or removeEventListener
    */
   public onNodeHoverIn(callback: HoverEventHandler) {
-    this.addEventListener('nodeHoverIn', callback)
-    this.addEventListener('nodeHoverIn', callback)
+    this.registeredEventHandlers.nodeHoverIn = [callback]
   }
 
   /**
    * @deprecated use addEventListener or removeEventListener
    */
   public onNodeHoverOut(callback: HoverEventHandler) {
-    this.addEventListener('nodeHoverOut', callback)
+    this.registeredEventHandlers.nodeHoverOut = [callback]
   }
 
   /**
    * @deprecated use addEventListener or removeEventListener
    */
   public onClick(callback: ClickEventHandler) {
-    this.addEventListener('click', callback)
+    this.registeredEventHandlers.click = [callback]
   }
 
   /**
    * @deprecated use addEventListener or removeEventListener
    */
   public onDragStart(callback: DragStartEventHandler) {
-    this.addEventListener('dragStart', callback)
+    this.registeredEventHandlers.dragStart = [callback]
   }
 
   /**
    * @deprecated use addEventListener or removeEventListener
    */
   public onNodeDrag(callback: NodeDragEventHandler) {
-    this.addEventListener('nodeDrag', callback)
+    this.registeredEventHandlers.nodeDrag = [callback]
   }
 
   /**
    * @deprecated use addEventListener or removeEventListener
    */
   public onDragEnd(callback: DragEndEventHandler) {
-    this.addEventListener('dragEnd', callback)
+    this.registeredEventHandlers.dragEnd = [callback]
   }
 
   /**
    * @deprecated use addEventListener or removeEventListener
    */
   public onPan(callback: PanEventHandler) {
-    this.addEventListener('pan', callback)
+    this.registeredEventHandlers.pan = [callback]
   }
 
   /**
    * @deprecated use addEventListener or removeEventListener
    */
   public onZoom(callback: ZoomEventHandler) {
-    this.addEventListener('zoom', callback)
+    this.registeredEventHandlers.zoom = [callback]
   }
 
   /**
    * @deprecated use addEventListener or removeEventListener
    */
   public onSecondaryClick(callback: SecondaryClickEventHandler) {
-    this.addEventListener('secondaryClick', callback)
+    this.registeredEventHandlers.secondaryClick = [callback]
   }
 
   private findNearestNodeIndex = (event: MouseEvent): number | null => {
