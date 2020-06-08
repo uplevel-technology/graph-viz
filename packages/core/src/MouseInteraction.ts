@@ -1,7 +1,7 @@
-import {get, noop, orderBy} from 'lodash'
+import {get, orderBy} from 'lodash'
 import * as THREE from 'three'
-import {DisplayNode, Nodes} from './Nodes'
 import {Intersection} from 'three'
+import {DisplayNode, Nodes} from './Nodes'
 
 const MAX_CLICK_DURATION = 300
 
@@ -60,31 +60,33 @@ export type SecondaryClickEventHandler = (
   nodeIdx: number | null,
 ) => any
 
+interface EventHandlerMap {
+  click: ClickEventHandler[]
+  nodeHoverIn: HoverEventHandler[]
+  nodeHoverOut: HoverEventHandler[]
+  dragStart: DragStartEventHandler[]
+  dragEnd: DragEndEventHandler[]
+  nodeDrag: NodeDragEventHandler[]
+  pan: PanEventHandler[]
+  zoom: ZoomEventHandler[]
+  secondaryClick: SecondaryClickEventHandler[]
+}
+
 export class MouseInteraction {
   private nodesData: DisplayNode[]
   private intersectedPointIdx: number | null
   private dragging: boolean
   private registerClick: boolean
-  private registeredEventHandlers: {
-    click: ClickEventHandler
-    nodeHoverIn: HoverEventHandler
-    nodeHoverOut: HoverEventHandler
-    dragStart: DragStartEventHandler
-    dragEnd: DragEndEventHandler
-    nodeDrag: NodeDragEventHandler
-    pan: PanEventHandler
-    zoom: ZoomEventHandler
-    secondaryClick: SecondaryClickEventHandler
-  } = {
-    click: noop,
-    nodeHoverIn: noop,
-    nodeHoverOut: noop,
-    dragStart: noop,
-    dragEnd: noop,
-    nodeDrag: noop,
-    pan: noop,
-    zoom: noop,
-    secondaryClick: noop,
+  private registeredEventHandlers: EventHandlerMap = {
+    click: [],
+    nodeHoverIn: [],
+    nodeHoverOut: [],
+    dragStart: [],
+    dragEnd: [],
+    nodeDrag: [],
+    pan: [],
+    zoom: [],
+    secondaryClick: [],
   }
 
   private readonly nodesMesh: Nodes
@@ -130,40 +132,111 @@ export class MouseInteraction {
     this.nodesData = nodesData
   }
 
+  public addEventListener(eventName: 'click', callback: ClickEventHandler): void
+  public addEventListener(
+    eventName: 'nodeHoverIn',
+    callback: HoverEventHandler,
+  ): void
+  public addEventListener(
+    eventName: 'nodeHoverOut',
+    callback: HoverEventHandler,
+  ): void
+  public addEventListener(
+    eventName: 'dragStart',
+    callback: DragStartEventHandler,
+  ): void
+  public addEventListener(
+    eventName: 'dragEnd',
+    callback: DragEndEventHandler,
+  ): void
+  public addEventListener(
+    eventName: 'nodeDrag',
+    callback: NodeDragEventHandler,
+  ): void
+  public addEventListener(eventName: 'pan', callback: PanEventHandler): void
+  public addEventListener(eventName: 'zoom', callback: ZoomEventHandler): void
+  public addEventListener(
+    eventName: 'secondaryClick',
+    callback: SecondaryClickEventHandler,
+  ): void
+  public addEventListener(eventName: keyof EventHandlerMap, callback: any) {
+    this.registeredEventHandlers[eventName].push(callback)
+  }
+
+  /**
+   * removes a registered event handler by reference
+   */
+  public removeEventListener(
+    eventName: keyof EventHandlerMap,
+    callbackRef: any,
+  ) {
+    ;(this.registeredEventHandlers[eventName] as any[]).filter(
+      e => e !== callbackRef,
+    )
+  }
+
+  /**
+   * @deprecated use addEventListener or removeEventListener
+   */
   public onNodeHoverIn(callback: HoverEventHandler) {
-    this.registeredEventHandlers.nodeHoverIn = callback
+    this.addEventListener('nodeHoverIn', callback)
+    this.addEventListener('nodeHoverIn', callback)
   }
 
+  /**
+   * @deprecated use addEventListener or removeEventListener
+   */
   public onNodeHoverOut(callback: HoverEventHandler) {
-    this.registeredEventHandlers.nodeHoverOut = callback
+    this.addEventListener('nodeHoverOut', callback)
   }
 
+  /**
+   * @deprecated use addEventListener or removeEventListener
+   */
   public onClick(callback: ClickEventHandler) {
-    this.registeredEventHandlers.click = callback
+    this.addEventListener('click', callback)
   }
 
+  /**
+   * @deprecated use addEventListener or removeEventListener
+   */
   public onDragStart(callback: DragStartEventHandler) {
-    this.registeredEventHandlers.dragStart = callback
+    this.addEventListener('dragStart', callback)
   }
 
+  /**
+   * @deprecated use addEventListener or removeEventListener
+   */
   public onNodeDrag(callback: NodeDragEventHandler) {
-    this.registeredEventHandlers.nodeDrag = callback
+    this.addEventListener('nodeDrag', callback)
   }
 
+  /**
+   * @deprecated use addEventListener or removeEventListener
+   */
   public onDragEnd(callback: DragEndEventHandler) {
-    this.registeredEventHandlers.dragEnd = callback
+    this.addEventListener('dragEnd', callback)
   }
 
+  /**
+   * @deprecated use addEventListener or removeEventListener
+   */
   public onPan(callback: PanEventHandler) {
-    this.registeredEventHandlers.pan = callback
+    this.addEventListener('pan', callback)
   }
 
+  /**
+   * @deprecated use addEventListener or removeEventListener
+   */
   public onZoom(callback: ZoomEventHandler) {
-    this.registeredEventHandlers.zoom = callback
+    this.addEventListener('zoom', callback)
   }
 
+  /**
+   * @deprecated use addEventListener or removeEventListener
+   */
   public onSecondaryClick(callback: SecondaryClickEventHandler) {
-    this.registeredEventHandlers.secondaryClick = callback
+    this.addEventListener('secondaryClick', callback)
   }
 
   private findNearestNodeIndex = (event: MouseEvent): number | null => {
@@ -221,11 +294,10 @@ export class MouseInteraction {
     }, MAX_CLICK_DURATION)
 
     this.panStart.set(event.clientX, event.clientY, 0)
-    this.registeredEventHandlers.dragStart(
-      this.getMouseInWorldSpace(0),
-      this.intersectedPointIdx,
-      event,
-    )
+
+    for (const listener of this.registeredEventHandlers.dragStart) {
+      listener(this.getMouseInWorldSpace(0), this.intersectedPointIdx, event)
+    }
   }
 
   private onMouseUp = (event: MouseEvent) => {
@@ -234,18 +306,15 @@ export class MouseInteraction {
     const worldMouse = this.getMouseInWorldSpace(0)
 
     this.intersectedPointIdx = this.findNearestNodeIndex(event)
-    this.registeredEventHandlers.dragEnd(
-      worldMouse,
-      this.intersectedPointIdx,
-      event,
-    )
+
+    for (const dragEndListener of this.registeredEventHandlers.dragEnd) {
+      dragEndListener(worldMouse, this.intersectedPointIdx, event)
+    }
 
     if (this.registerClick) {
-      this.registeredEventHandlers.click(
-        worldMouse,
-        this.intersectedPointIdx,
-        event,
-      )
+      for (const clickListener of this.registeredEventHandlers.click) {
+        clickListener(worldMouse, this.intersectedPointIdx, event)
+      }
     }
   }
 
@@ -260,31 +329,39 @@ export class MouseInteraction {
       if (nearestIndex !== null) {
         if (this.intersectedPointIdx !== nearestIndex) {
           // hover in newly intersected node
-          this.registeredEventHandlers.nodeHoverIn(nearestIndex)
+          for (const onHoverIn of this.registeredEventHandlers.nodeHoverIn) {
+            onHoverIn(nearestIndex)
+          }
 
           if (this.intersectedPointIdx !== null) {
             // hover out any previously intersected node
-            this.registeredEventHandlers.nodeHoverOut(this.intersectedPointIdx)
+            for (const onHoverOut of this.registeredEventHandlers
+              .nodeHoverOut) {
+              onHoverOut(this.intersectedPointIdx)
+            }
           }
           this.intersectedPointIdx = nearestIndex
         }
       } else if (this.intersectedPointIdx !== null) {
         // hover out previously intersected node and set current intersection to null
-        this.registeredEventHandlers.nodeHoverOut(this.intersectedPointIdx)
+        for (const onHoverOut of this.registeredEventHandlers.nodeHoverOut) {
+          onHoverOut(this.intersectedPointIdx)
+        }
         this.intersectedPointIdx = null
       }
     } else if (this.intersectedPointIdx !== null) {
       // handle node drag interaction
-      this.registeredEventHandlers.nodeDrag(
-        this.getMouseInWorldSpace(0),
-        this.intersectedPointIdx,
-      )
+      for (const onDrag of this.registeredEventHandlers.nodeDrag) {
+        onDrag(this.getMouseInWorldSpace(0), this.intersectedPointIdx)
+      }
     } else {
       // calculate the pan delta
       this.panEnd.set(event.clientX, event.clientY, 0)
       this.panDelta.subVectors(this.panEnd, this.panStart)
 
-      this.registeredEventHandlers.pan(this.panDelta)
+      for (const onPan of this.registeredEventHandlers.pan) {
+        onPan(this.panDelta)
+      }
 
       this.panStart.copy(this.panEnd)
     }
@@ -293,7 +370,9 @@ export class MouseInteraction {
   private onMouseWheel = (event: WheelEvent) => {
     event.preventDefault()
     event.stopPropagation()
-    this.registeredEventHandlers.zoom(event)
+    for (const onZoom of this.registeredEventHandlers.zoom) {
+      onZoom(event)
+    }
   }
 
   private getMouseInWorldSpace = (z: number) => {
@@ -307,6 +386,9 @@ export class MouseInteraction {
     this.dragging = false
     this.intersectedPointIdx = this.findNearestNodeIndex(event)
 
-    this.registeredEventHandlers.secondaryClick(event, this.intersectedPointIdx)
+    for (const onSecondaryClick of this.registeredEventHandlers
+      .secondaryClick) {
+      onSecondaryClick(event, this.intersectedPointIdx)
+    }
   }
 }
