@@ -83,6 +83,11 @@ export interface GraphVizComponentProps {
    */
   onClick: (event: MouseEvent, clickedNodeIdx: number | null) => any
 
+  // TODO Simplify
+  // -------------
+  // instead of exposing these via props, we should
+  // expose the visualization instance through the ref API
+  // and support binding multiple handlers to each event
   /**
    * callback for event onNodeHoverIn
    */
