@@ -3,6 +3,7 @@ import logo from './logo.svg'
 import './App.css'
 import {GraphVizComponent} from '@graph-viz/react'
 import {ForceConfig} from '@graph-viz/layouts'
+import {GraphVisualization} from '@graph-viz/core'
 
 const DATA = {
   nodes: [
@@ -39,6 +40,7 @@ const DATA = {
 
 const App: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const visualizationRef = useRef<GraphVisualization | null>(null)
 
   // useEffect(() => {
   //   const viz = new GraphVisualization(
@@ -66,29 +68,50 @@ const App: React.FC = () => {
     groupStrength: 0,
     nodeCharge: -30,
   })
-  useEffect(() => {
-    setTimeout(() => {
-      setData({
-        nodes: [...DATA.nodes, {id: 'black', fill: 'black'}],
-        links: [...DATA.links, {source: 'black', target: '2'}],
-        groups: [...DATA.groups],
-      })
-    }, 3000)
-    setTimeout(() => {
-      setConfig({
-        nodes: {
-          fill: 'purple',
-        },
-      })
-    }, 6000)
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setData({
+  //       nodes: [...DATA.nodes, {id: 'black', fill: 'black'}],
+  //       links: [...DATA.links, {source: 'black', target: '2'}],
+  //       groups: [...DATA.groups],
+  //     })
+  //   }, 3000)
+  //   setTimeout(() => {
+  //     setConfig({
+  //       nodes: {
+  //         fill: 'purple',
+  //       },
+  //     })
+  //   }, 6000)
+  //
+  //   setTimeout(() => {
+  //     setForceConfig({
+  //       groupStrength: 2,
+  //       nodeCharge: -300,
+  //     })
+  //   }, 8000)
+  // }, [])
 
-    setTimeout(() => {
-      setForceConfig({
-        groupStrength: 2,
-        nodeCharge: -300,
-      })
-    }, 8000)
-  }, [])
+  const viz = visualizationRef.current
+
+  useEffect(() => {
+    console.log(viz)
+    if (viz === null) {
+      return
+    }
+
+    const eL = () => {
+      console.log('hover In 2')
+    }
+
+    console.log('adding 2nd listener')
+    viz.interaction.addEventListener('nodeHoverIn', eL)
+
+    // setTimeout(() => {
+    //   console.log('removing 2nd listener')
+    //   viz.interaction.removeEventListener('nodeHoverIn', eL)
+    // }, 10000)
+  }, [visualizationRef.current])
 
   return (
     <div className="App">
@@ -104,6 +127,7 @@ const App: React.FC = () => {
             groups={data.groups}
             config={config}
             forceConfig={forceConfig}
+            visualizationRef={visualizationRef}
           />
         </div>
       </div>
