@@ -1,4 +1,4 @@
-import {get, orderBy} from 'lodash'
+import {get, orderBy, remove} from 'lodash'
 import * as THREE from 'three'
 import {Intersection} from 'three'
 import {DisplayNode, Nodes} from './Nodes'
@@ -170,8 +170,9 @@ export class MouseInteraction {
     eventName: keyof EventHandlerMap,
     callbackRef: any,
   ) {
-    ;(this.registeredEventHandlers[eventName] as any[]).filter(
-      e => e !== callbackRef,
+    remove(
+      this.registeredEventHandlers[eventName] as any[],
+      e => e === callbackRef,
     )
   }
 
