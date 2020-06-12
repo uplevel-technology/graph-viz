@@ -129,6 +129,16 @@ export interface GraphVizComponentProps {
   updateStylesRef?: MutableRefObject<() => any>
 
   /**
+   * reference to the GraphVisualization instance
+   */
+  visualizationRef?: MutableRefObject<GraphVisualization | null>
+
+  /**
+   * reference to the Simulation instance
+   */
+  simulationRef?: MutableRefObject<ForceSimulation | null>
+
+  /**
    * flag to prevent re-rendering the viz by default
    * useful in situation when you want to call render functions on the
    * GraphVisualization instance passed to the parent via onInit
@@ -387,6 +397,14 @@ export class GraphVizComponent extends React.Component<
     // Initialize data
     if (this.props.nodes.length > 0) {
       this.updateLayoutAndStyles()
+    }
+
+    if (this.props.visualizationRef) {
+      this.props.visualizationRef.current = this.visualization
+    }
+
+    if (this.props.simulationRef) {
+      this.props.simulationRef.current = this.simulation
     }
 
     if (this.props.updateLayoutAndStylesRef) {
