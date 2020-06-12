@@ -1,4 +1,4 @@
-import {defaultsDeep, isEqual, noop, size} from 'lodash'
+import {defaultsDeep, isEqual, size} from 'lodash'
 import * as THREE from 'three'
 import {Vector3} from 'three'
 import {
@@ -79,55 +79,12 @@ export interface ConfigurationOptions {
    * group style config
    */
   groups?: GroupStyleAttributes
-
-  /**
-   * events style config
-   */
-  events?: {
-    /**
-     * disables click event
-     */
-    disableClick?: boolean
-
-    /**
-     * disables hover events
-     */
-    disableHover?: boolean
-
-    /**
-     * disables pan event
-     */
-    disablePan?: boolean
-
-    /**
-     * disables zoom event
-     */
-    disableZoom?: boolean
-
-    /**
-     * disables drag events
-     */
-    disableDrag?: boolean
-
-    /**
-     * disables secondary click event
-     */
-    disableSecondaryClick?: boolean
-  }
 }
 
 const DEFAULT_CONFIG_OPTIONS: Required<ConfigurationOptions> = {
   nodes: NODE_DEFAULTS,
   links: LINK_DEFAULTS,
   groups: GROUP_DEFAULTS,
-  events: {
-    disableClick: false,
-    disableHover: false,
-    disablePan: false,
-    disableZoom: false,
-    disableDrag: false,
-    disableSecondaryClick: false,
-  },
 }
 
 @validateClassConstructor
@@ -232,6 +189,19 @@ export class GraphVisualization {
       this.data.nodes,
     )
     this.updateConfig(config)
+
+    this.interaction.addEventListener('click', this.handleClick)
+    this.interaction.addEventListener('nodeHoverIn', this.handleHoverIn)
+    this.interaction.addEventListener('nodeHoverOut', this.handleHoverOut)
+    this.interaction.addEventListener('dragStart', this.handleDragStart)
+    this.interaction.addEventListener('dragEnd', this.handleDragEnd)
+    this.interaction.addEventListener('nodeDrag', this.handleNodeDrag)
+    this.interaction.addEventListener('pan', this.handlePan)
+    this.interaction.addEventListener('zoom', this.handleZoomOnWheel)
+    this.interaction.addEventListener(
+      'secondaryClick',
+      this.handleSecondaryClick,
+    )
   }
 
   /**
@@ -274,48 +244,6 @@ export class GraphVisualization {
 
     if (needsUpdate) {
       this.render()
-    }
-
-    if (!this.config.events.disableClick) {
-      this.interaction.onClick(this.handleClick)
-    } else {
-      this.interaction.onClick(noop)
-    }
-
-    if (!this.config.events.disableHover) {
-      this.interaction.onNodeHoverIn(this.handleHoverIn)
-      this.interaction.onNodeHoverOut(this.handleHoverOut)
-    } else {
-      this.interaction.onNodeHoverIn(noop)
-      this.interaction.onNodeHoverOut(noop)
-    }
-
-    if (!this.config.events.disableDrag) {
-      this.interaction.onDragStart(this.handleDragStart)
-      this.interaction.onDragEnd(this.handleDragEnd)
-      this.interaction.onNodeDrag(this.handleNodeDrag)
-    } else {
-      this.interaction.onDragStart(noop)
-      this.interaction.onDragEnd(noop)
-      this.interaction.onNodeDrag(noop)
-    }
-
-    if (!this.config.events.disablePan) {
-      this.interaction.onPan(this.handlePan)
-    } else {
-      this.interaction.onPan(noop)
-    }
-
-    if (!this.config.events.disableZoom) {
-      this.interaction.onZoom(this.handleZoomOnWheel)
-    } else {
-      this.interaction.onZoom(noop)
-    }
-
-    if (!this.config.events.disableSecondaryClick) {
-      this.interaction.onSecondaryClick(this.handleSecondaryClick)
-    } else {
-      this.interaction.onSecondaryClick(noop)
     }
   }
 

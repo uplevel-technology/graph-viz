@@ -129,36 +129,6 @@
         }
     },
     "properties": {
-        "events": {
-            "description": "events style config",
-            "properties": {
-                "disableClick": {
-                    "description": "disables click event",
-                    "type": "boolean"
-                },
-                "disableDrag": {
-                    "description": "disables drag events",
-                    "type": "boolean"
-                },
-                "disableHover": {
-                    "description": "disables hover events",
-                    "type": "boolean"
-                },
-                "disablePan": {
-                    "description": "disables pan event",
-                    "type": "boolean"
-                },
-                "disableSecondaryClick": {
-                    "description": "disables secondary click event",
-                    "type": "boolean"
-                },
-                "disableZoom": {
-                    "description": "disables zoom event",
-                    "type": "boolean"
-                }
-            },
-            "type": "object"
-        },
         "groups": {
             "$ref": "#/definitions/GroupStyleAttributes",
             "description": "group style config"
