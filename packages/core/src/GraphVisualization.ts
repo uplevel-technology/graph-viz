@@ -8,17 +8,7 @@ import {
   LinkStyleAttributes,
   populateLinks,
 } from './Links'
-import {
-  ClickEventHandler,
-  DragEndEventHandler,
-  DragStartEventHandler,
-  HoverEventHandler,
-  MouseInteraction,
-  NodeDragEventHandler,
-  PanEventHandler,
-  SecondaryClickEventHandler,
-  ZoomEventHandler,
-} from './MouseInteraction'
+import {MouseInteraction} from './MouseInteraction'
 import {DisplayNode, NODE_DEFAULTS, Nodes, NodeStyleAttributes} from './Nodes'
 import {
   DisplayGroup,
@@ -95,30 +85,17 @@ export class GraphVisualization {
 
   public readonly canvas: HTMLCanvasElement
   public readonly camera: THREE.OrthographicCamera
+  public readonly interaction: MouseInteraction
 
   private data: VisualizationInputData
   private nodeIdToIndexMap: {[key: string]: number} = {}
   private userHasAdjustedViewport: boolean
-
-  private registeredEventHandlers: {
-    click?: ClickEventHandler
-    nodeHoverIn?: HoverEventHandler
-    nodeHoverOut?: HoverEventHandler
-    dragStart?: DragStartEventHandler
-    dragEnd?: DragEndEventHandler
-    nodeDrag?: NodeDragEventHandler
-    pan?: PanEventHandler
-    zoom?: ZoomEventHandler
-    secondaryClick?: SecondaryClickEventHandler
-  } = {}
 
   private width: number
   private height: number
 
   private readonly scene: THREE.Scene
   private readonly renderer: THREE.WebGLRenderer
-
-  public readonly interaction: MouseInteraction
   private config: Required<ConfigurationOptions> = DEFAULT_CONFIG_OPTIONS
 
   constructor(
@@ -190,35 +167,13 @@ export class GraphVisualization {
     )
     this.updateConfig(config)
 
-    this.interaction.addEventListener('click', 'default', this.handleClick)
-    this.interaction.addEventListener(
-      'nodeHoverIn',
-      'default',
-      this.handleHoverIn,
-    )
-    this.interaction.addEventListener(
-      'nodeHoverOut',
-      'default',
-      this.handleHoverOut,
-    )
     this.interaction.addEventListener(
       'dragStart',
       'default',
       this.handleDragStart,
     )
-    this.interaction.addEventListener('dragEnd', 'default', this.handleDragEnd)
-    this.interaction.addEventListener(
-      'nodeDrag',
-      'default',
-      this.handleNodeDrag,
-    )
     this.interaction.addEventListener('pan', 'default', this.handlePan)
     this.interaction.addEventListener('zoom', 'default', this.handleZoomOnWheel)
-    this.interaction.addEventListener(
-      'secondaryClick',
-      'default',
-      this.handleSecondaryClick,
-    )
   }
 
   /**
@@ -262,51 +217,6 @@ export class GraphVisualization {
     if (needsUpdate) {
       this.render()
     }
-  }
-
-  @validateArgs
-  public onNodeHoverIn(@required callback: HoverEventHandler) {
-    this.registeredEventHandlers.nodeHoverIn = callback
-  }
-
-  @validateArgs
-  public onNodeHoverOut(@required callback: HoverEventHandler) {
-    this.registeredEventHandlers.nodeHoverOut = callback
-  }
-
-  @validateArgs
-  public onClick(@required callback: ClickEventHandler) {
-    this.registeredEventHandlers.click = callback
-  }
-
-  @validateArgs
-  public onDragStart(@required callback: DragStartEventHandler) {
-    this.registeredEventHandlers.dragStart = callback
-  }
-
-  @validateArgs
-  public onDragEnd(@required callback: DragEndEventHandler) {
-    this.registeredEventHandlers.dragEnd = callback
-  }
-
-  @validateArgs
-  public onNodeDrag(@required callback: NodeDragEventHandler) {
-    this.registeredEventHandlers.nodeDrag = callback
-  }
-
-  @validateArgs
-  public onSecondaryClick(@required callback: SecondaryClickEventHandler) {
-    this.registeredEventHandlers.secondaryClick = callback
-  }
-
-  @validateArgs
-  public onPan(@required callback: PanEventHandler) {
-    this.registeredEventHandlers.pan = callback
-  }
-
-  @validateArgs
-  public onZoom(@required callback: ZoomEventHandler) {
-    this.registeredEventHandlers.zoom = callback
   }
 
   public render = () => {
@@ -520,56 +430,9 @@ export class GraphVisualization {
     this.linksMesh.handleCameraZoom(this.camera.zoom)
   }
 
-  private handleHoverIn = (hoveredToNodeIdx: number) => {
-    if (!this.registeredEventHandlers.nodeHoverIn) {
-      return
-    }
-    this.registeredEventHandlers.nodeHoverIn(hoveredToNodeIdx)
-    this.render()
-  }
-
-  private handleHoverOut = (hoveredFromNodeIdx: number) => {
-    if (!this.registeredEventHandlers.nodeHoverOut) {
-      return
-    }
-    this.registeredEventHandlers.nodeHoverOut(hoveredFromNodeIdx)
-    this.render()
-  }
-
-  private handleDragStart = (
-    worldSpaceMouse: THREE.Vector3,
-    draggedNodeIdx: number | null,
-    event: MouseEvent,
-  ) => {
+  private handleDragStart = () => {
     this.userHasAdjustedViewport = true
-    if (this.registeredEventHandlers.dragStart) {
-      this.registeredEventHandlers.dragStart(
-        worldSpaceMouse,
-        draggedNodeIdx,
-        event,
-      )
-    }
-    this.render() // <- this is probably not needed
-  }
-
-  private handleNodeDrag = (
-    worldSpaceMouse: THREE.Vector3,
-    draggedNodeIdx: number,
-  ) => {
-    if (this.registeredEventHandlers.nodeDrag) {
-      this.registeredEventHandlers.nodeDrag(worldSpaceMouse, draggedNodeIdx)
-    }
     this.render()
-  }
-
-  private handleDragEnd = (
-    worldSpaceMouse: THREE.Vector3,
-    nodeIdx: number,
-    event: MouseEvent,
-  ) => {
-    if (this.registeredEventHandlers.dragEnd) {
-      this.registeredEventHandlers.dragEnd(worldSpaceMouse, nodeIdx, event)
-    }
   }
 
   private handlePan = (panDelta: Vector3) => {
@@ -587,14 +450,10 @@ export class GraphVisualization {
     this.camera.updateProjectionMatrix()
 
     this.userHasAdjustedViewport = true
-
-    if (this.registeredEventHandlers.pan) {
-      this.registeredEventHandlers.pan(panDelta)
-    }
     this.render()
   }
 
-  private handleZoomOnWheel = (event: MouseWheelEvent) => {
+  private handleZoomOnWheel = (event: WheelEvent) => {
     this.userHasAdjustedViewport = true
 
     const zoomFactor = event.deltaY < 0 ? 0.95 : 1.05
@@ -604,32 +463,6 @@ export class GraphVisualization {
     this.nodesMesh.handleCameraZoom(this.camera.zoom)
     this.linksMesh.handleCameraZoom(this.camera.zoom)
 
-    if (this.registeredEventHandlers.zoom) {
-      this.registeredEventHandlers.zoom(event)
-    }
     this.render()
-  }
-
-  private handleClick = (
-    worldSpaceMouse: THREE.Vector3,
-    clickedNodeIdx: number | null,
-    event: MouseEvent,
-  ) => {
-    if (clickedNodeIdx === null || !this.registeredEventHandlers.click) {
-      return
-    }
-
-    this.registeredEventHandlers.click(worldSpaceMouse, clickedNodeIdx, event)
-    this.render()
-  }
-
-  private handleSecondaryClick = (
-    event: MouseEvent,
-    clickedNodeIdx: number | null,
-  ) => {
-    if (!this.registeredEventHandlers.secondaryClick) {
-      return
-    }
-    this.registeredEventHandlers.secondaryClick(event, clickedNodeIdx)
   }
 }
