@@ -190,16 +190,33 @@ export class GraphVisualization {
     )
     this.updateConfig(config)
 
-    this.interaction.addEventListener('click', this.handleClick)
-    this.interaction.addEventListener('nodeHoverIn', this.handleHoverIn)
-    this.interaction.addEventListener('nodeHoverOut', this.handleHoverOut)
-    this.interaction.addEventListener('dragStart', this.handleDragStart)
-    this.interaction.addEventListener('dragEnd', this.handleDragEnd)
-    this.interaction.addEventListener('nodeDrag', this.handleNodeDrag)
-    this.interaction.addEventListener('pan', this.handlePan)
-    this.interaction.addEventListener('zoom', this.handleZoomOnWheel)
+    this.interaction.addEventListener('click', 'default', this.handleClick)
+    this.interaction.addEventListener(
+      'nodeHoverIn',
+      'default',
+      this.handleHoverIn,
+    )
+    this.interaction.addEventListener(
+      'nodeHoverOut',
+      'default',
+      this.handleHoverOut,
+    )
+    this.interaction.addEventListener(
+      'dragStart',
+      'default',
+      this.handleDragStart,
+    )
+    this.interaction.addEventListener('dragEnd', 'default', this.handleDragEnd)
+    this.interaction.addEventListener(
+      'nodeDrag',
+      'default',
+      this.handleNodeDrag,
+    )
+    this.interaction.addEventListener('pan', 'default', this.handlePan)
+    this.interaction.addEventListener('zoom', 'default', this.handleZoomOnWheel)
     this.interaction.addEventListener(
       'secondaryClick',
+      'default',
       this.handleSecondaryClick,
     )
   }
