@@ -19,12 +19,6 @@ import {
 import {NodeTooltips, TooltipNode} from './NodeTooltips'
 import {lockNode, magnifyNode, resetNodeScale, toggleNodeLock} from './vizUtils'
 import {debounce, isEqual, noop, remove} from 'lodash'
-import {
-  DragEndEventHandler,
-  DragStartEventHandler,
-  HoverEventHandler,
-  NodeDragEventHandler,
-} from '@graph-viz/core/lib/MouseInteraction'
 
 /**
  * Primary GraphVizData type definitions
@@ -77,46 +71,6 @@ export interface GraphVizComponentProps {
    * requires editMode to be true
    */
   onLinkDrawn: (source: GraphVizNode, target: GraphVizNode) => any
-
-  /**
-   * callback dispatched on primary click
-   */
-  onClick: (event: MouseEvent, clickedNodeIdx: number | null) => any
-
-  // TODO Simplify
-  // -------------
-  // instead of exposing these via props, we should
-  // expose the visualization instance through the ref API
-  // and support binding multiple handlers to each event
-  /**
-   * callback for event onNodeHoverIn
-   */
-  onNodeHoverIn?: HoverEventHandler
-
-  /**
-   * callback for event onNodeHoverOut
-   */
-  onNodeHoverOut?: HoverEventHandler
-
-  /**
-   * callback for event onNodeDrag
-   */
-  onNodeDrag?: NodeDragEventHandler
-
-  /**
-   * callback for event onDragStart
-   */
-  onDragStart?: DragStartEventHandler
-
-  /**
-   * callback for event onDragEnd
-   */
-  onDragEnd?: DragEndEventHandler
-
-  /**
-   * callback dispatched on secondary click
-   */
-  onSecondaryClick: (event: MouseEvent, clickedNodeIdx: number | null) => any
 
   /**
    * on mount this ref points to a function to trigger graph viz initialization
@@ -172,8 +126,6 @@ export class GraphVizComponent extends React.Component<
     tooltips: [],
     groups: [],
     onLinkDrawn: noop,
-    onClick: noop,
-    onSecondaryClick: noop,
   }
 
   onWindowResize: () => void = debounce(() => {
@@ -239,10 +191,6 @@ export class GraphVizComponent extends React.Component<
           },
         })
       }
-
-      if (this.props.onNodeHoverIn) {
-        this.props.onNodeHoverIn(hoveredNodeIdx)
-      }
     })
 
     this.simulation.onTick((nodePositions: NodePosition[]) => {
@@ -262,16 +210,10 @@ export class GraphVizComponent extends React.Component<
       if (hoveredOutNodeIdx === this.state.currentlyHoveredIdx) {
         this.setState({currentTooltipNode: null, currentlyHoveredIdx: null})
       }
-
-      if (this.props.onNodeHoverOut) {
-        this.props.onNodeHoverOut(hoveredOutNodeIdx)
-      }
     })
 
     this.visualization.onClick(
       (worldPos, clickedNodeIdx, event: MouseEvent) => {
-        this.props.onClick(event, clickedNodeIdx)
-
         if (clickedNodeIdx === null) {
           return
         }
@@ -309,53 +251,45 @@ export class GraphVizComponent extends React.Component<
         forceGroups: this.props.groups,
       })
       // ^ the simulation tick handler should handle the position updates after this in our viz
-      if (this.props.onNodeDrag) {
-        this.props.onNodeDrag(worldPos, draggedNodeIdx)
-      }
     })
 
-    this.visualization.onDragStart(
-      (mouse, draggedNodeIdx: number | null, ...rest) => {
-        if (draggedNodeIdx === null) {
-          return
-        }
-        const draggedNode = this.vizData.nodes[draggedNodeIdx]
+    this.visualization.onDragStart((mouse, draggedNodeIdx: number | null) => {
+      if (draggedNodeIdx === null) {
+        return
+      }
+      const draggedNode = this.vizData.nodes[draggedNodeIdx]
 
-        if (this.props.editMode) {
-          this.setState({draftLinkSourceNode: draggedNode})
-          const draftNode = {
-            id: DRAFT_NODE_ID,
-            x: mouse.x,
-            y: mouse.y,
-            absoluteSize: 1,
-            // setting charge to 0 is required to ensure that the draftNode
-            // does not repel the targets
-            charge: 0,
-            // Important: disableInteractions on the draft node to make sure hover,
-            // click, dragEnd and other events ignore this node
-            disableInteractions: true,
-            fill: 'orange',
-          }
-          const draftLink = {
-            source: draggedNode.id,
-            target: draftNode.id,
-            color: 'orange',
-          }
-          this.vizData.nodes.push(draftNode)
-          this.vizData.links.push(draftLink)
-          this.visualization.update(this.vizData)
+      if (this.props.editMode) {
+        this.setState({draftLinkSourceNode: draggedNode})
+        const draftNode = {
+          id: DRAFT_NODE_ID,
+          x: mouse.x,
+          y: mouse.y,
+          absoluteSize: 1,
+          // setting charge to 0 is required to ensure that the draftNode
+          // does not repel the targets
+          charge: 0,
+          // Important: disableInteractions on the draft node to make sure hover,
+          // click, dragEnd and other events ignore this node
+          disableInteractions: true,
+          fill: 'orange',
         }
-        lockNode(this.vizData.nodes[draggedNodeIdx])
-        this.visualization.updateNode(
-          draggedNodeIdx,
-          this.vizData.nodes[draggedNodeIdx],
-        )
-        this.simulation.reheat()
-        if (this.props.onDragStart) {
-          this.props.onDragStart(mouse, draggedNodeIdx, ...rest)
+        const draftLink = {
+          source: draggedNode.id,
+          target: draftNode.id,
+          color: 'orange',
         }
-      },
-    )
+        this.vizData.nodes.push(draftNode)
+        this.vizData.links.push(draftLink)
+        this.visualization.update(this.vizData)
+      }
+      lockNode(this.vizData.nodes[draggedNodeIdx])
+      this.visualization.updateNode(
+        draggedNodeIdx,
+        this.vizData.nodes[draggedNodeIdx],
+      )
+      this.simulation.reheat()
+    })
 
     this.visualization.onDragEnd(
       (mouse, targetNodeIdx: number | null, ...rest) => {
@@ -378,15 +312,11 @@ export class GraphVizComponent extends React.Component<
           }
         }
         this.simulation.settle()
-        if (this.props.onDragEnd) {
-          this.props.onDragEnd(mouse, targetNodeIdx, ...rest)
-        }
       },
     )
 
-    this.visualization.onSecondaryClick((...args) => {
+    this.visualization.onSecondaryClick(() => {
       this.simulation.stop()
-      this.props.onSecondaryClick(...args)
     })
 
     // Initialize data
