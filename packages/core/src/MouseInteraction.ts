@@ -199,6 +199,17 @@ export class MouseInteraction {
     this.registeredEventHandlers[eventName].delete(eventListenerKey)
   }
 
+  /**
+   * gets a reference to a registered event handler by key
+   * can be useful for backing up event handlers after removal and restoring
+   */
+  public getEventListener(
+    eventName: keyof EventHandlerMap,
+    eventListenerKey: string,
+  ) {
+    return this.registeredEventHandlers[eventName].get(eventListenerKey)
+  }
+
   private findNearestNodeIndex = (event: MouseEvent): number | null => {
     const rect = this.canvas.getBoundingClientRect()
 
