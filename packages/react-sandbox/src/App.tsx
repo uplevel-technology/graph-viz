@@ -38,10 +38,6 @@ const DATA = {
   ],
 }
 
-const eL = () => {
-  console.log('hover In 2')
-}
-
 const App: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const visualizationRef = useRef<GraphVisualization | null>(null)
@@ -101,11 +97,13 @@ const App: React.FC = () => {
 
   function onInit(viz: GraphVisualization) {
     console.log('adding 2nd listener')
-    viz.interaction.addEventListener('nodeHoverIn', eL)
+    viz.interaction.addEventListener('nodeHoverIn', 'custom', () => {
+      console.log('hover In 2')
+    })
 
     setTimeout(() => {
       console.log('removing 2nd listener')
-      viz.interaction.removeEventListener('nodeHoverIn', eL)
+      viz.interaction.removeEventListener('nodeHoverIn', 'custom')
     }, 5000)
   }
 
