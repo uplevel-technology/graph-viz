@@ -373,8 +373,11 @@ export class GraphVizComponent extends React.Component<
         prevProps.links !== this.props.links ||
         prevProps.groups !== this.props.groups)
     ) {
-      this.tooltipNodes = this.props.tooltips as TooltipNode[]
       this.updateLayoutAndStyles()
+    }
+
+    if (prevProps.tooltips !== this.props.tooltips) {
+      this.tooltipNodes = this.props.tooltips as TooltipNode[]
     }
 
     if (prevProps.groups !== this.props.groups) {
