@@ -51,15 +51,54 @@ interface State {
 }
 
 export interface GraphVizComponentProps {
+  /**
+   * list of nodes to draw
+   */
   nodes: GraphVizNode[]
+
+  /**
+   * list of links to draw
+   */
   links: GraphVizLink[]
+
+  /**
+   * list of groups to draw
+   */
   groups: GraphVizGroup[]
+
+  /**
+   * list of tooltips for nodes
+   */
   tooltips: Partial<TooltipNode>[]
-  onRefresh?: () => any
-  onError?: (error: Error) => any
-  config?: ConfigurationOptions
-  forceConfig?: ForceConfig
+
+  /**
+   * renders a refresh, zoom in and zoom out buttons if enabled
+   */
   showControls?: boolean
+
+  /**
+   * callback function when refresh button is clicked
+   */
+  onRefresh?: () => any
+
+  /**
+   * callback function to handle errors
+   * @param error
+   */
+  onError?: (error: Error) => any
+
+  /**
+   * Graph config.
+   * Defaults for nodes, links, and  groups
+   */
+  config?: ConfigurationOptions
+
+  /**
+   * Force config.
+   * Defaults for forces / layout computation
+   */
+  forceConfig?: ForceConfig
+
   /**
    * enables graph editing
    * i.e. for now only the drawing of links
