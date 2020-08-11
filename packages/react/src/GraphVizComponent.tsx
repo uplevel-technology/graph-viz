@@ -48,6 +48,7 @@ interface State {
   readonly currentTooltipNode: TooltipNode | null
   readonly currentlyHoveredIdx: number | null
   readonly draftLinkSourceNode?: GraphVizNode
+  readonly selectedNodes: GraphVizNode[]
 }
 
 export interface GraphVizComponentProps {
@@ -98,6 +99,15 @@ export interface GraphVizComponentProps {
    * Defaults for forces / layout computation
    */
   forceConfig?: ForceConfig
+
+  /**
+   * dragMode selects what happens when you drag your cursor on the canvas
+   * 'drag' drags a node or the entire graph
+   * 'select' draws a rectangle and returns the list of selected nodes under
+   * the rectangle
+   * @default 'drag'
+   */
+  dragMode: 'drag' | 'select'
 
   /**
    * enables graph editing
@@ -156,15 +166,20 @@ export class GraphVizComponent extends React.Component<
   rootRef: React.RefObject<HTMLDivElement> = React.createRef()
   canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef()
 
+  // variable to backup the default pan event listener before it is removed
+  defaultPanListenerBackup: any
+
   readonly state: State = {
     currentTooltipNode: null,
     currentlyHoveredIdx: null,
+    selectedNodes: [],
   }
 
   static defaultProps: Partial<GraphVizComponentProps> = {
     tooltips: [],
     groups: [],
     onLinkDrawn: noop,
+    dragMode: 'drag',
   }
 
   onWindowResize: () => void = debounce(() => {
@@ -173,6 +188,13 @@ export class GraphVizComponent extends React.Component<
 
     this.visualization.resize(width, height)
   }, 500)
+
+  onDragSelect = () => {
+    if (this.props.dragMode === 'select') {
+      console.log('drag')
+      return
+    }
+  }
 
   componentDidMount() {
     const canvas = this.canvasRef.current! // this is safe when mounted
@@ -285,10 +307,26 @@ export class GraphVizComponent extends React.Component<
       },
     )
 
+    if (this.props.dragMode === 'select') {
+      this.defaultPanListenerBackup = this.visualization.interaction.getEventListener(
+        'pan',
+        'default',
+      )
+      this.visualization.interaction.removeEventListener('pan', 'default')
+      this.visualization.interaction.addEventListener(
+        'pan',
+        'react-dragSelect',
+        this.onDragSelect,
+      )
+    }
+
     this.visualization.interaction.addEventListener(
       'nodeDrag',
       'react-default',
       (worldPos, draggedNodeIdx) => {
+        if (this.props.dragMode === 'select') {
+          return
+        }
         let node
         if (this.props.editMode) {
           node = this.vizData.nodes[
@@ -315,6 +353,10 @@ export class GraphVizComponent extends React.Component<
       'dragStart',
       'react-default',
       (_e, draggedNodeIdx, mouse) => {
+        if (this.props.dragMode === 'select') {
+          console.log('drag start')
+          return
+        }
         if (draggedNodeIdx === null) {
           return
         }
@@ -357,6 +399,10 @@ export class GraphVizComponent extends React.Component<
       'dragEnd',
       'react-default',
       (_e, targetNodeIdx) => {
+        if (this.props.dragMode === 'select') {
+          console.log('drag end')
+          return
+        }
         if (this.props.editMode) {
           if (this.state.draftLinkSourceNode) {
             // This means a draft link was being drawn.
@@ -430,6 +476,33 @@ export class GraphVizComponent extends React.Component<
 
     if (!isEqual(prevProps.forceConfig, this.props.forceConfig)) {
       this.simulation.updateConfig(this.props.forceConfig)
+    }
+
+    if (prevProps.dragMode !== this.props.dragMode) {
+      if (this.props.dragMode === 'select') {
+        this.defaultPanListenerBackup = this.visualization.interaction.getEventListener(
+          'pan',
+          'default',
+        )
+        this.visualization.interaction.removeEventListener('pan', 'default')
+        this.visualization.interaction.addEventListener(
+          'pan',
+          'react-dragSelect',
+          this.onDragSelect,
+        )
+      } else {
+        if (this.defaultPanListenerBackup !== undefined) {
+          this.visualization.interaction.removeEventListener(
+            'pan',
+            'react-dragSelect',
+          )
+          this.visualization.interaction.addEventListener(
+            'pan',
+            'default',
+            this.defaultPanListenerBackup,
+          )
+        }
+      }
     }
   }
 

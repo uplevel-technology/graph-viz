@@ -85,12 +85,12 @@ const Sandbox: React.FC = () => {
       })
     }, 6000)
 
-    setTimeout(() => {
-      setForceConfig({
-        groupStrength: 2,
-        nodeCharge: -300,
-      })
-    }, 8000)
+    // setTimeout(() => {
+    //   setForceConfig({
+    //     groupStrength: 2,
+    //     nodeCharge: -300,
+    //   })
+    // }, 8000)
   }, [])
 
   const viz = visualizationRef.current
@@ -116,6 +116,7 @@ const Sandbox: React.FC = () => {
       <div className="App-content">
         <div className="App-graph-viz-container">
           <GraphVizComponent
+            dragMode={'select'}
             nodes={data.nodes}
             links={data.links}
             groups={data.groups}
