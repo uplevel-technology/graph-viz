@@ -38,7 +38,7 @@ const DATA = {
   ],
 }
 
-const App: React.FC = () => {
+const Sandbox: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const visualizationRef = useRef<GraphVisualization | null>(null)
 
@@ -129,4 +129,4 @@ const App: React.FC = () => {
   )
 }
 
-export default App
+export default Sandbox
