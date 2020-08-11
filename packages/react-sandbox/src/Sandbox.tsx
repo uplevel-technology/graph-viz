@@ -68,6 +68,7 @@ const Sandbox: React.FC = () => {
     groupStrength: 0,
     nodeCharge: -30,
   })
+  const [dragMode, setDragMode] = useState<'drag' | 'select'>('drag')
 
   useEffect(() => {
     setTimeout(() => {
@@ -76,6 +77,7 @@ const Sandbox: React.FC = () => {
         links: [...DATA.links, {source: 'black', target: '2'}],
         groups: [...DATA.groups],
       })
+      setDragMode('select')
     }, 3000)
     setTimeout(() => {
       setConfig({
@@ -83,6 +85,7 @@ const Sandbox: React.FC = () => {
           fill: 'purple',
         },
       })
+      setDragMode('drag')
     }, 6000)
 
     // setTimeout(() => {
@@ -116,7 +119,7 @@ const Sandbox: React.FC = () => {
       <div className="App-content">
         <div className="App-graph-viz-container">
           <GraphVizComponent
-            dragMode={'select'}
+            dragMode={dragMode}
             nodes={data.nodes}
             links={data.links}
             groups={data.groups}
