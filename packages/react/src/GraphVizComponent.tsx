@@ -323,7 +323,7 @@ export class GraphVizComponent extends React.Component<
     this.visualization.interaction.addEventListener(
       'nodeDrag',
       'react-default',
-      (worldPos, draggedNodeIdx) => {
+      (e, worldPos, draggedNodeIdx) => {
         if (this.props.dragMode === 'select') {
           return
         }
@@ -344,7 +344,6 @@ export class GraphVizComponent extends React.Component<
           links: this.vizData.links,
           forceGroups: this.props.groups,
         })
-        // ^ the simulation tick handler should handle the position updates after this in our viz
         this.visualization.render()
       },
     )
