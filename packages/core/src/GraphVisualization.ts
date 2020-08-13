@@ -1,6 +1,13 @@
 import {defaultsDeep, isEqual, size} from 'lodash'
 import * as THREE from 'three'
-import {Vector3} from 'three'
+import {
+  BufferAttribute,
+  BufferGeometry,
+  Mesh,
+  MeshBasicMaterial,
+  PlaneBufferGeometry,
+  Vector3,
+} from 'three'
 import {
   DisplayLink,
   LINK_DEFAULTS,
@@ -82,6 +89,7 @@ export class GraphVisualization {
   public nodesMesh: Nodes
   public linksMesh: Links
   public groupsMesh: DisplayGroups
+  public selectionRectMesh: Mesh
 
   public readonly canvas: HTMLCanvasElement
   public readonly camera: THREE.OrthographicCamera
@@ -90,6 +98,7 @@ export class GraphVisualization {
   private data: VisualizationInputData
   private nodeIdToIndexMap: {[key: string]: number} = {}
   private userHasAdjustedViewport: boolean
+  private dragMode: 'drag' | 'select' = 'select'
 
   private width: number
   private height: number
@@ -147,6 +156,51 @@ export class GraphVisualization {
     this.nodesMesh = new Nodes(graphData.nodes)
     this.linksMesh = new Links(populateLinks(graphData, this.nodeIdToIndexMap))
     this.groupsMesh = new DisplayGroups(graphData.nodes, graphData.groups)
+    const myPlaneGeometry = new BufferGeometry()
+    myPlaneGeometry.setAttribute(
+      'position',
+      new BufferAttribute(
+        Float32Array.from([
+          // Triangle 1
+          // A 0
+          -1,
+          1,
+          0,
+          // B 1
+          1,
+          1,
+          0,
+          // C 2
+          1,
+          -1,
+          0,
+          // Triangle 2
+          // D 3
+          -1,
+          -1,
+          0,
+          // A' 4
+          -1,
+          1,
+          0,
+          // C' 5
+          1,
+          -1,
+          0,
+        ]),
+        3,
+      ),
+    )
+    this.selectionRectMesh = new Mesh(
+      // new PlaneBufferGeometry(),
+      myPlaneGeometry,
+      new MeshBasicMaterial({
+        color: '#ffff00',
+        opacity: 0.5,
+        side: THREE.DoubleSide,
+      }),
+    )
+    this.selectionRectMesh.position.z = 10
 
     this.groupsMesh.object.position.z = 0
     this.scene.add(this.groupsMesh.object)
@@ -156,8 +210,6 @@ export class GraphVisualization {
 
     this.nodesMesh.object.position.z = 2
     this.scene.add(this.nodesMesh.object)
-
-    this.render()
 
     this.interaction = new MouseInteraction(
       this.canvas,
@@ -172,8 +224,43 @@ export class GraphVisualization {
       'default',
       this.handleDragStart,
     )
+    this.interaction.addEventListener('dragEnd', 'default', this.handleDragEnd)
     this.interaction.addEventListener('pan', 'default', this.handlePan)
     this.interaction.addEventListener('zoom', 'default', this.handleZoomOnWheel)
+  }
+
+  public drawSelectionRectangle(position: Vector3) {
+    const posAttr = (this.selectionRectMesh
+      .geometry as PlaneBufferGeometry).getAttribute(
+      'position',
+    ) as BufferAttribute
+
+    for (let i = 0; i < posAttr.count; i++) {
+      posAttr.setXY(i, position.x, position.y) // set all to origin
+    }
+    // this.selectionRectMesh.geometry.computeVertexNormals()
+    posAttr.needsUpdate = true
+    this.scene.add(this.selectionRectMesh)
+    this.render()
+  }
+
+  public updateSelectionRectangle(pos: Vector3) {
+    const posAttr = (this.selectionRectMesh
+      .geometry as BufferGeometry).getAttribute('position') as BufferAttribute
+    // triangle ABC
+    posAttr.setX(1, pos.x) // b
+    posAttr.setXY(2, pos.x, pos.y) // c
+    // triangle DCA
+    posAttr.setY(3, pos.y) // d
+    posAttr.setXY(5, pos.x, pos.y) // c'
+    // this.selectionRectMesh.geometry.computeVertexNormals()
+    posAttr.needsUpdate = true
+    this.render()
+  }
+
+  public removeSelectionRectangle() {
+    this.scene.remove(this.selectionRectMesh)
+    this.render()
   }
 
   /**
@@ -430,12 +517,28 @@ export class GraphVisualization {
     this.linksMesh.handleCameraZoom(this.camera.zoom)
   }
 
-  private handleDragStart = () => {
+  private handleDragStart = (
+    e: MouseEvent,
+    nodeIdx: number | null,
+    pos: Vector3,
+  ) => {
     this.userHasAdjustedViewport = true
-    this.render()
+    if (this.dragMode === 'select') {
+      this.drawSelectionRectangle(pos)
+    }
   }
 
-  private handlePan = (panDelta: Vector3) => {
+  private handleDragEnd = () => {
+    if (this.dragMode === 'select') {
+      this.removeSelectionRectangle()
+    }
+  }
+
+  private handlePan = (e: MouseEvent, worldPos: Vector3, panDelta: Vector3) => {
+    if (this.dragMode === 'select') {
+      this.updateSelectionRectangle(worldPos)
+      return
+    }
     const rect = this.canvas.getBoundingClientRect()
     panDelta.multiplyScalar(PAN_SPEED)
 

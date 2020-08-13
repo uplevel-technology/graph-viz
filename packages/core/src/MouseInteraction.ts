@@ -36,6 +36,7 @@ export type DragEndEventHandler = GenericMouseEventHandler
  * i.e. node was dragged
  */
 export type NodeDragEventHandler = (
+  event: MouseEvent,
   worldSpaceMousePosition: THREE.Vector3,
   draggedNodeIdx: number,
 ) => any
@@ -44,7 +45,11 @@ export type NodeDragEventHandler = (
  * dispatched when a mouse dragging event is detected after dragStart was dispatched with a null node
  * i.e. canvas was panned
  */
-export type PanEventHandler = (panDelta: THREE.Vector3) => any
+export type PanEventHandler = (
+  event: MouseEvent,
+  worldSpaceMousePosition: THREE.Vector3,
+  panDelta: THREE.Vector3,
+) => any
 
 /**
  * dispatched on mouse wheel change
@@ -325,7 +330,7 @@ export class MouseInteraction {
       // handle node drag interaction
       const idx = this.intersectedPointIdx
       this.registeredEventHandlers.nodeDrag.forEach(onDrag => {
-        onDrag(this.getMouseInWorldSpace(0), idx)
+        onDrag(event, this.getMouseInWorldSpace(0), idx)
       })
     } else {
       // calculate the pan delta
@@ -333,7 +338,7 @@ export class MouseInteraction {
       this.panDelta.subVectors(this.panEnd, this.panStart)
 
       this.registeredEventHandlers.pan.forEach(onPan => {
-        onPan(this.panDelta)
+        onPan(event, this.getMouseInWorldSpace(0), this.panDelta)
       })
 
       this.panStart.copy(this.panEnd)
