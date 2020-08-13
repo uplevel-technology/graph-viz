@@ -156,8 +156,8 @@ export class GraphVisualization {
     this.nodesMesh = new Nodes(graphData.nodes)
     this.linksMesh = new Links(populateLinks(graphData, this.nodeIdToIndexMap))
     this.groupsMesh = new DisplayGroups(graphData.nodes, graphData.groups)
-    const myPlaneGeometry = new BufferGeometry()
-    myPlaneGeometry.setAttribute(
+    const planeGeometry = new BufferGeometry()
+    planeGeometry.setAttribute(
       'position',
       new BufferAttribute(
         Float32Array.from([
@@ -192,11 +192,11 @@ export class GraphVisualization {
       ),
     )
     this.selectionRectMesh = new Mesh(
-      // new PlaneBufferGeometry(),
-      myPlaneGeometry,
+      planeGeometry,
       new MeshBasicMaterial({
-        color: '#ffff00',
-        opacity: 0.5,
+        color: '#1495dd',
+        opacity: 0.1,
+        transparent: true,
         side: THREE.DoubleSide,
       }),
     )
@@ -238,7 +238,6 @@ export class GraphVisualization {
     for (let i = 0; i < posAttr.count; i++) {
       posAttr.setXY(i, position.x, position.y) // set all to origin
     }
-    // this.selectionRectMesh.geometry.computeVertexNormals()
     posAttr.needsUpdate = true
     this.scene.add(this.selectionRectMesh)
     this.render()
