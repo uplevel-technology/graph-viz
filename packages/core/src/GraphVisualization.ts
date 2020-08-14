@@ -435,6 +435,8 @@ export class GraphVisualization {
     this.camera.updateProjectionMatrix()
     this.nodesMesh.handleCameraZoom(this.camera.zoom)
     this.linksMesh.handleCameraZoom(this.camera.zoom)
+
+    this.render()
   }
 
   private handleDragStart = (
