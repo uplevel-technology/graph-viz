@@ -8,16 +8,19 @@ import {
 } from 'three'
 
 /**
- * Simple rectangle drawn between two diametrically opposite control points - origin and transverse
+ * Simple rectangle drawn between two diagonally opposite control points - start and end
  * Used during dragSelection.
  */
 export class SelectionRectangle {
   public object: THREE.Mesh
 
+  private readonly frustum: THREE.Frustum
   private readonly geometry: THREE.BufferGeometry
   private readonly material: THREE.MeshBasicMaterial
+  private readonly camera: THREE.OrthographicCamera
 
-  constructor() {
+  constructor(camera: THREE.OrthographicCamera) {
+    this.camera = camera
     this.geometry = new BufferGeometry()
     this.geometry.setAttribute(
       'position',
@@ -26,7 +29,7 @@ export class SelectionRectangle {
         // The only purpose is for self-documentation
         Float32Array.from([
           // Triangle 1
-          // A 0 Origin
+          // A 0 Start point
           -1,
           1,
           0,
@@ -34,7 +37,7 @@ export class SelectionRectangle {
           1,
           1,
           0,
-          // C 2 Transverse
+          // C 2 End point
           1,
           -1,
           0,
@@ -43,11 +46,11 @@ export class SelectionRectangle {
           -1,
           -1,
           0,
-          // A' 4 Origin'
+          // A' 4 Start' point
           -1,
           1,
           0,
-          // C' 5 Transverse'
+          // C' 5 End' point
           1,
           -1,
           0,
@@ -64,26 +67,26 @@ export class SelectionRectangle {
     this.object = new Mesh(this.geometry, this.material)
   }
 
-  // sets the origin control point
-  public setOrigin(pos: Vector3) {
+  // sets the start control point
+  public setStart(start: Vector3) {
     const posAttr = this.geometry.getAttribute('position') as BufferAttribute
 
     for (let i = 0; i < posAttr.count; i++) {
-      // initialize all vertices to the origin
-      posAttr.setXY(i, pos.x, pos.y)
+      // initialize all vertices to the start point
+      posAttr.setXY(i, start.x, start.y)
     }
     posAttr.needsUpdate = true
   }
 
-  // updates the transverse control point and the rectangle
-  public updateTransverse(pos: Vector3) {
+  // sets the end control point
+  public setEnd(end: Vector3) {
     const posAttr = this.geometry.getAttribute('position') as BufferAttribute
     // triangle ABC
-    posAttr.setX(1, pos.x) // b
-    posAttr.setXY(2, pos.x, pos.y) // c
+    posAttr.setX(1, end.x) // b
+    posAttr.setXY(2, end.x, end.y) // c
     // triangle DCA
-    posAttr.setY(3, pos.y) // d
-    posAttr.setXY(5, pos.x, pos.y) // c'
+    posAttr.setY(3, end.y) // d
+    posAttr.setXY(5, end.x, end.y) // c'
     posAttr.needsUpdate = true
   }
 }

@@ -150,7 +150,7 @@ export class GraphVisualization {
     this.nodesMesh = new Nodes(graphData.nodes)
     this.linksMesh = new Links(populateLinks(graphData, this.nodeIdToIndexMap))
     this.groupsMesh = new DisplayGroups(graphData.nodes, graphData.groups)
-    this.selectionRectMesh = new SelectionRectangle()
+    this.selectionRectMesh = new SelectionRectangle(this.camera)
     this.selectionRectMesh.object.position.z = 10
 
     this.groupsMesh.object.position.z = 0
@@ -167,6 +167,7 @@ export class GraphVisualization {
       this.camera,
       this.nodesMesh,
       this.data.nodes,
+      this.scene,
     )
     this.updateConfig(config)
 
@@ -441,7 +442,7 @@ export class GraphVisualization {
   ) => {
     this.userHasAdjustedViewport = true
     if (this.dragMode === 'select') {
-      this.selectionRectMesh.setOrigin(pos)
+      this.selectionRectMesh.setStart(pos)
       this.scene.add(this.selectionRectMesh.object)
       this.render()
     }
@@ -456,7 +457,7 @@ export class GraphVisualization {
 
   private handlePan = (e: MouseEvent, worldPos: Vector3, panDelta: Vector3) => {
     if (this.dragMode === 'select') {
-      this.selectionRectMesh.updateTransverse(worldPos)
+      this.selectionRectMesh.setEnd(worldPos)
       this.render()
       return
     }
