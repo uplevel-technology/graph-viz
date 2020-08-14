@@ -24,6 +24,7 @@ import {
   validateInputData,
 } from './validators'
 import Ajv from 'ajv'
+import {SelectionRectangle} from './SelectionRectangle'
 
 const MAX_ZOOM = 5.0
 const PAN_SPEED = 1.0
@@ -82,6 +83,7 @@ export class GraphVisualization {
   public nodesMesh: Nodes
   public linksMesh: Links
   public groupsMesh: DisplayGroups
+  public selectionRectMesh: SelectionRectangle
 
   public readonly canvas: HTMLCanvasElement
   public readonly camera: THREE.OrthographicCamera
@@ -147,6 +149,8 @@ export class GraphVisualization {
     this.nodesMesh = new Nodes(graphData.nodes)
     this.linksMesh = new Links(populateLinks(graphData, this.nodeIdToIndexMap))
     this.groupsMesh = new DisplayGroups(graphData.nodes, graphData.groups)
+    this.selectionRectMesh = new SelectionRectangle(this.camera)
+    this.selectionRectMesh.object.position.z = 10
 
     this.groupsMesh.object.position.z = 0
     this.scene.add(this.groupsMesh.object)
@@ -156,8 +160,6 @@ export class GraphVisualization {
 
     this.nodesMesh.object.position.z = 2
     this.scene.add(this.nodesMesh.object)
-
-    this.render()
 
     this.interaction = new MouseInteraction(
       this.canvas,
@@ -172,8 +174,9 @@ export class GraphVisualization {
       'default',
       this.handleDragStart,
     )
-    this.interaction.addEventListener('pan', 'default', this.handlePan)
+    this.interaction.addEventListener('dragEnd', 'default', this.handleDragEnd)
     this.interaction.addEventListener('zoom', 'default', this.handleZoomOnWheel)
+    this.interaction.addEventListener('pan', 'default', this.handlePan)
   }
 
   /**
@@ -430,12 +433,32 @@ export class GraphVisualization {
     this.linksMesh.handleCameraZoom(this.camera.zoom)
   }
 
-  private handleDragStart = () => {
+  private handleDragStart = (
+    e: MouseEvent,
+    nodeIdx: number | null,
+    pos: Vector3,
+  ) => {
     this.userHasAdjustedViewport = true
+    // draw a rectangle if dragMode is 'select'
+    if (this.interaction.dragMode === 'select') {
+      this.selectionRectMesh.setStart(pos)
+      this.scene.add(this.selectionRectMesh.object)
+      this.render()
+    }
+  }
+
+  private handleDragEnd = () => {
+    // remove selection rectangle on drag end
+    this.scene.remove(this.selectionRectMesh.object)
     this.render()
   }
 
-  private handlePan = (panDelta: Vector3) => {
+  private handlePan = (e: MouseEvent, worldPos: Vector3, panDelta: Vector3) => {
+    if (this.interaction.dragMode === 'select') {
+      this.selectionRectMesh.setEnd(worldPos)
+      this.render()
+      return
+    }
     const rect = this.canvas.getBoundingClientRect()
     panDelta.multiplyScalar(PAN_SPEED)
 

@@ -48,18 +48,68 @@ interface State {
   readonly currentTooltipNode: TooltipNode | null
   readonly currentlyHoveredIdx: number | null
   readonly draftLinkSourceNode?: GraphVizNode
+  readonly selectedNodes: GraphVizNode[]
 }
 
 export interface GraphVizComponentProps {
+  /**
+   * list of nodes to draw
+   */
   nodes: GraphVizNode[]
+
+  /**
+   * list of links to draw
+   */
   links: GraphVizLink[]
+
+  /**
+   * list of groups to draw
+   */
   groups: GraphVizGroup[]
+
+  /**
+   * list of tooltips for nodes
+   */
   tooltips: Partial<TooltipNode>[]
-  onRefresh?: () => any
-  onError?: (error: Error) => any
-  config?: ConfigurationOptions
-  forceConfig?: ForceConfig
+
+  /**
+   * renders a refresh, zoom in and zoom out buttons if enabled
+   */
   showControls?: boolean
+
+  /**
+   * callback function when refresh button is clicked
+   */
+  onRefresh?: () => any
+
+  /**
+   * callback function to handle errors
+   * @param error
+   */
+  onError?: (error: Error) => any
+
+  /**
+   * Graph config.
+   * Defaults for nodes, links, and  groups
+   */
+  config?: ConfigurationOptions
+
+  /**
+   * Force config.
+   * Defaults for forces / layout computation
+   */
+  forceConfig?: ForceConfig
+
+  /**
+   * dragMode selects what happens when you drag your cursor on the canvas
+   * 'drag' drags a node or the entire graph
+   * 'select' draws a rectangle and returns the list of selected nodes under
+   * the rectangle
+   * @see MouseInteraction.dragMode
+   * @default 'drag'
+   */
+  dragMode: 'drag' | 'select'
+
   /**
    * enables graph editing
    * i.e. for now only the drawing of links
@@ -120,12 +170,14 @@ export class GraphVizComponent extends React.Component<
   readonly state: State = {
     currentTooltipNode: null,
     currentlyHoveredIdx: null,
+    selectedNodes: [],
   }
 
   static defaultProps: Partial<GraphVizComponentProps> = {
     tooltips: [],
     groups: [],
     onLinkDrawn: noop,
+    dragMode: 'drag',
   }
 
   onWindowResize: () => void = debounce(() => {
@@ -168,6 +220,7 @@ export class GraphVizComponent extends React.Component<
     window.addEventListener('resize', this.onWindowResize)
 
     this.simulation = new ForceSimulation()
+    this.visualization.interaction.dragMode = this.props.dragMode
     this.visualization.interaction.addEventListener(
       'nodeHoverIn',
       'react-default',
@@ -249,7 +302,7 @@ export class GraphVizComponent extends React.Component<
     this.visualization.interaction.addEventListener(
       'nodeDrag',
       'react-default',
-      (worldPos, draggedNodeIdx) => {
+      (e, worldPos, draggedNodeIdx) => {
         let node
         if (this.props.editMode) {
           node = this.vizData.nodes[
@@ -267,7 +320,6 @@ export class GraphVizComponent extends React.Component<
           links: this.vizData.links,
           forceGroups: this.props.groups,
         })
-        // ^ the simulation tick handler should handle the position updates after this in our viz
         this.visualization.render()
       },
     )
@@ -391,6 +443,10 @@ export class GraphVizComponent extends React.Component<
 
     if (!isEqual(prevProps.forceConfig, this.props.forceConfig)) {
       this.simulation.updateConfig(this.props.forceConfig)
+    }
+
+    if (prevProps.dragMode !== this.props.dragMode) {
+      this.visualization.interaction.dragMode = this.props.dragMode
     }
   }
 

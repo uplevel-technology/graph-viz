@@ -38,7 +38,7 @@ const DATA = {
   ],
 }
 
-const App: React.FC = () => {
+const Sandbox: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const visualizationRef = useRef<GraphVisualization | null>(null)
 
@@ -68,6 +68,7 @@ const App: React.FC = () => {
     groupStrength: 0,
     nodeCharge: -30,
   })
+  const [dragMode, setDragMode] = useState<'drag' | 'select'>('drag')
 
   useEffect(() => {
     setTimeout(() => {
@@ -76,6 +77,7 @@ const App: React.FC = () => {
         links: [...DATA.links, {source: 'black', target: '2'}],
         groups: [...DATA.groups],
       })
+      setDragMode('select')
     }, 3000)
     setTimeout(() => {
       setConfig({
@@ -83,14 +85,15 @@ const App: React.FC = () => {
           fill: 'purple',
         },
       })
+      setDragMode('drag')
     }, 6000)
 
-    setTimeout(() => {
-      setForceConfig({
-        groupStrength: 2,
-        nodeCharge: -300,
-      })
-    }, 8000)
+    // setTimeout(() => {
+    //   setForceConfig({
+    //     groupStrength: 2,
+    //     nodeCharge: -300,
+    //   })
+    // }, 8000)
   }, [])
 
   const viz = visualizationRef.current
@@ -116,6 +119,7 @@ const App: React.FC = () => {
       <div className="App-content">
         <div className="App-graph-viz-container">
           <GraphVizComponent
+            dragMode={dragMode}
             nodes={data.nodes}
             links={data.links}
             groups={data.groups}
@@ -129,4 +133,4 @@ const App: React.FC = () => {
   )
 }
 
-export default App
+export default Sandbox
