@@ -385,7 +385,11 @@ export class GraphVisualization {
     this.renderer.dispose()
   }
 
-  private zoomToFit = (graphData: VisualizationInputData) => {
+  /**
+   * make the graph fit the canvas
+   * @param graphData
+   */
+  public zoomToFit = (graphData: VisualizationInputData) => {
     if (size(graphData.nodes) === 0) {
       // Don't try to do this if there are no nodes.
       return
