@@ -497,9 +497,9 @@ export class GraphVizComponent extends React.Component<
   updateStyles = () => {
     this.vizData.nodes.forEach((n, i) => {
       /**
-       * IMPORTANT NOTE:
+       * IMPORTANT NOTE: 🙄
        * We are preserving the referential equality of the nodes here by manually
-       * assigning style props, to prevent any unexpected behavior with d3-force because
+       * assigning style props to prevent any unexpected behavior with d3-force because
        * d3-force internally uses referential equality checks on _nodes_ only to keep
        * track of diffs.
        */
