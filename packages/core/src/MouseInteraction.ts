@@ -378,7 +378,7 @@ export class MouseInteraction {
         // only dispatch nodeDrag events when dragMode is set to 'drag'
         const idx = this.intersectedPointIdx
         this.registeredEventHandlers.nodeDrag.forEach(onDrag => {
-          onDrag(event, this.getMouseInWorldSpace(0), idx)
+          onDrag(event, this.getMouseInWorldSpace(1), idx)
         })
       }
     } else {
@@ -386,7 +386,7 @@ export class MouseInteraction {
       this.panEnd.set(event.clientX, event.clientY, 0)
       this.panDelta.subVectors(this.panEnd, this.panStart)
       this.registeredEventHandlers.pan.forEach(onPan => {
-        onPan(event, this.getMouseInWorldSpace(0), this.panDelta)
+        onPan(event, this.getMouseInWorldSpace(1), this.panDelta)
       })
       this.panStart.copy(this.panEnd)
     }

@@ -65,6 +65,7 @@ export class SelectionRectangle {
       side: THREE.DoubleSide,
     })
     this.object = new Mesh(this.geometry, this.material)
+    this.object.frustumCulled = false
   }
 
   // sets the start control point
@@ -73,7 +74,7 @@ export class SelectionRectangle {
 
     for (let i = 0; i < posAttr.count; i++) {
       // initialize all vertices to the start point
-      posAttr.setXY(i, start.x, start.y)
+      posAttr.setXYZ(i, start.x, start.y, start.z)
     }
     posAttr.needsUpdate = true
   }

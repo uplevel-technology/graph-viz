@@ -150,7 +150,7 @@ export class GraphVisualization {
     this.linksMesh = new Links(populateLinks(graphData, this.nodeIdToIndexMap))
     this.groupsMesh = new DisplayGroups(graphData.nodes, graphData.groups)
     this.selectionRectMesh = new SelectionRectangle(this.camera)
-    this.selectionRectMesh.object.position.z = 10
+    this.selectionRectMesh.object.position.z = 3
 
     this.groupsMesh.object.position.z = 0
     this.scene.add(this.groupsMesh.object)
