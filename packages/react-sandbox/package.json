@@ -1,6 +1,6 @@
 {
   "name": "react-sandbox",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "private": true,
   "dependencies": {
     "@types/node": "12.7.3",
