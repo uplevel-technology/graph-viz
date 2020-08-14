@@ -1,9 +1,9 @@
 // @flow
 
-import {defaultTo, size, defaults} from 'lodash'
+import {defaults, defaultTo, size} from 'lodash'
 import * as THREE from 'three'
-import {nodesFragmentShader, nodesVertexShader} from './shaders/asText'
 import {BufferAttribute} from 'three'
+import {nodesFragmentShader, nodesVertexShader} from './shaders/asText'
 
 export interface NodeStyleAttributes {
   /**
@@ -443,6 +443,7 @@ export class Nodes {
 
     position.needsUpdate = true
     this.geometry.computeBoundingSphere()
+    this.geometry.computeBoundingBox()
   }
 
   /**
