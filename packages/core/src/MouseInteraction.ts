@@ -121,16 +121,12 @@ export class MouseInteraction {
     end: new Vector3(),
   }
 
-  tempScene: THREE.Scene
-
   constructor(
     canvas: HTMLCanvasElement,
     camera: THREE.OrthographicCamera,
     nodesMesh: Nodes,
     nodesData: DisplayNode[],
-    tempScene: THREE.Scene,
   ) {
-    this.tempScene = tempScene
     this.canvas = canvas
     this.camera = camera
     this.nodesMesh = nodesMesh
