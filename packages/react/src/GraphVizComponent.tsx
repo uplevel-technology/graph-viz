@@ -495,11 +495,25 @@ export class GraphVizComponent extends React.Component<
   }
 
   updateStyles = () => {
-    this.vizData = {
-      nodes: this.props.nodes,
-      links: this.props.links,
-      groups: this.props.groups,
-    }
+    this.vizData.nodes.forEach((n, i) => {
+      /**
+       * IMPORTANT NOTE:
+       * We are preserving the referential equality of the nodes here by manually
+       * assigning style props, to prevent any unexpected behavior with d3-force because
+       * d3-force internally uses referential equality checks on _nodes_ only to keep
+       * track of diffs.
+       */
+      n.absoluteSize = this.props.nodes[i].absoluteSize
+      n.innerRadius = this.props.nodes[i].innerRadius
+      n.fill = this.props.nodes[i].fill
+      n.fillOpacity = this.props.nodes[i].fillOpacity
+      n.scale = this.props.nodes[i].scale
+      n.stroke = this.props.nodes[i].stroke
+      n.strokeWidth = this.props.nodes[i].strokeWidth
+      n.strokeOpacity = this.props.nodes[i].strokeOpacity
+    })
+    this.vizData.links = this.props.links
+    this.vizData.groups = this.props.groups
 
     this.visualization.update(this.vizData)
   }
