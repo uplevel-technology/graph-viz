@@ -1,6 +1,6 @@
 import {get, orderBy} from 'lodash'
 import * as THREE from 'three'
-import {Intersection} from 'three'
+import {BufferGeometry, Intersection, Vector3} from 'three'
 import {DisplayNode, Nodes} from './Nodes'
 
 const MAX_CLICK_DURATION = 300
@@ -52,6 +52,15 @@ export type PanEventHandler = (
 ) => any
 
 /**
+ * dispatched when a mouse dragging event is detected and dragMode is set to 'select'
+ */
+export type DragSelectEventHandler = (
+  event: MouseEvent,
+  worldSpaceMousePosition: THREE.Vector3,
+  selection: number[],
+) => any
+
+/**
  * dispatched on mouse wheel change
  */
 export type ZoomEventHandler = (event: WheelEvent) => any
@@ -72,6 +81,7 @@ interface EventHandlerMap {
   dragStart: Map<string, DragStartEventHandler>
   dragEnd: Map<string, DragEndEventHandler>
   nodeDrag: Map<string, NodeDragEventHandler>
+  dragSelect: Map<string, DragSelectEventHandler>
   pan: Map<string, PanEventHandler>
   zoom: Map<string, ZoomEventHandler>
   secondaryClick: Map<string, SecondaryClickEventHandler>
@@ -79,6 +89,7 @@ interface EventHandlerMap {
 
 export class MouseInteraction {
   private nodesData: DisplayNode[]
+  private dragMode: 'drag' | 'select' = 'select'
   private intersectedPointIdx: number | null
   private dragging: boolean
   private registerClick: boolean
@@ -89,6 +100,7 @@ export class MouseInteraction {
     dragStart: new Map<string, DragStartEventHandler>(),
     dragEnd: new Map<string, DragEndEventHandler>(),
     nodeDrag: new Map<string, NodeDragEventHandler>(),
+    dragSelect: new Map<string, DragSelectEventHandler>(),
     pan: new Map<string, PanEventHandler>(),
     zoom: new Map<string, ZoomEventHandler>(),
     secondaryClick: new Map<string, SecondaryClickEventHandler>(),
@@ -103,12 +115,22 @@ export class MouseInteraction {
   private readonly mouse: THREE.Vector2
   private readonly raycaster: THREE.Raycaster
 
+  // frustum used to represent the selection box
+  private readonly frustum = {
+    start: new Vector3(),
+    end: new Vector3(),
+  }
+
+  tempScene: THREE.Scene
+
   constructor(
     canvas: HTMLCanvasElement,
     camera: THREE.OrthographicCamera,
     nodesMesh: Nodes,
     nodesData: DisplayNode[],
+    tempScene: THREE.Scene,
   ) {
+    this.tempScene = tempScene
     this.canvas = canvas
     this.camera = camera
     this.nodesMesh = nodesMesh
@@ -181,6 +203,11 @@ export class MouseInteraction {
     eventName: 'secondaryClick',
     eventListenerKey: string,
     callback: SecondaryClickEventHandler,
+  ): void
+  public addEventListener(
+    eventName: 'dragSelect',
+    eventListenerKey: string,
+    callback: DragSelectEventHandler,
   ): void
 
   /**
@@ -271,17 +298,27 @@ export class MouseInteraction {
 
     this.panStart.set(event.clientX, event.clientY, 0)
 
+    const worldMouse = this.getMouseInWorldSpace(2)
+    this.frustum.start = worldMouse
+
     this.registeredEventHandlers.dragStart.forEach(onDragStart => {
-      onDragStart(event, this.intersectedPointIdx, this.getMouseInWorldSpace(0))
+      onDragStart(event, this.intersectedPointIdx, worldMouse)
     })
   }
 
   private onMouseUp = (event: MouseEvent) => {
     event.preventDefault()
     this.dragging = false
-    const worldMouse = this.getMouseInWorldSpace(0)
+    const worldMouse = this.getMouseInWorldSpace(2)
 
     this.intersectedPointIdx = this.findNearestNodeIndex(event)
+
+    this.frustum.end = worldMouse
+    if (this.dragMode === 'select') {
+      this.registeredEventHandlers.dragSelect.forEach(dragSelectListener =>
+        dragSelectListener(event, worldMouse, this.findInFrustum()),
+      )
+    }
 
     this.registeredEventHandlers.dragEnd.forEach(dragEndListener => {
       dragEndListener(event, this.intersectedPointIdx, worldMouse)
@@ -354,8 +391,9 @@ export class MouseInteraction {
   }
 
   private getMouseInWorldSpace = (z: number) => {
-    const worldSpaceMouse = new THREE.Vector3(this.mouse.x, this.mouse.y, z)
+    const worldSpaceMouse = new THREE.Vector3(this.mouse.x, this.mouse.y, 0)
     worldSpaceMouse.unproject(this.camera)
+    worldSpaceMouse.setZ(z)
     return worldSpaceMouse
   }
 
@@ -367,5 +405,33 @@ export class MouseInteraction {
     this.registeredEventHandlers.secondaryClick.forEach(onSecondaryClick => {
       onSecondaryClick(event, this.intersectedPointIdx)
     })
+  }
+
+  // finds node ids within the 2D selection frustum
+  findInFrustum = () => {
+    const posAttr = (this.nodesMesh.object
+      .geometry as BufferGeometry).getAttribute('position')
+    const hits: number[] = []
+    for (let i = 0; i < posAttr.count; i++) {
+      const left = Math.min(this.frustum.start.x, this.frustum.end.x)
+      const right = Math.max(this.frustum.start.x, this.frustum.end.x)
+      const top = Math.min(this.frustum.start.y, this.frustum.end.y)
+      const down = Math.max(this.frustum.start.y, this.frustum.end.y)
+
+      const point = new Vector3(
+        posAttr.getX(i),
+        posAttr.getY(i),
+        posAttr.getZ(i),
+      )
+      if (
+        point.x >= left &&
+        point.x <= right &&
+        point.y >= top &&
+        point.y <= down
+      ) {
+        hits.push(i)
+      }
+    }
+    return hits
   }
 }
