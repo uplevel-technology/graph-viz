@@ -88,10 +88,6 @@ interface EventHandlerMap {
 }
 
 export class MouseInteraction {
-  // dragMode determines the type of dragging behavior
-  // 'drag' means node dragging and canvas panning events will be dispatched
-  // 'select' means dragSelection events will be dispatched
-  public dragMode: 'drag' | 'select' = 'drag'
   private nodesData: DisplayNode[]
   private intersectedPointIdx: number | null
   private dragging: boolean
@@ -123,6 +119,11 @@ export class MouseInteraction {
     start: new Vector3(),
     end: new Vector3(),
   }
+
+  // dragMode determines the type of dragging behavior
+  // 'drag' means node dragging and canvas panning events will be dispatched
+  // 'select' means dragSelection events will be dispatched
+  public dragMode: 'drag' | 'select' = 'drag'
 
   constructor(
     canvas: HTMLCanvasElement,
