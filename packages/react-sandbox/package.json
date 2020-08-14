@@ -12,9 +12,9 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
-    "sandbox": "react-scripts start",
-    "testsandbox": "react-scripts test",
-    "ejectsandbox": "react-scripts eject"
+    "sandbox": "PORT=3002 react-scripts start",
+    "testsandbox": "PORT=3002 react-scripts test",
+    "ejectsandbox": "PORT=3002 react-scripts eject"
   },
   "browserslist": {
     "production": [
