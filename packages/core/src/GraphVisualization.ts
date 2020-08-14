@@ -92,7 +92,6 @@ export class GraphVisualization {
   private data: VisualizationInputData
   private nodeIdToIndexMap: {[key: string]: number} = {}
   private userHasAdjustedViewport: boolean
-  private dragMode: 'drag' | 'select' = 'select'
 
   private width: number
   private height: number
@@ -167,7 +166,6 @@ export class GraphVisualization {
       this.camera,
       this.nodesMesh,
       this.data.nodes,
-      this.scene,
     )
     this.updateConfig(config)
 
@@ -177,8 +175,8 @@ export class GraphVisualization {
       this.handleDragStart,
     )
     this.interaction.addEventListener('dragEnd', 'default', this.handleDragEnd)
-    this.interaction.addEventListener('pan', 'default', this.handlePan)
     this.interaction.addEventListener('zoom', 'default', this.handleZoomOnWheel)
+    this.interaction.addEventListener('pan', 'default', this.handlePan)
   }
 
   /**
@@ -441,7 +439,8 @@ export class GraphVisualization {
     pos: Vector3,
   ) => {
     this.userHasAdjustedViewport = true
-    if (this.dragMode === 'select') {
+    // draw a rectangle if dragMode is 'select'
+    if (this.interaction.dragMode === 'select') {
       this.selectionRectMesh.setStart(pos)
       this.scene.add(this.selectionRectMesh.object)
       this.render()
@@ -449,14 +448,13 @@ export class GraphVisualization {
   }
 
   private handleDragEnd = () => {
-    if (this.dragMode === 'select') {
-      this.scene.remove(this.selectionRectMesh.object)
-      this.render()
-    }
+    // remove selection rectangle on drag end
+    this.scene.remove(this.selectionRectMesh.object)
+    this.render()
   }
 
   private handlePan = (e: MouseEvent, worldPos: Vector3, panDelta: Vector3) => {
-    if (this.dragMode === 'select') {
+    if (this.interaction.dragMode === 'select') {
       this.selectionRectMesh.setEnd(worldPos)
       this.render()
       return

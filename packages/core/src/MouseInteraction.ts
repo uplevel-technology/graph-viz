@@ -52,7 +52,7 @@ export type PanEventHandler = (
 ) => any
 
 /**
- * dispatched when a mouse dragging event is detected and dragMode is set to 'select'
+ * dispatched when a dragEnd event is detected and dragMode is set to 'select'
  */
 export type DragSelectEventHandler = (
   event: MouseEvent,
@@ -88,8 +88,11 @@ interface EventHandlerMap {
 }
 
 export class MouseInteraction {
+  // dragMode determines the type of dragging behavior
+  // 'drag' means node dragging and canvas panning events will be dispatched
+  // 'select' means dragSelection events will be dispatched
+  public dragMode: 'drag' | 'select' = 'drag'
   private nodesData: DisplayNode[]
-  private dragMode: 'drag' | 'select' = 'select'
   private intersectedPointIdx: number | null
   private dragging: boolean
   private registerClick: boolean
@@ -126,11 +129,13 @@ export class MouseInteraction {
     camera: THREE.OrthographicCamera,
     nodesMesh: Nodes,
     nodesData: DisplayNode[],
+    dragMode: 'drag' | 'select' = 'drag',
   ) {
     this.canvas = canvas
     this.camera = camera
     this.nodesMesh = nodesMesh
     this.nodesData = nodesData
+    this.dragMode = dragMode
 
     this.intersectedPointIdx = null
     this.dragging = false
@@ -286,16 +291,20 @@ export class MouseInteraction {
     event.preventDefault()
     this.dragging = true
     this.registerClick = true
-    this.intersectedPointIdx = this.findNearestNodeIndex(event)
+    this.intersectedPointIdx = null
 
     setTimeout(() => {
       this.registerClick = false
     }, MAX_CLICK_DURATION)
 
-    this.panStart.set(event.clientX, event.clientY, 0)
-
     const worldMouse = this.getMouseInWorldSpace(2)
     this.frustum.start = worldMouse
+    this.panStart.set(event.clientX, event.clientY, 0)
+
+    if (this.dragMode === 'drag') {
+      // only try finding node under the cursor when dragMode is 'drag'
+      this.intersectedPointIdx = this.findNearestNodeIndex(event)
+    }
 
     this.registeredEventHandlers.dragStart.forEach(onDragStart => {
       onDragStart(event, this.intersectedPointIdx, worldMouse)
@@ -305,15 +314,19 @@ export class MouseInteraction {
   private onMouseUp = (event: MouseEvent) => {
     event.preventDefault()
     this.dragging = false
+    this.intersectedPointIdx = null
     const worldMouse = this.getMouseInWorldSpace(2)
-
-    this.intersectedPointIdx = this.findNearestNodeIndex(event)
 
     this.frustum.end = worldMouse
     if (this.dragMode === 'select') {
       this.registeredEventHandlers.dragSelect.forEach(dragSelectListener =>
         dragSelectListener(event, worldMouse, this.findInFrustum()),
       )
+    }
+
+    if (this.dragMode === 'drag') {
+      // only try finding node under the cursor when dragMode is 'drag'
+      this.intersectedPointIdx = this.findNearestNodeIndex(event)
     }
 
     this.registeredEventHandlers.dragEnd.forEach(dragEndListener => {
@@ -360,20 +373,21 @@ export class MouseInteraction {
         this.intersectedPointIdx = null
       }
     } else if (this.intersectedPointIdx !== null) {
-      // handle node drag interaction
-      const idx = this.intersectedPointIdx
-      this.registeredEventHandlers.nodeDrag.forEach(onDrag => {
-        onDrag(event, this.getMouseInWorldSpace(0), idx)
-      })
+      // else handle node drag interaction
+      if (this.dragMode === 'drag') {
+        // only dispatch nodeDrag events when dragMode is set to 'drag'
+        const idx = this.intersectedPointIdx
+        this.registeredEventHandlers.nodeDrag.forEach(onDrag => {
+          onDrag(event, this.getMouseInWorldSpace(0), idx)
+        })
+      }
     } else {
       // calculate the pan delta
       this.panEnd.set(event.clientX, event.clientY, 0)
       this.panDelta.subVectors(this.panEnd, this.panStart)
-
       this.registeredEventHandlers.pan.forEach(onPan => {
         onPan(event, this.getMouseInWorldSpace(0), this.panDelta)
       })
-
       this.panStart.copy(this.panEnd)
     }
   }
