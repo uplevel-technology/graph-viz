@@ -2,8 +2,9 @@ import React, {useEffect, useRef, useState} from 'react'
 import logo from './logo.svg'
 import './App.css'
 import {GraphVizComponent} from '@graph-viz/react'
-import {ForceConfig} from '@graph-viz/layouts'
+import {ForceConfig, ForceSimulation} from '@graph-viz/layouts'
 import {GraphVisualization} from '@graph-viz/core'
+import * as Comlink from 'comlink'
 
 const DATA = {
   nodes: [
@@ -36,6 +37,13 @@ const DATA = {
       shape: 'convexHull' as const,
     },
   ],
+}
+
+async function doSomething() {
+  const SimClassAsync = Comlink.wrap(
+    new Worker('./simulationWorker.ts'),
+  ) as Comlink.Remote<ForceSimulation>
+  const simInstance = await new SimClassAsync()
 }
 
 const Sandbox: React.FC = () => {
