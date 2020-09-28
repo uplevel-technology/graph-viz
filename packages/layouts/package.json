@@ -4,6 +4,7 @@
   "main": "./lib/index.js",
   "license": "MIT",
   "dependencies": {
+    "comlink": "^4.3.0",
     "d3": "^5.10.0",
     "lodash": "^4.17.15"
   },

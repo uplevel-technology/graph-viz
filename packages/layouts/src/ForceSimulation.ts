@@ -1,7 +1,8 @@
 import * as d3 from 'd3'
-import {meanBy, noop, defaults} from 'lodash'
+import {defaults, meanBy, noop} from 'lodash'
 import {validateForceConfig, validateSimulationData} from './validators'
 import Ajv from 'ajv'
+import * as Comlink from 'comlink'
 
 export interface SimulationNode extends d3.SimulationNodeDatum {
   /**
@@ -217,12 +218,16 @@ export const FORCE_DEFAULTS = {
 
 export class ForceSimulation {
   public simulation: D3Simulation | undefined
-  public staticMode = false
+  public withWorker = false
   private registeredEventHandlers: {
     tick: (nodePositions: NodePosition[]) => void
+    tickWorker: (progress: number) => void
+    stabilized: (nodePosition: NodePosition[]) => void
   } = {
-    // Default no-op implementation. Will be overwritten by the callback provided to onSimulationTick
+    // Default no-op implementations
     tick: noop,
+    tickWorker: noop,
+    stabilized: noop,
   }
   // this is tracked referentially so readonly is important here
   private readonly config: Required<ForceConfig> = FORCE_DEFAULTS
@@ -232,7 +237,7 @@ export class ForceSimulation {
   public initialize(
     graph: SimulationData,
     config: ForceConfig = FORCE_DEFAULTS,
-    staticMode = false,
+    withWorker = false,
   ) {
     if (!validateSimulationData(graph)) {
       const err = validateSimulationData.errors?.[0] as Ajv.ErrorObject
@@ -243,7 +248,7 @@ export class ForceSimulation {
     const mergedConfig = defaults({}, config, FORCE_DEFAULTS)
     Object.assign(this.config, mergedConfig) // preserve referential equality
 
-    this.staticMode = staticMode
+    this.withWorker = withWorker
     const nodesCopy = graph.nodes.map(node => ({...node}))
     const linksCopy = graph.links.map(link => ({...link}))
     const groupsCopy = graph.forceGroups.map(group => ({...group}))
@@ -300,7 +305,7 @@ export class ForceSimulation {
         this.registeredEventHandlers.tick(this.getNodePositions())
       })
 
-    if (staticMode) {
+    if (withWorker) {
       this.simulation.stop()
       this.execManualTicks()
     }
@@ -308,9 +313,22 @@ export class ForceSimulation {
 
   private execManualTicks() {
     if (this.simulation) {
-      for (let i = 0, n = 300; i < n; ++i) {
+      for (
+        let i = 0,
+          n = Math.ceil(
+            Math.log(this.simulation.alphaMin()) /
+              Math.log(1 - this.simulation.alphaDecay()),
+          );
+        i < n;
+        ++i
+      ) {
+        this.registeredEventHandlers.tickWorker(i / n)
         this.simulation.tick()
       }
+      this.registeredEventHandlers.stabilized(this.getNodePositions())
+      // for (let i = 0, n = 300; i < n; ++i) {
+      //   this.simulation.tick()
+      // }
     }
   }
 
@@ -329,6 +347,14 @@ export class ForceSimulation {
 
   public onTick(callback: (nodePositions: NodePosition[]) => void) {
     this.registeredEventHandlers.tick = callback
+  }
+
+  public onTickWorker(callback: (progress: number) => void) {
+    this.registeredEventHandlers.tickWorker = callback
+  }
+
+  public onStabilizeWorker(callback: (nodePositions: NodePosition[]) => void) {
+    this.registeredEventHandlers.stabilized = callback
   }
 
   /**
@@ -434,3 +460,5 @@ export class ForceSimulation {
     this.simulation.stop()
   }
 }
+
+Comlink.expose(ForceSimulation)
