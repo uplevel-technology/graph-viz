@@ -2,9 +2,10 @@ import React, {useEffect, useRef, useState} from 'react'
 import logo from './logo.svg'
 import './App.css'
 import {GraphVizComponent} from '@graph-viz/react'
-import {ForceConfig, ForceSimulation} from '@graph-viz/layouts'
+import {ForceConfig} from '@graph-viz/layouts'
 import {GraphVisualization} from '@graph-viz/core'
-import * as Comlink from 'comlink'
+import {initSimulationWorker} from '@graph-viz/layouts/lib/ForceSimulationWorker'
+import {FORCE_DEFAULTS} from '@graph-viz/layouts/lib/ForceSimulation'
 
 const DATA = {
   nodes: [
@@ -40,11 +41,17 @@ const DATA = {
 }
 
 async function doSomething() {
-  const SimClassAsync = Comlink.wrap(
-    new Worker('./simulationWorker.ts'),
-  ) as Comlink.Remote<ForceSimulation>
-  const simInstance = await new SimClassAsync()
+  const simInstance = await initSimulationWorker()
+  await simInstance.initialize(
+    {...DATA, forceGroups: DATA.groups},
+    FORCE_DEFAULTS,
+    true,
+  )
+  await simInstance.onStabilizeWorker(pos => {
+    console.log('Stabilized: ', pos)
+  })
 }
+doSomething()
 
 const Sandbox: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
