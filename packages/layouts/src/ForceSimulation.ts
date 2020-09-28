@@ -2,7 +2,6 @@ import * as d3 from 'd3'
 import {defaults, meanBy, noop} from 'lodash'
 import {validateForceConfig, validateSimulationData} from './validators'
 import Ajv from 'ajv'
-import * as Comlink from 'comlink'
 
 export interface SimulationNode extends d3.SimulationNodeDatum {
   /**
@@ -460,5 +459,3 @@ export class ForceSimulation {
     this.simulation.stop()
   }
 }
-
-Comlink.expose(ForceSimulation)
