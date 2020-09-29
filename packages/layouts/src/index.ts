@@ -5,5 +5,6 @@ export {
   SimulationGroup,
   SimulationData,
   ForceConfig,
+  FORCE_DEFAULTS,
 } from './ForceSimulationBase'
 export {ForceSimulation} from './ForceSimulation'
