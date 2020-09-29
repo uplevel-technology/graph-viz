@@ -6,9 +6,8 @@ import {
   SimulationData,
 } from './ForceSimulationBase'
 import {noop} from 'lodash'
-import * as Comlink from 'comlink'
 
-class ForceSimulationWorker extends ForceSimulationBase {
+export class ForceSimulationWorker extends ForceSimulationBase {
   thread = 'worker' as const
 
   // narrow down type def
@@ -32,7 +31,9 @@ class ForceSimulationWorker extends ForceSimulationBase {
   }
 
   // narrow down type def
-  public onTick: (callback: (nodePositions: NodePosition[]) => void) => void
+  public onTick(callback: (nodePositions: NodePosition[]) => void) {
+    super.onTick(callback)
+  }
 
   public onStabilize(callback: (nodePositions: NodePosition[]) => void) {
     this.registeredEventHandlers.stabilized = callback
@@ -59,5 +60,3 @@ class ForceSimulationWorker extends ForceSimulationBase {
     }
   }
 }
-
-Comlink.expose(ForceSimulationWorker)

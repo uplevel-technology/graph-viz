@@ -30,5 +30,7 @@ export class ForceSimulation extends ForceSimulationBase {
   }
 
   // narrow down type def
-  public onTick: (callback: (nodePositions: NodePosition[]) => void) => void
+  public onTick(callback: (nodePositions: NodePosition[]) => void) {
+    super.onTick(callback)
+  }
 }
