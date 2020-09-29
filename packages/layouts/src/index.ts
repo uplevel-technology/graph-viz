@@ -1,9 +1,9 @@
 export {
-  ForceSimulation,
   NodePosition,
   SimulationNode,
   SimulationLink,
   SimulationGroup,
   SimulationData,
   ForceConfig,
-} from './ForceSimulation'
+} from './ForceSimulationBase'
+export {ForceSimulation} from './ForceSimulation'
