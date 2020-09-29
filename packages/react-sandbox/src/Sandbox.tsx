@@ -2,10 +2,17 @@ import React, {useEffect, useRef, useState} from 'react'
 import logo from './logo.svg'
 import './App.css'
 import {GraphVizComponent} from '@graph-viz/react'
-import {ForceConfig} from '@graph-viz/layouts'
+import {ForceConfig, ForceSimulationWorker} from '@graph-viz/layouts'
 import {GraphVisualization} from '@graph-viz/core'
-import {initSimulationWorker} from '@graph-viz/layouts/lib/ForceSimulationWorker'
-import {FORCE_DEFAULTS} from '@graph-viz/layouts/lib/ForceSimulation'
+import * as Comlink from 'comlink'
+import {FORCE_DEFAULTS} from '@graph-viz/layouts/lib/ForceSimulationBase'
+
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import SimulationWorker from 'worker-loader!@graph-viz/layouts/lib/worker'
+
+console.log(Worker)
+const SimWorker = Comlink.wrap<typeof ForceSimulationWorker>(new SimulationWorker())
 
 const DATA = {
   nodes: [
@@ -41,14 +48,14 @@ const DATA = {
 }
 
 async function doSomething() {
-  const simInstance = await initSimulationWorker()
-  await simInstance.initialize(
+  const sim: ForceSimulationWorker = await new SimWorker()
+  await sim.initialize(
     {...DATA, forceGroups: DATA.groups},
     FORCE_DEFAULTS,
-    true,
   )
-  await simInstance.onStabilizeWorker(pos => {
-    console.log('Stabilized: ', pos)
+  console.log('initialized')
+  await sim.onTick((p: number) => {
+    console.log(p)
   })
 }
 doSomething()
