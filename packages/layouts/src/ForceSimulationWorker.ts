@@ -29,8 +29,11 @@ export class ForceSimulationWorker extends ForceSimulationBase {
   ) {
     super.initialize(graph, config)
     if (this.simulation) {
+      // stop default simulation start
       this.simulation.stop()
-      this.stabilize()
+
+      // start manual stabilization
+      this.start()
     }
   }
 
@@ -43,7 +46,7 @@ export class ForceSimulationWorker extends ForceSimulationBase {
     this.registeredEventHandlers.stabilized = callback
   }
 
-  private stabilize() {
+  private start() {
     if (this.simulation) {
       for (
         let i = 0,
