@@ -8,6 +8,10 @@ import {
 import {noop} from 'lodash'
 
 export class ForceSimulationWorker extends ForceSimulationBase {
+  constructor() {
+    super()
+  }
+
   thread = 'worker' as const
 
   // narrow down type def
@@ -31,7 +35,7 @@ export class ForceSimulationWorker extends ForceSimulationBase {
   }
 
   // narrow down type def
-  public onTick(callback: (nodePositions: NodePosition[]) => void) {
+  public onTick(callback: (progress: number) => void) {
     super.onTick(callback)
   }
 
@@ -50,13 +54,11 @@ export class ForceSimulationWorker extends ForceSimulationBase {
         i < n;
         ++i
       ) {
-        this.registeredEventHandlers.tick(i / n)
+        this.registeredEventHandlers.tick(Math.round((i * 10000) / n) / 100)
         this.simulation.tick()
       }
+      this.registeredEventHandlers.tick(100)
       this.registeredEventHandlers.stabilized(this.getNodePositions())
-      // for (let i = 0, n = 300; i < n; ++i) {
-      //   this.simulation.tick()
-      // }
     }
   }
 }

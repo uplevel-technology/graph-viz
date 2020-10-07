@@ -8,6 +8,10 @@ import {
 import {noop} from 'lodash'
 
 export class ForceSimulation extends ForceSimulationBase {
+  constructor() {
+    super()
+  }
+
   thread = 'main' as const
 
   // narrow down type def
