@@ -2,8 +2,17 @@ import React, {useEffect, useRef, useState} from 'react'
 import logo from './logo.svg'
 import './App.css'
 import {GraphVizComponent} from '@graph-viz/react'
-import {ForceConfig} from '@graph-viz/layouts'
+import {ForceConfig, ForceSimulationWorker} from '@graph-viz/layouts'
 import {GraphVisualization} from '@graph-viz/core'
+import * as Comlink from 'comlink'
+import {Remote} from 'comlink'
+import {FORCE_DEFAULTS} from '@graph-viz/layouts/lib/ForceSimulationBase'
+
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import SimulationWorker from 'worker-loader!@graph-viz/layouts/lib/worker'
+
+const SimWorker = Comlink.wrap<typeof ForceSimulationWorker>(new SimulationWorker())
 
 const DATA = {
   nodes: [
@@ -37,6 +46,35 @@ const DATA = {
     },
   ],
 }
+
+async function doSomething() {
+  // @ts-ignore
+  const sim: Remote<ForceSimulationWorker> = await new SimWorker()
+
+  console.log('initialized ')
+
+
+  const onTick = Comlink.proxy((progress: number) => {
+    console.log('progress: ', progress);
+  })
+
+  const onStabilize = Comlink.proxy((pos: any) => {
+    console.log('stabilized:', pos)
+  })
+
+  await sim.onTick(onTick)
+  await sim.onStabilize(onStabilize)
+
+  await sim.initialize(
+    {...DATA, forceGroups: DATA.groups},
+    FORCE_DEFAULTS,
+  )
+
+  // onTick(() => { console.log('tick') })
+  // const pos = await sim.getNodePositions()
+  // console.log(pos);
+}
+doSomething()
 
 const Sandbox: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
